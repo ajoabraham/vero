@@ -6,47 +6,46 @@ import com.sourcetable.datasource.*;
 
 public class ExpressionMeta {
     UUID uuid;
-	String expression;
-	ArrayList<Table> tables;
-		
-	public ExpressionMeta(String inExp) {
+    String expression;
+    ArrayList<Table> tables;
+
+    public ExpressionMeta(String inExp) {
         uuid = UUID.randomUUID();
-		expression = inExp;
-		tables = new ArrayList();
-	}
-	
+        expression = inExp;
+        tables = new ArrayList();
+    }
+
     public ExpressionMeta(String inExp, ArrayList<Table> inTables) {
         uuid = UUID.randomUUID();
         expression = inExp;
         tables = new ArrayList(inTables);
     }
-        
-	public void addTable(Table inTab) {
-		tables.add(inTab);
-	}
-	
+
+    public void addTable(Table inTab) {
+        tables.add(inTab);
+    }
+
     public void addTables(ArrayList<Table> inTables) {
         tables.addAll(inTables);
     }
-    
-	public String getExpression() {
-		return expression;	
-	}
 
-	public UUID getUUID() {
-		return uuid;	
-	}
-    
-    
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("ExpressionMeta starts...");
-		
-		ExpressionMeta exp = new ExpressionMeta("abcde");		
-		exp.addTable(new Table());
-		
-		System.out.println("Expression: " + exp.toString());
+    public String getExpression() {
+        return expression;
+    }
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        System.out.println("ExpressionMeta starts...");
+
+        ExpressionMeta exp = new ExpressionMeta("abcde");
+        exp.addTable(new Table());
+
+        System.out.println("ExpressionMeta: " + exp.toString());
         System.out.println("uuid: " + exp.getUUID().toString());
-		System.out.println("expression: " + exp.getExpression());        
-	}
+        System.out.println("expression: " + exp.getExpression());
+    }
 }
