@@ -9,6 +9,7 @@ package com.sourcetable;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URI;
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +32,30 @@ public class SourceTable {
             jsonFileReader = new FileReader(jsonFile);
         } catch (java.io.FileNotFoundException e) {
             System.out.println("File not found...");
+            e.printStackTrace();
             return;
         }
         
-        JSONTokener tokener = new JSONTokener(jsonFileReader);
-        JSONObject root = new JSONObject(tokener);
+        try {
+            JSONTokener tokener = new JSONTokener(jsonFileReader);
+            JSONObject root = new JSONObject(tokener);
+            
+            JSONArray jsonArray = root.getJSONArray("tables");
+            int size = jsonArray.length();
+            ArrayList<JSONObject> arrays = new ArrayList();
+            for (int i = 0; i < size; i++) {
+                JSONObject another_json_object = jsonArray.getJSONObject(i);
+                System.out.println("json object: " + another_json_object.toString());
+                //Blah blah blah...
+                arrays.add(another_json_object);
+            }
+            
+            // finally
+            JSONObject[] jsons = new JSONObject[arrays.size()];
+            arrays.toArray(jsons);
+                        
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }       
     }    
 }
