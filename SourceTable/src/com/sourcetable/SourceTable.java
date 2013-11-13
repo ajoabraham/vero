@@ -6,10 +6,13 @@
 
 package com.sourcetable;
 
+import java.io.File;
+import java.io.FileReader;
 import java.net.URI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  *
@@ -21,9 +24,17 @@ public class SourceTable {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        URI uri = new URI("http://someserver/data.json");
-        JSONTokener tokener = new JSONTokener(uri.toURL().openStream());
+        File jsonFile = new File("test1.json");
+        FileReader jsonFileReader;
+        
+        try {
+            jsonFileReader = new FileReader(jsonFile);
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("File not found...");
+            return;
+        }
+        
+        JSONTokener tokener = new JSONTokener(jsonFileReader);
         JSONObject root = new JSONObject(tokener);
-    }
-    
+    }    
 }
