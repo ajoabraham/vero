@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.Iterator;
 import com.sourcetable.datasource.*;
 
-public class MetricMeta {
+public class MetricMeta implements Filterable {
     UUID uuid;
     String name;
     String description;

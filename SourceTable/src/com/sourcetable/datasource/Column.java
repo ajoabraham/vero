@@ -1,5 +1,10 @@
 package com.sourcetable.datasource;
 
-public class Column {
+import java.util.ArrayList;
+import java.util.Date;
 
+public class Column {
+    String name;
+    int dataType;
+    Table table;
 }

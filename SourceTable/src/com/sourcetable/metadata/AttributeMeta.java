@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.Iterator;
 import com.sourcetable.datasource.*;
 
-public class AttributeMeta {
+public class AttributeMeta implements Filterable {
     UUID uuid;
     String name;
     String description;
