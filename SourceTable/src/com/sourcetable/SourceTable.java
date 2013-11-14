@@ -38,6 +38,20 @@ public class SourceTable {
             JSONTokener tokener = new JSONTokener(jsonFileReader);
             JSONObject root = new JSONObject(tokener);
             
+            // parsing datasources
+            JSONArray jsonDSsArray = root.getJSONArray("datasources");
+            int DSsArraySize = jsonDSsArray.length();
+
+            for (int i = 0; i < DSsArraySize; i++) {
+                JSONObject oneJSONDSObj = jsonDSsArray.getJSONObject(i);
+                System.out.println("json DS object " + i + ": ");
+                // DS
+                System.out.println("uuid:" + oneJSONDSObj.getInt("uuid"));
+                System.out.println("name:" + oneJSONDSObj.getString("name"));            
+            }
+            System.out.println("------------------------------");
+            
+            // parsing tables
             JSONArray jsonTablesArray = root.getJSONArray("tables");
             int tablesArraySize = jsonTablesArray.length();
             ArrayList<JSONObject> arrays = new ArrayList();
@@ -63,11 +77,85 @@ public class SourceTable {
                 
                 arrays.add(oneJSONTableObj);
             }
+            System.out.println("------------------------------");
+            
+            // parsing attributes
+            JSONArray jsonAttrsArray = root.getJSONArray("attributes");
+            int attrsArraySize = jsonAttrsArray.length();
+
+            for (int i = 0; i < attrsArraySize; i++) {
+                JSONObject oneJSONAttrObj = jsonAttrsArray.getJSONObject(i);
+                System.out.println("json attribute object " + i + ": ");
+                // table
+                System.out.println("uuid:" + oneJSONAttrObj.getInt("uuid"));
+                System.out.println("name:" + oneJSONAttrObj.getString("name"));
+                JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
+               
+                int expressionsArraySize = jsonExpressionsArray.length();
+                for (int j = 0; j < expressionsArraySize; j++) {
+                    JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
+                    // expression
+                    System.out.println("uuid:" + oneJSONExpressionObj.getInt("uuid"));
+                    System.out.println("value:" + oneJSONExpressionObj.getString("value"));
+                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
+
+                    int tableUUIDsArraySize = jsonTableUUIDsArray.length();
+                    for (int k = 0; k < tableUUIDsArraySize; k++) {
+                        // table UUID
+                        System.out.println("table's uuid:" + jsonTableUUIDsArray.getInt(k));
+                    }                    
+                }
+            }
+            System.out.println("------------------------------");
+
+            // parsing metrics
+            JSONArray jsonMetricsArray = root.getJSONArray("metrics");
+            int metricsArraySize = jsonMetricsArray.length();
+
+            for (int i = 0; i < metricsArraySize; i++) {
+                JSONObject oneJSONMetricObj = jsonMetricsArray.getJSONObject(i);
+                System.out.println("json metric object " + i + ": ");
+                // table
+                System.out.println("uuid:" + oneJSONMetricObj.getInt("uuid"));
+                System.out.println("name:" + oneJSONMetricObj.getString("name"));
+                JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
+               
+                int expressionsArraySize = jsonExpressionsArray.length();
+                for (int j = 0; j < expressionsArraySize; j++) {
+                    JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
+                    // expression
+                    System.out.println("uuid:" + oneJSONExpressionObj.getInt("uuid"));
+                    System.out.println("value:" + oneJSONExpressionObj.getString("value"));
+                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
+
+                    int tableUUIDsArraySize = jsonTableUUIDsArray.length();
+                    for (int k = 0; k < tableUUIDsArraySize; k++) {
+                        // table UUID
+                        System.out.println("table's uuid:" + jsonTableUUIDsArray.getInt(k));
+                    }                    
+                }
+            }
+            System.out.println("------------------------------");
+            
+            // parsing joindefs
+            JSONArray jsonJDsArray = root.getJSONArray("joindefs");
+            int JDsArraySize = jsonJDsArray.length();
+
+            for (int i = 0; i < JDsArraySize; i++) {
+                JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
+                System.out.println("json JD object " + i + ": ");
+                // DS
+                System.out.println("uuid:" + oneJSONJDObj.getInt("uuid"));
+                System.out.println("tleft uuid:" + oneJSONJDObj.getInt("tleft"));
+                System.out.println("tright uuid:" + oneJSONJDObj.getInt("tright"));
+                System.out.println("expression:" + oneJSONJDObj.getString("expression"));
+                System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+            }
+            System.out.println("------------------------------");
             
             // finally
             JSONObject[] jsons = new JSONObject[arrays.size()];
-            arrays.toArray(jsons);
-                        
+            arrays.toArray(jsons);                                    
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
         }       
