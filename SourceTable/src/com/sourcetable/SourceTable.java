@@ -6,6 +6,7 @@
 
 package com.sourcetable;
 
+import com.sourcetable.session.*;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -23,7 +24,10 @@ public class SourceTable {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // session
+        Session userSession = new Session();
+        
+        // parsing the json file
         File jsonFile = new File("test1.json");
         FileReader jsonFileReader;
         
