@@ -8,7 +8,6 @@ package com.sourcetable;
 
 import java.io.File;
 import java.io.FileReader;
-import java.net.URI;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +31,6 @@ public class SourceTable {
             jsonFileReader = new FileReader(jsonFile);
         } catch (java.io.FileNotFoundException e) {
             System.out.println("File not found...");
-            e.printStackTrace();
             return;
         }
         
@@ -40,14 +38,30 @@ public class SourceTable {
             JSONTokener tokener = new JSONTokener(jsonFileReader);
             JSONObject root = new JSONObject(tokener);
             
-            JSONArray jsonArray = root.getJSONArray("tables");
-            int size = jsonArray.length();
+            JSONArray jsonTablesArray = root.getJSONArray("tables");
+            int tablesArraySize = jsonTablesArray.length();
             ArrayList<JSONObject> arrays = new ArrayList();
-            for (int i = 0; i < size; i++) {
-                JSONObject another_json_object = jsonArray.getJSONObject(i);
-                System.out.println("json object: " + another_json_object.toString());
-                //Blah blah blah...
-                arrays.add(another_json_object);
+            for (int i = 0; i < tablesArraySize; i++) {
+                JSONObject oneJSONTableObj = jsonTablesArray.getJSONObject(i);
+                System.out.println("json table object " + i + ": ");
+                // table
+                System.out.println("uuid:" + oneJSONTableObj.getInt("uuid"));
+                System.out.println("name:" + oneJSONTableObj.getString("name"));
+                System.out.println("datasource:" + oneJSONTableObj.getInt("datasource"));
+                JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
+               
+                int columnsArraySize = jsonColumnsArray.length();
+                for (int j = 0; j < columnsArraySize; j++) {
+                    JSONObject oneJSONColumnObj = jsonColumnsArray.getJSONObject(j);
+                    // column
+                    // System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
+                    System.out.println("uuid:" + oneJSONColumnObj.getInt("uuid"));
+                    System.out.println("name:" + oneJSONColumnObj.getString("name"));
+                    System.out.println("type:" + oneJSONColumnObj.getString("type"));
+                    System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
+                }
+                
+                arrays.add(oneJSONTableObj);
             }
             
             // finally
@@ -55,7 +69,7 @@ public class SourceTable {
             arrays.toArray(jsons);
                         
         } catch (JSONException e) {
-            e.printStackTrace();
+            System.out.println("JSONException..." + e.toString());
         }       
     }    
 }
