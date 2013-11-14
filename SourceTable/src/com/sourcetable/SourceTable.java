@@ -50,7 +50,6 @@ public class SourceTable {
                 JSONObject oneJSONDSObj = jsonDSsArray.getJSONObject(i);
                 System.out.println("json DS object " + i + ": ");
                 // DS
-                System.out.println("uuid:" + oneJSONDSObj.getInt("uuid"));
                 System.out.println("name:" + oneJSONDSObj.getString("name"));            
             }
             System.out.println("------------------------------");
@@ -63,9 +62,8 @@ public class SourceTable {
                 JSONObject oneJSONTableObj = jsonTablesArray.getJSONObject(i);
                 System.out.println("json table object " + i + ": ");
                 // table
-                System.out.println("uuid:" + oneJSONTableObj.getInt("uuid"));
                 System.out.println("name:" + oneJSONTableObj.getString("name"));
-                System.out.println("datasource:" + oneJSONTableObj.getInt("datasource"));
+                System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
                
                 int columnsArraySize = jsonColumnsArray.length();
@@ -73,7 +71,6 @@ public class SourceTable {
                     JSONObject oneJSONColumnObj = jsonColumnsArray.getJSONObject(j);
                     // column
                     // System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
-                    System.out.println("uuid:" + oneJSONColumnObj.getInt("uuid"));
                     System.out.println("name:" + oneJSONColumnObj.getString("name"));
                     System.out.println("type:" + oneJSONColumnObj.getString("type"));
                     System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
@@ -91,7 +88,6 @@ public class SourceTable {
                 JSONObject oneJSONAttrObj = jsonAttrsArray.getJSONObject(i);
                 System.out.println("json attribute object " + i + ": ");
                 // table
-                System.out.println("uuid:" + oneJSONAttrObj.getInt("uuid"));
                 System.out.println("name:" + oneJSONAttrObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
                
@@ -99,14 +95,13 @@ public class SourceTable {
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
-                    System.out.println("uuid:" + oneJSONExpressionObj.getInt("uuid"));
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
                         // table UUID
-                        System.out.println("table's uuid:" + jsonTableUUIDsArray.getInt(k));
+                        System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
                     }                    
                 }
             }
@@ -120,7 +115,6 @@ public class SourceTable {
                 JSONObject oneJSONMetricObj = jsonMetricsArray.getJSONObject(i);
                 System.out.println("json metric object " + i + ": ");
                 // table
-                System.out.println("uuid:" + oneJSONMetricObj.getInt("uuid"));
                 System.out.println("name:" + oneJSONMetricObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
                
@@ -128,14 +122,13 @@ public class SourceTable {
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
-                    System.out.println("uuid:" + oneJSONExpressionObj.getInt("uuid"));
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
                         // table UUID
-                        System.out.println("table's uuid:" + jsonTableUUIDsArray.getInt(k));
+                        System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
                     }                    
                 }
             }
@@ -149,9 +142,9 @@ public class SourceTable {
                 JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
                 System.out.println("json JD object " + i + ": ");
                 // DS
-                System.out.println("uuid:" + oneJSONJDObj.getInt("uuid"));
-                System.out.println("tleft uuid:" + oneJSONJDObj.getInt("tleft"));
-                System.out.println("tright uuid:" + oneJSONJDObj.getInt("tright"));
+                System.out.println("name:" + oneJSONJDObj.getString("name"));
+                System.out.println("tleft table name:" + oneJSONJDObj.getString("tleft"));
+                System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
                 System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                 System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
             }
