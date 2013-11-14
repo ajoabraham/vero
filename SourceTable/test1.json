@@ -1,91 +1,77 @@
 {
     "datasources": [
         {
-            "uuid": 123,
             "name": "Teradata - Prod"
         }
     ],
     "tables": [
         {
-            "uuid": 1,
             "name": "Departments",
             "columns": [
                 {
-                    "uuid": 12,
                     "name": "name",
                     "type": "string",
                     "primaryKey": false
                 },
                 {
-                    "uuid": 13,
                     "name": "id",
                     "type": "integer",
                     "primaryKey": true
                 },
                 {
-                    "uuid": 14,
                     "name": "school_name",
                     "type": "string",
                     "primaryKey": false
                 },
                 {
-                    "uuid": 15,
                     "name": "location",
                     "type": "string",
                     "primaryKey": false
                 }
             ],
-            "datasource": 123
+            "datasource": "Teradata - Prod"
         },
         {
-            "uuid": 2,
             "name": "DepartmentFacts",
             "columns": [
                 {
-                    "uuid": 22,
                     "name": "dept_id",
                     "type": "integer",
                     "primaryKey": false
                 },
                 {
-                    "uuid": 23,
                     "name": "num_students",
                     "type": "integer",
                     "primaryKey": false
                 },
                 {
-                    "uuid": 24,
                     "name": "num_professors",
                     "type": "integer",
                     "primaryKey": false
                 }
             ],
-            "datasource": 123
+            "datasource": "Teradata - Prod"
         }
     ],
     "attributes": [
         {
-            "uuid": 3,
             "name": "Department Name",
             "expressions": [
                 {
-                    "uuid": 33,
                     "value": "name",
                     "tables": [
-                        1
+                        "Departments"
                     ]
                 }
             ]
         },
         {
-            "uuid": 4,
             "name": "Department School",
             "expressions": [
                 {
-                    "uuid": 43,
                     "value": "school_name",
                     "tables": [
-                        1
+                        "Departments"
                     ]
                 }
             ]
@@ -93,14 +79,12 @@
     ],
     "metrics": [
         {
-            "uuid": 5,
             "name": "# of Students",
             "expressions": [
                 {
-                    "uuid": 53,
                     "value": "sum(num_students)",
                     "tables": [
-                        2
+                        "DepartmentFacts"
                     ]
                 }
             ]
@@ -108,11 +92,11 @@
     ],
     "joindefs": [
         {
-            "uuid": 67,
-            "tleft": 1,
-            "tright": 2,
+            "name": "on equal id",
+            "tleft": "Departments",
+            "tright": "DepartmentFacts",
             "expression": "tleft.id=tright.dept_id",
-            "jointype": "inner join"
+            "jointype": "inner"
         }
     ]
 }

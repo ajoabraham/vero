@@ -12,9 +12,9 @@ public class Table {
     Column primaryKey;
     DataSource dataSource;
     
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
     
     public int getRowCount() {
         return rowCount;

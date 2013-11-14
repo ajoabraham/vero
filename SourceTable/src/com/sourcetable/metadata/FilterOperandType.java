@@ -10,7 +10,10 @@ package com.sourcetable.metadata;
  *
  * @author yulinwen
  */
-public class FilterItemMeta {
-    FilterOperandType opType;
-    Filterable filterable; // ToDo: constant
+public enum FilterOperandType {
+    NONE,
+    AND,
+    OR,
+    AND_NOT,
+    OR_NOT
 }

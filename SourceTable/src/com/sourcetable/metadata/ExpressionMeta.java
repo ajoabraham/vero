@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import com.sourcetable.datasource.*;
 
-public class ExpressionMeta {
+public class ExpressionMeta implements Filterable {
     UUID uuid;
     String expression;
     ArrayList<Table> tables;
