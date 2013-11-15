@@ -4,8 +4,8 @@ package com.sourcetable.datasource;
  *
  * @author yulinwen
  */
-public enum DsType {
+public enum ColDataType {
     NONE,
-    MYSQL,
-    TERADATA
+    STRING,
+    INTEGER
 }
