@@ -10,6 +10,9 @@ import com.sourcetable.session.*;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +23,15 @@ import org.json.JSONTokener;
  * @author yulinwen
  */
 public class SourceTable {
+    public static void printMap(Map mp) {
+        Iterator it = mp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            System.out.println(pairs.getKey() + " = " + pairs.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -50,7 +62,13 @@ public class SourceTable {
                 JSONObject oneJSONDSObj = jsonDSsArray.getJSONObject(i);
                 System.out.println("json DS object " + i + ": ");
                 // DS
-                System.out.println("name:" + oneJSONDSObj.getString("name"));            
+                System.out.println("name:" + oneJSONDSObj.getString("name"));
+                System.out.println("type:" + oneJSONDSObj.getString("type"));
+                // add DS
+                userSession.addDataSource(
+                    oneJSONDSObj.getString("type"), 
+                    oneJSONDSObj.getString("name"),
+                    oneJSONDSObj.getString("name"));
             }
             System.out.println("------------------------------");
             
@@ -155,6 +173,12 @@ public class SourceTable {
             arrays.toArray(jsons);                                    
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
-        }       
+        }
+        
+        // dump session
+        System.out.println("Dumping session...");
+        HashMap ds = userSession.getDataSources();
+        printMap(ds);
+        
     }    
 }

@@ -1,7 +1,8 @@
 {
     "datasources": [
         {
-            "name": "Teradata - Prod"
+            "name": "Teradata - Prod",
+            "type": "teradata"
         }
     ],
     "tables": [

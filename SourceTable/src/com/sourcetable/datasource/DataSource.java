@@ -6,12 +6,14 @@ import java.util.UUID;
 public class DataSource {
     UUID uuid;
 	DsType type;
+    String name;
     String description;
     HashMap<String, Table> tables;
     
-    public DataSource(DsType inType, String inDescription) {
+    public DataSource(DsType inType, String inName, String inDescription) {
         uuid = UUID.randomUUID();
         type = inType;
+        name = inName;
         description = inDescription;
         tables = new HashMap();
     }
@@ -26,6 +28,10 @@ public class DataSource {
     
 	public DsType getType() {
 		return type;
+	}
+
+	public String getName() {
+		return name;
 	}
     
 	public String getDescription() {

@@ -3,21 +3,31 @@ package com.sourcetable.session;
 import com.sourcetable.datasource.*;
 import com.sourcetable.metadata.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Session {
-    ArrayList<DataSource> dataSources;
+    HashMap<String, DataSource> dataSources;
     // ArrayList<> 
     ArrayList<AttributeMeta> attributes;
     ArrayList<MetricMeta> metrics;
     // ArrayList<JoinDefMera> joindefs;
     
     public Session() {
-        dataSources = new ArrayList();
+        dataSources = new HashMap();
         attributes = new ArrayList();
         metrics = new ArrayList();
     }
     
-    public ArrayList<DataSource> getDataSources() {
+    public void addDataSource(String inType, String inName, String inDescription) {
+        if (inType.compareTo("teradata") == 0) {
+            DataSource ds = new Teradata(DsType.TERADATA, inName, inDescription);            
+            dataSources.put(inName, ds);
+        } else {
+            System.out.println("DS not supported...");
+        }
+    }
+    
+    public HashMap getDataSources() {
         return dataSources;
     }
     
