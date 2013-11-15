@@ -1,0 +1,31 @@
+#rootPane {
+    -fx-background-color: #2A2A2A;
+    -fx-padding: 1px;
+}
+
+#navButtonPane {
+/*    -fx-border-color: red;
+    -fx-border-width: 1px;*/
+    -fx-padding: 10 2 10 2;
+    -fx-spacing: 10;
+    -fx-alignment: top-center;
+}
+
+#datasourceNavPaneButton {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-image: url("images/datasource_nav_panel_btn.png");
+}
+
+#datasourceObjButton {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-image: url("images/datasource_obj_icon.png");
+}
+
+#navigationPane {
+/*    -fx-border-color: green;
+    -fx-border-width: 1px;*/
+}
