@@ -54,7 +54,7 @@ public class MetricMeta implements Filterable {
         System.out.println("AttributeMeta starts...");
 
         ExpressionMeta exp = new ExpressionMeta("abcde");
-        exp.addTable(new Table());
+        exp.addTable(new Table("abc", null));
 
         MetricMeta metr = new MetricMeta("Met1", "haha_description");
         metr.addExpression(exp);

@@ -6,6 +6,7 @@
 
 package com.sourcetable;
 
+import com.sourcetable.datasource.*;
 import com.sourcetable.session.*;
 import java.io.File;
 import java.io.FileReader;
@@ -28,7 +29,7 @@ public class SourceTable {
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             System.out.println(pairs.getKey() + " = " + pairs.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
+            // it.remove(); // avoids a ConcurrentModificationException
         }
     }
     
@@ -83,6 +84,14 @@ public class SourceTable {
                 System.out.println("name:" + oneJSONTableObj.getString("name"));
                 System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
+                // add table
+                DataSource specificDS = userSession.getDataSource(oneJSONTableObj.getString("datasource"));
+                if (specificDS != null) {
+                    Table aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
+                    specificDS.addTable(aTable);
+                } else {
+                    System.out.println("WARNING: Can't find specificDS...");
+                }
                
                 int columnsArraySize = jsonColumnsArray.length();
                 for (int j = 0; j < columnsArraySize; j++) {
@@ -177,8 +186,15 @@ public class SourceTable {
         
         // dump session
         System.out.println("Dumping session...");
-        HashMap ds = userSession.getDataSources();
+        HashMap ds = userSession.getAllDataSources();
         printMap(ds);
+        
+        DataSource specificDS = userSession.getDataSource("Teradata - Prod");
+        if (specificDS != null) {
+            System.out.println("Got a Teradata - Prod - " + specificDS.toString());
+        } else {
+            System.out.println("Not found...");
+        }
         
     }    
 }

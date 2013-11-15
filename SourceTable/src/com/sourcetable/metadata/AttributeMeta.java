@@ -54,7 +54,7 @@ public class AttributeMeta implements Filterable {
         System.out.println("AttributeMeta starts...");
 
         ExpressionMeta exp = new ExpressionMeta("abcde");
-        exp.addTable(new Table());
+        exp.addTable(new Table("abc", null));
 
         AttributeMeta attr = new AttributeMeta("Att1", "haha_description");
         attr.addExpression(exp);

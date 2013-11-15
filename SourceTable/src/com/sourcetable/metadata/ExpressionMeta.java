@@ -42,7 +42,7 @@ public class ExpressionMeta implements Filterable {
         System.out.println("ExpressionMeta starts...");
 
         ExpressionMeta exp = new ExpressionMeta("abcde");
-        exp.addTable(new Table());
+        exp.addTable(new Table("abc", null));
 
         System.out.println("ExpressionMeta: " + exp.toString());
         System.out.println("uuid: " + exp.getUUID().toString());

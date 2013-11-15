@@ -12,6 +12,15 @@ public class Table {
     Column primaryKey;
     DataSource dataSource;
     
+    public Table(String inName, DataSource inDS) {
+        name = inName;
+        columns = new ArrayList();
+        rowCount = 0;
+        lastScan = new Date();
+        primaryKey = null;
+        dataSource = inDS;
+    }
+    
     public String getName() {
         return name;
     }

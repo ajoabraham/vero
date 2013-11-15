@@ -27,8 +27,12 @@ public class Session {
         }
     }
     
-    public HashMap getDataSources() {
+    public HashMap getAllDataSources() {
         return dataSources;
+    }
+    
+    public DataSource getDataSource(String inName) {        
+        return dataSources.get(inName);        
     }
     
     public ArrayList<AttributeMeta> getAttributes() {
