@@ -1,31 +1,56 @@
-#rootPane {
+#root-pane {
     -fx-background-color: #2A2A2A;
     -fx-padding: 1px;
 }
 
-#navButtonPane {
-/*    -fx-border-color: red;
-    -fx-border-width: 1px;*/
-    -fx-padding: 10 2 10 2;
+#nav-button-pane {
+    -fx-padding: 10 0 10 0;
     -fx-spacing: 10;
     -fx-alignment: top-center;
+    -fx-border-color: rgb(200, 200, 200);
+    -fx-border-width: 0 1 0 0;
 }
 
-#datasourceNavPaneButton {
-    -fx-background-color: null;
+#datasource-nav-pane-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-image: url("images/datasource_nav_panel_btn.png");
 }
 
-#datasourceObjButton {
-    -fx-background-color: null;
+#datasource-obj-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-image: url("images/datasource_obj_icon.png");
 }
 
-#navigationPane {
-/*    -fx-border-color: green;
-    -fx-border-width: 1px;*/
+#navigation-pane {
+    -fx-border-color: rgb(200, 200, 200);
+    -fx-border-width: 0 1 0 0;
+}
+
+.section-title {
+    -fx-font: bold normal 14px "Helvetica";
+    -fx-text-fill: #ccc;
+    -fx-padding: 0 0 0 10;
+}
+
+#objects-pane {
+/*    -fx-border-color: red;
+    -fx-border-width: 1;*/
+    -fx-spacing: 5;
+    -fx-padding: 10 10 10 10;
+}
+
+.object-pane {
+    -fx-border-radius: 10;
+    -fx-border-color: rgb(26, 67, 26);
+    -fx-background-color: rgb(26, 67, 26);
+    -fx-padding: 0 5 0 5;
+}
+
+.object-label {
+    -fx-font: bold normal 12px "Helvetica";
+    -fx-text-fill: #ccc;
+    -fx-text-alignment: left;
+    -fx-border-radius: 10;
 }
