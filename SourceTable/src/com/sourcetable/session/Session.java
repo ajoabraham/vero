@@ -8,14 +8,16 @@ import java.util.HashMap;
 public class Session {
     HashMap<String, DataSource> dataSources;
     // ArrayList<> 
-    ArrayList<AttributeMeta> attributes;
-    ArrayList<MetricMeta> metrics;
+    HashMap<String, AttributeMeta> attributes;
+    HashMap<String, MetricMeta> metrics;
+    HashMap<String, JoinMeta> joins;
     // ArrayList<JoinDefMera> joindefs;
     
     public Session() {
         dataSources = new HashMap();
-        attributes = new ArrayList();
-        metrics = new ArrayList();
+        attributes = new HashMap();
+        metrics = new HashMap();
+        joins = new HashMap();
     }
     
     public void addDataSource(String inType, String inName, String inDescription) {
@@ -26,6 +28,18 @@ public class Session {
             System.out.println("DS not supported...");
         }
     }
+
+    public void addAttributeMeta(AttributeMeta inAttr) {
+        attributes.put(inAttr.getName(), inAttr);
+    }
+
+    public void addMetricMeta(MetricMeta inMetric) {
+        metrics.put(inMetric.getName(), inMetric);
+    }
+    
+    public void addJoinMeta(JoinMeta inJoin) {
+        joins.put(inJoin.getName(), inJoin);
+    }
     
     public HashMap getAllDataSources() {
         return dataSources;
@@ -35,11 +49,15 @@ public class Session {
         return dataSources.get(inName);        
     }
     
-    public ArrayList<AttributeMeta> getAttributes() {
+    public HashMap getAttributes() {
         return attributes;        
     }
     
-    public ArrayList<MetricMeta> getMetrics() {
+    public HashMap getMetrics() {
         return metrics;
+    }
+    
+    public HashMap getJoins() {
+        return joins;
     }
 }

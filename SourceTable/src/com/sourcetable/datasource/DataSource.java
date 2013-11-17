@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class DataSource {
     UUID uuid;
-	DsType type;
+    DsType type;
     String name;
     String description;
     HashMap<String, Table> tables;
@@ -26,17 +26,21 @@ public class DataSource {
         return uuid;
     }
     
-	public DsType getType() {
-		return type;
-	}
+    public DsType getType() {
+        return type;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
     
-	public String getDescription() {
-		return description;
-	}
+    public Table getTable(String inName) {
+        return tables.get(inName);
+    }
     
     public HashMap getTables() {
         return tables;

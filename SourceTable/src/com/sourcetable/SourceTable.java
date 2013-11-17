@@ -7,10 +7,10 @@
 package com.sourcetable;
 
 import com.sourcetable.datasource.*;
+import com.sourcetable.metadata.*;
 import com.sourcetable.session.*;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,6 +39,9 @@ public class SourceTable {
     public static void main(String[] args) {
         // session
         Session userSession = new Session();
+        
+        // only support single datasource, will be set later
+        DataSource userDS = null;
         
         // parsing the json file
         File jsonFile = new File("test1.json");
@@ -70,13 +73,14 @@ public class SourceTable {
                     oneJSONDSObj.getString("type"), 
                     oneJSONDSObj.getString("name"),
                     oneJSONDSObj.getString("name"));
+                userDS = userSession.getDataSource(oneJSONDSObj.getString("name"));
             }
             System.out.println("------------------------------");
             
             // parsing tables
             JSONArray jsonTablesArray = root.getJSONArray("tables");
             int tablesArraySize = jsonTablesArray.length();
-            ArrayList<JSONObject> arrays = new ArrayList();
+
             for (int i = 0; i < tablesArraySize; i++) {
                 JSONObject oneJSONTableObj = jsonTablesArray.getJSONObject(i);
                 System.out.println("json table object " + i + ": ");
@@ -86,8 +90,9 @@ public class SourceTable {
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
                 // add table
                 DataSource specificDS = userSession.getDataSource(oneJSONTableObj.getString("datasource"));
+                Table aTable = null;
                 if (specificDS != null) {
-                    Table aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
+                    aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
                     specificDS.addTable(aTable);
                 } else {
                     System.out.println("WARNING: Can't find specificDS...");
@@ -101,9 +106,19 @@ public class SourceTable {
                     System.out.println("name:" + oneJSONColumnObj.getString("name"));
                     System.out.println("type:" + oneJSONColumnObj.getString("type"));
                     System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
-                }
-                
-                arrays.add(oneJSONTableObj);
+                    
+                    // add column
+                    Column aColumn;
+                    if (oneJSONColumnObj.getString("type").equals("string")) {
+                        aColumn = new Column(oneJSONColumnObj.getString("name"),ColDataType.STRING, 
+                            oneJSONColumnObj.getBoolean("primaryKey"), aTable);
+                    } else if (oneJSONColumnObj.getString("type").equals("integer")) {
+                        aColumn = new Column(oneJSONColumnObj.getString("name"),ColDataType.INTEGER, 
+                            oneJSONColumnObj.getBoolean("primaryKey"), aTable);
+                    } else {
+                        System.out.println("ERROR: type is not defined...");
+                    }                                        
+                }               
             }
             System.out.println("------------------------------");
             
@@ -114,21 +129,28 @@ public class SourceTable {
             for (int i = 0; i < attrsArraySize; i++) {
                 JSONObject oneJSONAttrObj = jsonAttrsArray.getJSONObject(i);
                 System.out.println("json attribute object " + i + ": ");
-                // table
+                // attribute
                 System.out.println("name:" + oneJSONAttrObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
-               
+                // add attribute
+                AttributeMeta anAttr = new AttributeMeta(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
+                userSession.addAttributeMeta(anAttr);
+                
                 int expressionsArraySize = jsonExpressionsArray.length();
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
+                    // add expression
+                    ExpressionMeta anExp = new ExpressionMeta(oneJSONExpressionObj.getString("value"));
+                    anAttr.addExpression(anExp);
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
-                        // table UUID
+                        // table name
                         System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
+                        anExp.addTable(userDS.getTable(jsonTableUUIDsArray.getString(k)));
                     }                    
                 }
             }
@@ -141,21 +163,28 @@ public class SourceTable {
             for (int i = 0; i < metricsArraySize; i++) {
                 JSONObject oneJSONMetricObj = jsonMetricsArray.getJSONObject(i);
                 System.out.println("json metric object " + i + ": ");
-                // table
+                // metric
                 System.out.println("name:" + oneJSONMetricObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
-               
+                // add metric
+                MetricMeta aMetric = new MetricMeta(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
+                userSession.addMetricMeta(aMetric);
+                
                 int expressionsArraySize = jsonExpressionsArray.length();
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
-
+                    // add expression
+                    ExpressionMeta anExp = new ExpressionMeta(oneJSONExpressionObj.getString("value"));
+                    aMetric.addExpression(anExp);
+                    
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
-                        // table UUID
+                        // table name
                         System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
+                        anExp.addTable(userDS.getTable(jsonTableUUIDsArray.getString(k)));
                     }                    
                 }
             }
@@ -174,12 +203,17 @@ public class SourceTable {
                 System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
                 System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                 System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+                // add DS                
+                JoinMeta aJoin = new JoinMeta(
+                    oneJSONJDObj.getString("name"),
+                    oneJSONJDObj.getString("tleft"),
+                    oneJSONJDObj.getString("tright"),
+                    oneJSONJDObj.getString("expression"),
+                    oneJSONJDObj.getString("jointype")
+                );
+                userSession.addJoinMeta(aJoin);
             }
-            System.out.println("------------------------------");
-            
-            // finally
-            JSONObject[] jsons = new JSONObject[arrays.size()];
-            arrays.toArray(jsons);                                    
+            System.out.println("------------------------------");                                              
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
         }
@@ -194,7 +228,6 @@ public class SourceTable {
             System.out.println("Got a Teradata - Prod - " + specificDS.toString());
         } else {
             System.out.println("Not found...");
-        }
-        
+        }        
     }    
 }
