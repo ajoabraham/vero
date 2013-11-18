@@ -16,10 +16,10 @@ public interface UIConstants {
     
     public static final double DATASOURCE_NAV_PANE_BTN_WIDTH = 25;
     public static final double DATASOURCE_NAV_PANE_BTN_HEIGHT = 25;
-    public static final double DATASOURCE_OBJ_BTN_WIDTH = 25;
-    public static final double DATASOURCE_OBJ_BTN_HEIGHT = 25;
+    public static final double REPORTS_NAV_PANE_BTN_WIDTH = 25;
+    public static final double REPORTS_NAV_PANE_BTN_HEIGHT = 25;
     
     public static final double NAVIGATION_PANE_WIDTH = 250;
     public static final double OBJECT_PANE_WIDTH = 245;
-    public static final double OBJECT_PANE_HEIGHT = 35;
+    public static final double OBJECT_PANE_HEIGHT = 31;
 }
