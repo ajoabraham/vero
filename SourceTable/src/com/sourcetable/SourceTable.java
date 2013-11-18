@@ -269,7 +269,7 @@ public class SourceTable {
 
         // The following two statements produce equivalent SQL statement string
         // String sqlString = vendor.toString( query );
-        String sqlStirng2 = query.toString( );
+        String sqlString2 = query.toString();
         System.out.println("Output sql is: " + sqlString2);
     }    
 }
