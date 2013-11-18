@@ -18,6 +18,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.sql.generation.api.vendor.MySQLVendor;
+import org.sql.generation.api.vendor.SQLVendor;
+import org.sql.generation.api.vendor.SQLVendorProvider;
+import org.sql.generation.api.grammar.factories.BooleanFactory;
+import org.sql.generation.api.grammar.factories.ColumnsFactory;
+import org.sql.generation.api.grammar.factories.LiteralFactory;
+import org.sql.generation.api.grammar.factories.TableReferenceFactory;
+import org.sql.generation.api.grammar.query.QueryExpression;
 
 /**
  *
@@ -228,6 +236,40 @@ public class SourceTable {
             System.out.println("Got a Teradata - Prod - " + specificDS.toString());
         } else {
             System.out.println("Not found...");
-        }        
+        }
+        
+        // start generating sql
+        // Create or acquire vendor
+        SQLVendor vendor = null;
+        try {
+            vendor = SQLVendorProvider.createVendor(SQLVendor.class);
+        } catch (java.io.IOException e) {
+            System.out.println("Exception: " + e);
+        }
+
+        /*
+          Creating query:
+          SELECT value
+          FROM table
+          WHERE table.value = 5
+          ORDER BY 1 ASC
+        */
+        
+        BooleanFactory b = vendor.getBooleanFactory();
+        ColumnsFactory c = vendor.getColumnsFactory();
+        LiteralFactory l = vendor.getLiteralFactory();
+        TableReferenceFactory t = vendor.getTableReferenceFactory();
+
+        QueryExpression query = vendor.getQueryFactory().simpleQueryBuilder()
+          .select( "value" )
+          .from( t.tableName( "table" ) )
+          .where( b.eq( c.colName( "table", "value" ), l.n(5) ) )
+          .orderByAsc( "1" )
+          .createExpression();
+
+        // The following two statements produce equivalent SQL statement string
+        // String sqlString = vendor.toString( query );
+        String sqlStirng2 = query.toString( );
+        System.out.println("Output sql is: " + sqlString2);
     }    
 }
