@@ -52,7 +52,18 @@ public class SourceTableMainWindow extends BorderPane {
     private Pane getCenterPane() {
         BorderPane centerPane = new BorderPane();
         
+        centerPane.setTop(getMenuBar());
+        centerPane.setCenter(getTabPane());
+        
         return centerPane;
+    }
+    
+    private Pane getMenuBar() {
+        return null;
+    }
+    
+    private Pane getTabPane() {
+        return null;
     }
     
     private Pane getNavButtonPane() {
