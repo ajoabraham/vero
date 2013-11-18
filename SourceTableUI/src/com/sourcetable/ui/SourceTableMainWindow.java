@@ -13,7 +13,12 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import static com.sourcetable.ui.common.UIConstants.*;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 
 /**
@@ -58,12 +63,31 @@ public class SourceTableMainWindow extends BorderPane {
         return centerPane;
     }
     
-    private Pane getMenuBar() {
-        return null;
+    private Parent getMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        
+        Menu saveMenu = new Menu("SAVE");
+        Menu openMenu = new Menu("OPEN");
+        Menu runMenu = new Menu("RUN");
+        Menu addBlockMenu = new Menu("ADD BLOCK");
+        Menu deleteMenu = new Menu("DELETE");
+        
+        menuBar.getMenus().addAll(saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
+        
+        return menuBar;
     }
     
-    private Pane getTabPane() {
-        return null;
+    private Parent getTabPane() {
+        TabPane tabPane = new TabPane();
+        tabPane.setId("main-tab-pane");
+        
+        Tab studentTab = new Tab("#Students by Department");
+        tabPane.getTabs().add(studentTab);
+        
+        Tab otherReportTab = new Tab("Some Other Report");
+        tabPane.getTabs().add(otherReportTab);
+        
+        return tabPane;
     }
     
     private Pane getNavButtonPane() {
@@ -74,12 +98,12 @@ public class SourceTableMainWindow extends BorderPane {
         datasourceNavPaneButton.setId("datasource-nav-pane-button");
         datasourceNavPaneButton.setPrefSize(DATASOURCE_NAV_PANE_BTN_WIDTH, DATASOURCE_NAV_PANE_BTN_HEIGHT);
         datasourceNavPaneButton.setMinSize(DATASOURCE_NAV_PANE_BTN_WIDTH, DATASOURCE_NAV_PANE_BTN_HEIGHT);
-        Button datasourceObjButton = new Button();
-        datasourceObjButton.setId("datasource-obj-button");
-        datasourceObjButton.setPrefSize(DATASOURCE_OBJ_BTN_WIDTH, DATASOURCE_OBJ_BTN_HEIGHT);
-        datasourceObjButton.setMinSize(DATASOURCE_OBJ_BTN_WIDTH, DATASOURCE_OBJ_BTN_HEIGHT);
+        Button reportsNavPaneButton = new Button();
+        reportsNavPaneButton.setId("reports-nav-pane-button");
+        reportsNavPaneButton.setPrefSize(REPORTS_NAV_PANE_BTN_WIDTH, REPORTS_NAV_PANE_BTN_HEIGHT);
+        reportsNavPaneButton.setMinSize(REPORTS_NAV_PANE_BTN_WIDTH, REPORTS_NAV_PANE_BTN_HEIGHT);
         
-        navButtonPane.getChildren().addAll(datasourceNavPaneButton, datasourceObjButton);
+        navButtonPane.getChildren().addAll(datasourceNavPaneButton, reportsNavPaneButton);
         
         return navButtonPane;
     }

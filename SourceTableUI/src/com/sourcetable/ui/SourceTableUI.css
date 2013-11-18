@@ -7,7 +7,7 @@
     -fx-padding: 10 0 10 0;
     -fx-spacing: 10;
     -fx-alignment: top-center;
-    -fx-border-color: rgb(200, 200, 200);
+    -fx-border-color: #3C3C3C;
     -fx-border-width: 0 1 0 0;
 }
 
@@ -17,14 +17,14 @@
     -fx-background-image: url("images/datasource_nav_panel_btn.png");
 }
 
-#datasource-obj-button {
+#reports-nav-pane-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
-    -fx-background-image: url("images/datasource_obj_icon.png");
+    -fx-background-image: url("images/reports_nav_panel_btn.png");
 }
 
 #navigation-pane {
-    -fx-border-color: rgb(200, 200, 200);
+    -fx-border-color: #3C3C3C;
     -fx-border-width: 0 1 0 0;
 }
 
@@ -42,9 +42,12 @@
 }
 
 .object-pane {
-    -fx-border-radius: 10;
-    -fx-border-color: rgb(26, 67, 26);
-    -fx-background-color: rgb(26, 67, 26);
+    -fx-border-radius: 25;
+/*    -fx-border-color: rgb(26, 67, 26);
+    -fx-background-color: rgb(26, 67, 26);*/
+    -fx-background-image: url("images/attribute_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;
     -fx-padding: 0 5 0 5;
 }
 
@@ -52,5 +55,8 @@
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: #ccc;
     -fx-text-alignment: left;
-    -fx-border-radius: 10;
+}
+
+#main-tab-pane {
+    -fx-background-color: #3C3C3C;
 }
