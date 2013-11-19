@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.sourcetable.ui.common;
+package com.vero.ui.common;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sourcetable.ui;
+package com.vero.ui;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
-import static com.sourcetable.ui.common.UIConstants.*;
+import static com.vero.ui.common.UIConstants.*;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -25,8 +25,8 @@ import javafx.scene.image.ImageView;
  *
  * @author Tai Hu
  */
-public class SourceTableMainWindow extends BorderPane {
-    public SourceTableMainWindow() {
+public class VeroMainWindow extends BorderPane {
+    public VeroMainWindow() {
         buildUI();
     }
     
