@@ -39,6 +39,7 @@ public class SourceTableMainWindow extends BorderPane {
     
     private Pane getLeftPane() {
         GridPane leftPane = new GridPane();
+//leftPane.setStyle("-fx-border-color: yellow; -fx-border-width: 1;");        
         RowConstraints rc = new RowConstraints();
         rc.setPercentHeight(100);
         leftPane.getRowConstraints().add(rc);
@@ -56,7 +57,7 @@ public class SourceTableMainWindow extends BorderPane {
     
     private Pane getCenterPane() {
         BorderPane centerPane = new BorderPane();
-        
+//centerPane.setStyle("-fx-border-color: red; -fx-border-width: 1;");
         centerPane.setTop(getMenuBar());
         centerPane.setCenter(getTabPane());
         

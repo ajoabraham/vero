@@ -22,7 +22,7 @@ public class SourceTableUI extends Application {
         SourceTableMainWindow mainWindow = new SourceTableMainWindow();        
         
         // Set up stage
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         
         Scene scene = new Scene(mainWindow, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
         scene.getStylesheets().add(SourceTableUI.class.getResource("SourceTableUI.css").toExternalForm());

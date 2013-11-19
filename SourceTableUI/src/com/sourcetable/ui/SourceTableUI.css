@@ -24,6 +24,7 @@
 }
 
 #navigation-pane {
+    -fx-padding: 10 0 0 0;
     -fx-border-color: #3C3C3C;
     -fx-border-width: 0 1 0 0;
 }
@@ -42,19 +43,16 @@
 }
 
 .object-pane {
-    -fx-border-radius: 25;
-/*    -fx-border-color: rgb(26, 67, 26);
-    -fx-background-color: rgb(26, 67, 26);*/
     -fx-background-image: url("images/attribute_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
-    -fx-padding: 0 5 0 5;
 }
 
 .object-label {
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: #ccc;
     -fx-text-alignment: left;
+    -fx-padding: 0 0 0 10;
 }
 
 #main-tab-pane {
