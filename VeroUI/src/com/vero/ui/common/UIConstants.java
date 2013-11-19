@@ -20,6 +20,6 @@ public interface UIConstants {
     public static final double REPORTS_NAV_PANE_BTN_HEIGHT = 25;
     
     public static final double NAVIGATION_PANE_WIDTH = 250;
-    public static final double OBJECT_PANE_WIDTH = 230;
+    // Object pane should fill navigation pane width
     public static final double OBJECT_PANE_HEIGHT = 31;
 }

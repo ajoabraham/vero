@@ -4,6 +4,8 @@
  */
 package com.vero.ui;
 
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -13,13 +15,17 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import static com.vero.ui.common.UIConstants.*;
+import com.vero.util.UIUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBoxBuilder;
 
 /**
  *
@@ -120,40 +126,48 @@ public class VeroMainWindow extends BorderPane {
         VBox objectsPane = new VBox();
         objectsPane.setId("objects-pane");
         
-        objectsPane.getChildren().add(buildObjectPane("Teradata", null, null));
-        objectsPane.getChildren().add(buildObjectPane("LessionsFact", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Professors", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Professor ID", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Professor Name", null, null));
-        objectsPane.getChildren().add(buildObjectPane("# Professors", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Students", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Departments", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", null, null));
-        objectsPane.getChildren().add(buildObjectPane("Hive-Prod", null, null));
+        // Build search box first.
+        TextField searchField = new TextField();
+        searchField.setPrefHeight(OBJECT_PANE_HEIGHT);
+        searchField.setPromptText("Search...");
+        searchField.setId("object-search-field");
+        
+        objectsPane.getChildren().add(searchField);
+        objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
+        
+        objectsPane.getChildren().add(buildObjectPane("Teradata", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("LessionsFact", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Professors", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Professor ID", null, null, TYPE_ATTRIBUTE));
+        objectsPane.getChildren().add(buildObjectPane("Professor Name", null, null, TYPE_ATTRIBUTE));
+        objectsPane.getChildren().add(buildObjectPane("# Professors", null, null, TYPE_METRICS));
+        objectsPane.getChildren().add(buildObjectPane("Students", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Departments", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Hive-Prod", null, null, TYPE_DATASOURCE));
         
         navigationPane.setCenter(objectsPane);
         
         return navigationPane;
     }
     
-    private Pane buildObjectPane(String labelText, ImageView frontImage, ImageView backImage) {
-        BorderPane objectPane = new BorderPane();
-        objectPane.getStyleClass().add("object-pane");
-        objectPane.setPrefSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
-        objectPane.setMinSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
+    private Pane buildObjectPane(String labelText, ImageView frontImage, ImageView backImage, ObjectType type) {
+        HBox objectPane = new HBox();
+        objectPane.getStyleClass().addAll("object-pane", UIUtils.getObjectSytleClass(type));
+        objectPane.setPrefHeight(OBJECT_PANE_HEIGHT);
         
         if (frontImage != null) {
-            objectPane.setLeft(frontImage);
+            objectPane.getChildren().add(frontImage);
         }
         
         Label label = new Label(labelText);
-        label.setPrefSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
-        label.setMinSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
+//        label.setPrefSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
+//        label.setMinSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
         label.getStyleClass().add("object-label");
-        objectPane.setCenter(label);
+        objectPane.getChildren().add(label);
         
         if (backImage != null) {
-            objectPane.setRight(backImage);
+            objectPane.getChildren().add(backImage);
         }
         
         return objectPane;

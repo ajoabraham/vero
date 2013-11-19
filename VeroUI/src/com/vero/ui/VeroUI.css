@@ -42,8 +42,37 @@
     -fx-padding: 10 10 10 10;
 }
 
+#object-search-field {
+    -fx-background-color: #3C3C3C;
+    -fx-border-color: grey;
+    -fx-border-width: 1;
+    -fx-prompt-text-fill: grey;
+    -fx-text-fill: #ccc;
+}
+
 .object-pane {
+    -fx-alignment: center-left;
+    -fx-fill-height: true;
+}
+
+.object-attribute-pane {
     -fx-background-image: url("images/attribute_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;    
+}
+
+.object-datasource-pane {
+    -fx-background-image: url("images/ds_and_tbl_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;    
+}
+
+.object-unused-pane {
+   
+}
+
+.object-metrics-pane {
+    -fx-background-image: url("images/metrics_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
 }
