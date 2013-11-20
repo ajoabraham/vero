@@ -4,6 +4,7 @@
  */
 package com.vero.ui;
 
+import com.vero.ui.common.ImageList;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.*;
 import javafx.scene.control.Button;
@@ -22,10 +23,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.web.HTMLEditor;
 
 /**
  *
@@ -71,11 +74,11 @@ public class VeroMainWindow extends BorderPane {
     private Parent getMenuBar() {
         MenuBar menuBar = new MenuBar();
         
-        Menu saveMenu = new Menu("SAVE");
-        Menu openMenu = new Menu("OPEN");
-        Menu runMenu = new Menu("RUN");
-        Menu addBlockMenu = new Menu("ADD BLOCK");
-        Menu deleteMenu = new Menu("DELETE");
+        Menu saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
+        Menu openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
+        Menu runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
+        Menu addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
+        Menu deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
         
         menuBar.getMenus().addAll(saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
         
@@ -84,11 +87,11 @@ public class VeroMainWindow extends BorderPane {
     
     private Parent getTabPane() {
         TabPane tabPane = new TabPane();
-        tabPane.setId("main-tab-pane");
         
         Tab studentTab = new Tab("#Students by Department");
         BorderPane tabContentPane = new BorderPane();
         tabContentPane.setLeft(getDropZonePane());
+        tabContentPane.setCenter(getQueryPane());
         studentTab.setContent(tabContentPane);
         tabPane.getTabs().add(studentTab);
         
@@ -100,21 +103,29 @@ public class VeroMainWindow extends BorderPane {
     
     private Pane getDropZonePane() {
         VBox dropZonePane = new VBox();
+        dropZonePane.setId("drop-zone-pane");
+        dropZonePane.setPrefWidth(DROP_ZONE_PANE_WIDTH);
                 
         dropZonePane.getChildren().add(buildObjectPane("REPORT BLOCK", TYPE_UNUSED));
 
         Label attributesLabel = new Label("ATTRIBUTES");
+        attributesLabel.getStyleClass().add("subsection-title");
+        attributesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         dropZonePane.getChildren().add(attributesLabel);
                
         dropZonePane.getChildren().add(buildObjectPane("Student Department Name", TYPE_ATTRIBUTE));
         dropZonePane.getChildren().add(buildObjectPane("Professor Department Name", TYPE_ATTRIBUTE));
         
         Label metricsLabel = new Label("METRICS");
+        metricsLabel.getStyleClass().add("subsection-title");
+        metricsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         dropZonePane.getChildren().add(metricsLabel);
         
         dropZonePane.getChildren().add(buildObjectPane("# Lessons", TYPE_METRICS));
         
         Label tablesLabel = new Label("TABLES");
+        tablesLabel.getStyleClass().add("subsection-title");
+        tablesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         dropZonePane.getChildren().add(tablesLabel);
         
         dropZonePane.getChildren().add(buildObjectPane("LessionsFact T1", TYPE_DATASOURCE));
@@ -124,7 +135,16 @@ public class VeroMainWindow extends BorderPane {
         dropZonePane.getChildren().add(buildObjectPane("Departments T5", TYPE_DATASOURCE));
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
+        tableJoinsLabel.getStyleClass().add("subsection-title");
+        tableJoinsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         dropZonePane.getChildren().add(tableJoinsLabel);
+        
+        dropZonePane.getChildren().add(buildTableJoinPane());
+        dropZonePane.getChildren().add(buildTableJoinPane());
+        
+        TextField tableJoinTextField = new TextField();
+        tableJoinTextField.setPrefHeight(OBJECT_PANE_HEIGHT);
+        dropZonePane.getChildren().add(tableJoinTextField);
                 
         return dropZonePane;
     }
@@ -162,7 +182,7 @@ public class VeroMainWindow extends BorderPane {
         TextField searchField = new TextField();
         searchField.setPrefHeight(OBJECT_PANE_HEIGHT);
         searchField.setPromptText("Search...");
-        searchField.setId("object-search-field");
+        searchField.setId("object-search-text-field");
         
         objectsPane.getChildren().add(searchField);
         objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
@@ -208,5 +228,96 @@ public class VeroMainWindow extends BorderPane {
         }
         
         return objectPane;
+    }
+    
+    private Pane buildTableJoinPane() {
+        HBox tableJoinPane = new HBox();
+        tableJoinPane.getStyleClass().add("table-join-pane");
+        tableJoinPane.setPrefHeight(OBJECT_PANE_HEIGHT);
+        
+        Button editButton = new Button();
+        editButton.getStyleClass().add("edit-button");
+        editButton.setPrefSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
+        editButton.setMinSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
+        tableJoinPane.getChildren().add(editButton);
+        
+        Label leftTableLabel = new Label("T1");
+        leftTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
+        leftTableLabel.getStyleClass().add("table-label");
+        tableJoinPane.getChildren().add(leftTableLabel);
+        
+        Label joinLabel = new Label(null, new ImageView(ImageList.IMAGE_INNER_JOIN));
+        joinLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        tableJoinPane.getChildren().add(joinLabel);
+        
+        Label rightTableLabel = new Label("T2");
+        rightTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
+        rightTableLabel.getStyleClass().add("table-label");
+        tableJoinPane.getChildren().add(rightTableLabel);
+        
+        return tableJoinPane;
+    }
+    
+    private Pane getQueryPane() {
+        VBox queryPane = new VBox();
+        queryPane.setId("query-pane");
+        
+        queryPane.getChildren().addAll(getGlobalFilterPane(), getCommentPane(), getReportBlockPane());
+        return queryPane;
+    }
+    
+    private Pane getGlobalFilterPane() {
+        VBox globalFilterPane = new VBox();
+        globalFilterPane.setId("global-filter-pane");
+        
+        Label globalFilterLabel = new Label("GLOBAL FILTERS");
+        globalFilterLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        globalFilterLabel.getStyleClass().add("section-title");
+        globalFilterPane.getChildren().add(globalFilterLabel);
+        
+        TextField filterTextField = new TextField();
+        filterTextField.setPromptText("Type a column, attribute, metric, or table name to start...");
+        filterTextField.setId("global-filter-text-field");
+        globalFilterPane.getChildren().add(filterTextField);
+        
+        return globalFilterPane;
+    }
+    
+    private Pane getCommentPane() {
+        HBox commentPane = new HBox();
+        commentPane.setId("comment-pane");
+        
+        commentPane.getChildren().add(new ImageView(ImageList.IMAGE_COMMENT));
+        
+        Label commentLabel = new Label("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
+        commentLabel.setId("comment-label");
+        HBox.setHgrow(commentLabel, Priority.ALWAYS);
+        commentPane.getChildren().add(commentLabel);
+        
+        return commentPane;
+    }
+    
+    private Pane getReportBlockPane() {
+        BorderPane reportBlockPane = new BorderPane();
+        reportBlockPane.setId("report-block-pane");
+        reportBlockPane.setPrefHeight(REPORT_BLOCK_PANE_HEIGHT);
+        reportBlockPane.setMinHeight(REPORT_BLOCK_PANE_HEIGHT);
+        
+        HBox headerPane = new HBox();
+        headerPane.getChildren().add(new ImageView(ImageList.IMAGE_ACTIVE_CIRCLE));
+        Label headerLabel = new Label("REPORT BLOCK");
+        headerLabel.getStyleClass().add("section-title");
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(headerLabel, Priority.ALWAYS);
+        headerPane.getChildren().add(headerLabel);
+        headerPane.getChildren().add(new ImageView(ImageList.IMAGE_FILTER));
+        headerPane.getChildren().add(new ImageView(ImageList.IMAGE_RUN));
+        reportBlockPane.setTop(headerPane);
+        
+        TextArea reportBlockTextArea = new TextArea();
+        reportBlockTextArea.setId("report-block-text-area");
+        reportBlockPane.setCenter(reportBlockTextArea);
+        
+        return reportBlockPane;
     }
 }
