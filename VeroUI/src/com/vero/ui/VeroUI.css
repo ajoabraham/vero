@@ -67,8 +67,17 @@
     -fx-background-position: left top;    
 }
 
+.object-table-pane {
+    -fx-background-image: url("images/ds_and_tbl_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;    
+    -fx-padding: 0 10 0 10;
+}
+
 .object-unused-pane {
-   
+    -fx-background-image: url("images/unused_col_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;       
 }
 
 .object-metrics-pane {
@@ -82,6 +91,14 @@
     -fx-text-fill: #ccc;
     -fx-text-alignment: left;
     -fx-padding: 0 0 0 10;
+}
+
+.object-table-imageview {
+    -fx-image: url("images/datasource_obj_icon.png");
+}
+
+.object-table-status-imageview {
+    -fx-image: url("images/active_circle_icon.png");
 }
 
 #main-tab-pane {

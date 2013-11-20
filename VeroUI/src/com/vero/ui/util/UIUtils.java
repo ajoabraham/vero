@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.util;
+package com.vero.ui.util;
 
 import com.vero.ui.common.ObjectType;
 import javafx.scene.layout.HBoxBuilder;
@@ -28,6 +28,9 @@ public final class UIUtils {
                 break;
             case TYPE_DATASOURCE:
                 styleClass = "object-datasource-pane";
+                break;
+            case TYPE_TABLE:
+                styleClass = "object-table-pane";
                 break;
             case TYPE_METRICS:
                 styleClass = "object-metrics-pane";

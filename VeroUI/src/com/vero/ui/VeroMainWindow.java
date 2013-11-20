@@ -15,7 +15,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import static com.vero.ui.common.UIConstants.*;
-import com.vero.util.UIUtils;
+import com.vero.ui.util.UIUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -25,7 +25,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.layout.Priority;
 
 /**
  *
@@ -45,7 +45,6 @@ public class VeroMainWindow extends BorderPane {
     
     private Pane getLeftPane() {
         GridPane leftPane = new GridPane();
-//leftPane.setStyle("-fx-border-color: yellow; -fx-border-width: 1;");        
         RowConstraints rc = new RowConstraints();
         rc.setPercentHeight(100);
         leftPane.getRowConstraints().add(rc);
@@ -63,7 +62,6 @@ public class VeroMainWindow extends BorderPane {
     
     private Pane getCenterPane() {
         BorderPane centerPane = new BorderPane();
-//centerPane.setStyle("-fx-border-color: red; -fx-border-width: 1;");
         centerPane.setTop(getMenuBar());
         centerPane.setCenter(getTabPane());
         
@@ -89,12 +87,46 @@ public class VeroMainWindow extends BorderPane {
         tabPane.setId("main-tab-pane");
         
         Tab studentTab = new Tab("#Students by Department");
+        BorderPane tabContentPane = new BorderPane();
+        tabContentPane.setLeft(getDropZonePane());
+        studentTab.setContent(tabContentPane);
         tabPane.getTabs().add(studentTab);
         
         Tab otherReportTab = new Tab("Some Other Report");
         tabPane.getTabs().add(otherReportTab);
         
         return tabPane;
+    }
+    
+    private Pane getDropZonePane() {
+        VBox dropZonePane = new VBox();
+                
+        dropZonePane.getChildren().add(buildObjectPane("REPORT BLOCK", TYPE_UNUSED));
+
+        Label attributesLabel = new Label("ATTRIBUTES");
+        dropZonePane.getChildren().add(attributesLabel);
+               
+        dropZonePane.getChildren().add(buildObjectPane("Student Department Name", TYPE_ATTRIBUTE));
+        dropZonePane.getChildren().add(buildObjectPane("Professor Department Name", TYPE_ATTRIBUTE));
+        
+        Label metricsLabel = new Label("METRICS");
+        dropZonePane.getChildren().add(metricsLabel);
+        
+        dropZonePane.getChildren().add(buildObjectPane("# Lessons", TYPE_METRICS));
+        
+        Label tablesLabel = new Label("TABLES");
+        dropZonePane.getChildren().add(tablesLabel);
+        
+        dropZonePane.getChildren().add(buildObjectPane("LessionsFact T1", TYPE_DATASOURCE));
+        dropZonePane.getChildren().add(buildObjectPane("Professors T2", TYPE_DATASOURCE));
+        dropZonePane.getChildren().add(buildObjectPane("Students T3", TYPE_DATASOURCE));
+        dropZonePane.getChildren().add(buildObjectPane("Departments T4", TYPE_DATASOURCE));
+        dropZonePane.getChildren().add(buildObjectPane("Departments T5", TYPE_DATASOURCE));
+
+        Label tableJoinsLabel = new Label("TABLE JOINS");
+        dropZonePane.getChildren().add(tableJoinsLabel);
+                
+        return dropZonePane;
     }
     
     private Pane getNavButtonPane() {
@@ -135,39 +167,44 @@ public class VeroMainWindow extends BorderPane {
         objectsPane.getChildren().add(searchField);
         objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
         
-        objectsPane.getChildren().add(buildObjectPane("Teradata", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("LessionsFact", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Professors", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Professor ID", null, null, TYPE_ATTRIBUTE));
-        objectsPane.getChildren().add(buildObjectPane("Professor Name", null, null, TYPE_ATTRIBUTE));
-        objectsPane.getChildren().add(buildObjectPane("# Professors", null, null, TYPE_METRICS));
-        objectsPane.getChildren().add(buildObjectPane("Students", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Departments", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", null, null, TYPE_DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Hive-Prod", null, null, TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Teradata", TYPE_TABLE));
+        objectsPane.getChildren().add(buildObjectPane("LessionsFact", TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Professors", TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Professor ID", TYPE_ATTRIBUTE));
+        objectsPane.getChildren().add(buildObjectPane("Professor Name", TYPE_ATTRIBUTE));
+        objectsPane.getChildren().add(buildObjectPane("# Professors", TYPE_METRICS));
+        objectsPane.getChildren().add(buildObjectPane("unused_column_1", TYPE_UNUSED));
+        objectsPane.getChildren().add(buildObjectPane("Students", TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Departments", TYPE_DATASOURCE));
+        objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", TYPE_TABLE));
+        objectsPane.getChildren().add(buildObjectPane("Hive-Prod", TYPE_TABLE));
         
         navigationPane.setCenter(objectsPane);
         
         return navigationPane;
     }
     
-    private Pane buildObjectPane(String labelText, ImageView frontImage, ImageView backImage, ObjectType type) {
+    private Pane buildObjectPane(String labelText, ObjectType type) {
         HBox objectPane = new HBox();
         objectPane.getStyleClass().addAll("object-pane", UIUtils.getObjectSytleClass(type));
         objectPane.setPrefHeight(OBJECT_PANE_HEIGHT);
         
-        if (frontImage != null) {
-            objectPane.getChildren().add(frontImage);
+        if (type == TYPE_TABLE) {
+            ImageView tableImageView = new ImageView();
+            tableImageView.getStyleClass().add("object-table-imageview");
+            objectPane.getChildren().add(tableImageView);
         }
         
         Label label = new Label(labelText);
-//        label.setPrefSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
-//        label.setMinSize(OBJECT_PANE_WIDTH, OBJECT_PANE_HEIGHT);
+        HBox.setHgrow(label, Priority.ALWAYS);
+        label.setMaxWidth(Double.MAX_VALUE);
         label.getStyleClass().add("object-label");
         objectPane.getChildren().add(label);
         
-        if (backImage != null) {
-            objectPane.getChildren().add(backImage);
+        if (type == TYPE_TABLE) {
+            ImageView statusImageView = new ImageView();
+            statusImageView.getStyleClass().add("object-table-status-imageview");
+            objectPane.getChildren().add(statusImageView);
         }
         
         return objectPane;

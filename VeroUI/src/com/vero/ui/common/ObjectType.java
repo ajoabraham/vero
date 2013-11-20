@@ -11,5 +11,5 @@ package com.vero.ui.common;
  * @author Tai Hu
  */
 public enum ObjectType {
-    TYPE_ATTRIBUTE, TYPE_METRICS, TYPE_DATASOURCE, TYPE_UNUSED 
+    TYPE_ATTRIBUTE, TYPE_METRICS, TYPE_DATASOURCE, TYPE_TABLE, TYPE_UNUSED 
 }
