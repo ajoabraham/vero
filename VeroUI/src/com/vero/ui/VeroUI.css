@@ -1,5 +1,14 @@
+.root {
+/*******************************************************************************
+ * Defined all common color and style here to be used in ohter sections
+*******************************************************************************/
+    -fx-main-background-color: #2A2A2A;
+    -fx-light-grey-color: #3C3C3C;
+    -fx-default-text-color: #ccc;
+}
+
 #root-pane {
-    -fx-background-color: #2A2A2A;
+    -fx-background-color: -fx-main-background-color;
     -fx-padding: 1px;
 }
 
@@ -7,7 +16,7 @@
     -fx-padding: 10 0 10 0;
     -fx-spacing: 10;
     -fx-alignment: top-center;
-    -fx-border-color: #3C3C3C;
+    -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
 }
 
@@ -25,13 +34,13 @@
 
 #navigation-pane {
     -fx-padding: 10 0 0 0;
-    -fx-border-color: #3C3C3C;
+    -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
 }
 
 .section-title {
     -fx-font: bold normal 14px "Helvetica";
-    -fx-text-fill: #ccc;
+    -fx-text-fill: -fx-default-text-color;
     -fx-padding: 0 0 0 10;
 }
 
@@ -43,11 +52,11 @@
 }
 
 #object-search-field {
-    -fx-background-color: #3C3C3C;
+    -fx-background-color: -fx-light-grey-color;
     -fx-border-color: grey;
     -fx-border-width: 1;
     -fx-prompt-text-fill: grey;
-    -fx-text-fill: #ccc;
+    -fx-text-fill: -fx-default-text-color;
 }
 
 .object-pane {
@@ -88,7 +97,7 @@
 
 .object-label {
     -fx-font: bold normal 12px "Helvetica";
-    -fx-text-fill: #ccc;
+    -fx-text-fill: -fx-default-text-color;
     -fx-text-alignment: left;
     -fx-padding: 0 0 0 10;
 }
@@ -102,5 +111,5 @@
 }
 
 #main-tab-pane {
-    -fx-background-color: #3C3C3C;
+    -fx-background-color: -fx-light-grey-color;
 }
