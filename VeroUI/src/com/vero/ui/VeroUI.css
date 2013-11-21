@@ -72,12 +72,16 @@
 .object-pane {
     -fx-alignment: center-left;
     -fx-fill-height: true;
+    -fx-border-color: -fx-main-background-color;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-border-insets: -3;
 }
 
 .object-attribute-pane {
     -fx-background-image: url("images/attribute_bg.png");
     -fx-background-repeat: repeat;
-    -fx-background-position: left top;    
+    -fx-background-position: left top;  
 }
 
 .object-datasource-pane {
