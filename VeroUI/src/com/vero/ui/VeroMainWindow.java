@@ -16,11 +16,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import static com.vero.ui.common.UIConstants.*;
+import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -28,7 +27,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.web.HTMLEditor;
 
 /**
  *
@@ -40,7 +38,7 @@ public class VeroMainWindow extends BorderPane {
     }
     
     private void buildUI() {
-        setId("root-pane");
+        setId(ID_ROOT_PANE);
         
         setLeft(getLeftPane());
         setCenter(getCenterPane());
@@ -65,26 +63,12 @@ public class VeroMainWindow extends BorderPane {
     
     private Pane getCenterPane() {
         BorderPane centerPane = new BorderPane();
-        centerPane.setTop(getMenuBar());
+        centerPane.setTop(new VeroMenuBar());
         centerPane.setCenter(getTabPane());
         
         return centerPane;
     }
-    
-    private Parent getMenuBar() {
-        MenuBar menuBar = new MenuBar();
         
-        Menu saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
-        Menu openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
-        Menu runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
-        Menu addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
-        Menu deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
-        
-        menuBar.getMenus().addAll(saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
-        
-        return menuBar;
-    }
-    
     private Parent getTabPane() {
         TabPane tabPane = new TabPane();
         
