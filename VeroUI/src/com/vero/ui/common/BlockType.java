@@ -10,13 +10,9 @@ package com.vero.ui.common;
  *
  * @author Tai Hu
  */
-public enum ObjectType {  
-    DATASOURCE, 
-    TABLE,
-    COLUMN,
-    EXPRESSION,
-    ATTRIBUTE,
-    METRIC,
-    TABLE_JOIN,
-    UNUSED 
+public enum BlockType {
+    COMMENT_BLOCK,
+    QUERY_BLOCK,
+    REPORT_BLOCK,
+    FINAL_BLOCK
 }

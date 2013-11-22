@@ -23,19 +23,19 @@ public final class UIUtils {
         String styleClass = "unknown";
         
         switch (type) {
-            case TYPE_ATTRIBUTE:
+            case ATTRIBUTE:
                 styleClass = "object-attribute-pane";
                 break;
-            case TYPE_DATASOURCE:
+            case DATASOURCE:
                 styleClass = "object-datasource-pane";
                 break;
-            case TYPE_TABLE:
+            case TABLE:
                 styleClass = "object-table-pane";
                 break;
-            case TYPE_METRICS:
+            case METRIC:
                 styleClass = "object-metrics-pane";
                 break;
-            case TYPE_UNUSED:
+            case UNUSED:
                 styleClass = "object-unused-pane";
                 break;
             default:
