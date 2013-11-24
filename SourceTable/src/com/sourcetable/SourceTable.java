@@ -358,9 +358,13 @@ public class SourceTable {
         }
 
         // construct join
-        
-        
-        
+        HashMap<String, Table> selectedTables = new HashMap();
+        HashMap<String, JoinMeta> joinDefs = userSession.getJoins();
+        it = joinDefs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            JoinMeta aJoin = (JoinMeta) pairs.getValue();            
+        }
         
         
         ColumnReferenceByName innerFirstCol = c.colName( "t0", "entity_pk" );
