@@ -219,14 +219,20 @@ public class SourceTable {
                 // DS
                 System.out.println("name:" + oneJSONJDObj.getString("name"));
                 System.out.println("tleft table name:" + oneJSONJDObj.getString("tleft"));
+                System.out.println("cleft column name:" + oneJSONJDObj.getString("cleft"));
+                System.out.println("operator:" + oneJSONJDObj.getString("operator"));
                 System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
+                System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
                 System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                 System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
                 // add DS                
                 JoinMeta aJoin = new JoinMeta(
                     oneJSONJDObj.getString("name"),
                     oneJSONJDObj.getString("tleft"),
+                    oneJSONJDObj.getString("cleft"),
+                    oneJSONJDObj.getString("operator"),
                     oneJSONJDObj.getString("tright"),
+                    oneJSONJDObj.getString("cright"),
                     oneJSONJDObj.getString("expression"),
                     oneJSONJDObj.getString("jointype")
                 );
@@ -358,15 +364,50 @@ public class SourceTable {
         }
 
         // construct join
-        HashMap<String, Table> selectedTables = new HashMap();
+        ArrayList<String> selectedTables = new ArrayList();
         HashMap<String, JoinMeta> joinDefs = userSession.getJoins();
         it = joinDefs.entrySet().iterator();
+        int cnt = 0;
+        TableReferenceBuilder allJoins = null;
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
-            JoinMeta aJoin = (JoinMeta) pairs.getValue();            
+            JoinMeta aJoin = (JoinMeta) pairs.getValue();
+            selectedTables.add(aJoin.getTLeft());
+            selectedTables.add(aJoin.getTRight());
+            // parsing joindef
+            String jType = aJoin.getType();
+            String jExp = aJoin.getExpression();
+            org.sql.generation.api.grammar.query.joins.JoinType jT;
+            
+            switch (jType) {
+                case "inner":
+                    jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                    break;
+                case "outer":
+                    jT = org.sql.generation.api.grammar.query.joins.JoinType.FULL_OUTER;
+                    break;
+                case "left":
+                    jT = org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER;
+                    break;
+                case "right":
+                    jT = org.sql.generation.api.grammar.query.joins.JoinType.RIGHT_OUTER;
+                    break;
+                default:
+                    jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                    break;
+            }            
+            
+            if (cnt == 0) {
+                allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias("T0")));
+            }                                  
+
+            allJoins.addQualifiedJoin(
+                jT,
+                t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias("T1")),
+                t.jc(b.booleanBuilder(b.eq(c.colName("T0", aJoin.getCLeft()), c.colName("T1", aJoin.getCRight())))
+                .createExpression()));
         }
-        
-        
+                
         ColumnReferenceByName innerFirstCol = c.colName( "t0", "entity_pk" );
         ColumnReferenceByName innerSecondCol = c.colName( "t0", "entity_identity" );
         // ColumnsBuilder innerSelectCols = q.columnsBuilder().addUnnamedColumns(innerFirstCol, innerSecondCol );                                                        
@@ -403,7 +444,8 @@ public class SourceTable {
 
         QuerySpecificationBuilder secondBuilder = q.querySpecificationBuilder();
         secondBuilder.setSelect( innerSelectCols );
-        secondBuilder.getFrom().addTableReferences( join );
+        //secondBuilder.getFrom().addTableReferences( join );
+        secondBuilder.getFrom().addTableReferences(allJoins);
         secondBuilder.getWhere().reset( where );
         secondBuilder.getGroupBy().addGroupingElements( q.groupingElement( innerFirstCol ),
             q.groupingElement( innerSecondCol ) );

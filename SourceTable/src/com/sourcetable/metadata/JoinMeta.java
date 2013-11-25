@@ -16,21 +16,55 @@ public class JoinMeta {
     UUID uuid;
     String name;
     String tleft;
+    String cleft;
     String tright;
+    String cright;
+    String operator;
     String expression;
     // JoinType type;
     String type;
     
-    public JoinMeta(String inName, String inL, String inR, String inExp, String inType) {
+    public JoinMeta(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
         uuid = UUID.randomUUID();
         name = inName;
-        tleft = inL;
-        tright = inR;
+        tleft = inTL;
+        cleft = inCL;
+        operator = inOp;
+        tright = inTR;
+        cright = inCR;
         expression = inExp;
         type = inType;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public String getTLeft() {
+        return tleft;
+    }
+
+    public String getCLeft() {
+        return cleft;
+    }
+    
+    public String getTRight() {
+        return tright;
+    }
+    
+    public String getCRight() {
+        return cright;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public String getExpression() {
+        return expression;
     }
 }

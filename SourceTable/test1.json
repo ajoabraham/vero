@@ -95,7 +95,10 @@
         {
             "name": "on equal id",
             "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",
             "tright": "DepartmentFacts",
+            "cright": "dept_id",
             "expression": "tleft.id=tright.dept_id",
             "jointype": "inner"
         }
