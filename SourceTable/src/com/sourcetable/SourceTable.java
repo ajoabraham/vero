@@ -395,11 +395,11 @@ public class SourceTable {
                 default:
                     jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
                     break;
-            }            
+            }
             
             if (cnt == 0) {
                 allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias("T0")));
-            }                                  
+            }
 
             allJoins.addQualifiedJoin(
                 jT,
@@ -407,15 +407,8 @@ public class SourceTable {
                 t.jc(b.booleanBuilder(b.eq(c.colName("T0", aJoin.getCLeft()), c.colName("T1", aJoin.getCRight())))
                 .createExpression()));
         }
-                
-        ColumnReferenceByName innerFirstCol = c.colName( "t0", "entity_pk" );
-        ColumnReferenceByName innerSecondCol = c.colName( "t0", "entity_identity" );
-        // ColumnsBuilder innerSelectCols = q.columnsBuilder().addUnnamedColumns(innerFirstCol, innerSecondCol );                                                        
-        
-        BooleanExpression where = b.in( c.colName( "t0", "entity_type_id" ), l.n( 3 ), l.n( 4 ) );
-        firstInnerQuery.setSelect( innerSelectCols );                              
+        firstInnerQuery.setSelect(innerSelectCols);                              
         firstInnerQuery.getFrom().addTableReferences(allJoins);
-
         //firstInnerQuery.getWhere().reset( where );
 
         QueryExpressionBody innerQuery = q.queryBuilder(firstInnerQuery.createExpression()).createExpression();
