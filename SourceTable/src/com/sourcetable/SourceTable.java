@@ -414,55 +414,13 @@ public class SourceTable {
         
         BooleanExpression where = b.in( c.colName( "t0", "entity_type_id" ), l.n( 3 ), l.n( 4 ) );
         firstInnerQuery.setSelect( innerSelectCols );                              
-        firstInnerQuery.getFrom().addTableReferences(
-            t.tableBuilder( t.table( t.tableName( "qi4j", "entities" ), t.tableAlias( "t0" ) ) ) );
+        firstInnerQuery.getFrom().addTableReferences(allJoins);
 
-        firstInnerQuery.getWhere().reset( where );
+        //firstInnerQuery.getWhere().reset( where );
 
-        TableReferenceBuilder join = t
-            .tableBuilder( t.table( t.tableName( "qi4j", "entities" ), t.tableAlias( "t0" ) ) )
-            .addQualifiedJoin(
-                org.sql.generation.api.grammar.query.joins.JoinType.INNER,
-                t.table( t.tableName( "qi4j", "qname_6" ), t.tableAlias( "t1" ) ),
-                t.jc( b.booleanBuilder( b.eq( c.colName( "t0", "entity_pk" ), c.colName( "t1", "entity_pk" ) ) )
-                    .and( b.isNull( c.colName( "t1", "parent_qname" ) ) ).createExpression() ) )
-            .addQualifiedJoin(
-                org.sql.generation.api.grammar.query.joins.JoinType.INNER,
-                t.table( t.tableName( "qi4j", "qname_11" ), t.tableAlias( "t2" ) ),
-                t.jc( b.booleanBuilder( b.eq( c.colName( "t1", "qname_id" ), c.colName( "t2", "parent_qname" ) ) )
-                    .and( b.eq( c.colName( "t1", "entity_pk" ), c.colName( "t2", "entity_pk" ) ) ).createExpression() ) )
-            .addQualifiedJoin(
-                org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER,
-                t.table( t.tableName( "qi4j", "qname_12" ), t.tableAlias( "t3" ) ),
-                t.jc( b.booleanBuilder( b.eq( c.colName( "t2", "qname_id" ), c.colName( "t3", "parent_qname" ) ) )
-                    .and( b.eq( c.colName( "t2", "entity_pk" ), c.colName( "t3", "entity_pk" ) ) ).createExpression() ) )
-            .addQualifiedJoin(
-                org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER,
-                t.table( t.tableName( "qi4j", "qname_13" ), t.tableAlias( "t4" ) ),
-                t.jc( b.booleanBuilder( b.eq( c.colName( "t3", "qname_id" ), c.colName( "t4", "parent_qname" ) ) )
-                    .and( b.eq( c.colName( "t2", "entity_pk" ), c.colName( "t4", "entity_pk" ) ) ).createExpression() ) );
+        QueryExpressionBody innerQuery = q.queryBuilder(firstInnerQuery.createExpression()).createExpression();
 
-        QuerySpecificationBuilder secondBuilder = q.querySpecificationBuilder();
-        secondBuilder.setSelect( innerSelectCols );
-        //secondBuilder.getFrom().addTableReferences( join );
-        secondBuilder.getFrom().addTableReferences(allJoins);
-        secondBuilder.getWhere().reset( where );
-        secondBuilder.getGroupBy().addGroupingElements( q.groupingElement( innerFirstCol ),
-            q.groupingElement( innerSecondCol ) );
-        secondBuilder.getHaving().reset( b.geq( l.func( "COUNT", c.colName( "t2", "qname_value" ) ), l.n( 2 ) ) );
-        secondBuilder.getOrderBy().addSortSpecs( q.sortSpec( c.colName( "t0", "entity_pk" ), Ordering.ASCENDING ) );
-
-        QueryExpressionBody innerQuery = q.queryBuilder( firstInnerQuery.createExpression() )
-            .except( secondBuilder.createExpression() ).createExpression();
-
-        QuerySpecificationBuilder select = q.querySpecificationBuilder().setSelect(
-            q.columnsBuilder().addUnnamedColumns( c.colName( "t0", "entity_identity" ) ) );
-        select.getFrom().addTableReferences(
-            t.tableBuilder( t.table( q.createQuery( innerQuery ), t.tableAlias( "t0" ) ) ) );
-
-        QueryExpression query = q.createQuery( q.queryBuilder( select.createExpression() ).createExpression() );
-
-        String sqlString = query.toString();
+        String sqlString = innerQuery.toString();
         System.out.println("Output sql is: " + sqlString);       
     }    
 }
