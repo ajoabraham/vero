@@ -364,19 +364,24 @@ public class SourceTable {
         }
 
         // construct join
-        ArrayList<String> selectedTables = new ArrayList();
+        // ArrayList<String> selectedTables = new ArrayList();
+        HashMap<String, String> tableAliases = new HashMap();
         HashMap<String, JoinMeta> joinDefs = userSession.getJoins();
         it = joinDefs.entrySet().iterator();
         int cnt = 0;
+        int alias_cnt = 0;
         TableReferenceBuilder allJoins = null;
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             JoinMeta aJoin = (JoinMeta) pairs.getValue();
-            selectedTables.add(aJoin.getTLeft());
-            selectedTables.add(aJoin.getTRight());
+            tableAliases.put(aJoin.getTLeft(), "T"+alias_cnt);
+            alias_cnt++;
+            tableAliases.put(aJoin.getTRight(), "T"+alias_cnt);
+            alias_cnt++;
             // parsing joindef
             String jType = aJoin.getType();
             String jExp = aJoin.getExpression();
+            String jOper = aJoin.getOperator();
             org.sql.generation.api.grammar.query.joins.JoinType jT;
             
             switch (jType) {
@@ -398,14 +403,29 @@ public class SourceTable {
             }
             
             if (cnt == 0) {
-                allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias("T0")));
+                allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(tableAliases.get(aJoin.getTLeft()))));
             }
 
+            BooleanExpression bE;
+            switch (jOper) {
+                case ">":
+                    bE = b.gt(c.colName(tableAliases.get(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(tableAliases.get(aJoin.getTRight()), aJoin.getCRight()));
+                    break;
+                case "=":
+                    bE = b.eq(c.colName(tableAliases.get(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(tableAliases.get(aJoin.getTRight()), aJoin.getCRight()));
+                    break;
+                case "<":
+                    bE = b.lt(c.colName(tableAliases.get(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(tableAliases.get(aJoin.getTRight()), aJoin.getCRight()));
+                    break;
+                default:
+                    bE = b.eq(c.colName(tableAliases.get(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(tableAliases.get(aJoin.getTRight()), aJoin.getCRight()));
+                    break;
+            }                                    
+                        
             allJoins.addQualifiedJoin(
                 jT,
-                t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias("T1")),
-                t.jc(b.booleanBuilder(b.eq(c.colName("T0", aJoin.getCLeft()), c.colName("T1", aJoin.getCRight())))
-                .createExpression()));
+                t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(tableAliases.get(aJoin.getTRight()))),
+                t.jc(b.booleanBuilder(bE).createExpression()));
         }
         firstInnerQuery.setSelect(innerSelectCols);                              
         firstInnerQuery.getFrom().addTableReferences(allJoins);
