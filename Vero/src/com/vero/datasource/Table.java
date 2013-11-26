@@ -32,4 +32,8 @@ public class Table {
     public Date getLastScan() {
         return lastScan;
     }
+    
+    public void addColumn(Column col){
+        columns.add(col);
+    }
 }
