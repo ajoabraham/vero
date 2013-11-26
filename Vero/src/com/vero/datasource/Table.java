@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Table {
-    String name;
+    String objectName = "";
+    String displayName = "";
     ArrayList<Column> columns;
     int rowCount;
     Date lastScan;
@@ -13,7 +14,8 @@ public class Table {
     DataSource dataSource;
     
     public Table(String inName, DataSource inDS) {
-        name = inName;
+        objectName = inName;
+        displayName = inName;
         columns = new ArrayList();
         rowCount = 0;
         lastScan = new Date();
@@ -21,8 +23,12 @@ public class Table {
         dataSource = inDS;
     }
     
-    public String getName() {
-        return name;
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
     
     public int getRowCount() {

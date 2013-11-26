@@ -19,7 +19,7 @@ public class DataSource {
     }
     
     public void addTable(Table inTable) {
-        tables.put(inTable.getName(), inTable);
+        tables.put(inTable.getObjectName(), inTable);
     }
 
     public UUID getUUID() {

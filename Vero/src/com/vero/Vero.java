@@ -271,31 +271,6 @@ public class Vero {
         } catch (java.io.IOException e) {
             System.out.println("Exception: " + e);
         }
-
-        /*
-          Creating query:
-          SELECT value
-          FROM table
-          WHERE table.value = 5
-          ORDER BY 1 ASC
-        
-        BooleanFactory b = vendor.getBooleanFactory();
-        ColumnsFactory c = vendor.getColumnsFactory();
-        LiteralFactory l = vendor.getLiteralFactory();
-        TableReferenceFactory t = vendor.getTableReferenceFactory();
-
-        QueryExpression query = vendor.getQueryFactory().simpleQueryBuilder()
-          .select( "value" )
-          .from( t.tableName( "table" ) )
-          .where( b.eq( c.colName( "table", "value" ), l.n(5) ) )
-          .orderByAsc( "1" )
-          .createExpression();
-
-        // The following two statements produce equivalent SQL statement string
-        // String sqlString = vendor.toString( query );
-        String sqlString2 = query.toString();
-        System.out.println("Output sql is: " + sqlString2);
-        */
         
         // @formatter:off
         /*
@@ -325,6 +300,8 @@ public class Vero {
         ColumnsFactory c = vendor.getColumnsFactory();
 
         QuerySpecificationBuilder firstInnerQuery = q.querySpecificationBuilder();
+        HashMap<String, String> tableAliases = new HashMap();
+        int alias_cnt = 0;                       
         
         // construct select
         // get all expressions from all attributes
@@ -336,9 +313,19 @@ public class Vero {
             
             AttributeMeta anAttr = (AttributeMeta) pairs.getValue();
             ArrayList<ExpressionMeta> exps = anAttr.getExpressions();
-            for (int i = 0; i < exps.size(); i++) {
-                ColumnReferenceByName aColExp = c.colName(exps.get(i).getExpression());
-                colRefByName.add(aColExp);
+            String colTableRep = "";
+            for (int i = 0; i < exps.size(); i++) {                
+                ArrayList<Table> expTables = exps.get(i).getTables();
+                for (int j =0; j < expTables.size(); j++) {
+                    if (j==0) colTableRep = expTables.get(j).getObjectName();
+                    if (!tableAliases.containsKey(expTables.get(j).getObjectName())) {
+                        tableAliases.put(expTables.get(j).getObjectName(), "T"+alias_cnt);
+                        alias_cnt++;
+                    }
+                }
+                
+                ColumnReferenceByName aColExp = c.colName(tableAliases.get(colTableRep), exps.get(i).getExpression());
+                colRefByName.add(aColExp);                
             }
         }
         ColumnReference[] colRefAttr = new ColumnReference[colRefByName.size()];
@@ -354,8 +341,18 @@ public class Vero {
             
             MetricMeta anMet = (MetricMeta) pairs.getValue();
             ArrayList<ExpressionMeta> exps = anMet.getExpressions();
+            String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {
-                ColumnReferenceByName aColExp = c.colName(exps.get(i).getExpression());
+                ArrayList<Table> expTables = exps.get(i).getTables();
+                for (int j =0; j < expTables.size(); j++) {
+                    if (j==0) colTableRep = expTables.get(j).getObjectName();
+                    if (!tableAliases.containsKey(expTables.get(j).getObjectName())) {
+                        tableAliases.put(expTables.get(j).getObjectName(), "T"+alias_cnt);
+                        alias_cnt++;
+                    }
+                }
+                
+                ColumnReferenceByName aColExp = c.colName(tableAliases.get(colTableRep), exps.get(i).getExpression());
                 colRefByName.add(aColExp);
             }
         }
@@ -370,20 +367,23 @@ public class Vero {
         }
 
         // construct join
-        // ArrayList<String> selectedTables = new ArrayList();
-        HashMap<String, String> tableAliases = new HashMap();
         HashMap<String, JoinMeta> joinDefs = userSession.getJoins();
         it = joinDefs.entrySet().iterator();
         int cnt = 0;
-        int alias_cnt = 0;
         TableReferenceBuilder allJoins = null;
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             JoinMeta aJoin = (JoinMeta) pairs.getValue();
-            tableAliases.put(aJoin.getTLeft(), "T"+alias_cnt);
-            alias_cnt++;
-            tableAliases.put(aJoin.getTRight(), "T"+alias_cnt);
-            alias_cnt++;
+            
+            if (!tableAliases.containsKey(aJoin.getTLeft())) {
+                tableAliases.put(aJoin.getTLeft(), "T"+alias_cnt);
+                alias_cnt++;
+            }
+            
+            if (!tableAliases.containsKey(aJoin.getTRight())) {
+                tableAliases.put(aJoin.getTRight(), "T"+alias_cnt);
+                alias_cnt++;
+            }
             // parsing joindef
             String jType = aJoin.getType();
             String jExp = aJoin.getExpression();

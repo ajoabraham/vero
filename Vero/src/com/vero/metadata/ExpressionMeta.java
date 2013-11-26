@@ -33,6 +33,10 @@ public class ExpressionMeta implements Filterable {
         return expression;
     }
 
+    public ArrayList getTables() {
+        return tables;
+    }
+    
     public UUID getUUID() {
         return uuid;
     }
