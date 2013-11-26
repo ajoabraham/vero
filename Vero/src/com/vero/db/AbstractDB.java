@@ -6,10 +6,19 @@
 
 package com.vero.db;
 
+import com.vero.datasource.ColDataType;
+import com.vero.datasource.Column;
 import com.vero.datasource.Table;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +46,9 @@ abstract class AbstractDB implements Serializable {
     private String databaseName="";
     private String schemaName="";
     
-    protected Connection conn = null;
+    protected Connection _conn = null;
+    protected Map<String,Table> _catalog;
+    protected List<String> _databases;
    
     
     public AbstractDB(){
@@ -45,10 +56,81 @@ abstract class AbstractDB implements Serializable {
     
     // ---- ABSTRACT METHODS ---- //
     abstract Connection connect();
-    abstract void testConnection();
-    abstract HashMap<String,Table> getDBTables();
-    abstract void getDatabases();
-    abstract void getSchemas();
+    abstract boolean testConnection();
+   
+    // ---- CORE METHODS ---- //
+    public Map<String, Table> getDBTables() {
+        if (_catalog == null){
+            try {
+                loadCatalog();
+            } catch (SQLException ex) {
+                Logger.getLogger(MySQLDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return _catalog;
+    }
+
+    public List<String> getDatabases() throws SQLException {
+        if(_databases == null){
+            _databases = new ArrayList();
+            ResultSet rs = connect().getMetaData().getCatalogs();
+            
+            while(rs.next()){
+                _databases.add(rs.getString(1));
+            }
+        }
+        return _databases;
+    }
+    
+    public void getSchemas() {
+        throw new UnsupportedOperationException("MySQL does not support Schemas specifically (databases and schemas are the same thing)."); 
+    }
+    
+    public boolean supportsSchema(){
+        return false;
+    }
+    
+    public void loadCatalog() throws SQLException{
+        if(_catalog == null){
+            _catalog = new HashMap();
+        }else{
+          _catalog.clear();  
+        }
+        
+        ResultSet rs = connect().getMetaData().getColumns(this.getDatabaseName(), null, null, null);
+        String tableName = "";
+        String prevTableName="";
+        Table t = null;
+        
+        while(rs.next()){
+            tableName = rs.getString("TABLE_NAME");
+            
+            if(!tableName.equals(prevTableName)){
+                t = new Table(tableName,null);
+                if(!prevTableName.isEmpty()){
+                    _catalog.put(prevTableName, t);
+                }
+            }
+            
+            Column c = new Column(
+                    rs.getString("TABLE_NAME"),
+                    ColDataType.NONE,
+                    false,
+                    t   );
+            t.addColumn(c);
+            
+            prevTableName = tableName;
+        }
+    }
+    
+    public void close() throws SQLException{
+        _conn.close();
+        _conn = null;
+        if( _catalog != null) {_catalog.clear();}
+        _catalog = null;
+        if( _databases != null) {_databases.clear();}
+        _databases = null;
+    }
     
     // ---- SETTER & GETTER METHODS ---- //
     public String getVersion() {
