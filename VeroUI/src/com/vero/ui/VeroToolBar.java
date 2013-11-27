@@ -10,6 +10,8 @@ import static com.vero.ui.common.UIConstants.DATASOURCES_TOOL_BAR_BTN_WIDTH;
 import static com.vero.ui.common.UIConstants.REPORTS_TOOL_BAR_BTN_HEIGHT;
 import static com.vero.ui.common.UIConstants.REPORTS_TOOL_BAR_BTN_WIDTH;
 import static com.vero.ui.common.CSSConstants.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -17,8 +19,9 @@ import javafx.scene.layout.VBox;
  *
  * @author Tai Hu
  */
-public class VeroToolBar extends VBox {
-    
+public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
+    private Button datasourcesToolBarButton = null;
+    private Button reportsToolBarButton = null;
     
     public VeroToolBar() {
         buildUI();
@@ -27,15 +30,27 @@ public class VeroToolBar extends VBox {
     private void buildUI() {
         setId(ID_VERO_TOOL_BAR);
 
-        Button datasourceNavPaneButton = new Button();
-        datasourceNavPaneButton.setId(ID_DATASOURCES_TOOL_BAR_BUTTON);
-        datasourceNavPaneButton.setPrefSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
-        datasourceNavPaneButton.setMinSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
-        Button reportsNavPaneButton = new Button();
-        reportsNavPaneButton.setId(ID_REPORTS_TOOL_BAR_BUTTON);
-        reportsNavPaneButton.setPrefSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
-        reportsNavPaneButton.setMinSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
+        datasourcesToolBarButton = new Button();
+        datasourcesToolBarButton.setId(ID_DATASOURCES_TOOL_BAR_BUTTON);
+        datasourcesToolBarButton.setPrefSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
+        datasourcesToolBarButton.setMinSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
+        datasourcesToolBarButton.setOnAction(this);
+        reportsToolBarButton = new Button();
+        reportsToolBarButton.setId(ID_REPORTS_TOOL_BAR_BUTTON);
+        reportsToolBarButton.setPrefSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
+        reportsToolBarButton.setMinSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
+        reportsToolBarButton.setOnAction(this);
 
-        getChildren().addAll(datasourceNavPaneButton, reportsNavPaneButton);
+        getChildren().addAll(datasourcesToolBarButton, reportsToolBarButton);
+    }
+
+    @Override
+    public void handle(ActionEvent e) {
+        if (e.getSource() == datasourcesToolBarButton) {
+            
+        }
+        else if (e.getSource() == reportsToolBarButton) {
+            
+        }
     }
 }

@@ -37,11 +37,31 @@
     -fx-background-image: url("images/datasource_nav_panel_btn.png");
 }
 
+#datasources-tool-bar-button:hover {
+    -fx-background-color: -fx-media-grey-color;
+    -fx-background-insets: -1;
+}
+
+#datasources-tool-bar-button:pressed {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-background-insets: 1;
+}
+
 #reports-tool-bar-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
     -fx-background-image: url("images/reports_nav_panel_btn.png");
+}
+
+#reports-tool-bar-button:hover {
+    -fx-background-color: -fx-media-grey-color;
+    -fx-background-insets: -1;
+}
+
+#reports-tool-bar-button:pressed {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-background-insets: 1;
 }
 
 #navigation-pane {
