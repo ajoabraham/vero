@@ -5,9 +5,6 @@
 package com.vero.ui;
 
 import com.vero.ui.common.ImageList;
-import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.*;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -17,7 +14,6 @@ import javafx.scene.layout.VBox;
 
 import static com.vero.ui.common.UIConstants.*;
 import static com.vero.ui.common.CSSConstants.*;
-import com.vero.ui.util.UIUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -33,6 +29,9 @@ import javafx.scene.layout.Priority;
  * @author Tai Hu
  */
 public class VeroMainWindow extends BorderPane {
+    private Pane veroToolBar = null;
+    private Pane navigationPane = null;
+    
     public VeroMainWindow() {
         buildUI();
     }
@@ -44,17 +43,22 @@ public class VeroMainWindow extends BorderPane {
         setCenter(getCenterPane());
     }
     
+    /**
+     * Build tool bar and navigation pane
+     * 
+     * @return pane contains both tool bar and navigation pane 
+     */
     private Pane getLeftPane() {
         GridPane leftPane = new GridPane();
         RowConstraints rc = new RowConstraints();
         rc.setPercentHeight(100);
         leftPane.getRowConstraints().add(rc);
         
-        Pane navButtonPane = getNavButtonPane();
+        veroToolBar = new VeroToolBar();
         leftPane.getColumnConstraints().add(new ColumnConstraints(40));
-        leftPane.add(navButtonPane, 0, 0);
+        leftPane.add(veroToolBar, 0, 0);
         
-        Pane navigationPane = getNavigationPane();
+        navigationPane = new NavigationPane();
         leftPane.getColumnConstraints().add(new ColumnConstraints(NAVIGATION_PANE_WIDTH));
         leftPane.add(navigationPane, 1, 0);
         
@@ -74,7 +78,7 @@ public class VeroMainWindow extends BorderPane {
         
         Tab studentTab = new Tab("#Students by Department");
         BorderPane tabContentPane = new BorderPane();
-        tabContentPane.setLeft(getDropZonePane());
+        tabContentPane.setLeft(new DropZonePane());
         tabContentPane.setCenter(getQueryPane());
         studentTab.setContent(tabContentPane);
         tabPane.getTabs().add(studentTab);
@@ -84,164 +88,7 @@ public class VeroMainWindow extends BorderPane {
         
         return tabPane;
     }
-    
-    private Pane getDropZonePane() {
-        VBox dropZonePane = new VBox();
-        dropZonePane.setId("drop-zone-pane");
-        dropZonePane.setPrefWidth(DROP_ZONE_PANE_WIDTH);
-                
-        dropZonePane.getChildren().add(buildObjectPane("REPORT BLOCK", UNUSED));
-
-        Label attributesLabel = new Label("ATTRIBUTES");
-        attributesLabel.getStyleClass().add("subsection-title");
-        attributesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        dropZonePane.getChildren().add(attributesLabel);
-               
-        dropZonePane.getChildren().add(buildObjectPane("Student Department Name", ATTRIBUTE));
-        dropZonePane.getChildren().add(buildObjectPane("Professor Department Name", ATTRIBUTE));
         
-        Label metricsLabel = new Label("METRICS");
-        metricsLabel.getStyleClass().add("subsection-title");
-        metricsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        dropZonePane.getChildren().add(metricsLabel);
-        
-        dropZonePane.getChildren().add(buildObjectPane("# Lessons", METRIC));
-        
-        Label tablesLabel = new Label("TABLES");
-        tablesLabel.getStyleClass().add("subsection-title");
-        tablesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        dropZonePane.getChildren().add(tablesLabel);
-        
-        dropZonePane.getChildren().add(buildObjectPane("LessionsFact T1", DATASOURCE));
-        dropZonePane.getChildren().add(buildObjectPane("Professors T2", DATASOURCE));
-        dropZonePane.getChildren().add(buildObjectPane("Students T3", DATASOURCE));
-        dropZonePane.getChildren().add(buildObjectPane("Departments T4", DATASOURCE));
-        dropZonePane.getChildren().add(buildObjectPane("Departments T5", DATASOURCE));
-
-        Label tableJoinsLabel = new Label("TABLE JOINS");
-        tableJoinsLabel.getStyleClass().add("subsection-title");
-        tableJoinsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        dropZonePane.getChildren().add(tableJoinsLabel);
-        
-        dropZonePane.getChildren().add(buildTableJoinPane());
-        dropZonePane.getChildren().add(buildTableJoinPane());
-        
-        TextField tableJoinTextField = new TextField();
-        tableJoinTextField.setPrefHeight(OBJECT_PANE_HEIGHT);
-        dropZonePane.getChildren().add(tableJoinTextField);
-                
-        return dropZonePane;
-    }
-    
-    private Pane getNavButtonPane() {
-        VBox navButtonPane = new VBox();
-        navButtonPane.setId("nav-button-pane");
-        
-        Button datasourceNavPaneButton = new Button();
-        datasourceNavPaneButton.setId("datasource-nav-pane-button");
-        datasourceNavPaneButton.setPrefSize(DATASOURCE_NAV_PANE_BTN_WIDTH, DATASOURCE_NAV_PANE_BTN_HEIGHT);
-        datasourceNavPaneButton.setMinSize(DATASOURCE_NAV_PANE_BTN_WIDTH, DATASOURCE_NAV_PANE_BTN_HEIGHT);
-        Button reportsNavPaneButton = new Button();
-        reportsNavPaneButton.setId("reports-nav-pane-button");
-        reportsNavPaneButton.setPrefSize(REPORTS_NAV_PANE_BTN_WIDTH, REPORTS_NAV_PANE_BTN_HEIGHT);
-        reportsNavPaneButton.setMinSize(REPORTS_NAV_PANE_BTN_WIDTH, REPORTS_NAV_PANE_BTN_HEIGHT);
-        
-        navButtonPane.getChildren().addAll(datasourceNavPaneButton, reportsNavPaneButton);
-        
-        return navButtonPane;
-    }
-    
-    private Pane getNavigationPane() {
-        BorderPane navigationPane = new BorderPane();
-        navigationPane.setId("navigation-pane");
-        
-        Label datasourcesLabel = new Label("DATASOURCES");
-        datasourcesLabel.getStyleClass().add("section-title");
-        navigationPane.setTop(datasourcesLabel);
-        
-        VBox objectsPane = new VBox();
-        objectsPane.setId("objects-pane");
-        
-        // Build search box first.
-        TextField searchField = new TextField();
-        searchField.setPrefHeight(OBJECT_PANE_HEIGHT);
-        searchField.setPromptText("Search...");
-        searchField.setId("object-search-text-field");
-        
-        objectsPane.getChildren().add(searchField);
-        objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
-        
-        objectsPane.getChildren().add(buildObjectPane("Teradata", TABLE));
-        objectsPane.getChildren().add(buildObjectPane("LessionsFact", DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Professors", DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Professor ID", ATTRIBUTE));
-        objectsPane.getChildren().add(buildObjectPane("Professor Name", ATTRIBUTE));
-        objectsPane.getChildren().add(buildObjectPane("# Professors", METRIC));
-        objectsPane.getChildren().add(buildObjectPane("unused_column_1", UNUSED));
-        objectsPane.getChildren().add(buildObjectPane("Students", DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Departments", DATASOURCE));
-        objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", TABLE));
-        objectsPane.getChildren().add(buildObjectPane("Hive-Prod", TABLE));
-        
-        navigationPane.setCenter(objectsPane);
-        
-        return navigationPane;
-    }
-    
-    private Pane buildObjectPane(String labelText, ObjectType type) {
-        HBox objectPane = new HBox();
-        objectPane.getStyleClass().addAll("object-pane", UIUtils.getObjectSytleClass(type));
-        objectPane.setPrefHeight(OBJECT_PANE_HEIGHT);
-        
-        if (type == TABLE) {
-            ImageView tableImageView = new ImageView();
-            tableImageView.getStyleClass().add("object-table-imageview");
-            objectPane.getChildren().add(tableImageView);
-        }
-        
-        Label label = new Label(labelText);
-        HBox.setHgrow(label, Priority.ALWAYS);
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.getStyleClass().add("object-label");
-        objectPane.getChildren().add(label);
-        
-        if (type == TABLE) {
-            ImageView statusImageView = new ImageView();
-            statusImageView.getStyleClass().add("object-table-status-imageview");
-            objectPane.getChildren().add(statusImageView);
-        }
-        
-        return objectPane;
-    }
-    
-    private Pane buildTableJoinPane() {
-        HBox tableJoinPane = new HBox();
-        tableJoinPane.getStyleClass().add("table-join-pane");
-        tableJoinPane.setPrefHeight(OBJECT_PANE_HEIGHT);
-        
-        Button editButton = new Button();
-        editButton.getStyleClass().add("edit-button");
-        editButton.setPrefSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
-        editButton.setMinSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
-        tableJoinPane.getChildren().add(editButton);
-        
-        Label leftTableLabel = new Label("T1");
-        leftTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
-        leftTableLabel.getStyleClass().add("table-label");
-        tableJoinPane.getChildren().add(leftTableLabel);
-        
-        Label joinLabel = new Label(null, new ImageView(ImageList.IMAGE_INNER_JOIN));
-        joinLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        tableJoinPane.getChildren().add(joinLabel);
-        
-        Label rightTableLabel = new Label("T2");
-        rightTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
-        rightTableLabel.getStyleClass().add("table-label");
-        tableJoinPane.getChildren().add(rightTableLabel);
-        
-        return tableJoinPane;
-    }
-    
     private Pane getQueryPane() {
         VBox queryPane = new VBox();
         queryPane.setId("query-pane");

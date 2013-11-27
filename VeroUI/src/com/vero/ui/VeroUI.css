@@ -1,7 +1,7 @@
-.root {
 /*******************************************************************************
- * Defined all common color and style here to be used in ohter sections
-*******************************************************************************/
+ * Defined all common color here to be used in ohter sections
+ ******************************************************************************/
+.root {
     -fx-main-background-color: #2A2A2A;
     -fx-nav-background-color: #3C3C3C;
     -fx-light-grey-color: #393939;
@@ -12,11 +12,17 @@
     -fx-global-filter-border-color: #4D1823;
 }
 
+/*******************************************************************************
+ * Style for main window
+ ******************************************************************************/
 #root-pane {
     -fx-background-color: -fx-main-background-color;
 }
 
-#nav-button-pane {
+/*******************************************************************************
+ * Style for VERO tool bar
+ ******************************************************************************/
+#vero-tool-bar {
     -fx-padding: 20 0 10 0;
     -fx-spacing: 10;
     -fx-alignment: top-center;
@@ -24,14 +30,14 @@
     -fx-border-width: 0 1 0 0;
 }
 
-#datasource-nav-pane-button {
+#datasources-tool-bar-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
     -fx-background-image: url("images/datasource_nav_panel_btn.png");
 }
 
-#reports-nav-pane-button {
+#reports-tool-bar-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
