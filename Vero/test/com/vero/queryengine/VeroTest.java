@@ -6,9 +6,10 @@
 
 package com.vero.queryengine;
 
-import com.vero.datasource.DataSource;
 import com.vero.datasource.DsType;
 import com.vero.datasource.*;
+import com.vero.metadata.*;
+import java.util.ArrayList;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,6 +26,9 @@ public class VeroTest {
     private static Teradata ds;
     private static Table t1;
     private static Table t2;
+    private static ArrayList<AttributeMeta> attrs = new ArrayList();
+    private static ArrayList<MetricMeta> metrics = new ArrayList();
+    private static JoinMeta join;
     
     public VeroTest() {
     }
@@ -45,6 +49,35 @@ public class VeroTest {
         t2.addColumn(new Column("num_students",ColDataType.INTEGER,false,t2));
         t2.addColumn(new Column("num_professors",ColDataType.INTEGER,false,t2));
         
+        AttributeMeta dname = new AttributeMeta("Department Name", null);
+        ExpressionMeta dnexp = new ExpressionMeta("name");
+        dname.addExpression(dnexp);
+        dnexp.addTable(t1);
+        attrs.add(dname);
+        
+        AttributeMeta dschool = new AttributeMeta("Department School", null);
+        ExpressionMeta dsexp = new ExpressionMeta("school_name");
+        dschool.addExpression(dsexp);
+        dnexp.addTable(t1);
+        attrs.add(dschool);
+        
+        MetricMeta met = new MetricMeta("# of Students", null);
+        ExpressionMeta metexp = new ExpressionMeta("name");
+        met.addExpression(metexp);
+        metexp.addTable(t2);
+        metrics.add(met);
+        
+        join = new JoinMeta(
+                    "on equal id",
+                    "Departments",
+                    "id",
+                    "=",
+                    "DepartmentFacts",
+                    "dept_id",
+                    "tleft.id=tright.dept_id",
+                    "inner"
+                );
+        
     }
     
     @AfterClass
@@ -62,10 +95,7 @@ public class VeroTest {
     @Test
     public void testSQLEngine() {
         
-        System.out.println("printMap");
-        Map mp = null;
-        Vero.printMap(mp);
-        // TODO review the generated test code and remove the default call to fail.
+       
         fail("The test case is a prototype.");
     }
     
