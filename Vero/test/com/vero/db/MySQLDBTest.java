@@ -6,8 +6,10 @@
 
 package com.vero.db;
 
-import com.vero.datasource.Table;
+import com.vero.metadata.Column;
+import com.vero.metadata.Table;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -64,19 +66,36 @@ public class MySQLDBTest {
     }
     
     @Test
-    public void testGetDBTablesBuildsColumn() throws SQLException{
+    public void testExpectedColumnsArePresent() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("CustomerDemographics");
+        String[] expectedColumns = {"ShipVia","ShipCity","ShipRegion","Freight",
+                                    "OrderData","RequiredDate","ShippedDate",
+                                    "OrderID","CustomerID","EmployeeID","ShipName",
+                                     "ShipAddress","ShipPostalCode","ShipCountry"};
         
-        fail("Test that table object contains expected columns.");
+        Table t = d.get("Orders");
+        Column c;
+        for(String col : expectedColumns){
+            c = t.getColumn(col);
+            assertTrue(col+" column should be in Orders table",c != null);
+        }
+        
     }
     
     @Test
-    public void testGetDBTablesIdentifiesPrimaryKey() throws SQLException{
+    public void testIdentifyPrimaryKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
         Table t = d.get("CustomerDemographics");
         
         fail("Test that table was built with primary key identifier.");
+    }
+    
+     @Test
+    public void testIdentifyForeignKeys() throws SQLException{
+        System.out.println(db.getDatabaseName());
+        ResultSet rs = db.connect().getMetaData().getPrimaryKeys(db.getDatabaseName(), null, "Orders");
+        AbstractDB.printResultSet("Foreign Keys", rs);
+        fail("Test that table foreign keys were detected.");
     }
     
 }

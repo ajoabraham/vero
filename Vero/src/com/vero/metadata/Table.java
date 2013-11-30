@@ -1,8 +1,9 @@
-package com.vero.datasource;
+package com.vero.metadata;
 
+import com.vero.admin.DataSource;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Iterator;
 
 public class Table {
     String objectName = "";
@@ -41,5 +42,16 @@ public class Table {
     
     public void addColumn(Column col){
         columns.add(col);
+    }
+
+    public Column getColumn(String columnName) {
+        Iterator<Column> it = columns.iterator();
+        while(it.hasNext()){
+            Column c = it.next();
+            if(c.getName().equals(columnName)){
+                return c;
+            }
+        }
+        return null;
     }
 }

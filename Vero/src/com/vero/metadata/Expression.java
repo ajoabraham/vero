@@ -1,21 +1,20 @@
 package com.vero.metadata;
 
-import com.vero.datasource.Table;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ExpressionMeta implements Filterable {
+public class Expression implements Filterable {
     UUID uuid;
     String expression;
     ArrayList<Table> tables;
 
-    public ExpressionMeta(String inExp) {
+    public Expression(String inExp) {
         uuid = UUID.randomUUID();
         expression = inExp;
         tables = new ArrayList();
     }
 
-    public ExpressionMeta(String inExp, ArrayList<Table> inTables) {
+    public Expression(String inExp, ArrayList<Table> inTables) {
         uuid = UUID.randomUUID();
         expression = inExp;
         tables = new ArrayList(inTables);
@@ -45,7 +44,7 @@ public class ExpressionMeta implements Filterable {
         // TODO Auto-generated method stub
         System.out.println("ExpressionMeta starts...");
 
-        ExpressionMeta exp = new ExpressionMeta("abcde");
+        Expression exp = new Expression("abcde");
         exp.addTable(new Table("abc", null));
 
         System.out.println("ExpressionMeta: " + exp.toString());

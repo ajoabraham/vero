@@ -1,5 +1,6 @@
-package com.vero.datasource;
+package com.vero.admin;
 
+import com.vero.metadata.Table;
 import java.util.HashMap;
 import java.util.UUID;
 

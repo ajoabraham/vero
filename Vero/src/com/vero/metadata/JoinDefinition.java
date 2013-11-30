@@ -12,7 +12,7 @@ import java.util.UUID;
  *
  * @author yulinwen
  */
-public class JoinMeta {
+public class JoinDefinition {
     UUID uuid;
     String name;
     String tleft;
@@ -24,7 +24,7 @@ public class JoinMeta {
     // JoinType type;
     String type;
     
-    public JoinMeta(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
+    public JoinDefinition(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
         uuid = UUID.randomUUID();
         name = inName;
         tleft = inTL;

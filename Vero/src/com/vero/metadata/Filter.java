@@ -3,10 +3,10 @@ package com.vero.metadata;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class FilterMeta {
+public class Filter {
     UUID uuid;
     String description;
-    ArrayList<FilterItemMeta> filterItems;
+    ArrayList<FilterItem> filterItems;
     
     
 }

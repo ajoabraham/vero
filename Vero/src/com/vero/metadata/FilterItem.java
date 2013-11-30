@@ -10,7 +10,7 @@ package com.vero.metadata;
  *
  * @author yulinwen
  */
-public class FilterItemMeta {
+public class FilterItem {
     FilterOperandType opType;
     Filterable filterable; // ToDo: constant
 }

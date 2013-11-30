@@ -7,14 +7,13 @@
 package com.vero.queryengine;
 
 import com.vero.session.Session;
-import com.vero.metadata.AttributeMeta;
-import com.vero.metadata.MetricMeta;
-import com.vero.metadata.JoinMeta;
-import com.vero.metadata.ExpressionMeta;
-import com.vero.datasource.ColDataType;
-import com.vero.datasource.DataSource;
-import com.vero.datasource.Table;
-import com.vero.datasource.Column;
+import com.vero.metadata.Attribute;
+import com.vero.metadata.Metric;
+import com.vero.metadata.JoinDefinition;
+import com.vero.metadata.Expression;
+import com.vero.admin.DataSource;
+import com.vero.metadata.Table;
+import com.vero.metadata.Column;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -135,11 +134,11 @@ public class Vero {
                     // add column
                     Column aColumn;
                     if (oneJSONColumnObj.getString("type").equals("string")) {
-                        aColumn = new Column(oneJSONColumnObj.getString("name"),ColDataType.STRING, 
-                            oneJSONColumnObj.getBoolean("primaryKey"), aTable);
+                        aColumn = new Column(oneJSONColumnObj.getString("name"),"String", 10,
+                             aTable);
                     } else if (oneJSONColumnObj.getString("type").equals("integer")) {
-                        aColumn = new Column(oneJSONColumnObj.getString("name"),ColDataType.INTEGER, 
-                            oneJSONColumnObj.getBoolean("primaryKey"), aTable);
+                        aColumn = new Column(oneJSONColumnObj.getString("name"),"Int", 10,
+                             aTable);
                     } else {
                         System.out.println("ERROR: type is not defined...");
                     }                                        
@@ -158,7 +157,7 @@ public class Vero {
                 System.out.println("name:" + oneJSONAttrObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
                 // add attribute
-                AttributeMeta anAttr = new AttributeMeta(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
+                Attribute anAttr = new Attribute(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
                 userSession.addAttributeMeta(anAttr);
                 
                 int expressionsArraySize = jsonExpressionsArray.length();
@@ -168,7 +167,7 @@ public class Vero {
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
                     // add expression
-                    ExpressionMeta anExp = new ExpressionMeta(oneJSONExpressionObj.getString("value"));
+                    Expression anExp = new Expression(oneJSONExpressionObj.getString("value"));
                     anAttr.addExpression(anExp);
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
@@ -192,7 +191,7 @@ public class Vero {
                 System.out.println("name:" + oneJSONMetricObj.getString("name"));
                 JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
                 // add metric
-                MetricMeta aMetric = new MetricMeta(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
+                Metric aMetric = new Metric(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
                 userSession.addMetricMeta(aMetric);
                 
                 int expressionsArraySize = jsonExpressionsArray.length();
@@ -202,7 +201,7 @@ public class Vero {
                     System.out.println("value:" + oneJSONExpressionObj.getString("value"));
                     JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
                     // add expression
-                    ExpressionMeta anExp = new ExpressionMeta(oneJSONExpressionObj.getString("value"));
+                    Expression anExp = new Expression(oneJSONExpressionObj.getString("value"));
                     aMetric.addExpression(anExp);
                     
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
@@ -232,7 +231,7 @@ public class Vero {
                 System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                 System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
                 // add DS                
-                JoinMeta aJoin = new JoinMeta(
+                JoinDefinition aJoin = new JoinDefinition(
                     oneJSONJDObj.getString("name"),
                     oneJSONJDObj.getString("tleft"),
                     oneJSONJDObj.getString("cleft"),
@@ -311,8 +310,8 @@ public class Vero {
         while (it.hasNext()) {            
             Map.Entry pairs = (Map.Entry)it.next();
             
-            AttributeMeta anAttr = (AttributeMeta) pairs.getValue();
-            ArrayList<ExpressionMeta> exps = anAttr.getExpressions();
+            Attribute anAttr = (Attribute) pairs.getValue();
+            ArrayList<Expression> exps = anAttr.getExpressions();
             String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {                
                 ArrayList<Table> expTables = exps.get(i).getTables();
@@ -339,8 +338,8 @@ public class Vero {
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             
-            MetricMeta anMet = (MetricMeta) pairs.getValue();
-            ArrayList<ExpressionMeta> exps = anMet.getExpressions();
+            Metric anMet = (Metric) pairs.getValue();
+            ArrayList<Expression> exps = anMet.getExpressions();
             String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {
                 ArrayList<Table> expTables = exps.get(i).getTables();
@@ -367,13 +366,13 @@ public class Vero {
         }
 
         // construct join
-        HashMap<String, JoinMeta> joinDefs = userSession.getJoins();
+        HashMap<String, JoinDefinition> joinDefs = userSession.getJoins();
         it = joinDefs.entrySet().iterator();
         int cnt = 0;
         TableReferenceBuilder allJoins = null;
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
-            JoinMeta aJoin = (JoinMeta) pairs.getValue();
+            JoinDefinition aJoin = (JoinDefinition) pairs.getValue();
             
             if (!tableAliases.containsKey(aJoin.getTLeft())) {
                 tableAliases.put(aJoin.getTLeft(), "T"+alias_cnt);

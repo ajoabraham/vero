@@ -1,35 +1,34 @@
 package com.vero.metadata;
 
-import com.vero.datasource.Table;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
 
-public class AttributeMeta implements Filterable {
+public class Metric implements Filterable {
     UUID uuid;
     String name;
     String description;
-    ArrayList<ExpressionMeta> expressions;
+    ArrayList<Expression> expressions;
     
-    public AttributeMeta(String inName, String inDescription) {
+    public Metric(String inName, String inDescription) {
         uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
         expressions = new ArrayList();
     }
 
-    public AttributeMeta(String inName, String inDescription, ArrayList<ExpressionMeta> inExpressions) {
+    public Metric(String inName, String inDescription, ArrayList<Expression> inExpressions) {
         uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
         expressions = new ArrayList(inExpressions);
     }
 
-    public void addExpression(ExpressionMeta inExpression) {
+    public void addExpression(Expression inExpression) {
         expressions.add(inExpression);
     }
 
-    public void addExpressions(ArrayList<ExpressionMeta> inExpressions) {
+    public void addExpressions(ArrayList<Expression> inExpressions) {
         expressions.addAll(inExpressions);
     }
 
@@ -45,7 +44,7 @@ public class AttributeMeta implements Filterable {
         return uuid;
     }
     
-    public ArrayList<ExpressionMeta> getExpressions() {
+    public ArrayList<Expression> getExpressions() {
         return expressions;
     }
 
@@ -53,22 +52,22 @@ public class AttributeMeta implements Filterable {
         // TODO Auto-generated method stub
         System.out.println("AttributeMeta starts...");
 
-        ExpressionMeta exp = new ExpressionMeta("abcde");
+        Expression exp = new Expression("abcde");
         exp.addTable(new Table("abc", null));
 
-        AttributeMeta attr = new AttributeMeta("Att1", "haha_description");
-        attr.addExpression(exp);
+        Metric metr = new Metric("Met1", "haha_description");
+        metr.addExpression(exp);
         
-        System.out.println("AttributeMeta: " + attr.toString());
-        System.out.println("uuid: " + attr.getUUID().toString());
-        System.out.println("name: " + attr.getName());
+        System.out.println("MetricMeta: " + metr.toString());
+        System.out.println("uuid: " + metr.getUUID().toString());
+        System.out.println("name: " + metr.getName());
         
         System.out.println("Loop through expressions...");
-        ArrayList<ExpressionMeta> exprs = attr.getExpressions();
-        Iterator<ExpressionMeta> it = exprs.iterator();        
+        ArrayList<Expression> exprs = metr.getExpressions();
+        Iterator<Expression> it = exprs.iterator();        
         while (it.hasNext()) {
-            ExpressionMeta curexp = it.next();
+            Expression curexp = it.next();
             System.out.println("ExpressionMeta: " + curexp.getExpression());
         }
-    }
+    }        
 }

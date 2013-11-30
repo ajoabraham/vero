@@ -6,9 +6,8 @@
 
 package com.vero.db;
 
-import com.vero.datasource.ColDataType;
-import com.vero.datasource.Column;
-import com.vero.datasource.Table;
+import com.vero.metadata.Table;
+import com.vero.metadata.Column;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -97,7 +96,7 @@ abstract class AbstractDB implements Serializable {
           _catalog.clear();  
         }
         
-        ResultSet rs = connect().getMetaData().getColumns(this.getDatabaseName(), null, null, null);
+        ResultSet rs = connect().getMetaData().getColumns(getDatabaseName(), getSchemaName(), null, null);
         String tableName = "";
         String prevTableName="";
         Table t = null;
@@ -113,10 +112,12 @@ abstract class AbstractDB implements Serializable {
             }
             
             Column c = new Column(
-                    rs.getString("TABLE_NAME"),
-                    ColDataType.NONE,
-                    false,
+                    rs.getString("COLUMN_NAME"),
+                    rs.getString("TYPE_NAME"),
+                    rs.getInt("COLUMN_SIZE"),
                     t   );
+            c.setDecimalDigits(rs.getInt("DECIMAL_DIGITS"));
+            c.setSqlType(rs.getInt("DATA_TYPE"));
             t.addColumn(c);
             
             prevTableName = tableName;
@@ -203,5 +204,43 @@ abstract class AbstractDB implements Serializable {
     public AbstractDB setSchemaName(String schemaName) {
         this.schemaName = schemaName;
         return this;
+    }
+    
+    public static void printResultSet(String name,ResultSet rs) throws SQLException {
+        System.out.println(name+":\n");
+        StringBuffer col = new StringBuffer();
+        for (int j=1;j<rs.getMetaData().getColumnCount()+1;j++){
+            if (j>0){
+                    col.append(" ");
+                }
+                col.append(rs.getMetaData().getColumnName(j));
+        }
+        System.out.println(col);
+        while(rs.next()){
+            StringBuffer s = new StringBuffer();
+            
+            for(int i=1;i<rs.getMetaData().getColumnCount()+1;i++){
+                if (i>0){
+                    s.append(" ");
+                }
+                s.append(rs.getString(i));
+            }
+            System.out.println(s);
+        }
+    }
+
+    public void identifyKeys(Table t) throws SQLException {
+        ResultSet rs = connect().getMetaData().getImportedKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        while (rs.next()) {
+            String fkcol = rs.getString("FKCOLUMN_NAME");
+            t.getColumn(fkcol).setKeyType(Column.KeyTypes.FOREIGN_KEY);
+        }
+        rs.close();
+        rs = connect().getMetaData().getPrimaryKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        while (rs.next()) {
+            String fkcol = rs.getString("COLUMN_NAME");
+            t.getColumn(fkcol).setKeyType(Column.KeyTypes.PRIMARY_KEY);
+        }
+        rs.close();
     }
 }
