@@ -3,33 +3,42 @@ package com.vero.metadata;
 import com.vero.admin.DataSource;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Table {
-    String objectName = "";
-    String displayName = "";
-    ArrayList<Column> columns;
-    int rowCount;
-    Date lastScan;
-    Column primaryKey;
-    DataSource dataSource;
+    private String objectName = "";
+    private String physicalName = "";
+    private Map<String,Column> columns = new HashMap();
+    private int rowCount = -1;
+    private Date lastStatCollectionDate;
+    private DataSource dataSource;
     
-    public Table(String inName, DataSource inDS) {
-        objectName = inName;
-        displayName = inName;
-        columns = new ArrayList();
-        rowCount = 0;
-        lastScan = new Date();
-        primaryKey = null;
-        dataSource = inDS;
+    public Table(){}
+    
+    public Table(String physicalName, DataSource ds) {
+        objectName = physicalName;
+        this.physicalName = physicalName;
+        columns = new HashMap();
+        rowCount = -1;
+        dataSource = ds;
     }
     
     public String getObjectName() {
         return objectName;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getPhysicalName() {
+        return physicalName;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
     
     public int getRowCount() {
@@ -37,21 +46,46 @@ public class Table {
     }
     
     public Date getLastScan() {
-        return lastScan;
+        return lastStatCollectionDate;
     }
     
     public void addColumn(Column col){
-        columns.add(col);
+        getColumns().put(col.getObjectName(),col);
+    }
+    
+    public void removeColumn(Column col){
+        getColumns().remove(col.getObjectName());
+    }
+    
+    public Map<String, Column> getColumns(){
+        return columns;
     }
 
-    public Column getColumn(String columnName) {
-        Iterator<Column> it = columns.iterator();
+    public Column getColumn(String columnName) {       
+        return getColumns().get(columnName);
+    }
+    
+    public ArrayList<Column> getPrimaryKeyColumns(){
+        ArrayList<Column> pkcol = new ArrayList();
+        Iterator<String> it = getColumns().keySet().iterator();
         while(it.hasNext()){
-            Column c = it.next();
-            if(c.getName().equals(columnName)){
-                return c;
+            Column c = getColumn(it.next());
+            if(c.isPrimaryKey()){
+                pkcol.add(c);
             }
         }
-        return null;
+        return pkcol;
+    }
+    
+    public ArrayList<Column> getForeignKeyColumns(){
+        ArrayList<Column> fkcol = new ArrayList();
+        Iterator<String> it = getColumns().keySet().iterator();
+        while(it.hasNext()){
+            Column c = getColumn(it.next());
+            if(c.isForeignKey()){
+                fkcol.add(c);
+            }
+        }
+        return fkcol;
     }
 }

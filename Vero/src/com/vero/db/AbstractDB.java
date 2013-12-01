@@ -105,10 +105,10 @@ abstract class AbstractDB implements Serializable {
             tableName = rs.getString("TABLE_NAME");
             
             if(!tableName.equals(prevTableName)){
-                t = new Table(tableName,null);
                 if(!prevTableName.isEmpty()){
                     _catalog.put(prevTableName, t);
                 }
+                t = new Table(tableName,null);
             }
             
             Column c = new Column(
@@ -230,16 +230,21 @@ abstract class AbstractDB implements Serializable {
     }
 
     public void identifyKeys(Table t) throws SQLException {
-        ResultSet rs = connect().getMetaData().getImportedKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
-        while (rs.next()) {
-            String fkcol = rs.getString("FKCOLUMN_NAME");
-            t.getColumn(fkcol).setKeyType(Column.KeyTypes.FOREIGN_KEY);
-        }
-        rs.close();
-        rs = connect().getMetaData().getPrimaryKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        ResultSet rs = connect().getMetaData().getPrimaryKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
         while (rs.next()) {
             String fkcol = rs.getString("COLUMN_NAME");
             t.getColumn(fkcol).setKeyType(Column.KeyTypes.PRIMARY_KEY);
+        }
+        rs.close();
+        
+        // Foreign key column identification must always come second.
+        // In mysql a bridge table key columns are both primary key
+        // and foreign key columns.  For our purposes we just need to know the
+        // singular role.
+        rs = connect().getMetaData().getImportedKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        while (rs.next()) {
+            String fkcol = rs.getString("FKCOLUMN_NAME");
+            t.getColumn(fkcol).setKeyType(Column.KeyTypes.FOREIGN_KEY);
         }
         rs.close();
     }

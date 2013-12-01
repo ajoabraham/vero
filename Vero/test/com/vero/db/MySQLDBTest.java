@@ -9,8 +9,9 @@ package com.vero.db;
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.junit.AfterClass;
@@ -69,7 +70,7 @@ public class MySQLDBTest {
     public void testExpectedColumnsArePresent() throws SQLException{
         Map<String, Table> d = db.getDBTables();
         String[] expectedColumns = {"ShipVia","ShipCity","ShipRegion","Freight",
-                                    "OrderData","RequiredDate","ShippedDate",
+                                    "OrderDate","RequiredDate","ShippedDate",
                                     "OrderID","CustomerID","EmployeeID","ShipName",
                                      "ShipAddress","ShipPostalCode","ShipCountry"};
         
@@ -85,17 +86,61 @@ public class MySQLDBTest {
     @Test
     public void testIdentifyPrimaryKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("CustomerDemographics");
+        Table t = d.get("Employees");
+        db.identifyKeys(t);
+        Column c = d.get("Employees").getPrimaryKeyColumns().get(0);
         
-        fail("Test that table was built with primary key identifier.");
+        assertTrue("EmployeeID should be the first and only primary key: ",
+                c.getObjectName().equals("EmployeeID"));
+        
+        assertTrue("There should only be 1 primary key in this table: ",
+                d.get("Employees").getPrimaryKeyColumns().size()==1);
+        
     }
     
-     @Test
+    @Test
     public void testIdentifyForeignKeys() throws SQLException{
-        System.out.println(db.getDatabaseName());
-        ResultSet rs = db.connect().getMetaData().getPrimaryKeys(db.getDatabaseName(), null, "Orders");
-        AbstractDB.printResultSet("Foreign Keys", rs);
-        fail("Test that table foreign keys were detected.");
+        Map<String, Table> d = db.getDBTables();
+        Table t = d.get("Orders");
+        db.identifyKeys(t);
+        ArrayList<Column> c = t.getForeignKeyColumns();
+        
+        String[] expectedColumns = {"CustomerID","ShipVia","EmployeeID"};
+        
+        assertTrue("There should be 3 foreign key columns: ",
+                c.size()==3);
+        
+        for (String eCol : expectedColumns) {
+           boolean found = false;
+           for(Iterator<Column> it= c.iterator(); it.hasNext();){
+               if (it.next().getObjectName().equals(eCol)){
+                   found = true;
+               }
+           }
+           assertTrue(eCol + " should be a foreign key ",found);
+        }
     }
     
+    @Test
+    public void testBridgeTableKeysAreForeignKeys() throws SQLException{
+        Map<String, Table> d = db.getDBTables();
+        Table t = d.get("EmployeeTerritories");
+        db.identifyKeys(t);
+        ArrayList<Column> c = t.getForeignKeyColumns();
+        
+        String[] expectedColumns = {"TerritoryID","EmployeeID"};
+        
+        assertTrue("There should be 2 foreign key columns: ",
+                c.size()==2);
+        
+        for (String eCol : expectedColumns) {
+           boolean found = false;
+           for(Iterator<Column> it= c.iterator(); it.hasNext();){
+               if (it.next().getObjectName().equals(eCol)){
+                   found = true;
+               }
+           }
+           assertTrue(eCol + " should be a foreign key ",found);
+        }
+    }
 }
