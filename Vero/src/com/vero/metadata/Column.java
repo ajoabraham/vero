@@ -1,7 +1,9 @@
 package com.vero.metadata;
 
 /**
- *
+ * Columns are the most fundamental of all objects. A table
+ * has many columns and a column belongs to a table.
+ * 
  * @author ajoabraham
  */
 public class Column {
@@ -19,13 +21,25 @@ public class Column {
      * auto detect table type.
      */
     public static enum KeyTypes{
+        /**
+         * The primary key column of a table.  There could
+         * be zero or many primary key columns.
+         */
         PRIMARY_KEY,
+        /**
+         * The foreign key column of a table.  There could be 
+         * zero or many foreign key columns.
+         */
         FOREIGN_KEY,
+        /**
+         * This is the default key type which is just a normal
+         * column that is not a primary or foreign key.
+         */
         NO_KEY_TYPE
     }
     
     /**
-     *
+     * Default column constructor.
      */
     public Column(){
         this.objectName = "";
@@ -35,11 +49,12 @@ public class Column {
     }
     
     /**
-     *
-     * @param name
-     * @param dataType
-     * @param dataTypeSize
-     * @param table
+     * A convenience constructor for building columns quickly.
+     * 
+     * @param name  The name of a column (must be actual name of column in the db).
+     * @param dataType  The name of the datatype as reported by the database.
+     * @param dataTypeSize  The size of the datatype as reported by the database.
+     * @param table The table to which this column belongs to.
      */
     public Column(String name, String dataType, int dataTypeSize, Table table) {
         this.objectName = name;
@@ -51,72 +66,88 @@ public class Column {
     }
 
     /**
-     *
-     * @return
+     * Column names are always the same as their name in the database.
+     * We store column names exactly as it exists in the database with case sensitivity.
+     * 
+     * @return  Exact name of column as it exists in the database.
      */
     public String getObjectName() {
         return objectName;
     }
 
     /**
-     *
-     * @return
+     * String name of datatype reported by database.
+     * 
+     * @return  column datatype as reported by the database.
      */
     public String getDataType() {
         return dataType;
     }
     
     /**
-     *
-     * @return
+     * Size of the datatype as reported by the database.
+     * 
+     * @return  Integer size of db datatype {@link #getDataType()}
      */
     public int getDataTypeSize() {
         return dataTypeSize;
     }
     
     /**
-     *
-     * @return
+     * Decimal digits of datatype as reported by the database.
+     * Zero by default.
+     * 
+     * @return  For numeric values with precision it returns actual
+     *          decimal digits otherwise zero.
      */
     public int getDecimalDigits() {
         return decimalDigits;
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return  The table this column belongs to.
      */
     public Table getTable() {
         return table;
     }
 
     /**
-     *
-     * @return
+     * Get the key type of a column. It could be a primary
+     * key, foreign key, or no key type.  We use this information
+     * to determine table type and optimize queries.
+     * 
+     * @return  a LogicalTableType
      */
     public KeyTypes getKeyType() {
         return keyType;
     }
 
     /**
-     *
-     * @param name
+     * Name of a column as it exists in the database. We store this
+     * with case sensitivity.
+     * 
+     * @param name  this should be the actual name of the column
+     *              in the database.  Names other than the db name
+     *              may cause issues with queries.
      */
     public void setObjectName(String name) {
         this.objectName = name;
     }
 
     /**
-     *
-     * @param dataType
+     * We may have to rethink datatype in the future. We might just have
+     * to store the java.sql.Type instead of the db reported one.
+     * 
+     * @param dataType  name of datatype reported by the database.
      */
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
 
     /**
-     *
-     * @param table
+     * 
+     * @param table The table that this column belong to.
      */
     public void setTable(Table table) {
         this.table = table;
@@ -128,7 +159,7 @@ public class Column {
     
     /**
      *
-     * @param dataTypeSize
+     * @param dataTypeSize  size of datatype as reported by the db.
      */
     public void setDataTypeSize(int dataTypeSize) {
         this.dataTypeSize = dataTypeSize;
@@ -136,7 +167,7 @@ public class Column {
     
     /**
      *
-     * @param decimalDigits
+     * @param decimalDigits decimal digits as reported by the db.
      */
     public void setDecimalDigits(int decimalDigits) {
         this.decimalDigits = decimalDigits;
@@ -144,7 +175,7 @@ public class Column {
     
     /**
      *
-     * @return
+     * @return  true if foreign key
      */
     public boolean isForeignKey(){
         return getKeyType() == KeyTypes.FOREIGN_KEY;
@@ -152,23 +183,23 @@ public class Column {
     
     /**
      *
-     * @return
+     * @return  true if primary key
      */
     public boolean isPrimaryKey(){
         return getKeyType() == KeyTypes.PRIMARY_KEY;
     }
     
     /**
-     *
-     * @return
+     * @see java.sql.Types
+     * @return  the java.sql.Types
      */
     public int getSqlType() {
         return sqlType;
     }
 
     /**
-     * This is the java sql type.  Built from the
-     * "DATA_TYPE" field in the metadata.
+     * This is the java.sql.Types.  Built from the
+     * "DATA_TYPE" field in the @see DatabaseMetadata.
      * 
      * @param sqlType
      * @see java.sql.Types
