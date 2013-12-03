@@ -13,17 +13,25 @@ import java.util.UUID;
  * @author yulinwen
  */
 public class JoinDefinition {
-    UUID uuid;
-    String name;
-    String tleft;
-    String cleft;
-    String tright;
-    String cright;
-    String operator;
-    String expression;
+    private UUID uuid;
+    private String name;
+    private String tleft;
+    private String cleft;
+    private String tright;
+    private String cright;
+    private String operator;
+    private String expression;
     // JoinType type;
-    String type;
+    private String type;
     
+    public enum JoinType {
+        NONE,
+        INNER,
+        OUTER,
+        LEFT,
+        RIGHT
+    }
+        
     public JoinDefinition(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
         uuid = UUID.randomUUID();
         name = inName;

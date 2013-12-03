@@ -13,4 +13,12 @@ package com.vero.metadata;
 public class FilterItem {
     FilterOperandType opType;
     Filterable filterable; // ToDo: constant
+    
+    public enum FilterOperandType {
+        NONE,
+        AND,
+        OR,
+        AND_NOT,
+        OR_NOT
+    }    
 }

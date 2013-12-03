@@ -5,7 +5,6 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.JoinDefinition;
 import com.vero.admin.DataSource;
 import com.vero.admin.DeleteTeradata;
-import com.vero.admin.DsType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +25,7 @@ public class Session {
     
     public void addDataSource(String inType, String inName, String inDescription) {
         if (inType.compareTo("teradata") == 0) {
-            DataSource ds = new DeleteTeradata(DsType.TERADATA, inName, inDescription);            
+            DataSource ds = new DeleteTeradata(DataSource.DsType.TERADATA, inName, inDescription);            
             dataSources.put(inName, ds);
         } else {
             System.out.println("DS not supported...");

@@ -11,6 +11,12 @@ public class DataSource {
     String description;
     HashMap<String, Table> tables;
     
+    public enum DsType {
+        NONE,
+        MYSQL,
+        TERADATA
+    }
+    
     public DataSource(DsType inType, String inName, String inDescription) {
         uuid = UUID.randomUUID();
         type = inType;
