@@ -28,17 +28,20 @@ public class MySQLDBTest {
     public static MySQLDB db;
     
     @BeforeClass
-    public static void setUpClass() {
-        System.out.println("Testing MySQL DB");
+    public static void setUpClass() throws SQLException {
+        System.out.println("Testing MySQL DB....");
         db = new MySQLDB();
         db.setUsername("stuser")
                 .setPassword("sourcetable")
                 .setDatabaseName("northwind")
                 .setHostName("mysql5.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
+        String sql = "CREATE TABLE UpdateStructureTest (id int , col1 int, col2 int, col3 int);";
+        db.connect().createStatement().execute(sql);
     }
     
     @AfterClass
     public static void tearDownClass() throws SQLException {
+        db.connect().createStatement().execute("DROP TABLE UpdateStructureTest;");
         db.close();
     }
     
@@ -142,5 +145,58 @@ public class MySQLDBTest {
            }
            assertTrue(eCol + " should be a foreign key ",found);
         }
+    }
+    
+    @Test
+    public void testCollectStats() throws SQLException{
+        Table t = db.getDBTables().get("Orders");
+        db.collectStats(t);
+        assertTrue("Orders table should have 830 rows.", t.getRowCount()==830);
+        assertTrue("Last stat timestamp should have been updated.", t.getLastStatDate()!=null);
+    }
+    
+    @Test
+    public void testUpdateStructureNewColumn() throws SQLException{
+        Table t = db.getDBTables().get("UpdateStructureTest");
+        db.connect().createStatement()
+          .execute("ALTER TABLE UpdateStructureTest ADD COLUMN new_col1 int;");
+        
+        db.updateTableStructure(t);
+        assertTrue("new_col1 column should have be added to the table.", t.getColumn("new_col1") != null);
+    }
+    
+    @Test
+    public void testUpdateStructureRemoveColumn() throws SQLException{
+        Table t = db.getDBTables().get("UpdateStructureTest");
+        db.connect().createStatement()
+          .execute("ALTER TABLE UpdateStructureTest DROP COLUMN col1;");
+        
+        db.updateTableStructure(t);
+        assertTrue("col1 column should have been removed from the table.", t.getColumn("col1") == null);
+        assertTrue("col2 column should still be present.",t.getColumn("col2")!= null);
+    }
+    
+    @Test
+    public void testUpdateStructureUpdateColumnType() throws SQLException{
+        Table t = db.getDBTables().get("UpdateStructureTest");
+        db.connect().createStatement()
+          .execute("ALTER TABLE UpdateStructureTest MODIFY new_col1 varchar(22);");
+        
+        db.updateTableStructure(t);
+        assertTrue("new_col1 column should now have String datatype.", 
+                t.getColumn("new_col1").getDataType().equalsIgnoreCase("varchar"));
+        assertTrue("new_col1 column should have size of 22.", 
+                t.getColumn("new_col1").getDataTypeSize()==22);       
+    }
+    
+    @Test
+    public void testUpdateStructureUpdateColumnKeyType() throws SQLException{
+        Table t = db.getDBTables().get("UpdateStructureTest");
+        db.connect().createStatement()
+          .execute("ALTER TABLE UpdateStructureTest ADD PRIMARY KEY (new_col1)");
+        
+        db.updateTableStructure(t);
+        assertTrue("new_col1 column should now be a primary key.", 
+                t.getColumn("new_col1").isPrimaryKey());
     }
 }

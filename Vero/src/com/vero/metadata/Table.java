@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * A table in Vero closely reflects the table and its structure as it exists
+ * in the target database.  Overtime we may add some methods on the table
+ * to assist in query generation.
+ * 
+ * @author ajoabraham
+ */
 public class Table {
     private String objectName = "";
     private String physicalName = "";
@@ -17,6 +24,10 @@ public class Table {
     private DataSource dataSource;
     private LogicalTableTypes tableLogicalType = LogicalTableTypes.UNKNOWN;
     
+    /**
+     * Enumeration of different LogicalTableTypes.  This will be essential
+     * in generating the correct query.
+     */
     public enum LogicalTableTypes{
         DIMENSION,
         BRIDGE,
@@ -33,10 +44,21 @@ public class Table {
         dataSource = ds;
     }
     
+    /**
+     * This is the name of the the table as it is displayed in Vero.  It maybe
+     * different from the name of the table as it exists in the db.
+     * 
+     * @return 
+     */
     public String getObjectName() {
         return objectName;
     }
-
+    
+    /**
+     * This is the exact name of the table as it exists in the database.
+     * 
+     * @return 
+     */
     public String getPhysicalName() {
         return physicalName;
     }
@@ -44,7 +66,12 @@ public class Table {
     public DataSource getDataSource() {
         return dataSource;
     }
-
+    
+    /**
+     * We will try to guess the logical type based on the number of primary
+     * keys and foreign keys if the user hasn't manually set the table type.
+     * @return 
+     */
     public LogicalTableTypes getTableLogicalType() {
         if(tableLogicalType==LogicalTableTypes.UNKNOWN){
             ArrayList<Column> pkcols = getPrimaryKeyColumns();
@@ -63,11 +90,21 @@ public class Table {
         }
         return tableLogicalType;
     }
-
+    
+    /**
+     * Manually assign a table logical type.  This will be informative in
+     * generating efficient SQL queries.
+     * 
+     * @param tableLogicalType 
+     */
     public void setLogicalType(LogicalTableTypes tableLogicalType) {
         this.tableLogicalType = tableLogicalType;
     }
-
+    
+    /**
+     * This is the datasource this table belongs to.
+     * @param dataSource 
+     */
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -76,12 +113,24 @@ public class Table {
         return rowCount;
     }
     
+    /**
+     * Updating row counts will automatically update the last stat collection
+     * timestamp.
+     * 
+     * @param rowCount 
+     */
     public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
         this.lastStatCollectionDate = new Timestamp((new Date()).getTime());
+        this.rowCount = rowCount;       
     }
     
-    public Date getLastStatDate() {
+    /**
+     * This is the last date and time the number of rows was updated for
+     * this table.
+     * 
+     * @return 
+     */
+    public Timestamp getLastStatDate() {
         return lastStatCollectionDate;
     }
     
@@ -89,6 +138,12 @@ public class Table {
         getColumns().put(col.getObjectName(),col);
     }
     
+    /**
+     * Remove a column by its name.  It has to be the exact name exactly as
+     * its stored in the database. 
+     * 
+     * @param col Case sensitive name of the column.
+     */
     public void removeColumn(Column col){
         getColumns().remove(col.getObjectName());
     }
@@ -96,11 +151,24 @@ public class Table {
     public Map<String, Column> getColumns(){
         return columns;
     }
-
+    
+    /**
+     * Retrieve a column by its name.  It has to be the exact name exactly as
+     * its stored in the database.
+     * 
+     * @param columnName Case sensitive name of the column.
+     * @return 
+     */
     public Column getColumn(String columnName) {       
         return getColumns().get(columnName);
     }
     
+    /**
+     * Primary key columns represent unique row identifiers of a table.
+     * Generally primary key columns are also used in joins.
+     * 
+     * @return ArrayList of all the primary key columns.
+     */
     public ArrayList<Column> getPrimaryKeyColumns(){
         ArrayList<Column> pkcol = new ArrayList();
         Iterator<String> it = getColumns().keySet().iterator();
@@ -113,6 +181,12 @@ public class Table {
         return pkcol;
     }
     
+    /**
+     * Foreign key columns are columns who have a parent table in which they
+     * are the primary key.  This is a join clue as well as a table type clue.
+     * 
+     * @return ArrayList of all the foreign key columns.
+     */
     public ArrayList<Column> getForeignKeyColumns(){
         ArrayList<Column> fkcol = new ArrayList();
         Iterator<String> it = getColumns().keySet().iterator();
@@ -124,7 +198,12 @@ public class Table {
         }
         return fkcol;
     }
-    
+    /**
+     * Non key columns are those which are nether a primary key nor a 
+     * foreign key.
+     * 
+     * @return ArrayList of all the Non Key columns.
+     */
     public ArrayList<Column> getNonKeyColumns(){
         ArrayList<Column> col = new ArrayList();
         Iterator<String> it = getColumns().keySet().iterator();
