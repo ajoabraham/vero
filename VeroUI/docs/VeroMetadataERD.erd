@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<erd version="1.0">
+    <datasource>
+        <connection value="jdbc:derby:D:\TAIHU\Projects\vero\VeroUI\metadata\vero"/>
+    </datasource>
+    <table tableId="ATTRIBUTES" x="2173" y="1425"/>
+    <table tableId="DATASOURCES" x="920" y="204"/>
+    <table tableId="COMMENT_BLOCKS" x="615" y="544"/>
+    <table tableId="QUERY_BLOCKS" x="32" y="544"/>
+    <table tableId="REPORT_BLOCKS" x="615" y="32"/>
+    <table tableId="EXPRESSIONS_ATTRIBUTES" x="1883" y="1295"/>
+    <table tableId="REPORTS" x="346" y="204"/>
+    <table tableId="COLUMNS_EXPRESSIONS" x="1883" y="1014"/>
+    <table tableId="EXPRESSIONS" x="2173" y="1144"/>
+    <table tableId="METRICS" x="2447" y="1295"/>
+    <table tableId="TABLES" x="1264" y="544"/>
+    <table tableId="COLUMNS" x="1559" y="800"/>
+    <table tableId="TABLE_JOINTS" x="1559" y="204"/>
+    <table tableId="FINAL_BLOCKS" x="32" y="32"/>
+</erd>
