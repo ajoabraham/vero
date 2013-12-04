@@ -22,17 +22,17 @@ import java.util.logging.Logger;
  *
  * @author ajoabraham
  */
-public class PrintDBProperties {
+public class DumpDBProperties {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MySQLDB ds = new MySQLDB();
+        MSSQLServerDB ds = new MSSQLServerDB();
         ds.setUsername("stuser")
                 .setPassword("sourcetable")
-                .setDatabaseName("northwind")
-                .setHostName("mysql5.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
+                .setDatabaseName("Northwind")
+                .setHostName("sqlserver11.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
 
         try (Connection conn = ds.connect()) {
             DatabaseMetaData md = conn.getMetaData();
@@ -85,7 +85,7 @@ public class PrintDBProperties {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(PrintDBProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DumpDBProperties.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

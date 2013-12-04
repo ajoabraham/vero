@@ -18,16 +18,17 @@ import java.util.logging.Logger;
  *
  * @author ajoabraham
  */
-public class MySQLDB extends AbstractDB{
+public class MSSQLServerDB extends AbstractDB{
     private static final String TEST_CONNECT_QUERY = "SELECT 2+2";
     private final HashMap<String,Table> _catalog = new HashMap<>();
     
-    public MySQLDB(){
-        VENDOR_NAME = "MySQL";
-        DRIVER = "com.mysql.jdbc.Driver";
-        ABSOLUTE_TABLE_NAME_PATTERN="DATABASE.TABLE";
-        SUPPORTED_VERSIONS= new String[]{"5.1","5.5","5.6","5.7"};
-        this.setPort(3306);
+    public MSSQLServerDB(){
+        VENDOR_NAME = "Microsoft SQL Server";
+        DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        ABSOLUTE_TABLE_NAME_PATTERN="DATABASE.SCHEMA.TABLE";
+        SUPPORTED_VERSIONS= new String[]{"2005", "2008", "2008 R2", "2012", "Azure"};
+        DEFAULT_SCHEMA="dbo";
+        this.setPort(1433);
         
         try {
             Class.forName(DRIVER).newInstance();
@@ -38,17 +39,17 @@ public class MySQLDB extends AbstractDB{
     
     @Override
     Connection connect() {
-        StringBuilder sb = new StringBuilder("jdbc:mysql://");
+        StringBuilder sb = new StringBuilder("jdbc:sqlserver://");
         
         sb.append(getHostName())
             .append(":")
             .append(getPort())
-            .append("/")
+            .append(";databaseName=")
             .append(getDatabaseName())
-            .append("?")
+            .append(";")
             .append("user=")
             .append(getUsername())
-            .append("&")
+            .append(";")
             .append("password=")
             .append(getPassword());
         
@@ -71,4 +72,11 @@ public class MySQLDB extends AbstractDB{
             return false;
         }          
     }
+
+    @Override
+    public boolean supportsSchema() {
+        return true; 
+    }
+    
+    
 }

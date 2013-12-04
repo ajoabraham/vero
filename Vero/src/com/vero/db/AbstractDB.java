@@ -164,6 +164,8 @@ abstract class AbstractDB implements Serializable {
             
             prevTableName = tableName;
         }
+        // Put the last table in the set into the catalog.
+        _catalog.put(t.getPhysicalName(), t);
     }
     
     /**
@@ -325,6 +327,9 @@ abstract class AbstractDB implements Serializable {
      * @return 
      */
     public String getSchemaName() {
+        if(schemaName.isEmpty() && supportsSchema()){
+            schemaName = DEFAULT_SCHEMA;
+        }
         return schemaName;
     }
     
@@ -416,7 +421,7 @@ abstract class AbstractDB implements Serializable {
     public void collectStats(Table t) throws SQLException{
         ResultSet rs = connect().createStatement()
                          .executeQuery("SELECT count(*) FROM "+t.getPhysicalName()+";");
-        rs.first();
+        rs.next();
         t.setRowCount(rs.getInt(1));
         rs.close();
     }
