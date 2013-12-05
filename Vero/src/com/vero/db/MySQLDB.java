@@ -37,7 +37,7 @@ public class MySQLDB extends AbstractDB{
     }
     
     @Override
-    Connection connect() {
+    public Connection connect() {
         StringBuilder sb = new StringBuilder("jdbc:mysql://");
         
         sb.append(getHostName())

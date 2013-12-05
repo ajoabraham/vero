@@ -38,7 +38,7 @@ public class MSSQLServerDB extends AbstractDB{
     }
     
     @Override
-    Connection connect() {
+    public Connection connect() {
         StringBuilder sb = new StringBuilder("jdbc:sqlserver://");
         
         sb.append(getHostName())
