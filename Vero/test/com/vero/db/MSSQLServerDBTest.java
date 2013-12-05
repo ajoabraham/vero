@@ -199,4 +199,20 @@ public class MSSQLServerDBTest {
         assertTrue("new_col1 column should now be a primary key.", 
                 t.getColumn("new_col1").isPrimaryKey());
     }
+    
+    // ------ TESTS BELOW ARE ON AN ALTERNATIVE SCHEMA ----- //
+    
+    @Test
+    public void testLoadSysSchemaCatalog() throws SQLException{
+        MSSQLServerDB db2 = new MSSQLServerDB();
+        db2.setUsername("stuser")
+                .setPassword("sourcetable")
+                .setDatabaseName("Northwind")
+                .setHostName("sqlserver11.cokqqhqwkadj.us-west-2.rds.amazonaws.com")
+                .setSchemaName("sys");
+        db2.loadCatalog();
+        Table t = db2.getDBTables().get("trace_xe_action_map");
+        assertTrue("trace_xe_action_map should be in the collection of tables.", 
+                t != null);
+    }
 }
