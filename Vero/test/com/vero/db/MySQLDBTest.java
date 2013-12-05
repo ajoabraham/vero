@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -198,5 +200,15 @@ public class MySQLDBTest {
         db.updateTableStructure(t);
         assertTrue("new_col1 column should now be a primary key.", 
                 t.getColumn("new_col1").isPrimaryKey());
+    }
+    
+    @Test
+    public void testGetSchemas(){
+        try {
+            db.getSchemas();
+            fail("MySQL doesnt support schemas so this method should throw an exception.");
+        } catch (Exception ex) {
+            assertTrue(true);
+        }
     }
 }

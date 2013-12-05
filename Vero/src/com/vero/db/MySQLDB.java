@@ -10,6 +10,7 @@ import com.vero.metadata.Table;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,10 @@ public class MySQLDB extends AbstractDB{
     
     @Override
     public Connection connect() {
+        if(_conn !=null ){
+            return _conn;
+        }
+        
         StringBuilder sb = new StringBuilder("jdbc:mysql://");
         
         sb.append(getHostName())
@@ -70,5 +75,10 @@ public class MySQLDB extends AbstractDB{
             Logger.getLogger(MySQLDB.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }          
+    }
+
+    @Override
+    public ArrayList<String> getSchemas(){
+        throw new UnsupportedOperationException("MySQL does not support schemas."); 
     }
 }
