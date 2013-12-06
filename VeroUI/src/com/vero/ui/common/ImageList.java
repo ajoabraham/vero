@@ -22,5 +22,7 @@ public interface ImageList {
     public static final Image IMAGE_INNER_JOIN = new Image(VeroUI.class.getResourceAsStream("images/inner_join_icon.png"));
     public static final Image IMAGE_COMMENT = new Image(VeroUI.class.getResourceAsStream("images/comment_icon.png"));
     public static final Image IMAGE_ACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/active_circle_icon.png"));
+    public static final Image IMAGE_INACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/inactive_circle_icon.png"));
     public static final Image IMAGE_FILTER = new Image(VeroUI.class.getResourceAsStream("images/filter_icon.png"));
+    public static final Image IMAGE_DATASOURCE_OBJECT = new Image(VeroUI.class.getResourceAsStream("images/datasource_obj_icon.png"));
 }

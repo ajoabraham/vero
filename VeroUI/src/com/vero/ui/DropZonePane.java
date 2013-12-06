@@ -11,7 +11,7 @@ import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.DATASOURCE;
 import static com.vero.ui.common.ObjectType.METRIC;
 import static com.vero.ui.common.ObjectType.TABLE;
-import static com.vero.ui.common.ObjectType.UNUSED;
+import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.UIConstants.DROP_ZONE_PANE_WIDTH;
 import static com.vero.ui.common.UIConstants.EDIT_BUTTON_HEIGHT;
 import static com.vero.ui.common.UIConstants.EDIT_BUTTON_WIDTH;
@@ -43,7 +43,7 @@ public class DropZonePane extends VBox {
         setId(ID_DROP_ZONE_PANE);
         setPrefWidth(DROP_ZONE_PANE_WIDTH);
 
-        getChildren().add(buildObjectPane("REPORT BLOCK", UNUSED));
+        getChildren().add(buildObjectPane("REPORT BLOCK", COLUMN));
 
         Label attributesLabel = new Label("ATTRIBUTES");
         attributesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);

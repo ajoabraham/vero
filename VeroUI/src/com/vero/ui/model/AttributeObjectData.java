@@ -11,7 +11,17 @@ package com.vero.ui.model;
  * @author Tai Hu
  */
 public class AttributeObjectData extends UIData {
+    private String name = null;
+    
     public AttributeObjectData() {
         
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }    
 }

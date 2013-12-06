@@ -17,6 +17,5 @@ public enum ObjectType {
     EXPRESSION,
     ATTRIBUTE,
     METRIC,
-    TABLE_JOIN,
-    UNUSED 
+    TABLE_JOIN
 }

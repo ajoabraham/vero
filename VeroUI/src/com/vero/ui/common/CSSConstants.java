@@ -26,12 +26,17 @@ public interface CSSConstants {
     /**
      * ID for navigation pane
      */
-    public static final String ID_NAVIGATION_PANE = "navigation-pane";
+    public static final String ID_DATASOURCE_NAVIGATION_PANE = "datasource-navigation-pane";
     public static final String CLASS_SECTION_TITLE = "section-title";
     public static final String ID_OBJECTS_PANE = "objects-pane";
     public static final String ID_OBJECT_SEARCH_TEXT_FIELD = "object-search-text-field";
     public static final String CLASS_OBJECT_PANE = "object-pane";
     public static final String CLASS_OBJECT_LABEL = "object-label";
+    public static final String CLASS_DATASOURCE_OBJECT_PANE = "datasource-object-pane";
+    public static final String CLASS_TABLE_OBJECT_PANE = "table-object-pane";
+    public static final String CLASS_COLUMN_OBJECT_PANE = "column-object-pane";
+    public static final String CLASS_ATTRIBUTE_OBJECT_PANE = "attribute-object-pane";
+    public static final String CLASS_METRIC_OBJECT_PANE = "metric-object-pane";
     
     /**
      * ID for drop zone pane

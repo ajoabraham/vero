@@ -10,11 +10,17 @@ import com.vero.ui.common.ObjectType;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 
+import static com.vero.ui.common.CSSConstants.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Tai Hu
  */
 public final class UIUtils {
+    private static final Logger logger = Logger.getLogger(UIUtils.class.getName());
+    
     public static Pane createVerticalSpaceFiller(double height) {
         return HBoxBuilder.create().prefHeight(height).build();
     }
@@ -23,23 +29,23 @@ public final class UIUtils {
         String styleClass = "unknown";
         
         switch (type) {
-            case ATTRIBUTE:
-                styleClass = "object-attribute-pane";
-                break;
             case DATASOURCE:
-                styleClass = "object-datasource-pane";
+                styleClass = CLASS_DATASOURCE_OBJECT_PANE;
                 break;
             case TABLE:
-                styleClass = "object-table-pane";
+                styleClass = CLASS_TABLE_OBJECT_PANE;
+                break;
+            case COLUMN:
+                styleClass = CLASS_COLUMN_OBJECT_PANE;
+                break;
+            case ATTRIBUTE:
+                styleClass = CLASS_ATTRIBUTE_OBJECT_PANE;
                 break;
             case METRIC:
-                styleClass = "object-metrics-pane";
-                break;
-            case UNUSED:
-                styleClass = "object-unused-pane";
+                styleClass = CLASS_METRIC_OBJECT_PANE;
                 break;
             default:
-                System.err.println("Invalid object type - " + type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }
         
         return styleClass;

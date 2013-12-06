@@ -10,7 +10,7 @@ import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.DATASOURCE;
 import static com.vero.ui.common.ObjectType.METRIC;
 import static com.vero.ui.common.ObjectType.TABLE;
-import static com.vero.ui.common.ObjectType.UNUSED;
+import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.util.UIUtils;
@@ -27,14 +27,14 @@ import javafx.scene.layout.VBox;
  *
  * @author Tai Hu
  */
-public class NavigationPane extends BorderPane {
+public class DatasourceNavigationPane extends BorderPane {
 
-    public NavigationPane() {
+    public DatasourceNavigationPane() {
         buildUI();
     }
 
     private void buildUI() {
-        setId(ID_NAVIGATION_PANE);
+        setId(ID_DATASOURCE_NAVIGATION_PANE);
 
         Label datasourcesLabel = new Label("DATASOURCES");
         datasourcesLabel.getStyleClass().add(CLASS_SECTION_TITLE);
@@ -58,7 +58,7 @@ public class NavigationPane extends BorderPane {
         objectsPane.getChildren().add(buildObjectPane("Professor ID", ATTRIBUTE));
         objectsPane.getChildren().add(buildObjectPane("Professor Name", ATTRIBUTE));
         objectsPane.getChildren().add(buildObjectPane("# Professors", METRIC));
-        objectsPane.getChildren().add(buildObjectPane("unused_column_1", UNUSED));
+        objectsPane.getChildren().add(buildObjectPane("unused_column_1", COLUMN));
         objectsPane.getChildren().add(buildObjectPane("Students", DATASOURCE));
         objectsPane.getChildren().add(buildObjectPane("Departments", DATASOURCE));
         objectsPane.getChildren().add(buildObjectPane("Oracle-Billing", TABLE));

@@ -8,7 +8,14 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.TABLE;
+import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
+import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.model.TableObjectData;
+import com.vero.ui.util.UIUtils;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 /**
  *
@@ -18,7 +25,19 @@ public class TableObjectPane extends ObjectPane {
     private TableObjectData data = null;
     
     public TableObjectPane(TableObjectData data) {
-        this.data = data;
+        this.data = data;        
+        buildUI();
+    }
+    
+    private void buildUI() {
+        getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
+        setPrefHeight(OBJECT_PANE_HEIGHT);
+
+        Label label = new Label(data.getName());
+        HBox.setHgrow(label, Priority.ALWAYS);
+        label.setMaxWidth(Double.MAX_VALUE);
+        label.getStyleClass().add(CLASS_OBJECT_LABEL);
+        getChildren().add(label);
     }
     
     @Override

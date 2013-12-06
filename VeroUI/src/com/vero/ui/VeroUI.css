@@ -64,7 +64,10 @@
     -fx-background-insets: 1;
 }
 
-#navigation-pane {
+/*******************************************************************************
+ * Style for Datasource Navigation Pane
+ ******************************************************************************/
+#datasource-navigation-pane {
     -fx-padding: 20 0 0 0;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
@@ -105,32 +108,32 @@
     -fx-border-insets: -3;
 }
 
-.object-attribute-pane {
-    -fx-background-image: url("images/attribute_bg.png");
-    -fx-background-repeat: repeat;
-    -fx-background-position: left top;  
-}
-
-.object-datasource-pane {
+.datasource-object-pane {
     -fx-background-image: url("images/ds_and_tbl_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;    
 }
 
-.object-table-pane {
+.table-object-pane {
     -fx-background-image: url("images/ds_and_tbl_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;    
     -fx-padding: 0 10 0 10;
 }
 
-.object-unused-pane {
+.column-object-pane {
     -fx-background-image: url("images/unused_col_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;       
 }
 
-.object-metrics-pane {
+.attribute-object-pane {
+    -fx-background-image: url("images/attribute_bg.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;  
+}
+
+.metric-object-pane {
     -fx-background-image: url("images/metrics_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
@@ -141,14 +144,6 @@
     -fx-text-fill: -fx-default-text-color;
     -fx-alignment: center-left;
     -fx-padding: 0 0 0 10;
-}
-
-.object-table-imageview {
-    -fx-image: url("images/datasource_obj_icon.png");
-}
-
-.object-table-status-imageview {
-    -fx-image: url("images/active_circle_icon.png");
 }
 
 #drop-zone-pane {

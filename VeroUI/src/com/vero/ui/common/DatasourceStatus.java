@@ -4,14 +4,13 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui.model;
+package com.vero.ui.common;
 
 /**
  *
  * @author Tai Hu
  */
-public class DataSourceObjectData extends UIData {
-    public DataSourceObjectData() {
-        
-    }
+public enum DatasourceStatus {
+    ACTIVE,
+    INACTIVE
 }

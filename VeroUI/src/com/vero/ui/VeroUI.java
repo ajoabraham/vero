@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import static com.vero.ui.common.UIConstants.*;
-import javafx.stage.StageStyle;
+//import javafx.stage.StageStyle;
 
 /**
  *

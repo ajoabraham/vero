@@ -58,7 +58,7 @@ public class VeroMainWindow extends BorderPane {
         leftPane.getColumnConstraints().add(new ColumnConstraints(40));
         leftPane.add(veroToolBar, 0, 0);
         
-        navigationPane = new NavigationPane();
+        navigationPane = new DatasourceNavigationPane();
         leftPane.getColumnConstraints().add(new ColumnConstraints(NAVIGATION_PANE_WIDTH));
         leftPane.add(navigationPane, 1, 0);
         

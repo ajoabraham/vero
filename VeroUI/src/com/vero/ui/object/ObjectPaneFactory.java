@@ -9,7 +9,7 @@ package com.vero.ui.object;
 import com.vero.ui.common.ObjectType;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
-import com.vero.ui.model.DataSourceObjectData;
+import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
@@ -24,7 +24,7 @@ public final class ObjectPaneFactory {
         
         switch (type) {
             case DATASOURCE:
-                objectPane = new DataSourceObjectPane((DataSourceObjectData) data);
+                objectPane = new DatasourceObjectPane((DatasourceObjectData) data);
                 break;
             case TABLE:
                 objectPane = new TableObjectPane((TableObjectData) data);

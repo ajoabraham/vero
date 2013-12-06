@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui.common;
+package com.vero.ui;
+
+import javafx.scene.layout.BorderPane;
 
 /**
  *
  * @author Tai Hu
  */
-public enum DataSourceStatus {
-    ACTIVE,
-    INACTIVE
+public class ReportNavigationPane extends BorderPane {
+    
 }
