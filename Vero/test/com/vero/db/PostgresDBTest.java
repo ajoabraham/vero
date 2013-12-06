@@ -23,25 +23,25 @@ import static org.junit.Assert.*;
  *
  * @author ajoabraham
  */
-public class MSSQLServerDBTest {
+public class PostgresDBTest {
     
-    public static MSSQLServerDB db;
+    public static PostgresDB db;
     
     @BeforeClass
     public static void setUpClass() throws SQLException {
-        System.out.println("Testing MS SQL Server DB....");
-        db = new MSSQLServerDB();
+        System.out.println("Testing PostgreSQL DB....");
+        db = new PostgresDB();
         db.setUsername("stuser")
                 .setPassword("sourcetable")
-                .setDatabaseName("Northwind")
-                .setHostName("sqlserver11.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
-        String sql = "CREATE TABLE dbo.UpdateStructureTest (id int , col1 int, col2 int, col3 int);";
+                .setDatabaseName("northwind")
+                .setHostName("pg9.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
+        String sql = "CREATE TABLE updatestructuretest (id int , col1 int, col2 int, col3 int);";
         db.connect().createStatement().execute(sql);
     }
     
     @AfterClass
     public static void tearDownClass() throws SQLException {
-        db.connect().createStatement().execute("DROP TABLE UpdateStructureTest;");
+        db.connect().createStatement().execute("DROP TABLE updatestructuretest;");
         db.close();
     }
     
@@ -66,7 +66,7 @@ public class MSSQLServerDBTest {
     @Test
     public void testGetDBTables() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        assertTrue("CustomerDemographics table should be in the collection",d.containsKey("CustomerDemographics"));
+        assertTrue("CustomerDemographics table should be in the collection",d.containsKey("customerdemographics"));
     }
     
     @Test
@@ -77,7 +77,7 @@ public class MSSQLServerDBTest {
                                     "OrderID","CustomerID","EmployeeID","ShipName",
                                      "ShipAddress","ShipPostalCode","ShipCountry"};
         
-        Table t = d.get("Orders");
+        Table t = d.get("orders");
         Column c;
         for(String col : expectedColumns){
             c = t.getColumn(col);
@@ -89,28 +89,28 @@ public class MSSQLServerDBTest {
     @Test
     public void testIdentifyPrimaryKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("Employees");
+        Table t = d.get("employees");
         db.identifyKeys(t);
-        Column c = d.get("Employees").getPrimaryKeyColumns().get(0);
+        Column c = d.get("employees").getPrimaryKeyColumns().get(0);
         
         assertTrue("EmployeeID should be the first and only primary key: ",
                 c.getObjectName().equals("EmployeeID"));
         
         assertTrue("There should only be 1 primary key in this table: ",
-                d.get("Employees").getPrimaryKeyColumns().size()==1);
+                d.get("employees").getPrimaryKeyColumns().size()==1);
         
     }
     
     @Test
     public void testIdentifyForeignKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("Orders");
+        Table t = d.get("orders");
         db.identifyKeys(t);
         ArrayList<Column> c = t.getForeignKeyColumns();
         
         String[] expectedColumns = {"CustomerID","ShipVia","EmployeeID"};
         
-        assertTrue("There should be 3 foreign key columns: ",
+        assertTrue("There should be 3 foreign key columns in the orders table: ",
                 c.size()==3);
         
         for (String eCol : expectedColumns) {
@@ -127,7 +127,7 @@ public class MSSQLServerDBTest {
     @Test
     public void testBridgeTableKeysAreForeignKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("EmployeeTerritories");
+        Table t = d.get("employeeterritories");
         db.identifyKeys(t);
         ArrayList<Column> c = t.getForeignKeyColumns();
         
@@ -149,7 +149,7 @@ public class MSSQLServerDBTest {
     
     @Test
     public void testCollectStats() throws SQLException{
-        Table t = db.getDBTables().get("Orders");
+        Table t = db.getDBTables().get("orders");
         db.collectStats(t);
         assertTrue("Orders table should have 830 rows.", t.getRowCount()==830);
         assertTrue("Last stat timestamp should have been updated.", t.getLastStatDate()!=null);
@@ -157,9 +157,9 @@ public class MSSQLServerDBTest {
     
     @Test
     public void testUpdateStructureNewColumn() throws SQLException{
-        Table t = db.getDBTables().get("UpdateStructureTest");
+        Table t = db.getDBTables().get("updatestructuretest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest ADD new_col1 int;");
+          .execute("ALTER TABLE updatestructuretest ADD new_col1 int;");
         
         db.updateTableStructure(t);
         assertTrue("new_col1 column should have be added to the table.", t.getColumn("new_col1") != null);
@@ -167,9 +167,9 @@ public class MSSQLServerDBTest {
     
     @Test
     public void testUpdateStructureRemoveColumn() throws SQLException{
-        Table t = db.getDBTables().get("UpdateStructureTest");
+        Table t = db.getDBTables().get("updatestructuretest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest DROP COLUMN col1;");
+          .execute("ALTER TABLE updatestructuretest DROP COLUMN col1;");
         
         db.updateTableStructure(t);
         assertTrue("col1 column should have been removed from the table.", t.getColumn("col1") == null);
@@ -178,9 +178,9 @@ public class MSSQLServerDBTest {
     
     @Test
     public void testUpdateStructureUpdateColumnType() throws SQLException{
-        Table t = db.getDBTables().get("UpdateStructureTest");
+        Table t = db.getDBTables().get("updatestructuretest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest ALTER COLUMN new_col1 varchar(22) not null;");
+          .execute("ALTER TABLE updatestructuretest ALTER COLUMN new_col1 TYPE varchar(22);");
         
         db.updateTableStructure(t);
         assertTrue("new_col1 column should now have String datatype.", 
@@ -191,9 +191,9 @@ public class MSSQLServerDBTest {
     
     @Test
     public void testUpdateStructureUpdateColumnKeyType() throws SQLException{
-        Table t = db.getDBTables().get("UpdateStructureTest");
+        Table t = db.getDBTables().get("updatestructuretest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest ADD CONSTRAINT pk_newcol1 PRIMARY KEY (new_col1)");
+          .execute("ALTER TABLE updatestructuretest ADD CONSTRAINT pk_newcol1 PRIMARY KEY (new_col1)");
         
         db.updateTableStructure(t);
         assertTrue("new_col1 column should now be a primary key.", 
@@ -201,31 +201,31 @@ public class MSSQLServerDBTest {
     }
     
     // ------ TESTS BELOW ARE ON AN ALTERNATIVE SCHEMA ----- //
+    
     @Test
     public void testGetSchemas() throws SQLException{
         ArrayList<String> s = db.getSchemas();
         Iterator<String> it = s.iterator();
         boolean hasPGCatalog = false;
         while(it.hasNext()){
-            if(it.next().equals("sys")){
+            if(it.next().equals("pg_catalog")){
                 hasPGCatalog = true;
             }
         }
-        assertTrue("sys should be in the collection of schemas.",hasPGCatalog);
+        assertTrue("pg_catalog should be in the collection of schemas.",hasPGCatalog);
     }
     
-    
     @Test
-    public void testLoadSysSchemaCatalog() throws SQLException{
-        MSSQLServerDB db2 = new MSSQLServerDB();
+    public void testLoadNonDefaultSchemaCatalog() throws SQLException{
+        PostgresDB db2 = new PostgresDB();
         db2.setUsername("stuser")
                 .setPassword("sourcetable")
-                .setDatabaseName("Northwind")
-                .setHostName("sqlserver11.cokqqhqwkadj.us-west-2.rds.amazonaws.com")
-                .setSchemaName("sys");
+                .setDatabaseName("northwind")
+                .setHostName("pg9.cokqqhqwkadj.us-west-2.rds.amazonaws.com")
+                .setSchemaName("pg_catalog");
         db2.loadCatalog();
-        Table t = db2.getDBTables().get("trace_xe_action_map");
-        assertTrue("trace_xe_action_map should be in the collection of tables.", 
+        Table t = db2.getDBTables().get("pg_database");
+        assertTrue("pg_database should be in the collection of tables.", 
                 t != null);
     }
 }

@@ -102,9 +102,16 @@ abstract class AbstractDB implements Serializable {
     /**
      * Returns a list of schemas under a specific database.  MySQL
      * will return null while Postgres will return at least Public.
+     * 
+     * @throws UnsupportedMethod or SQLException
      */
-    public void getSchemas() {
-        throw new UnsupportedOperationException("MySQL does not support Schemas specifically (databases and schemas are the same thing)."); 
+    public ArrayList<String> getSchemas() throws SQLException {
+        ArrayList<String> s = new ArrayList();
+        ResultSet rs = connect().getMetaData().getSchemas(getDatabaseName(), null);
+        while(rs.next()){
+            s.add(rs.getString("TABLE_SCHEM"));
+        }
+        return s;
     }
     
     /**

@@ -9,9 +9,11 @@ package com.vero.db;
 import com.vero.metadata.Table;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,17 +21,17 @@ import java.util.logging.Logger;
  *
  * @author ajoabraham
  */
-public class MSSQLServerDB extends AbstractDB{
+public class PostgresDB extends AbstractDB{
     private static final String TEST_CONNECT_QUERY = "SELECT 2+2";
     private final HashMap<String,Table> _catalog = new HashMap<>();
     
-    public MSSQLServerDB(){
-        VENDOR_NAME = "Microsoft SQL Server";
-        DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    public PostgresDB(){
+        VENDOR_NAME = "PostgreSQL";
+        DRIVER = "org.postgresql.Driver";
         ABSOLUTE_TABLE_NAME_PATTERN="DATABASE.SCHEMA.TABLE";
-        SUPPORTED_VERSIONS= new String[]{"2005", "2008", "2008 R2", "2012", "Azure"};
-        DEFAULT_SCHEMA="dbo";
-        this.setPort(1433);
+        SUPPORTED_VERSIONS= new String[]{"9.3","9.2"};
+        DEFAULT_SCHEMA="public";
+        this.setPort(5432);
         
         try {
             Class.forName(DRIVER).newInstance();
@@ -44,22 +46,21 @@ public class MSSQLServerDB extends AbstractDB{
             return _conn;
         }
         
-        StringBuilder sb = new StringBuilder("jdbc:sqlserver://");
+        StringBuilder sb = new StringBuilder("jdbc:postgresql://");
         
         sb.append(getHostName())
             .append(":")
             .append(getPort())
-            .append(";databaseName=")
-            .append(getDatabaseName())
-            .append(";")
-            .append("user=")
-            .append(getUsername())
-            .append(";")
-            .append("password=")
-            .append(getPassword());
+            .append("/")
+            .append(getDatabaseName());
+        
+        Properties props = new Properties();
+        props.setProperty("user",getUsername());
+        props.setProperty("password",getPassword());
+        props.setProperty("search_path",getSchemaName());
         
         try {
-            _conn = DriverManager.getConnection(sb.toString());
+            _conn = DriverManager.getConnection(sb.toString(),props);
         } catch (SQLException ex) {
             Logger.getLogger(MySQLDB.class.getName()).log(Level.SEVERE, sb.toString(), ex);
         }
@@ -82,5 +83,16 @@ public class MSSQLServerDB extends AbstractDB{
     public boolean supportsSchema() {
         return true; 
     }
-   
+
+    @Override
+    public ArrayList<String> getSchemas() throws SQLException {
+        ArrayList<String> s = new ArrayList();
+        ResultSet rs = connect().getMetaData().getSchemas(getDatabaseName(), null);
+        while(rs.next()){
+            s.add(rs.getString("TABLE_SCHEM"));
+        }
+        return s;
+    }
+    
+    
 }
