@@ -42,6 +42,7 @@ import org.sql.generation.api.grammar.query.ColumnReferenceByName;
 import org.sql.generation.api.grammar.query.Ordering;
 import org.sql.generation.api.grammar.query.QueryExpression;
 import org.sql.generation.api.grammar.query.QueryExpressionBody;
+import org.jgrapht.alg.*;
 
 /**
  *
@@ -57,10 +58,8 @@ public class Vero {
         }
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void queryEngineTest1() {
+        // a placeholder for old test
         // session
         Session userSession = new Session();
         
@@ -439,6 +438,18 @@ public class Vero {
         QueryExpressionBody innerQuery = q.queryBuilder(firstInnerQuery.createExpression()).createExpression();
 
         String sqlString = innerQuery.toString();
-        System.out.println("Output sql is: " + sqlString);       
-    }    
+        System.out.println("Output sql is: " + sqlString);
+    }
+    
+    public static void queryEngineTest2() {
+        
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // queryEngineTest1();
+        queryEngineTest2();
+    }
 }
