@@ -7,8 +7,7 @@
 package com.vero.ui.object;
 
 import static com.vero.ui.common.CSSConstants.ID_OBJECT_TREE_VIEW;
-import static com.vero.ui.common.ObjectType.DATASOURCE;
-import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.RootObjectData;
 import com.vero.ui.test.TestDataGenerator;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
@@ -30,11 +29,11 @@ public class ObjectTreeView extends TreeView<ObjectPane> {
         setCellFactory(new ObjectTreeCellFactory());
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
-        DatasourceObjectData rootData = TestDataGenerator.generateDatasource("DS");
-        TreeItem<ObjectPane> root = new ObjectTreeItem<>(rootData, 
-                ObjectPaneFactory.getInstance().createObjectPane(DATASOURCE, rootData));
-        setShowRoot(true);
+        RootObjectData rootData = new RootObjectData();
+        rootData.setDatasourceObjectDataList(TestDataGenerator.generateDatasourceList("DS"));
+        TreeItem<ObjectPane> root = new ObjectTreeItem<>(rootData, null);
+        setShowRoot(false);
         setRoot(root);
-        root.setExpanded(false);
+        root.setExpanded(true);
     }
 }

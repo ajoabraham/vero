@@ -6,7 +6,7 @@
 
 package com.vero.ui.object;
 
-import javafx.scene.Group;
+import com.vero.ui.util.UIUtils;
 import javafx.scene.control.TreeCell;
 
 /**
@@ -17,14 +17,14 @@ public class ObjectTreeCell extends TreeCell<ObjectPane> {
     public ObjectTreeCell() {
         // In UI, expand/collapse arrow is hidden. However, empty space still
         // exists in front of tree cell. Replace node holds arrow with an empty
-        // group to remove space.
-        setDisclosureNode(new Group());
+        // group to remove space.      
+        setDisclosureNode(UIUtils.createHorizontalSpaceFiller(0));
     }
     
     @Override
     protected void updateItem(ObjectPane item, boolean empty) {
         super.updateItem(item, empty);
-        
+
         if (!empty) {
             setText(null);
             setGraphic(item);

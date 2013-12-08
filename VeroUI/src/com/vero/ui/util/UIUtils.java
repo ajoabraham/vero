@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import static com.vero.ui.common.CSSConstants.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.VBoxBuilder;
 
 /**
  *
@@ -23,6 +24,10 @@ public final class UIUtils {
     
     public static Pane createVerticalSpaceFiller(double height) {
         return HBoxBuilder.create().prefHeight(height).build();
+    }
+    
+    public static Pane createHorizontalSpaceFiller(double width) {
+        return VBoxBuilder.create().prefWidth(width).build();
     }
     
     public static String getObjectSytleClass(ObjectType type) {

@@ -117,13 +117,13 @@
 .datasource-object-pane {
     -fx-background-image: url("images/ds_and_tbl_bg.png");
     -fx-background-repeat: repeat;
-    -fx-background-position: left top;    
+    -fx-background-position: left top;   
 }
 
 .table-object-pane {
     -fx-background-image: url("images/ds_and_tbl_bg.png");
     -fx-background-repeat: repeat;
-    -fx-background-position: left top;    
+    -fx-background-position: left top;   
 /*    -fx-padding: 0 10 0 10;*/
 }
 
@@ -693,10 +693,10 @@
     -fx-opacity: -fx-disabled-opacity;
 }
 
-.tree-view .corner {
+/*.tree-view .corner {
     -fx-background-color: -fx-box-border, -fx-base;
     -fx-background-insets: 0, 1 0 0 1;
-}
+}*/
 
 .tree-cell {
     -fx-skin: "com.sun.javafx.scene.control.skin.TreeCellSkin";
@@ -704,7 +704,7 @@
 /*    -fx-padding: 0.25em;  3 
     -fx-text-fill: -fx-text-inner-color;*/
     -fx-padding: 2;
-    /*-fx-indent: 10;*/
+    -fx-indent: 10;
 }
 
 /*.tree-cell .label {

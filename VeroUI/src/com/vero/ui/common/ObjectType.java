@@ -17,5 +17,8 @@ public enum ObjectType {
     EXPRESSION,
     ATTRIBUTE,
     METRIC,
-    TABLE_JOIN
+    TABLE_JOIN,
+    // This is a special type used to represent tree root
+    // which is not displayed in UI.
+    ROOT
 }

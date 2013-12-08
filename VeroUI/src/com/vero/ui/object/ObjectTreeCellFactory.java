@@ -18,8 +18,7 @@ public class ObjectTreeCellFactory implements Callback<TreeView<ObjectPane>, Tre
 
     @Override
     public TreeCell<ObjectPane> call(TreeView<ObjectPane> param) {
-        TreeCell<ObjectPane> treeCell = new ObjectTreeCell();
-        
+        TreeCell<ObjectPane> treeCell = new ObjectTreeCell();        
         return treeCell;
     }
 }
