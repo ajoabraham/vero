@@ -26,7 +26,7 @@ public final class TestDataGenerator {
         datasourceObjectData.setId(++ID_SEQ);
         datasourceObjectData.setName(name);
         
-        List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+        List<TableObjectData> tableObjectDataList = new ArrayList<>();
         datasourceObjectData.setTableObjectDataList(tableObjectDataList);
         
         for (int i = 0; i < 10; i++) {
@@ -34,7 +34,7 @@ public final class TestDataGenerator {
             tableObjectData.setId(++ID_SEQ);
             tableObjectData.setName("Table-" + i);
             
-            List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
+            List<ColumnObjectData> columnObjectDataList = new ArrayList<>();
             tableObjectData.setColumnObjectDataList(columnObjectDataList);
             
             for (int j = 0; j < 10; j++) {
@@ -44,7 +44,7 @@ public final class TestDataGenerator {
                 columnObjectDataList.add(columnObjectData);
             }
             
-            List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
+            List<AttributeObjectData> attributeObjectDataList = new ArrayList<>();
             tableObjectData.setAttributeObjectDataList(attributeObjectDataList);
             for (int j = 0; j < 10; j++) {
                 AttributeObjectData attributeObjectData = new AttributeObjectData();
@@ -53,8 +53,8 @@ public final class TestDataGenerator {
                 attributeObjectDataList.add(attributeObjectData);             
             }
             
-            List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
-            tableObjectData.setMetricObjectData(metricObjectDataList);
+            List<MetricObjectData> metricObjectDataList = new ArrayList<>();
+            tableObjectData.setMetricObjectDataList(metricObjectDataList);
             for (int j = 0; j < 10; j++) {
                 MetricObjectData metricObjectData = new MetricObjectData();
                 metricObjectData.setId(++ID_SEQ);
@@ -69,7 +69,7 @@ public final class TestDataGenerator {
     }
     
     public static List<DatasourceObjectData> generateDatasourceList(String namePrefix) {
-        List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
+        List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<>();
         
         for (int i = 0; i < 10; i++) {
             datasourceObjectDataList.add(generateDatasource(namePrefix + "-" + i));

@@ -18,7 +18,7 @@ public class TableObjectData extends UIData {
     private String name = null;
     private List<ColumnObjectData> columnObjectDataList = null;
     private List<AttributeObjectData> attributeObjectDataList = null;
-    private List<MetricObjectData> metricObjectData = null;
+    private List<MetricObjectData> metricObjectDataList = null;
     
     public TableObjectData() {
         
@@ -53,11 +53,11 @@ public class TableObjectData extends UIData {
         this.attributeObjectDataList = attributeObjectDataList;
     }
 
-    public List<MetricObjectData> getMetricObjectData() {
-        return metricObjectData;
+    public List<MetricObjectData> getMetricObjectDataList() {
+        return metricObjectDataList;
     }
 
-    public void setMetricObjectData(List<MetricObjectData> metricObjectData) {
-        this.metricObjectData = metricObjectData;
+    public void setMetricObjectDataList(List<MetricObjectData> metricObjectDataList) {
+        this.metricObjectDataList = metricObjectDataList;
     }
 }
