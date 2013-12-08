@@ -34,7 +34,6 @@ public class DatasourceObjectPane extends ObjectPane {
     private void buildUI() {
         getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
         setPrefHeight(OBJECT_PANE_HEIGHT);
-
         ImageView datasourceImageView = new ImageView(ImageList.IMAGE_DATASOURCE_OBJECT);
         getChildren().add(datasourceImageView);
        

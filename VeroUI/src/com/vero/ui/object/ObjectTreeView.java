@@ -6,6 +6,7 @@
 
 package com.vero.ui.object;
 
+import static com.vero.ui.common.CSSConstants.ID_OBJECT_TREE_VIEW;
 import static com.vero.ui.common.ObjectType.DATASOURCE;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.test.TestDataGenerator;
@@ -23,6 +24,7 @@ public class ObjectTreeView extends TreeView<ObjectPane> {
     }
     
     private void buildUI() {
+        setId(ID_OBJECT_TREE_VIEW);
         setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         setEditable(false);
         setCellFactory(new ObjectTreeCellFactory());

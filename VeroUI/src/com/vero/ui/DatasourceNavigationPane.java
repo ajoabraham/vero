@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -34,6 +35,7 @@ public class DatasourceNavigationPane extends BorderPane {
         setTop(datasourcesLabel);
 
         VBox objectsPane = new VBox();
+        objectsPane.setFillWidth(true);
         objectsPane.setId(ID_OBJECTS_PANE);
 
         // Build search box first.
@@ -46,6 +48,7 @@ public class DatasourceNavigationPane extends BorderPane {
         objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
 
         TreeView<ObjectPane> treeView = new ObjectTreeView();
+        VBox.setVgrow(treeView, Priority.ALWAYS);
         objectsPane.getChildren().add(treeView);
 
         setCenter(objectsPane);

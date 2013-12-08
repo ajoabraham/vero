@@ -73,6 +73,11 @@
     -fx-border-width: 0 1 0 0;
 }
 
+#object-tree-view {
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
 .section-title {
     -fx-font: bold normal 14px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
@@ -106,6 +111,7 @@
     -fx-border-width: 3;
     -fx-border-radius: 5;
     -fx-border-insets: -3;
+    -fx-padding: 0 5 0 5;
 }
 
 .datasource-object-pane {
@@ -118,7 +124,7 @@
     -fx-background-image: url("images/ds_and_tbl_bg.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;    
-    -fx-padding: 0 10 0 10;
+/*    -fx-padding: 0 10 0 10;*/
 }
 
 .column-object-pane {
@@ -695,9 +701,10 @@
 .tree-cell {
     -fx-skin: "com.sun.javafx.scene.control.skin.TreeCellSkin";
     -fx-background-color: -fx-main-background-color;
-    -fx-padding: 0.25em; /* 3 */
-    -fx-text-fill: -fx-text-inner-color;
-    -fx-indent: 10;
+/*    -fx-padding: 0.25em;  3 
+    -fx-text-fill: -fx-text-inner-color;*/
+    -fx-padding: 2;
+    /*-fx-indent: 10;*/
 }
 
 /*.tree-cell .label {
@@ -741,23 +748,21 @@
     -fx-opacity: -fx-disabled-opacity;
 }*/
 
-.tree-cell .tree-disclosure-node {
-    /** put a bit of padding around the disclosure node to make the clicking region larger */
+/*.tree-cell .tree-disclosure-node {
+    * put a bit of padding around the disclosure node to make the clicking region larger 
     -fx-padding: 4 2 4 8;
     -fx-background-color: transparent;
-}
+}*/
 
-.tree-cell .tree-disclosure-node:disabled {
+/*.tree-cell .tree-disclosure-node:disabled {
     -fx-opacity: -fx-disabled-opacity;
-}
+}*/
 
-.tree-cell .tree-disclosure-node .arrow {
-/*    -fx-background-color: -fx-mark-color;
-    -fx-padding: 0.333333em;  4 
-    -fx-shape: "M 0 -4 L 8 0 L 0 4 z";*/
-    -fx-background-color: -fx-main-background-color;
-    -fx-shape: null;
-}
+/*.tree-cell .tree-disclosure-node .arrow {
+    -fx-background-color: -fx-mark-color;
+    -fx-padding: 0.333333em; 
+    -fx-shape: "M 0 -4 L 8 0 L 0 4 z";
+}*/
 
 /*.tree-cell:expanded .tree-disclosure-node .arrow {
     -fx-rotate: 90;
