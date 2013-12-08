@@ -6,6 +6,8 @@
 
 package com.vero.ui.model;
 
+import com.vero.ui.common.ObjectType;
+
 /**
  *
  * @author Tai Hu
@@ -24,4 +26,6 @@ public abstract class UIData {
     public void setId(long Id) {
         this.Id = Id;
     }
+    
+    public abstract ObjectType getType();
 }

@@ -8,6 +8,8 @@ package com.vero.ui.model;
 
 import com.vero.ui.common.DatasourceStatus;
 import static com.vero.ui.common.DatasourceStatus.INACTIVE;
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.DATASOURCE;
 import java.util.List;
 
 /**
@@ -21,6 +23,11 @@ public class DatasourceObjectData extends UIData {
     
     public DatasourceObjectData() {
         
+    }
+    
+    @Override
+    public ObjectType getType() {
+        return DATASOURCE;
     }
 
     public String getName() {

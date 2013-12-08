@@ -6,6 +6,9 @@
 
 package com.vero.ui.model;
 
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.METRIC;
+
 /**
  *
  * @author Tai Hu
@@ -15,6 +18,11 @@ public class MetricObjectData extends UIData {
     
     public MetricObjectData() {
         
+    }
+    
+    @Override
+    public ObjectType getType() {
+        return METRIC;
     }
 
     public String getName() {

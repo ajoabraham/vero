@@ -6,6 +6,9 @@
 
 package com.vero.ui.model;
 
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.ATTRIBUTE;
+
 /**
  *
  * @author Tai Hu
@@ -17,6 +20,11 @@ public class AttributeObjectData extends UIData {
         
     }
 
+    @Override
+    public ObjectType getType() {
+        return ATTRIBUTE;
+    }
+    
     public String getName() {
         return name;
     }

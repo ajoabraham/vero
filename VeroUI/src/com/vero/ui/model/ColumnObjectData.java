@@ -6,6 +6,9 @@
 
 package com.vero.ui.model;
 
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.COLUMN;
+
 /**
  *
  * @author Tai Hu
@@ -15,6 +18,11 @@ public class ColumnObjectData extends UIData {
     
     public ColumnObjectData() {
         
+    }
+    
+    @Override
+    public ObjectType getType() {
+        return COLUMN;
     }
 
     public String getName() {

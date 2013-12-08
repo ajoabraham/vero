@@ -19,7 +19,21 @@ import com.vero.ui.model.UIData;
  * @author Tai Hu
  */
 public final class ObjectPaneFactory {
-    public static ObjectPane createObjectPane(ObjectType type, UIData data) {
+    private static ObjectPaneFactory INSTANCE = null;
+    
+    private ObjectPaneFactory() {
+        
+    }
+    
+    public static ObjectPaneFactory getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ObjectPaneFactory();
+        }
+        
+        return INSTANCE;
+    }
+    
+    public ObjectPane createObjectPane(ObjectType type, UIData data) {
         ObjectPane objectPane = null;
         
         switch (type) {
