@@ -12,8 +12,12 @@ import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -21,7 +25,7 @@ import javafx.scene.layout.Priority;
  *
  * @author Tai Hu
  */
-public class AttributeObjectPane extends DraggableObjectPane {
+public class AttributeObjectPane extends ObjectPane {
     private AttributeObjectData data = null;
     
     public AttributeObjectPane(AttributeObjectData data) {
@@ -44,4 +48,24 @@ public class AttributeObjectPane extends DraggableObjectPane {
     public ObjectType getType() {
         return ATTRIBUTE;
     }
+
+    @Override
+    public void handleDragDoneEvent(DragEvent event) {
+    }
+
+    @Override
+    public void handleDragDetectedEvent(MouseEvent event) {
+    }
+
+    @Override
+    public Node getDragSource() {
+        return this;
+    }
+
+    @Override
+    public UIData getTransferData() {
+        return data;
+    }
+    
+    
 }
