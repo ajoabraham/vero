@@ -6,6 +6,10 @@
 
 package com.vero.ui.object;
 
+import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.ObjectType.ATTRIBUTE;
+import static com.vero.ui.common.ObjectType.COLUMN;
+import static com.vero.ui.common.ObjectType.METRIC;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.TreeCell;
 
@@ -28,6 +32,14 @@ public class ObjectTreeCell extends TreeCell<ObjectPane> {
         if (!empty) {
             setText(null);
             setGraphic(item);
+            
+            // In UI, for leaf nodes with unknown reason, there are extra
+            // space in front of tree cell. Reduced indent here to minimize
+            // extra space.
+            if (item.getType() == ATTRIBUTE || item.getType() == METRIC
+                    || item.getType() == COLUMN) {
+               setStyle("-fx-indent: 0;");
+            }
         }
     }
 }
