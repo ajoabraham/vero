@@ -6,7 +6,6 @@
 
 package com.vero.ui.object;
 
-import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.ObjectType.METRIC;
@@ -38,7 +37,7 @@ public class ObjectTreeCell extends TreeCell<ObjectPane> {
             // extra space.
             if (item.getType() == ATTRIBUTE || item.getType() == METRIC
                     || item.getType() == COLUMN) {
-               setStyle("-fx-indent: 0;");
+               setStyle("-fx-indent: -5;");
             }
         }
     }

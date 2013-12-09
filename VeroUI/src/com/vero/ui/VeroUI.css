@@ -704,7 +704,7 @@
 /*    -fx-padding: 0.25em;  3 
     -fx-text-fill: -fx-text-inner-color;*/
     -fx-padding: 2;
-    -fx-indent: 10;
+    -fx-indent: 0;
 }
 
 /*.tree-cell .label {
