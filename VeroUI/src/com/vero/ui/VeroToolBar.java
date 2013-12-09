@@ -13,6 +13,7 @@ import static com.vero.ui.common.CSSConstants.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
 /**
@@ -34,11 +35,13 @@ public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
         datasourcesToolBarButton.setId(ID_DATASOURCES_TOOL_BAR_BUTTON);
         datasourcesToolBarButton.setPrefSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
         datasourcesToolBarButton.setMinSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
+        datasourcesToolBarButton.setTooltip(new Tooltip("Browse datasources"));
         datasourcesToolBarButton.setOnAction(this);
         reportsToolBarButton = new Button();
         reportsToolBarButton.setId(ID_REPORTS_TOOL_BAR_BUTTON);
         reportsToolBarButton.setPrefSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
         reportsToolBarButton.setMinSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
+        reportsToolBarButton.setTooltip(new Tooltip("Browse reports"));
         reportsToolBarButton.setOnAction(this);
 
         getChildren().addAll(datasourcesToolBarButton, reportsToolBarButton);
@@ -47,10 +50,10 @@ public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent e) {
         if (e.getSource() == datasourcesToolBarButton) {
-            
+            UIManager.getInstance().showDatasourceNavigationPane();
         }
         else if (e.getSource() == reportsToolBarButton) {
-            
+            UIManager.getInstance().showReportNavigationPane();
         }
     }
 }

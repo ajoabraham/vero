@@ -27,6 +27,7 @@ public interface CSSConstants {
      * ID for navigation pane
      */
     public static final String ID_DATASOURCE_NAVIGATION_PANE = "datasource-navigation-pane";
+    public static final String ID_REPORT_NAVIGATION_PANE = "report-navigation-pane";
     public static final String ID_OBJECT_TREE_VIEW = "object-tree-view";
     public static final String CLASS_SECTION_TITLE = "section-title";
     public static final String ID_OBJECTS_PANE = "objects-pane";

@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -30,9 +31,10 @@ import javafx.scene.layout.Priority;
  */
 public class VeroMainWindow extends BorderPane {
     private Pane veroToolBar = null;
-    private Pane navigationPane = null;
+    private UIManager uiManager = null;
     
     public VeroMainWindow() {
+        uiManager = UIManager.getInstance();
         buildUI();
     }
     
@@ -58,7 +60,12 @@ public class VeroMainWindow extends BorderPane {
         leftPane.getColumnConstraints().add(new ColumnConstraints(40));
         leftPane.add(veroToolBar, 0, 0);
         
-        navigationPane = new DatasourceNavigationPane();
+        Pane navigationPane = new StackPane();
+        
+        Pane datasourceNavigationPane = uiManager.getDatasourceNavigationPane();
+        Pane reportNavigationPane = uiManager.getReportNavigationPane();
+        navigationPane.getChildren().setAll(reportNavigationPane, datasourceNavigationPane);
+        
         leftPane.getColumnConstraints().add(new ColumnConstraints(NAVIGATION_PANE_WIDTH));
         leftPane.add(navigationPane, 1, 0);
         
