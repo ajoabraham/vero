@@ -33,14 +33,14 @@ import javafx.scene.control.TreeItem;
 public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
     private static final Logger logger = Logger.getLogger(ObjectTreeItem.class.getName());
     
-    private T value = null;
+    private T objectData = null;
     private boolean isFirstTimeChildren = true;
     private boolean isFirstTimeLeaf = true;
     private boolean isLeaf = false;
     
-    public ObjectTreeItem(T value, ObjectPane objectPane) {
+    public ObjectTreeItem(T objectData, ObjectPane objectPane) {
         super(objectPane);
-        this.value = value;
+        this.objectData = objectData;
     }
     
     @Override
@@ -50,9 +50,9 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
             
             ObjectPaneFactory objectPaneFactory = ObjectPaneFactory.getInstance();
             
-            switch(value.getType()) {
+            switch(objectData.getType()) {
                 case ROOT:
-                    List<DatasourceObjectData> datasourceObjectDataList = ((RootObjectData) value).getDatasourceObjectDataList();
+                    List<DatasourceObjectData> datasourceObjectDataList = ((RootObjectData) objectData).getDatasourceObjectDataList();
                     List<TreeItem<ObjectPane>> datasourceObjectTreeItemList = new ArrayList<>();
                     
                     for (DatasourceObjectData datasourceObjectData : datasourceObjectDataList) {
@@ -65,7 +65,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
 
                     break;
                 case DATASOURCE:
-                    List<TableObjectData> tableObjectDataList = ((DatasourceObjectData) value).getTableObjectDataList();
+                    List<TableObjectData> tableObjectDataList = ((DatasourceObjectData) objectData).getTableObjectDataList();
                     List<TreeItem<ObjectPane>> tableObjectTreeItemList = new ArrayList<>();
                     
                     for (TableObjectData tableObjectData : tableObjectDataList) {
@@ -77,7 +77,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     super.getChildren().setAll(tableObjectTreeItemList);                    
                     break;
                 case TABLE:
-                    List<AttributeObjectData> attributeObjectDataList = ((TableObjectData) value).getAttributeObjectDataList();
+                    List<AttributeObjectData> attributeObjectDataList = ((TableObjectData) objectData).getAttributeObjectDataList();
                     List<TreeItem<ObjectPane>> treeItemList = new ArrayList<>();
                     
                     for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
@@ -86,7 +86,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                         treeItemList.add(treeItem);
                     }
                     
-                    List<MetricObjectData> metricObjectDataList = ((TableObjectData) value).getMetricObjectDataList();
+                    List<MetricObjectData> metricObjectDataList = ((TableObjectData) objectData).getMetricObjectDataList();
                     
                     for (MetricObjectData metricObjectData : metricObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(metricObjectData, 
@@ -94,7 +94,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                         treeItemList.add(treeItem);
                     }
                     
-                    List<ColumnObjectData> columnObjectDataList = ((TableObjectData) value).getColumnObjectDataList();
+                    List<ColumnObjectData> columnObjectDataList = ((TableObjectData) objectData).getColumnObjectDataList();
                     
                     for (ColumnObjectData columnObjectData : columnObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(columnObjectData, 
@@ -106,7 +106,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     break;
                 default:
-                    logger.log(Level.SEVERE, "Invalid object type - {0}", value.getType());
+                    logger.log(Level.SEVERE, "Invalid object type - {0}", objectData.getType());
             }
         }
         
@@ -118,11 +118,19 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
         if (isFirstTimeLeaf) {
             isFirstTimeLeaf = false;
             
-            isLeaf = (value.getType() == ATTRIBUTE
-                    || value.getType() == COLUMN
-                    || value.getType() == METRIC);
+            isLeaf = (objectData.getType() == ATTRIBUTE
+                    || objectData.getType() == COLUMN
+                    || objectData.getType() == METRIC);
         }
         
         return isLeaf;
+    }
+
+    public T getObjectData() {
+        return objectData;
+    }
+
+    public void setObjectData(T objectData) {
+        this.objectData = objectData;
     }
 }
