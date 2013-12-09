@@ -57,7 +57,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (DatasourceObjectData datasourceObjectData : datasourceObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(datasourceObjectData, 
-                                objectPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData));
+                                objectPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData, false));
                         datasourceObjectTreeItemList.add(treeItem);
                     }
                     
@@ -70,7 +70,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (TableObjectData tableObjectData : tableObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(tableObjectData, 
-                                objectPaneFactory.createObjectPane(TABLE, tableObjectData));
+                                objectPaneFactory.createObjectPane(TABLE, tableObjectData, false));
                         tableObjectTreeItemList.add(treeItem);
                     }
                     
@@ -82,7 +82,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(attributeObjectData, 
-                                objectPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData));
+                                objectPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -90,7 +90,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (MetricObjectData metricObjectData : metricObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(metricObjectData, 
-                                objectPaneFactory.createObjectPane(METRIC, metricObjectData));
+                                objectPaneFactory.createObjectPane(METRIC, metricObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -98,7 +98,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (ColumnObjectData columnObjectData : columnObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(columnObjectData, 
-                                objectPaneFactory.createObjectPane(COLUMN, columnObjectData));
+                                objectPaneFactory.createObjectPane(COLUMN, columnObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     

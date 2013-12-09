@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Tai Hu
  */
-public abstract class ObjectPane extends HBox implements DraggableObject, DroppableObject {
+public abstract class ObjectPane extends HBox implements DraggableObject {
     public ObjectPane() {
     }
     
@@ -44,30 +44,5 @@ public abstract class ObjectPane extends HBox implements DraggableObject, Droppa
 
     @Override
     public void handleDragDoneEvent(DragEvent event) {
-    }
-
-    /**
-     * If dropping function is enabled, subclass must override the following methods
-     * @return 
-     */
-    @Override
-    public Node getDropTarget() {
-        throw new UnsupportedOperationException("Override this method to support this function");
-    }
-
-    @Override
-    public void handleDragOverEvent(DragEvent event) {
-    }
-
-    @Override
-    public void handleDragEnteredEvent(DragEvent event) {
-    }
-
-    @Override
-    public void handleDragExitedEvent(DragEvent event) {
-    }
-
-    @Override
-    public void handleDragDroppedEvent(DragEvent event) {
     }
 }

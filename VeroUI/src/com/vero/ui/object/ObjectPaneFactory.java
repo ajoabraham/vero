@@ -36,10 +36,8 @@ public final class ObjectPaneFactory {
         return INSTANCE;
     }
     
-    public ObjectPane createObjectPane(ObjectType type, UIData data) {
+    public ObjectPane createObjectPane(ObjectType type, UIData data, boolean isDraggable) {
         ObjectPane objectPane = null;
-        boolean isDraggable = false;
-        boolean isDroppable = false;
         
         switch (type) {
             case DATASOURCE:
@@ -50,15 +48,12 @@ public final class ObjectPaneFactory {
                 break;
             case COLUMN:
                 objectPane = new ColumnObjectPane((ColumnObjectData) data);
-                isDraggable = true;
                 break;
             case ATTRIBUTE:
                 objectPane = new AttributeObjectPane((AttributeObjectData) data);
-                isDraggable = true;
                 break;
             case METRIC:
                 objectPane = new MetricObjectPane((MetricObjectData) data);               
-                isDraggable = true;
                 break;
             default:
                 logger.severe("Invalid object type - " + type);
@@ -66,10 +61,6 @@ public final class ObjectPaneFactory {
         
         if (isDraggable) {
             DragManager.newInstance(objectPane);
-        }
-        
-        if (isDroppable) {
-            DropManager.newInstance(objectPane);
         }
         
         return objectPane;
