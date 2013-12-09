@@ -41,13 +41,14 @@ public final class ObjectPaneFactory {
                 objectPane = new DatasourceObjectPane((DatasourceObjectData) data);
                 break;
             case TABLE:
-                objectPane = new TableObjectPane((TableObjectData) data);
+                objectPane = new TableObjectPane((TableObjectData) data);                
                 break;
             case COLUMN:
                 objectPane = new ColumnObjectPane((ColumnObjectData) data);
                 break;
             case ATTRIBUTE:
                 objectPane = new AttributeObjectPane((AttributeObjectData) data);
+                ((DraggableObjectPane) objectPane).enableDragging();
                 break;
             case METRIC:
                 objectPane = new MetricObjectPane((MetricObjectData) data);

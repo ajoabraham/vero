@@ -21,7 +21,7 @@ import javafx.scene.layout.Priority;
  *
  * @author Tai Hu
  */
-public class AttributeObjectPane extends ObjectPane {
+public class AttributeObjectPane extends DraggableObjectPane {
     private AttributeObjectData data = null;
     
     public AttributeObjectPane(AttributeObjectData data) {
@@ -44,5 +44,4 @@ public class AttributeObjectPane extends ObjectPane {
     public ObjectType getType() {
         return ATTRIBUTE;
     }
-    
 }
