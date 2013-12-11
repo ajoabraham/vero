@@ -7,6 +7,7 @@
 package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
+import static com.vero.ui.common.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
@@ -17,13 +18,13 @@ import javafx.scene.layout.VBox;
  */
 public abstract class DropPane extends VBox implements DroppableObject {
     public DropPane() {
-        
+        setPrefHeight(DEFAULT_DROP_PANE_HEIGHT);
     }
     
     public abstract ObjectType getType();
 
     @Override
-    public Node getDropTarget() {
+    public DropPane getDropTarget() {
         throw new UnsupportedOperationException("Override this method to support this function."); 
     }
 

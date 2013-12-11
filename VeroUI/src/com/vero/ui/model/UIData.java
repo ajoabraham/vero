@@ -7,12 +7,13 @@
 package com.vero.ui.model;
 
 import com.vero.ui.common.ObjectType;
+import java.io.Serializable;
 
 /**
  *
  * @author Tai Hu
  */
-public abstract class UIData {
+public abstract class UIData implements Serializable {
     private long Id = 0L;
     
     public UIData() {

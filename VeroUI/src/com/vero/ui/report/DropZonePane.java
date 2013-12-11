@@ -19,6 +19,10 @@ import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_WIDTH;
 import static com.vero.ui.common.CSSConstants.*;
+import com.vero.ui.object.AttributeDropPane;
+import com.vero.ui.object.DropPaneFactory;
+import com.vero.ui.object.MetricDropPane;
+import com.vero.ui.object.TableDropPane;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -50,26 +54,23 @@ public class DropZonePane extends VBox {
         attributesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         getChildren().add(attributesLabel);
 
-        getChildren().add(buildObjectPane("Student Department Name", ATTRIBUTE));
-        getChildren().add(buildObjectPane("Professor Department Name", ATTRIBUTE));
+        DropPaneFactory dropPaneFactory = DropPaneFactory.getInstance();
+        
+        getChildren().add(dropPaneFactory.createDropPane(ATTRIBUTE, true));
 
         Label metricsLabel = new Label("METRICS");
         metricsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         metricsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         getChildren().add(metricsLabel);
 
-        getChildren().add(buildObjectPane("# Lessons", METRIC));
+        getChildren().add(dropPaneFactory.createDropPane(METRIC, true));
 
         Label tablesLabel = new Label("TABLES");
         tablesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         tablesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
         getChildren().add(tablesLabel);
 
-        getChildren().add(buildObjectPane("LessionsFact T1", DATASOURCE));
-        getChildren().add(buildObjectPane("Professors T2", DATASOURCE));
-        getChildren().add(buildObjectPane("Students T3", DATASOURCE));
-        getChildren().add(buildObjectPane("Departments T4", DATASOURCE));
-        getChildren().add(buildObjectPane("Departments T5", DATASOURCE));
+        getChildren().add(dropPaneFactory.createDropPane(TABLE, true));
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
         tableJoinsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);

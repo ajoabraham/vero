@@ -6,24 +6,25 @@
 
 package com.vero.ui.object;
 
-import javafx.event.Event;
+import com.vero.ui.model.UIData;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 
 /**
  *
  * @author Tai Hu
  */
 public class DropManager implements EventHandler<DragEvent> {
-   private DroppableObject target = null;
+   private DropPane target = null;
     
-    private DropManager(DroppableObject target) {
+    private DropManager(DropPane target) {
         this.target = target;
         enableDropping();
     }
     
-    public static DropManager newInstance(DroppableObject target) {
+    public static DropManager newInstance(DropPane target) {
         return new DropManager(target);
     }
     
@@ -52,18 +53,52 @@ public class DropManager implements EventHandler<DragEvent> {
     }
     
     private void handleDragOverEvent(DragEvent event) {
+        if (event.getGestureSource() != target) {
+            UIData data = DragAndDropDataManager.getInstance().getData();
+            
+            if (data != null && data.getType() == target.getType()) {
+                event.acceptTransferModes(TransferMode.COPY);
+            }
+        }
+                
+        event.consume();
         target.handleDragOverEvent(event);
     }
 
-    private void handleDragEnteredEvent(DragEvent event) {            
+    private void handleDragEnteredEvent(DragEvent event) {  
+        if (event.getGestureSource() != target) {
+            UIData data = DragAndDropDataManager.getInstance().getData();
+            
+            if (data != null && data.getType() == target.getType()) {
+                target.setStyle("-fx-background-color: -fx-light-grey-color;");
+            }
+        }
+        
         target.handleDragEnteredEvent(event);
     }
         
     private void handleDragExitedEvent(DragEvent event) {
+        if (event.getGestureSource() != target) {
+            UIData data = DragAndDropDataManager.getInstance().getData();
+            
+            if (data != null && data.getType() == target.getType()) {
+                target.setStyle("-fx-background-color: transparent;");
+            }
+        }
+        
         target.handleDragExitedEvent(event);
     }
 
     private void handleDragDroppedEvent(DragEvent event) {
+        if (event.getGestureSource() != target) {
+            UIData data = DragAndDropDataManager.getInstance().getData();
+            
+            if (data != null && data.getType() == target.getType()) {
+                ObjectPane objectPane = ObjectPaneFactory.getInstance().createObjectPane(data.getType(), data, false);
+                target.getChildren().add(objectPane);
+            }
+        }
+        
         target.handleDragDroppedEvent(event);
     }
 }

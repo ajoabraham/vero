@@ -20,5 +20,6 @@ public enum ObjectType {
     TABLE_JOIN,
     // This is a special type used to represent tree root
     // which is not displayed in UI.
-    ROOT
+    ROOT,
+    REPORT
 }

@@ -8,7 +8,6 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.METRIC;
-import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 
 /**
@@ -42,11 +41,10 @@ public class MetricDropPane extends DropPane {
 
     @Override
     public void handleDragOverEvent(DragEvent event) {
-        
     }
 
     @Override
-    public Node getDropTarget() {
+    public DropPane getDropTarget() {
         return this;
     }
     

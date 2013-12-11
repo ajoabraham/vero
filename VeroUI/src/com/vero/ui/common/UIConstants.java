@@ -31,4 +31,6 @@ public interface UIConstants {
     public static final double EDIT_BUTTON_HEIGHT = 15;
     
     public static final double REPORT_BLOCK_PANE_HEIGHT = 400;
+    
+    public static final double DEFAULT_DROP_PANE_HEIGHT = 100;
 }

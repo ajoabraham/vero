@@ -47,12 +47,16 @@ public class DragManager implements EventHandler<Event> {
         source.getDragSource().setOnDragDone(this);
     }
 
-    private void handleDragDetectedEvent(Event event) {                
-        Dragboard db = source.getDragSource().startDragAndDrop(TransferMode.ANY);
-                
+    private void handleDragDetectedEvent(Event event) {        
+        Dragboard db = source.getDragSource().startDragAndDrop(TransferMode.COPY);                
         ClipboardContent content = new ClipboardContent();
-        content.putString("Hello World");
+        content.putString(source.getTransferData().getType().toString());
         db.setContent(content);
+        
+        // TH 12/11/2013, built-in dragboard doesn't support object
+        DragAndDropDataManager.getInstance().setData(source.getTransferData());
+        
+        source.handleDragDetectedEvent((MouseEvent) event);
                 
         event.consume();
     }    

@@ -47,6 +47,10 @@ public final class DropPaneFactory {
                 logger.severe("Invalid object type - " + type);
         }
         
+        if (isDroppable) {
+            DropManager.newInstance(dropPane);
+        }
+        
         return dropPane;
     }
 }

@@ -6,7 +6,6 @@
 
 package com.vero.ui.object;
 
-import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 
 /**
@@ -14,7 +13,7 @@ import javafx.scene.input.DragEvent;
  * @author Tai Hu
  */
 public interface DroppableObject {
-    public Node getDropTarget();
+    public DropPane getDropTarget();
     public void handleDragOverEvent(DragEvent event);
     public void handleDragEnteredEvent(DragEvent event);
     public void handleDragExitedEvent(DragEvent event);

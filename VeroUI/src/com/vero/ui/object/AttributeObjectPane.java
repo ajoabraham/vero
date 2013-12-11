@@ -54,7 +54,7 @@ public class AttributeObjectPane extends ObjectPane {
     }
 
     @Override
-    public void handleDragDetectedEvent(MouseEvent event) {
+    public void handleDragDetectedEvent(MouseEvent event) {    
     }
 
     @Override
