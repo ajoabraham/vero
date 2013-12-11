@@ -6,9 +6,10 @@
 
 package com.vero.ui.object;
 
+import static com.vero.ui.common.CSSConstants.CLASS_DROP_PANE;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
-import javafx.scene.Node;
+import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
 
@@ -18,7 +19,9 @@ import javafx.scene.layout.VBox;
  */
 public abstract class DropPane extends VBox implements DroppableObject {
     public DropPane() {
+        getStyleClass().add(CLASS_DROP_PANE);
         setPrefHeight(DEFAULT_DROP_PANE_HEIGHT);
+        setMaxHeight(Double.MAX_VALUE);
     }
     
     public abstract ObjectType getType();
@@ -42,5 +45,6 @@ public abstract class DropPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event) {
+        setPrefHeight((getChildren().size() + 1) * OBJECT_PANE_HEIGHT);
     }
 }

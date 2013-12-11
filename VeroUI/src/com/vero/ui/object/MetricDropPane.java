@@ -26,7 +26,7 @@ public class MetricDropPane extends DropPane {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event) {
-        
+        super.handleDragDroppedEvent(event);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class MetricDropPane extends DropPane {
 
     @Override
     public void handleDragOverEvent(DragEvent event) {
+        
     }
 
     @Override

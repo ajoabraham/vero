@@ -45,4 +45,5 @@ public interface CSSConstants {
      */
     public static final String ID_DROP_ZONE_PANE = "drop-zone-pane";
     public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
+    public static final String CLASS_DROP_PANE = "drop-pane";
 }

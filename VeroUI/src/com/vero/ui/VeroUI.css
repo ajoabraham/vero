@@ -163,12 +163,18 @@
     -fx-background-color: -fx-main-background-color;
 }
 
-
+/*******************************************************************************
+ * Style for Report Pane
+ ******************************************************************************/
 #drop-zone-pane {
     -fx-spacing: 5;
     -fx-padding: 10 10 10 10;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
+}
+
+.drop-pane {
+    -fx-spacing: 5;
 }
 
 .table-join-pane {

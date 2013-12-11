@@ -27,7 +27,7 @@ public class AttributeDropPane extends DropPane {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event) {
-        
+        super.handleDragDroppedEvent(event);        
     }
 
     @Override

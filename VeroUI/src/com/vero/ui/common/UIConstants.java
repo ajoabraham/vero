@@ -32,5 +32,5 @@ public interface UIConstants {
     
     public static final double REPORT_BLOCK_PANE_HEIGHT = 400;
     
-    public static final double DEFAULT_DROP_PANE_HEIGHT = 100;
+    public static final double DEFAULT_DROP_PANE_HEIGHT = OBJECT_PANE_HEIGHT * 2;
 }
