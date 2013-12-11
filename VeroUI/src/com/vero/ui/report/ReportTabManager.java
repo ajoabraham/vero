@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui;
+package com.vero.ui.report;
 
 /**
  * This class handles all report tab panes in the application.

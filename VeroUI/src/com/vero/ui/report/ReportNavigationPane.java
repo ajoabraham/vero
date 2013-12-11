@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui;
+package com.vero.ui.report;
 
 import static com.vero.ui.common.CSSConstants.CLASS_SECTION_TITLE;
 import static com.vero.ui.common.CSSConstants.ID_REPORT_NAVIGATION_PANE;

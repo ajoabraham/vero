@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.vero.ui;
+package com.vero.ui.report;
 
 import com.vero.ui.common.ImageList;
 import com.vero.ui.common.ObjectType;

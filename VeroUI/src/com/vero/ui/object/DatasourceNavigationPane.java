@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.vero.ui;
+package com.vero.ui.object;
 
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;

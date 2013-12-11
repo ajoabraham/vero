@@ -4,16 +4,12 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui;
-
-import javafx.scene.layout.VBox;
+package com.vero.ui.report;
 
 /**
  *
  * @author Tai Hu
  */
-public class QueryPane extends VBox {
-    public QueryPane() {
-        
-    }
+public class ReportPane {
+    
 }

@@ -4,6 +4,8 @@
  */
 package com.vero.ui;
 
+import com.vero.ui.common.UIManager;
+import com.vero.ui.report.DropZonePane;
 import com.vero.ui.common.ImageList;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;

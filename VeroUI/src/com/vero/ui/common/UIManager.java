@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui;
+package com.vero.ui.common;
 
+import com.vero.ui.object.DatasourceNavigationPane;
+import com.vero.ui.report.ReportNavigationPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
