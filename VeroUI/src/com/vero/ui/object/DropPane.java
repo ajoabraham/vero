@@ -45,6 +45,6 @@ public abstract class DropPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event) {
-        setPrefHeight((getChildren().size() + 1) * OBJECT_PANE_HEIGHT);
+        setPrefHeight(getChildren().size() * (OBJECT_PANE_HEIGHT + 5) + OBJECT_PANE_HEIGHT);
     }
 }
