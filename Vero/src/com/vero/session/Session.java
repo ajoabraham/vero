@@ -5,10 +5,22 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.JoinDefinition;
 import com.vero.admin.DataSource;
 import com.vero.admin.DeleteTeradata;
+import static com.vero.queryengine.Vero.printMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Session {
+    public static void printMap(Map mp) {
+        Iterator it = mp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            System.out.println(pairs.getKey() + " = " + pairs.getValue());
+            // it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+    
     HashMap<String, DataSource> dataSources;
     // ArrayList<> 
     HashMap<String, Attribute> attributes;
@@ -62,5 +74,19 @@ public class Session {
     
     public HashMap getJoins() {
         return joins;
+    }
+    
+    public void dump() {
+        System.out.println("Dumping session...");
+        HashMap ds = getAllDataSources();
+        printMap(ds);
+        
+        DataSource specificDS = getDataSource("Teradata - Prod");
+        if (specificDS != null) {
+            System.out.println("Got a Teradata - Prod - " + specificDS.toString());
+        } else {
+            System.out.println("Not found...");
+        }
+        System.out.println("------------------------------");
     }
 }
