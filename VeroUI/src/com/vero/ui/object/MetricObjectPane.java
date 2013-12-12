@@ -14,10 +14,7 @@ import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -50,23 +47,7 @@ public class MetricObjectPane extends ObjectPane {
     }
 
     @Override
-    public void handleDragDoneEvent(DragEvent event) {
-    }
-
-    @Override
-    public void handleDragDetectedEvent(MouseEvent event) {
-    }
-
-    @Override
-    public Node getDragSource() {
-        return this;
-    }
-
-    @Override
     public UIData getTransferData() {
         return data;
-    }
-    
-    
-    
+    }    
 }

@@ -38,7 +38,7 @@ public class DragManager implements EventHandler<Event> {
             handleDragDetectedEvent(event);
         }
         else if (eventType == DragEvent.DRAG_DONE) {
-            handleDragDoneEvent(event);
+            handleDragDoneEvent((DragEvent) event);
         }
     }
     
@@ -48,21 +48,24 @@ public class DragManager implements EventHandler<Event> {
     }
 
     private void handleDragDetectedEvent(Event event) {        
+        // TH 12/11/2013, built-in dragboard doesn't support object
+        String id = DragAndDropDataManager.getInstance().putData(source.getTransferData());
+        
         Dragboard db = source.getDragSource().startDragAndDrop(TransferMode.COPY);                
         ClipboardContent content = new ClipboardContent();
-        content.putString(source.getTransferData().getType().toString());
+        content.putString(id);
         db.setContent(content);
-        
-        // TH 12/11/2013, built-in dragboard doesn't support object
-        DragAndDropDataManager.getInstance().setData(source.getTransferData());
-        
+                
         source.handleDragDetectedEvent((MouseEvent) event);
                 
         event.consume();
     }    
 
-    private void handleDragDoneEvent(Event event) {                
-        source.handleDragDoneEvent((DragEvent) event);
+    private void handleDragDoneEvent(DragEvent event) {  
+        String id = event.getDragboard().getString();
+        DragAndDropDataManager.getInstance().removeData(id);
+        
+        source.handleDragDoneEvent(event);
         event.consume();
     }
 }

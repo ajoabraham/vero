@@ -7,6 +7,9 @@
 package com.vero.ui.object;
 
 import com.vero.ui.model.UIData;
+import com.vero.ui.util.CommonUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,11 +17,11 @@ import com.vero.ui.model.UIData;
  */
 public final class DragAndDropDataManager {
     private static DragAndDropDataManager INSTANCE = null;
-    
-    private UIData data = null;
+     
+    private Map<String, UIData> uiDataMap = null;
     
     private DragAndDropDataManager() {
-        
+        uiDataMap = new HashMap<>();
     }
     
     public static DragAndDropDataManager getInstance() {
@@ -29,11 +32,17 @@ public final class DragAndDropDataManager {
         return INSTANCE;
     }
     
-    public void setData(UIData data) {
-        this.data = data;
+    public String putData(UIData data) {
+        String id = CommonUtil.generateId();
+        uiDataMap.put(id, data);
+        return id;
     }
     
-    public UIData getData() {
-        return data;
+    public UIData getData(String id) {
+        return uiDataMap.get(id);
+    }
+    
+    public void removeData(String id) {
+        uiDataMap.remove(id);
     }
 }

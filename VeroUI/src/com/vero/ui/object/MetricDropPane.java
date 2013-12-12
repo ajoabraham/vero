@@ -23,32 +23,4 @@ public class MetricDropPane extends DropPane {
     public ObjectType getType() {
         return METRIC;
     }
-
-    @Override
-    public void handleDragDroppedEvent(DragEvent event) {
-        super.handleDragDroppedEvent(event);
-    }
-
-    @Override
-    public void handleDragExitedEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public void handleDragEnteredEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public void handleDragOverEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public DropPane getDropTarget() {
-        return this;
-    }
-    
-    
-    
 }

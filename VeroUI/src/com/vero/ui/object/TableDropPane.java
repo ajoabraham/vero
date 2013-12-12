@@ -8,7 +8,6 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.TABLE;
-import javafx.scene.input.DragEvent;
 
 /**
  *
@@ -23,33 +22,5 @@ public class TableDropPane extends DropPane {
     @Override
     public ObjectType getType() {
         return TABLE;
-    }
-
-    @Override
-    public void handleDragDroppedEvent(DragEvent event) {
-        super.handleDragDroppedEvent(event);
-    }
-
-    @Override
-    public void handleDragExitedEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public void handleDragEnteredEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public void handleDragOverEvent(DragEvent event) {
-        
-    }
-
-    @Override
-    public DropPane getDropTarget() {
-        return this;
-    }
-    
-    
-    
+    }    
 }

@@ -11,9 +11,9 @@ import static com.vero.ui.common.ObjectType.TABLE;
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.model.TableObjectData;
+import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -45,4 +45,8 @@ public class TableObjectPane extends ObjectPane {
         return TABLE;
     }
     
+    @Override
+    public UIData getTransferData() {
+        return data;
+    }
 }

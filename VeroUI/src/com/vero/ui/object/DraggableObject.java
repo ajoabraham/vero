@@ -16,6 +16,12 @@ import javafx.scene.input.MouseEvent;
  * @author Tai Hu
  */
 public interface DraggableObject {
+    /**
+     * This data will be put on DragAndDropDataManager cache to share with
+     * drop target.
+     * 
+     * @return Data to share with drop target 
+     */
     public UIData getTransferData();
     public Node getDragSource();
     public void handleDragDetectedEvent(MouseEvent event);

@@ -10,6 +10,8 @@ import static com.vero.ui.common.CSSConstants.CLASS_DROP_PANE;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
+import com.vero.ui.model.UIData;
+import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
 
@@ -27,24 +29,34 @@ public abstract class DropPane extends VBox implements DroppableObject {
     public abstract ObjectType getType();
 
     @Override
-    public DropPane getDropTarget() {
-        throw new UnsupportedOperationException("Override this method to support this function."); 
+    public Node getDropTarget() {
+        return this;
     }
 
+    @Override
+    public boolean acceptDrop(UIData transferData) {
+        return getType() == transferData.getType();
+    }
+
+    
     @Override
     public void handleDragOverEvent(DragEvent event) {    
     }
 
     @Override
     public void handleDragEnteredEvent(DragEvent event) {
+        setStyle("-fx-background-color: -fx-light-grey-color;");
     }
 
     @Override
     public void handleDragExitedEvent(DragEvent event) {
+        setStyle("-fx-background-color: transparent;");
     }
 
     @Override
-    public void handleDragDroppedEvent(DragEvent event) {
+    public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
+        ObjectPane objectPane = ObjectPaneFactory.getInstance().createObjectPane(getType(), transferData, false);
+        getChildren().add(objectPane);
         setPrefHeight(getChildren().size() * (OBJECT_PANE_HEIGHT + 5) + OBJECT_PANE_HEIGHT);
     }
 }

@@ -7,8 +7,6 @@ package com.vero.ui.object;
 
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
-import com.vero.ui.object.ObjectPane;
-import com.vero.ui.object.ObjectTreeView;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

@@ -70,7 +70,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (TableObjectData tableObjectData : tableObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(tableObjectData, 
-                                objectPaneFactory.createObjectPane(TABLE, tableObjectData, false));
+                                objectPaneFactory.createObjectPane(TABLE, tableObjectData, true));
                         tableObjectTreeItemList.add(treeItem);
                     }
                     

@@ -24,7 +24,7 @@ public abstract class ObjectPane extends HBox implements DraggableObject {
     public abstract ObjectType getType();
 
     /**
-     * If dragging function is enabled, subclass must override the following methods
+     * If dragging function is enabled, subclass must override this method
      * 
      * @return 
      */
@@ -35,9 +35,9 @@ public abstract class ObjectPane extends HBox implements DraggableObject {
 
     @Override
     public Node getDragSource() {
-        throw new UnsupportedOperationException("Override this method to support this function");
+        return this;
     }
-
+ 
     @Override
     public void handleDragDetectedEvent(MouseEvent event) {        
     }

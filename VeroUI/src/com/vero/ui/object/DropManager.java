@@ -17,9 +17,9 @@ import javafx.scene.input.TransferMode;
  * @author Tai Hu
  */
 public class DropManager implements EventHandler<DragEvent> {
-   private DropPane target = null;
+   private DroppableObject target = null;
     
-    private DropManager(DropPane target) {
+    private DropManager(DroppableObject target) {
         this.target = target;
         enableDropping();
     }
@@ -53,52 +53,53 @@ public class DropManager implements EventHandler<DragEvent> {
     }
     
     private void handleDragOverEvent(DragEvent event) {
-        if (event.getGestureSource() != target) {
-            UIData data = DragAndDropDataManager.getInstance().getData();
-            
-            if (data != null && data.getType() == target.getType()) {
-                event.acceptTransferModes(TransferMode.COPY);
-            }
+        if (acceptDrop(event)) {
+            event.acceptTransferModes(TransferMode.COPY);
+            target.handleDragOverEvent(event);
         }
-                
+                        
         event.consume();
-        target.handleDragOverEvent(event);
     }
 
     private void handleDragEnteredEvent(DragEvent event) {  
-        if (event.getGestureSource() != target) {
-            UIData data = DragAndDropDataManager.getInstance().getData();
-            
-            if (data != null && data.getType() == target.getType()) {
-                target.setStyle("-fx-background-color: -fx-light-grey-color;");
-            }
+        if (acceptDrop(event)) {
+            target.handleDragEnteredEvent(event);        
         }
         
-        target.handleDragEnteredEvent(event);
+        event.consume();
     }
         
     private void handleDragExitedEvent(DragEvent event) {
-        if (event.getGestureSource() != target) {
-            UIData data = DragAndDropDataManager.getInstance().getData();
-            
-            if (data != null && data.getType() == target.getType()) {
-                target.setStyle("-fx-background-color: transparent;");
-            }
+        if (acceptDrop(event)) {
+            target.handleDragExitedEvent(event);
         }
         
-        target.handleDragExitedEvent(event);
+        event.consume();
     }
 
     private void handleDragDroppedEvent(DragEvent event) {
-        if (event.getGestureSource() != target) {
-            UIData data = DragAndDropDataManager.getInstance().getData();
+        if (acceptDrop(event)) {
+            target.handleDragDroppedEvent(event, getTransferData(event));
+        }
+        
+        event.consume();
+    }
+    
+    private boolean acceptDrop(DragEvent event) {
+        boolean acceptDrop = false;
+        if (event.getGestureSource() != target.getDropTarget()) {
+            UIData data = getTransferData(event);
             
-            if (data != null && data.getType() == target.getType()) {
-                ObjectPane objectPane = ObjectPaneFactory.getInstance().createObjectPane(data.getType(), data, false);
-                target.getChildren().add(objectPane);
+            if (data != null && target.acceptDrop(data)) {
+                acceptDrop = true;
             }
         }
         
-        target.handleDragDroppedEvent(event);
+        return acceptDrop;
+    }
+    
+    private UIData getTransferData(DragEvent event) {
+        String id = event.getDragboard().getString();
+        return DragAndDropDataManager.getInstance().getData(id);
     }
 }
