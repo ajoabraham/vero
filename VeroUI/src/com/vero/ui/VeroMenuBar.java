@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
  */
 public class VeroMenuBar extends MenuBar {
 
+    private Menu newMenu = null;
     private Menu saveMenu = null;
     private Menu openMenu = null;
     private Menu runMenu = null;
@@ -27,12 +28,13 @@ public class VeroMenuBar extends MenuBar {
     }
 
     private void buildUI() {
+        newMenu = new Menu("NEW", new ImageView(ImageList.IMAGE_NEW));
         saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
         openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
         runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
         addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
         deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
         
-        getMenus().addAll(saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
+        getMenus().addAll(newMenu, saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
     }
 }

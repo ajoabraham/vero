@@ -4,6 +4,7 @@
 .root {
     -fx-main-background-color: #2A2A2A;
     -fx-nav-background-color: #3C3C3C;
+    -fx-ds-tbl-background-color: #3A3A3A;
     -fx-light-grey-color: #393939;
     -fx-media-grey-color: derive(-fx-light-grey-color, 15%);
     -fx-default-text-color: #ccc;
@@ -34,7 +35,7 @@
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
-    -fx-background-image: url("images/datasource_nav_panel_btn.png");
+    -fx-background-image: url("images/icon_datasource_nav_pnl.png");
 }
 
 #datasources-tool-bar-button:hover {
@@ -51,7 +52,7 @@
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
-    -fx-background-image: url("images/reports_nav_panel_btn.png");
+    -fx-background-image: url("images/icon_report.png");
 }
 
 #reports-tool-bar-button:hover {
@@ -116,32 +117,27 @@
 }
 
 .datasource-object-pane {
-    -fx-background-image: url("images/ds_and_tbl_bg.png");
-    -fx-background-repeat: repeat;
-    -fx-background-position: left top;   
+    -fx-background-color: -fx-ds-tbl-background-color;
 }
 
 .table-object-pane {
-    -fx-background-image: url("images/ds_and_tbl_bg.png");
-    -fx-background-repeat: repeat;
-    -fx-background-position: left top;   
-/*    -fx-padding: 0 10 0 10;*/
+    -fx-background-color: -fx-ds-tbl-background-color;
 }
 
 .column-object-pane {
-    -fx-background-image: url("images/unused_col_bg.png");
+    -fx-background-image: url("images/bg_unused_col.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;       
 }
 
 .attribute-object-pane {
-    -fx-background-image: url("images/attribute_bg.png");
+    -fx-background-image: url("images/bg_attribute.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;  
 }
 
 .metric-object-pane {
-    -fx-background-image: url("images/metrics_bg.png");
+    -fx-background-image: url("images/bg_metric.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
 }
@@ -182,17 +178,15 @@
     -fx-alignment: center;
 }
 
-.edit-button {
+/*.edit-button {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
     -fx-background-image: url("images/edit_join_def_icon.png");
-}
+}*/
 
 .table-label {
-    -fx-background-image: url("images/join_tbl_bg.png");
-    -fx-background-repeat: repeat;
-    -fx-background-position: left top;
+    -fx-background-color: -fx-ds-tbl-background-color;
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
     -fx-alignment: center;

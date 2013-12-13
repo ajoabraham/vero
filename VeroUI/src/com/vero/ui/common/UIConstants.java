@@ -27,8 +27,8 @@ public interface UIConstants {
     public static final double TABLE_LABEL_WIDTH = 31;
     public static final double TABLE_LABEL_HEIGHT = 31;
     
-    public static final double EDIT_BUTTON_WIDTH = 40;
-    public static final double EDIT_BUTTON_HEIGHT = 15;
+//    public static final double EDIT_BUTTON_WIDTH = 40;
+//    public static final double EDIT_BUTTON_HEIGHT = 15;
     
     public static final double REPORT_BLOCK_PANE_HEIGHT = 400;
     

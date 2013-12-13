@@ -14,15 +14,16 @@ import javafx.scene.image.Image;
  * @author Tai Hu
  */
 public interface ImageList {
-    public static final Image IMAGE_SAVE = new Image(VeroUI.class.getResourceAsStream("images/save_icon.png"));
-    public static final Image IMAGE_OPEN = new Image(VeroUI.class.getResourceAsStream("images/open_icon.png"));
-    public static final Image IMAGE_RUN = new Image(VeroUI.class.getResourceAsStream("images/run_icon.png"));
-    public static final Image IMAGE_ADD_BLOCK = new Image(VeroUI.class.getResourceAsStream("images/add_block_icon.png"));
-    public static final Image IMAGE_DELETE = new Image(VeroUI.class.getResourceAsStream("images/delete_icon.png"));
-    public static final Image IMAGE_INNER_JOIN = new Image(VeroUI.class.getResourceAsStream("images/inner_join_icon.png"));
-    public static final Image IMAGE_COMMENT = new Image(VeroUI.class.getResourceAsStream("images/comment_icon.png"));
-    public static final Image IMAGE_ACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/active_circle_icon.png"));
-    public static final Image IMAGE_INACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/inactive_circle_icon.png"));
-    public static final Image IMAGE_FILTER = new Image(VeroUI.class.getResourceAsStream("images/filter_icon.png"));
-    public static final Image IMAGE_DATASOURCE_OBJECT = new Image(VeroUI.class.getResourceAsStream("images/datasource_obj_icon.png"));
+    public static final Image IMAGE_NEW = new Image(VeroUI.class.getResourceAsStream("images/icon_report.png"));
+    public static final Image IMAGE_SAVE = new Image(VeroUI.class.getResourceAsStream("images/icon_save.png"));
+    public static final Image IMAGE_OPEN = new Image(VeroUI.class.getResourceAsStream("images/icon_open.png"));
+    public static final Image IMAGE_RUN = new Image(VeroUI.class.getResourceAsStream("images/icon_run.png"));
+    public static final Image IMAGE_ADD_BLOCK = new Image(VeroUI.class.getResourceAsStream("images/icon_add_block.png"));
+    public static final Image IMAGE_DELETE = new Image(VeroUI.class.getResourceAsStream("images/icon_delete.png"));
+    public static final Image IMAGE_INNER_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_inner_join.png"));
+    public static final Image IMAGE_COMMENT = new Image(VeroUI.class.getResourceAsStream("images/icon_comment.png"));
+    public static final Image IMAGE_ACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/icon_active_circle.png"));
+    public static final Image IMAGE_INACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/icon_inactive_circle.png"));
+    public static final Image IMAGE_FILTER = new Image(VeroUI.class.getResourceAsStream("images/icon_filter.png"));
+    public static final Image IMAGE_DATASOURCE_OBJECT = new Image(VeroUI.class.getResourceAsStream("images/icon_datasource.png"));
 }
