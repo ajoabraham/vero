@@ -11,9 +11,7 @@ import com.vero.metadata.Attribute;
 import com.vero.metadata.Metric;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Expression;
-import com.vero.admin.DataSource;
 import com.vero.metadata.Table;
-import com.vero.metadata.Column;
 import com.vero.testparser.TestParser;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,16 +41,7 @@ import org.jgrapht.alg.*;
  *
  * @author yulinwen
  */
-public class Vero {
-    public static void printMap(Map mp) {
-        Iterator it = mp.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
-            System.out.println(pairs.getKey() + " = " + pairs.getValue());
-            // it.remove(); // avoids a ConcurrentModificationException
-        }
-    }
-    
+public class Vero {    
     public static void queryEngineTest1() {
         // session
         Session userSession;
