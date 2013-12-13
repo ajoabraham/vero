@@ -47,7 +47,7 @@ public class ReportPane extends BorderPane {
         
         Label globalFilterLabel = new Label("GLOBAL FILTERS");
         globalFilterLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
-        globalFilterLabel.getStyleClass().add("section-title");
+        globalFilterLabel.getStyleClass().add("subsection-title");
         globalFilterPane.getChildren().add(globalFilterLabel);
         
         TextField filterTextField = new TextField();
@@ -81,7 +81,7 @@ public class ReportPane extends BorderPane {
         HBox headerPane = new HBox();
         headerPane.getChildren().add(new ImageView(ImageList.IMAGE_ACTIVE_CIRCLE));
         Label headerLabel = new Label("REPORT BLOCK");
-        headerLabel.getStyleClass().add("section-title");
+        headerLabel.getStyleClass().add("subsection-title");
         headerLabel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(headerLabel, Priority.ALWAYS);
         headerPane.getChildren().add(headerLabel);

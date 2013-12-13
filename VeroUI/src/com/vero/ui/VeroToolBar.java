@@ -34,18 +34,20 @@ public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
 
         datasourcesToolBarButton = new Button();
         datasourcesToolBarButton.setId(ID_DATASOURCES_TOOL_BAR_BUTTON);
+        datasourcesToolBarButton.setMaxWidth(Double.MAX_VALUE);
         datasourcesToolBarButton.setPrefSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
         datasourcesToolBarButton.setMinSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
         datasourcesToolBarButton.setTooltip(new Tooltip("Browse datasources"));
         datasourcesToolBarButton.setOnAction(this);
         reportsToolBarButton = new Button();
         reportsToolBarButton.setId(ID_REPORTS_TOOL_BAR_BUTTON);
+        reportsToolBarButton.setMaxWidth(Double.MAX_VALUE);
         reportsToolBarButton.setPrefSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
         reportsToolBarButton.setMinSize(REPORTS_TOOL_BAR_BTN_WIDTH, REPORTS_TOOL_BAR_BTN_HEIGHT);
         reportsToolBarButton.setTooltip(new Tooltip("Browse reports"));
         reportsToolBarButton.setOnAction(this);
 
-        getChildren().addAll(datasourcesToolBarButton, reportsToolBarButton);
+        getChildren().addAll(reportsToolBarButton, datasourcesToolBarButton);
     }
 
     @Override

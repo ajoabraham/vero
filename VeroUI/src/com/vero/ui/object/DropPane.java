@@ -45,11 +45,13 @@ public abstract class DropPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragEnteredEvent(DragEvent event) {
+        setPrefHeight((getChildren().size() + 1) * (OBJECT_PANE_HEIGHT + 5));
         setStyle("-fx-background-color: -fx-light-grey-color;");
     }
 
     @Override
     public void handleDragExitedEvent(DragEvent event) {
+        setPrefHeight(getChildren().size() * (OBJECT_PANE_HEIGHT + 5));
         setStyle("-fx-background-color: transparent;");
     }
 
@@ -57,6 +59,6 @@ public abstract class DropPane extends VBox implements DroppableObject {
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
         ObjectPane objectPane = ObjectPaneFactory.getInstance().createObjectPane(getType(), transferData, false);
         getChildren().add(objectPane);
-        setPrefHeight(getChildren().size() * (OBJECT_PANE_HEIGHT + 5) + OBJECT_PANE_HEIGHT);
+        setPrefHeight(getChildren().size() * (OBJECT_PANE_HEIGHT + 5));
     }
 }

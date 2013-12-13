@@ -11,6 +11,8 @@
     -fx-hint-text-color: #666666;
     -fx-comment-text-color: #999999;
     -fx-global-filter-border-color: #4D1823;
+    -fx-button-hover-color: #17163A;
+    -fx-button-hover-border-color: #666;
 }
 
 /*******************************************************************************
@@ -24,11 +26,12 @@
  * Style for VERO tool bar
  ******************************************************************************/
 #vero-tool-bar {
-    -fx-padding: 20 0 10 0;
-    -fx-spacing: 10;
+    -fx-padding: 5 0 10 0;
+    -fx-spacing: 1;
     -fx-alignment: top-center;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
+    -fx-fill-width: true;
 }
 
 #datasources-tool-bar-button {
@@ -36,16 +39,20 @@
     -fx-background-insets: 0;
     -fx-background-color: transparent;
     -fx-background-image: url("images/icon_datasource_nav_pnl.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 #datasources-tool-bar-button:hover {
-    -fx-background-color: -fx-media-grey-color;
+    -fx-background-color: -fx-button-hover-color;
     -fx-background-insets: -1;
+    -fx-border-color: -fx-button-hover-border-color;
 }
 
 #datasources-tool-bar-button:pressed {
-    -fx-background-color: -fx-light-grey-color;
+    -fx-background-color: -fx-button-hover-color;
     -fx-background-insets: 1;
+    -fx-border-color: -fx-button-hover-border-color;
 }
 
 #reports-tool-bar-button {
@@ -53,23 +60,27 @@
     -fx-background-insets: 0;
     -fx-background-color: transparent;
     -fx-background-image: url("images/icon_report.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 #reports-tool-bar-button:hover {
-    -fx-background-color: -fx-media-grey-color;
+    -fx-background-color: -fx-button-hover-color;
     -fx-background-insets: -1;
+    -fx-border-color: -fx-button-hover-border-color;
 }
 
 #reports-tool-bar-button:pressed {
-    -fx-background-color: -fx-light-grey-color;
+    -fx-background-color: -fx-button-hover-color;
     -fx-background-insets: 1;
+    -fx-border-color: -fx-button-hover-border-color;
 }
 
 /*******************************************************************************
  * Style for Datasource Navigation Pane
  ******************************************************************************/
 #datasource-navigation-pane {
-    -fx-padding: 20 0 0 0;
+    -fx-padding: 10 0 0 0;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
     -fx-background-color: -fx-main-background-color;
@@ -113,7 +124,7 @@
     -fx-border-width: 3;
     -fx-border-radius: 5;
     -fx-border-insets: -3;
-    -fx-padding: 0 5 0 5;
+    -fx-padding: 0 5 0 10;
 }
 
 .datasource-object-pane {
@@ -127,19 +138,22 @@
 .column-object-pane {
     -fx-background-image: url("images/bg_unused_col.png");
     -fx-background-repeat: repeat;
-    -fx-background-position: left top;       
+    -fx-background-position: left top;
+    -fx-padding: 0 5 0 0;
 }
 
 .attribute-object-pane {
     -fx-background-image: url("images/bg_attribute.png");
     -fx-background-repeat: repeat;
-    -fx-background-position: left top;  
+    -fx-background-position: left top;
+    -fx-padding: 0 5 0 0;
 }
 
 .metric-object-pane {
     -fx-background-image: url("images/bg_metric.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
+    -fx-padding: 0 5 0 0;
 }
 
 .object-label {
@@ -153,7 +167,7 @@
  * Style for Report Navigation Pane
  ******************************************************************************/
 #report-navigation-pane {
-    -fx-padding: 20 0 0 0;
+    -fx-padding: 10 0 0 0;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
     -fx-background-color: -fx-main-background-color;
@@ -230,12 +244,12 @@
     -fx-border-color: -fx-light-grey-color;
     -fx-border-radius: 5;
     -fx-border-width: 1;
-    -fx-padding: 10 10 10 10;
+    -fx-padding: 0 10 10 10;
 }
 
 #report-block-pane HBox {
     -fx-padding: 5 0 5 0;
-    -fx-spacing: 5;
+    -fx-spacing: 2;
     -fx-alignment: center-left;
 }
 
@@ -315,8 +329,8 @@
 
 .menu-bar {
     /*-fx-skin: "com.sun.javafx.scene.control.skin.MenuBarSkin";*/
-    -fx-padding: 10 8 0 8;
-    -fx-spacing: 0.166667em; /* 2 */
+    -fx-padding: 3 8 3 8;
+    -fx-spacing: 0; /* 2 */
     /*-fx-base: derive(#d0d0d0,-70%);*/
     -fx-background-color: -fx-nav-background-color;
     -fx-background-insets: 0, 1 0 1 0;
@@ -331,9 +345,10 @@
 }
 /* Change padding of menu buttons when in menu bar */
 .menu-bar .menu-button .label {
-    -fx-padding: 0.333em 0.5em 0.333em 0.5em; /* 4 6 4 6*/
+/*    -fx-padding: 0.333em 0.5em 0.333em 0.5em; */
+    -fx-padding: 1 1 1 1;
     -fx-text-fill: -fx-default-text-color;
-    -fx-font: bold normal 14px "Helvetica";
+    -fx-font: bold normal 12px "Helvetica";
 }
 
 .menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
@@ -350,8 +365,11 @@
 }*/
 
 .menu-bar .menu-button:hover {
-    -fx-background: -fx-accent;
-    -fx-background-color: -fx-selection-bar;
+/*    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;*/
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 5;
     -fx-text-fill: -fx-selection-bar-text;
 }
 

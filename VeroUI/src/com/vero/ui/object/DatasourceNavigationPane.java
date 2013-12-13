@@ -43,7 +43,7 @@ public class DatasourceNavigationPane extends BorderPane {
         searchField.setId(ID_OBJECT_SEARCH_TEXT_FIELD);
 
         objectsPane.getChildren().add(searchField);
-        objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(20));
+        objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(10));
 
         TreeView<ObjectPane> treeView = new ObjectTreeView();
         VBox.setVgrow(treeView, Priority.ALWAYS);
