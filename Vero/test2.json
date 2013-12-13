@@ -1,66 +1,54 @@
-{   "scenario": "Simple select and group by scenario.",
-    "expectedOutput":"select t2.school_name,sum(t1.num_students) from DepartmentFacts t1 join Departments t2 on t1.dept_id=t2.id group by t2.school_num",
+{
     "datasources": [
         {
             "name": "Teradata - Prod",
-            "database": {"vendor": "Teradata"}
+            "type": "teradata"
         }
     ],
     "tables": [
         {
             "name": "Departments",
-            "rowCount": 100,
-            "tableType": "dimension",
             "columns": [
                 {
                     "name": "name",
                     "type": "string",
-                    "primaryKey": false,
-                    "foreignKey": false
+                    "primaryKey": false
                 },
                 {
                     "name": "id",
                     "type": "integer",
-                    "primaryKey": true,
-                    "foreignKey": false
+                    "primaryKey": true
                 },
                 {
                     "name": "school_name",
                     "type": "string",
-                    "primaryKey": false,
-                    "foreignKey": false
+                    "primaryKey": false
                 },
                 {
                     "name": "location",
                     "type": "string",
-                    "primaryKey": false,
-                    "foreignKey": false
+                    "primaryKey": false
                 }
             ],
             "datasource": "Teradata - Prod"
         },
         {
             "name": "DepartmentFacts",
-            "rowCount": 10000,
-            "tableType": "fact",
             "columns": [
                 {
                     "name": "dept_id",
                     "type": "integer",
-                    "primaryKey": false,
-                    "foreignKey": true
+                    "primaryKey": false
                 },
                 {
                     "name": "num_students",
                     "type": "integer",
-                    "primaryKey": false,
-                    "foreignKey": false
+                    "primaryKey": false
                 },
                 {
                     "name": "num_professors",
                     "type": "integer",
-                    "primaryKey": false,
-                    "foreignKey": false
+                    "primaryKey": false
                 }
             ],
             "datasource": "Teradata - Prod"
@@ -71,9 +59,9 @@
             "name": "Department Name",
             "expressions": [
                 {
-                    "definition": "name",
-                    "coloumns": [
-                        ["name", "Departments"]
+                    "value": "name",
+                    "tables": [
+                        "Departments"
                     ]
                 }
             ]
@@ -82,9 +70,9 @@
             "name": "Department School",
             "expressions": [
                 {
-                    "defintion": "school_name",
-                    "columns": [
-                        ["school_name", "Departments"]
+                    "value": "school_name",
+                    "tables": [
+                        "Departments"
                     ]
                 }
             ]
@@ -95,13 +83,13 @@
             "name": "# of Students",
             "expressions": [
                 {
-                    "definition": "sum(num_students)",
-                    "columns": [
-                        ["num_students", "DepartmentFacts"]
+                    "value": "sum(num_students)",
+                    "tables": [
+                        "DepartmentFacts"
                     ]
                 }
             ]
-        }
+        }        
     ],
     "joindefs": [
         {
