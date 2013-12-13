@@ -72,7 +72,7 @@
             "expressions": [
                 {
                     "definition": "name",
-                    "coloumns": [
+                    "columns": [
                         ["name", "Departments"]
                     ]
                 }
@@ -82,7 +82,7 @@
             "name": "Department School",
             "expressions": [
                 {
-                    "defintion": "school_name",
+                    "definition": "school_name",
                     "columns": [
                         ["school_name", "Departments"]
                     ]

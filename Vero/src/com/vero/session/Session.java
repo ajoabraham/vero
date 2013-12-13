@@ -24,7 +24,7 @@ public class Session {
     }
     
     public void addDataSource(String inType, String inName, String inDescription) {
-        if (inType.compareTo("teradata") == 0) {
+        if (inType.compareTo("Teradata") == 0) {
             DataSource ds = new DeleteTeradata(DataSource.DsType.TERADATA, inName, inDescription);            
             dataSources.put(inName, ds);
         } else {

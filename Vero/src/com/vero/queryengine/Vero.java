@@ -242,7 +242,7 @@ public class Vero {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //queryEngineTest1();
-        queryEngineTest2();
+        queryEngineTest1();
+        //queryEngineTest2();
     }
 }

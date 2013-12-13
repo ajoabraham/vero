@@ -59,19 +59,12 @@ public class TestParser {
                 System.out.println("json DS object " + i + ": ");
                 // DS
                 System.out.println("name:" + oneJSONDSObj.getString("name"));
-                
-                JSONArray jsonDatabaseArray = root.getJSONArray("database");
-                int databaseArraySize = jsonDatabaseArray.length();                
-                for (int j = 0; j < databaseArraySize; j++) {
-                    JSONObject oneJSONTableObj = jsonDatabaseArray.getJSONObject(j);
-                    System.out.println("json table object " + j + ": ");
-                    System.out.println("vendor:" + oneJSONTableObj.getString("vendor"));
-                }
+                System.out.println("vendor:" + oneJSONDSObj.getJSONObject("database").getString("vendor"));
                 
                 //System.out.println("database:" + oneJSONDSObj.getString("database"));
                 // add DS
                 testSession.addDataSource(
-                    oneJSONDSObj.getString("database"), 
+                    oneJSONDSObj.getJSONObject("database").getString("vendor"), 
                     oneJSONDSObj.getString("name"),
                     oneJSONDSObj.getString("name"));
                 testDS = testSession.getDataSource(oneJSONDSObj.getString("name"));
@@ -176,17 +169,19 @@ public class TestParser {
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
-                    System.out.println("value:" + oneJSONExpressionObj.getString("value"));
-                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
+                    System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                     // add expression
-                    Expression anExp = new Expression(oneJSONExpressionObj.getString("value"));
+                    Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
                     anAttr.addExpression(anExp);
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
                         // table name
-                        System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
-                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getString(k)));
+                        System.out.println("table's column:" + jsonTableUUIDsArray.getJSONArray(k).getString(0));
+                        System.out.println("table's name:" + jsonTableUUIDsArray.getJSONArray(k).getString(1));
+
+                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getJSONArray(k).getString(1)));
                     }                    
                 }
             }
@@ -210,18 +205,20 @@ public class TestParser {
                 for (int j = 0; j < expressionsArraySize; j++) {
                     JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                     // expression
-                    System.out.println("value:" + oneJSONExpressionObj.getString("value"));
-                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("tables");
+                    System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                     // add expression
-                    Expression anExp = new Expression(oneJSONExpressionObj.getString("value"));
+                    Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
                     aMetric.addExpression(anExp);
                     
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                     for (int k = 0; k < tableUUIDsArraySize; k++) {
-                        // table name
-                        System.out.println("table's name:" + jsonTableUUIDsArray.getString(k));
-                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getString(k)));
-                    }                    
+                        // table name                        
+                        System.out.println("table's column:" + jsonTableUUIDsArray.getJSONArray(k).getString(0));
+                        System.out.println("table's name:" + jsonTableUUIDsArray.getJSONArray(k).getString(1));
+
+                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getJSONArray(k).getString(1)));
+                    }
                 }
             }
             System.out.println("------------------------------");
