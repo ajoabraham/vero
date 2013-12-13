@@ -59,10 +59,19 @@ public class TestParser {
                 System.out.println("json DS object " + i + ": ");
                 // DS
                 System.out.println("name:" + oneJSONDSObj.getString("name"));
-                System.out.println("type:" + oneJSONDSObj.getString("type"));
+                
+                JSONArray jsonDatabaseArray = root.getJSONArray("database");
+                int databaseArraySize = jsonDatabaseArray.length();                
+                for (int j = 0; j < databaseArraySize; j++) {
+                    JSONObject oneJSONTableObj = jsonDatabaseArray.getJSONObject(j);
+                    System.out.println("json table object " + j + ": ");
+                    System.out.println("vendor:" + oneJSONTableObj.getString("vendor"));
+                }
+                
+                //System.out.println("database:" + oneJSONDSObj.getString("database"));
                 // add DS
                 testSession.addDataSource(
-                    oneJSONDSObj.getString("type"), 
+                    oneJSONDSObj.getString("database"), 
                     oneJSONDSObj.getString("name"),
                     oneJSONDSObj.getString("name"));
                 testDS = testSession.getDataSource(oneJSONDSObj.getString("name"));
@@ -78,6 +87,8 @@ public class TestParser {
                 System.out.println("json table object " + i + ": ");
                 // table
                 System.out.println("name:" + oneJSONTableObj.getString("name"));
+                System.out.println("rowCount:" + oneJSONTableObj.getInt("rowCount"));
+                System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
                 System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
                 // add table
@@ -85,6 +96,25 @@ public class TestParser {
                 Table aTable = null;
                 if (specificDS != null) {
                     aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
+                    aTable.setRowCount(oneJSONTableObj.getInt("rowCount")); 
+                    switch (oneJSONTableObj.getString("tableType")) {
+                        case "dimension":
+                            aTable.setLogicalType(Table.LogicalTableTypes.DIMENSION);
+                            break;
+                        case "bridge":
+                            aTable.setLogicalType(Table.LogicalTableTypes.BRIDGE);
+                            break;
+                        case "fact":
+                            aTable.setLogicalType(Table.LogicalTableTypes.FACT);
+                            break;
+                        case "aggregate":
+                            aTable.setLogicalType(Table.LogicalTableTypes.AGGREGATE);
+                            break;
+                        default:
+                            aTable.setLogicalType(Table.LogicalTableTypes.UNKNOWN);
+                            break;
+                    }
+
                     specificDS.addTable(aTable);
                 } else {
                     System.out.println("WARNING: Can't find specificDS...");
@@ -98,18 +128,32 @@ public class TestParser {
                     System.out.println("name:" + oneJSONColumnObj.getString("name"));
                     System.out.println("type:" + oneJSONColumnObj.getString("type"));
                     System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
+                    System.out.println("foreignKey:" + oneJSONColumnObj.getBoolean("foreignKey"));
                     
                     // add column
                     Column aColumn;
-                    if (oneJSONColumnObj.getString("type").equals("string")) {
-                        aColumn = new Column(oneJSONColumnObj.getString("name"),"String", 10,
-                             aTable);
-                    } else if (oneJSONColumnObj.getString("type").equals("integer")) {
-                        aColumn = new Column(oneJSONColumnObj.getString("name"),"Int", 10,
-                             aTable);
+                    switch (oneJSONColumnObj.getString("type")) {
+                        case "string":
+                            aColumn = new Column(oneJSONColumnObj.getString("name"),"String", 10,
+                                aTable);
+                            break;
+                        case "integer":
+                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Int", 10,
+                                aTable);
+                            break;                                        
+                        default:
+                            System.out.println("ERROR: type is not defined...");
+                            aColumn = new Column();
+                            break;
+                    }
+                    
+                    if (oneJSONColumnObj.getBoolean("primaryKey") == true) {
+                        aColumn.setKeyType(Column.KeyTypes.PRIMARY_KEY);
+                    } else if (oneJSONColumnObj.getBoolean("foreignKey") == true) {
+                        aColumn.setKeyType(Column.KeyTypes.FOREIGN_KEY);
                     } else {
-                        System.out.println("ERROR: type is not defined...");
-                    }                                        
+                        aColumn.setKeyType(Column.KeyTypes.NO_KEY_TYPE);
+                    }
                 }               
             }
             System.out.println("------------------------------");
