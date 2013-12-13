@@ -26,4 +26,9 @@ public interface ImageList {
     public static final Image IMAGE_INACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/icon_inactive_circle.png"));
     public static final Image IMAGE_FILTER = new Image(VeroUI.class.getResourceAsStream("images/icon_filter.png"));
     public static final Image IMAGE_DATASOURCE_OBJECT = new Image(VeroUI.class.getResourceAsStream("images/icon_datasource.png"));
+    public static final Image IMAGE_AGG_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_agg_table.png"));
+    public static final Image IMAGE_BRIDGE_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_bridge_table.png"));
+    public static final Image IMAGE_DIM_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_dim_table.png"));
+    public static final Image IMAGE_FACT_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_fact_table.png"));
+    public static final Image IMAGE_UNKNOWN_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_unknown_table.png"));
 }

@@ -10,10 +10,12 @@ import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.TABLE;
 import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
+import com.vero.ui.common.ImageList;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -32,6 +34,9 @@ public class TableObjectPane extends ObjectPane {
     private void buildUI() {
         getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
         setPrefHeight(OBJECT_PANE_HEIGHT);
+        
+        ImageView tableImageView = new ImageView(ImageList.IMAGE_UNKNOWN_TABLE);
+        getChildren().add(tableImageView);
 
         Label label = new Label(data.getName());
         HBox.setHgrow(label, Priority.ALWAYS);
