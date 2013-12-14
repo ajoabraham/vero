@@ -5,7 +5,12 @@
  */
 package com.vero.ui;
 
+import com.vero.ui.common.ActionMenu;
 import com.vero.ui.common.ImageList;
+import com.vero.ui.model.ReportData;
+import com.vero.ui.report.ReportTabManager;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -15,7 +20,7 @@ import javafx.scene.image.ImageView;
  *
  * @author Tai Hu
  */
-public class VeroMenuBar extends MenuBar {
+public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 
     private Menu newMenu = null;
     private Menu saveMenu = null;
@@ -31,7 +36,9 @@ public class VeroMenuBar extends MenuBar {
     }
 
     private void buildUI() {
-        newMenu = new Menu("NEW", new ImageView(ImageList.IMAGE_NEW));      
+        newMenu = new ActionMenu("NEW", new ImageView(ImageList.IMAGE_NEW)); 
+        ((ActionMenu) newMenu).setOnMenuAction(this);
+        
         saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
         openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
         runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
@@ -44,5 +51,18 @@ public class VeroMenuBar extends MenuBar {
         deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
         
         getMenus().addAll(newMenu, saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getSource() == newMenu) {
+            handleNewMenuAction();
+        }
+    }
+    
+    private void handleNewMenuAction() {
+        ReportData reportData = new ReportData();
+        reportData.setName("New Report");
+        ReportTabManager.getInstance().createReportTab(reportData);
     }
 }
