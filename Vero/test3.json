@@ -1,5 +1,5 @@
-{   "scenario": "User chooses a set of metrics and attributes that does not have sufficient join defs to resolve directly.",
-    "expectedOutput":"select t2.name,t3.name,count(*) from LessonsFact t1 cross join Departments t2 cross join Departments t3",
+{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query.",
+    "expectedOutput":"select t3.name,t5.name,count(*) from LessonsFact t1 join Professors t2 on prof_id = t2.id join Students t3 on t1.std_id = t3.id cross join departments t4 on t4.id=t2.dept_id join Departments t5 on t5.id=t3.dept_id",
     "datasources": [
         {
             "name": "Teradata - Prod",
@@ -173,6 +173,19 @@
             "tright": "Students",
             "expression": "tleft.std_id=tright.id",
             "jointype": "inner"
+        },
+        {
+            "tleft": "Departments",
+            "tright": "Students",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        },
+        {
+            "tleft": "Departments",
+            "tright": "Professors",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
         }
-    ]
+    ],
+    "hardHints":["Students","Professors"]
 }
