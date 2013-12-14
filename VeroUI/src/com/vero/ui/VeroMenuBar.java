@@ -8,6 +8,7 @@ package com.vero.ui;
 import com.vero.ui.common.ImageList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 
 /**
@@ -21,6 +22,8 @@ public class VeroMenuBar extends MenuBar {
     private Menu openMenu = null;
     private Menu runMenu = null;
     private Menu addBlockMenu = null;
+    private MenuItem queryBlockMenuItem = null;
+    private MenuItem commentBlockMenuItem = null;
     private Menu deleteMenu = null;
 
     public VeroMenuBar() {
@@ -28,11 +31,16 @@ public class VeroMenuBar extends MenuBar {
     }
 
     private void buildUI() {
-        newMenu = new Menu("NEW", new ImageView(ImageList.IMAGE_NEW));
+        newMenu = new Menu("NEW", new ImageView(ImageList.IMAGE_NEW));      
         saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
         openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
         runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
+        
         addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
+        commentBlockMenuItem = new MenuItem("COMMENT BLOCK");
+        queryBlockMenuItem = new MenuItem("QUERY BLOCK");
+        addBlockMenu.getItems().addAll(commentBlockMenuItem, queryBlockMenuItem);
+        
         deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
         
         getMenus().addAll(newMenu, saveMenu, openMenu, runMenu, addBlockMenu, deleteMenu);

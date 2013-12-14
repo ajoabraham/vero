@@ -351,11 +351,11 @@
     -fx-font: bold normal 12px "Helvetica";
 }
 
-.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+/*.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
     -fx-background: -fx-accent;
     -fx-background-color: -fx-selection-bar;
     -fx-text-fill: -fx-selection-bar-text;
-}
+}*/
 
 /*.menu-bar .menu:focused:showing, .menu-bar .menu:showing, .menu-bar .menu:focused, .menu:focused:showing, .menu:showing, .menu:focused {*/
 /*.menu-bar .menu-button:showing, .menu-button:showing {
@@ -373,6 +373,20 @@
     -fx-text-fill: -fx-selection-bar-text;
 }
 
+.menu-bar .menu-button:pressed {
+    -fx-background-color: derive(-fx-nav-background-color, 50%);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 5;
+}
+
+.menu-bar .menu-button:showing {
+    -fx-background-color: derive(-fx-nav-background-color, 50%);
+    -fx-background-radius: 5 5 0 0;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 5 5 0 0;
+}
+
 .menu-bar:show-mnemonics .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
 }
@@ -382,6 +396,13 @@
  * MenuItem                                                                    *
  *                                                                             *
  ******************************************************************************/
+
+.context-menu {
+    -fx-background-color: -fx-nav-background-color;
+    -fx-background-radious: 0 5 5 5;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 0 5 5 5;
+}
 
 .menu-item {
 /*    -fx-skin: "com.sun.javafx.scene.control.skin.MenuItemSkin";*/
@@ -399,7 +420,8 @@
 
 .menu-item .label {
     -fx-padding: 0em 0.5em 0em 0em;
-    -fx-text-fill: -fx-text-base-color;
+    -fx-text-fill: -fx-default-text-color;
+    -fx-font: bold normal 12px "Helvetica";
 }
 
 .menu-item:disabled .label {
@@ -407,14 +429,15 @@
 }
 
 .menu-item:focused {
-     -fx-background: -fx-accent;
+/*     -fx-background: -fx-accent;
      -fx-background-color: -fx-selection-bar;
-     -fx-text-fill: -fx-selection-bar-text;
+     -fx-text-fill: -fx-selection-bar-text;*/
+     -fx-background-color: derive(-fx-nav-background-color, 50%);
 }
 
-.menu-item:focused .label {
+/*.menu-item:focused .label {
     -fx-text-fill: white;
-}
+}*/
 .menu-item .right-container {
     -fx-padding: 0em 0em 0em 0.5em;
 }
@@ -422,7 +445,6 @@
 .menu-item:show-mnemonics .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
 } 
-
 
 .radio-menu-item:checked .radio {
     -fx-background-color: -fx-mark-color;
