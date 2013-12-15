@@ -35,6 +35,7 @@ public final class ReportTabManager {
     public TabPane getReportTabPane() {
         if (reportTabPane == null) {
             reportTabPane = new TabPane();
+            reportTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         }
         
         return reportTabPane;
