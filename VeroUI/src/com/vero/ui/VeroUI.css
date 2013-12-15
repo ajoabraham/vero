@@ -507,9 +507,9 @@
 
 .tab-pane {
     -fx-skin: "com.sun.javafx.scene.control.skin.TabPaneSkin";
-    /* -fx-tab-min-width: 4.583em;  55 */
-    /* -fx-tab-max-width: 4.583em; 55 */
-    -fx-tab-max-width: 180px;
+    -fx-tab-min-width: 60;
+    /* TH 12/14/2013, if set max width, tab close button will disappear. */
+    /*-fx-tab-max-width: 180px;*/
     -fx-tab-min-height: 2em; /* 24 */
     -fx-tab-max-height: 2em; /* 24 */
 }
@@ -518,7 +518,6 @@
     -fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
     -fx-background-color: transparent;    
     -fx-alignment: CENTER;
-    /*-fx-text-fill: -fx-text-base-color;*/
     -fx-text-fill: -fx-default-text-color;
 }
 /*
@@ -533,12 +532,13 @@
 }
 
 .tab {
-    -fx-background-insets: 0 10 0 0;
-    -fx-padding: 0 20 0 10; /* 1 6 1 6 */
+    -fx-background-radius: 5 5 0 0;
+    -fx-padding: 0 5 0 10; /* 1 6 1 6 */    
 }
 
 .tab:top {
     /*-fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;*/
+    /* This is the background color for unselected tabs */
     -fx-background-color: -fx-media-grey-color;
 }
 
@@ -566,7 +566,6 @@
     -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;*/
     /*-fx-background-color: -fx-tab-border-color, -fx-control-inner-background;*/
     -fx-background-color: -fx-main-background-color;
-    -fx-background-radius: 5 5 0 0;
 }
 
 .tab:disabled {
