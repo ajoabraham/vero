@@ -163,29 +163,45 @@
     ],
     "joindefs": [
         {
+            "name": "on equal professor id",
             "tleft": "LessonsFact",
+            "cleft": "prof_id",
+            "operator": "=",
             "tright": "Professors",
+            "cright": "id",
             "expression": "tleft.prof_id=tright.id",
             "jointype": "inner"
         },
         {
+            "name": "on equal student id",
             "tleft": "LessonsFact",
+            "cleft": "std_id",
+            "operator": "=",
             "tright": "Students",
+            "cright": "id",
             "expression": "tleft.std_id=tright.id",
             "jointype": "inner"
         },
         {
+            "name": "on equal department id",
             "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",
             "tright": "Students",
+            "cright": "dept_id",
             "expression": "tleft.id=tright.dept_id",
             "jointype": "inner"
         },
         {
+            "name": "on equal professor/department id",
             "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",           
             "tright": "Professors",
+            "cright": "dept_id",
             "expression": "tleft.id=tright.dept_id",
             "jointype": "inner"
         }
     ],
-    "hardHints":["Students","Professors"]
+    "hardhints":["Students","Professors"]
 }
