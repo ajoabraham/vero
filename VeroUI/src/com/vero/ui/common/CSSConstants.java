@@ -32,6 +32,7 @@ public interface CSSConstants {
     public static final String CLASS_SECTION_TITLE = "section-title";
     public static final String ID_OBJECTS_PANE = "objects-pane";
     public static final String ID_OBJECT_SEARCH_TEXT_FIELD = "object-search-text-field";
+    public static final String CLASS_LABEL_PANE = "label-pane";
     public static final String CLASS_OBJECT_PANE = "object-pane";
     public static final String CLASS_OBJECT_LABEL = "object-label";
     public static final String CLASS_DATASOURCE_OBJECT_PANE = "datasource-object-pane";

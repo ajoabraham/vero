@@ -5,7 +5,7 @@
  */
 package com.vero.ui.object;
 
-import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
+import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
@@ -38,7 +38,7 @@ public class DatasourceNavigationPane extends BorderPane {
 
         // Build search box first.
         TextField searchField = new TextField();
-        searchField.setPrefHeight(OBJECT_PANE_HEIGHT);
+        searchField.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         searchField.setPromptText("Search...");
         searchField.setId(ID_OBJECT_SEARCH_TEXT_FIELD);
 

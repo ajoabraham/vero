@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui.object;
+package com.vero.ui;
 
 import com.vero.ui.common.ObjectType;
 import com.vero.ui.model.AttributeObjectData;
@@ -13,24 +13,32 @@ import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
+import com.vero.ui.object.AttributeObjectPane;
+import com.vero.ui.object.ColumnObjectPane;
+import com.vero.ui.object.DatasourceObjectPane;
+import com.vero.ui.object.DragManager;
+import com.vero.ui.object.MetricObjectPane;
+import com.vero.ui.object.ObjectPane;
+import com.vero.ui.object.TableObjectPane;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
  * @author Tai Hu
  */
-public final class ObjectPaneFactory {
-    private static final Logger logger = Logger.getLogger(ObjectPaneFactory.class.getName());
+public final class LabelPaneFactory {
+    private static final Logger logger = Logger.getLogger(LabelPaneFactory.class.getName());
     
-    private static ObjectPaneFactory INSTANCE = null;
+    private static LabelPaneFactory INSTANCE = null;
     
-    private ObjectPaneFactory() {
+    private LabelPaneFactory() {
         
     }
     
-    public static ObjectPaneFactory getInstance() {
+    public static LabelPaneFactory getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ObjectPaneFactory();
+            INSTANCE = new LabelPaneFactory();       
         }
         
         return INSTANCE;
@@ -56,7 +64,7 @@ public final class ObjectPaneFactory {
                 objectPane = new MetricObjectPane((MetricObjectData) data);               
                 break;
             default:
-                logger.severe("Invalid object type - " + type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }
         
         if (isDraggable) {

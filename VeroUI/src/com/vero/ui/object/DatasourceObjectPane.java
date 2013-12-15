@@ -8,7 +8,6 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.DATASOURCE;
-import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.common.ImageList;
 import com.vero.ui.model.DatasourceObjectData;
@@ -33,7 +32,7 @@ public class DatasourceObjectPane extends ObjectPane {
     
     private void buildUI() {
         getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
-        setPrefHeight(OBJECT_PANE_HEIGHT);
+
         ImageView datasourceImageView = new ImageView(ImageList.IMAGE_DATASOURCE_OBJECT);
         getChildren().add(datasourceImageView);
        

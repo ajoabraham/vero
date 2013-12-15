@@ -22,7 +22,7 @@ public interface UIConstants {
     public static final double NAVIGATION_PANE_WIDTH = 250;
     public static final double DROP_ZONE_PANE_WIDTH = 250;
     // Object pane should fill navigation pane width
-    public static final double OBJECT_PANE_HEIGHT = 31;
+    public static final double DEFAULT_LABEL_PANE_HEIGHT = 31;
     
     public static final double TABLE_LABEL_WIDTH = 31;
     public static final double TABLE_LABEL_HEIGHT = 31;
@@ -32,5 +32,5 @@ public interface UIConstants {
     
     public static final double REPORT_BLOCK_PANE_HEIGHT = 400;
     
-    public static final double DEFAULT_DROP_PANE_HEIGHT = OBJECT_PANE_HEIGHT;
+    public static final double DEFAULT_DROP_PANE_HEIGHT = DEFAULT_LABEL_PANE_HEIGHT;
 }

@@ -6,6 +6,7 @@
 
 package com.vero.ui.object;
 
+import com.vero.ui.LabelPaneFactory;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.ObjectType.DATASOURCE;
@@ -48,7 +49,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
         if (isFirstTimeChildren) {
             isFirstTimeChildren = false;
             
-            ObjectPaneFactory objectPaneFactory = ObjectPaneFactory.getInstance();
+            LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
             
             switch(objectData.getType()) {
                 case ROOT:
@@ -57,7 +58,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (DatasourceObjectData datasourceObjectData : datasourceObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(datasourceObjectData, 
-                                objectPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData, false));
+                                labelPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData, false));
                         datasourceObjectTreeItemList.add(treeItem);
                     }
                     
@@ -70,7 +71,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (TableObjectData tableObjectData : tableObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(tableObjectData, 
-                                objectPaneFactory.createObjectPane(TABLE, tableObjectData, true));
+                                labelPaneFactory.createObjectPane(TABLE, tableObjectData, true));
                         tableObjectTreeItemList.add(treeItem);
                     }
                     
@@ -82,7 +83,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(attributeObjectData, 
-                                objectPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData, true));
+                                labelPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -90,7 +91,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (MetricObjectData metricObjectData : metricObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(metricObjectData, 
-                                objectPaneFactory.createObjectPane(METRIC, metricObjectData, true));
+                                labelPaneFactory.createObjectPane(METRIC, metricObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -98,7 +99,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (ColumnObjectData columnObjectData : columnObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem(columnObjectData, 
-                                objectPaneFactory.createObjectPane(COLUMN, columnObjectData, true));
+                                labelPaneFactory.createObjectPane(COLUMN, columnObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     

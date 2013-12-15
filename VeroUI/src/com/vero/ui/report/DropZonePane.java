@@ -12,7 +12,7 @@ import static com.vero.ui.common.ObjectType.METRIC;
 import static com.vero.ui.common.ObjectType.TABLE;
 import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.UIConstants.DROP_ZONE_PANE_WIDTH;
-import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
+import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_WIDTH;
 import static com.vero.ui.common.CSSConstants.*;
@@ -44,7 +44,7 @@ public class DropZonePane extends VBox {
 
         Label attributesLabel = new Label("ATTRIBUTES");
         attributesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
-        attributesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(attributesLabel);
 
         DropPaneFactory dropPaneFactory = DropPaneFactory.getInstance();
@@ -53,35 +53,35 @@ public class DropZonePane extends VBox {
 
         Label metricsLabel = new Label("METRICS");
         metricsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
-        metricsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(metricsLabel);
 
         getChildren().add(dropPaneFactory.createDropPane(METRIC, true));
 
         Label tablesLabel = new Label("TABLES");
         tablesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
-        tablesLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(tablesLabel);
 
         getChildren().add(dropPaneFactory.createDropPane(TABLE, true));
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
         tableJoinsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
-        tableJoinsLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(tableJoinsLabel);
 
         getChildren().add(buildTableJoinPane());
         getChildren().add(buildTableJoinPane());
 
         TextField tableJoinTextField = new TextField();
-        tableJoinTextField.setPrefHeight(OBJECT_PANE_HEIGHT);
+        tableJoinTextField.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(tableJoinTextField);
     }
 
     private Pane buildObjectPane(String labelText, ObjectType type) {
         HBox objectPane = new HBox();
         objectPane.getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(type));
-        objectPane.setPrefHeight(OBJECT_PANE_HEIGHT);
+        objectPane.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
 
         if (type == TABLE) {
             ImageView tableImageView = new ImageView();
@@ -107,7 +107,7 @@ public class DropZonePane extends VBox {
     private Pane buildTableJoinPane() {
         HBox tableJoinPane = new HBox();
         tableJoinPane.getStyleClass().add("table-join-pane");
-        tableJoinPane.setPrefHeight(OBJECT_PANE_HEIGHT);
+        tableJoinPane.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
 
 //        Button editButton = new Button();
 //        editButton.getStyleClass().add("edit-button");
@@ -121,7 +121,7 @@ public class DropZonePane extends VBox {
         tableJoinPane.getChildren().add(leftTableLabel);
 
         Label joinLabel = new Label(null, new ImageView(ImageList.IMAGE_INNER_JOIN));
-        joinLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        joinLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         tableJoinPane.getChildren().add(joinLabel);
 
         Label rightTableLabel = new Label("T2");

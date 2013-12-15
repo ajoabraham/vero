@@ -7,7 +7,7 @@
 package com.vero.ui.report;
 
 import com.vero.ui.common.ImageList;
-import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
+import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.REPORT_BLOCK_PANE_HEIGHT;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -46,7 +46,7 @@ public class ReportPane extends BorderPane {
         globalFilterPane.setId("global-filter-pane");
         
         Label globalFilterLabel = new Label("GLOBAL FILTERS");
-        globalFilterLabel.setPrefHeight(OBJECT_PANE_HEIGHT);
+        globalFilterLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         globalFilterLabel.getStyleClass().add("subsection-title");
         globalFilterPane.getChildren().add(globalFilterLabel);
         

@@ -10,7 +10,6 @@ import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_LABEL;
 import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_PANE;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.COLUMN;
-import static com.vero.ui.common.UIConstants.OBJECT_PANE_HEIGHT;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
@@ -32,7 +31,6 @@ public class ColumnObjectPane extends ObjectPane {
     
     private void buildUI() {
         getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
-        setPrefHeight(OBJECT_PANE_HEIGHT);
 
         Label label = new Label(data.getName());
         HBox.setHgrow(label, Priority.ALWAYS);

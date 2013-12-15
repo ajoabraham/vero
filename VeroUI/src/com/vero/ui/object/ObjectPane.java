@@ -6,18 +6,18 @@
 
 package com.vero.ui.object;
 
+import com.vero.ui.LabelPane;
 import com.vero.ui.common.ObjectType;
 import com.vero.ui.model.UIData;
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 
 /**
  *
  * @author Tai Hu
  */
-public abstract class ObjectPane extends HBox implements DraggableObject {
+public abstract class ObjectPane extends LabelPane implements DraggableObject {
     public ObjectPane() {
     }
     
