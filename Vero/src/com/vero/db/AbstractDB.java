@@ -53,6 +53,7 @@ abstract class AbstractDB implements Serializable {
     protected Connection _conn = null;
     protected Map<String,Table> _catalog;
     protected List<String> _databases;
+    protected HashMap<String,String> _orderedArgs;
    
     public AbstractDB(){}
     
@@ -145,7 +146,9 @@ abstract class AbstractDB implements Serializable {
           _catalog.clear();  
         }
         
-        ResultSet rs = connect().getMetaData().getColumns(getDatabaseName(), getSchemaName(), null, null);
+        ResultSet rs = 
+        connect().getMetaData().getColumns(getOrderedArgs().get("database"), 
+                            getOrderedArgs().get("schema"), null, null);
         String tableName;
         String prevTableName="";
         Table t = null;
@@ -400,7 +403,7 @@ abstract class AbstractDB implements Serializable {
      * @throws SQLException 
      */
     public void identifyKeys(Table t) throws SQLException {
-        ResultSet rs = connect().getMetaData().getPrimaryKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        ResultSet rs = connect().getMetaData().getPrimaryKeys(getOrderedArgs().get("database"), getOrderedArgs().get("schema"), t.getObjectName());
         while (rs.next()) {
             String fkcol = rs.getString("COLUMN_NAME");
             t.getColumn(fkcol).setKeyType(Column.KeyTypes.PRIMARY_KEY);
@@ -411,7 +414,7 @@ abstract class AbstractDB implements Serializable {
         // In mysql a bridge table key columns are both primary key
         // and foreign key columns.  For our purposes we just need to know the
         // singular role.
-        rs = connect().getMetaData().getImportedKeys(getDatabaseName(), getSchemaName(), t.getObjectName());
+        rs = connect().getMetaData().getImportedKeys(getOrderedArgs().get("database"), getOrderedArgs().get("schema"), t.getObjectName());
         while (rs.next()) {
             String fkcol = rs.getString("FKCOLUMN_NAME");
             t.getColumn(fkcol).setKeyType(Column.KeyTypes.FOREIGN_KEY);
@@ -447,7 +450,8 @@ abstract class AbstractDB implements Serializable {
      */
     public void updateTableStructure(Table t) throws SQLException{
         ResultSet rs = connect().getMetaData()
-                .getColumns(getDatabaseName(), getSchemaName(), t.getPhysicalName(), null);
+                .getColumns(getOrderedArgs().get("database"), getOrderedArgs().get("schema"), 
+                            t.getPhysicalName(), null);
         
         // Build array of current columns in the table (in the database)
         // We need this in order to find out if any columns have been removed.
@@ -494,5 +498,22 @@ abstract class AbstractDB implements Serializable {
         // TODO - need to probably reset current key types incase
         // something that was a keyType is no longer.
         identifyKeys(t);
+    }
+    
+    /**
+     * Hack to deal with the fact that in some jdbc drivers schema
+     * means database and database means schema.  This is an issue 
+     * for Teradata and likely oracle.  Each subclass db that exhibits
+     * this reversed behavior should override this method.
+     * 
+     * @return 
+     */
+    public Map<String,String> getOrderedArgs(){
+        if(_orderedArgs == null){
+            _orderedArgs = new HashMap();
+            _orderedArgs.put("database", getDatabaseName());
+            _orderedArgs.put("schema", getSchemaName());           
+        }        
+        return _orderedArgs;
     }
 }

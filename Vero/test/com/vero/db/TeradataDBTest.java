@@ -8,7 +8,6 @@ package com.vero.db;
 
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,18 +22,18 @@ import static org.junit.Assert.*;
  *
  * @author ajoabraham
  */
-public class MySQLDBTest {
+public class TeradataDBTest {
     
-    public static MySQLDB db;
+    public static TeradataDB db;
     
     @BeforeClass
     public static void setUpClass() throws SQLException {
-        System.out.println("Testing MySQL DB....");
-        db = new MySQLDB();
-        db.setUsername("stuser")
-                .setPassword("sourcetable")
+        System.out.println("Testing Teradata DB....");
+        db = new TeradataDB();
+        db.setUsername("dbc")
+                .setPassword("dbc")
                 .setDatabaseName("northwind")
-                .setHostName("mysql5.cokqqhqwkadj.us-west-2.rds.amazonaws.com");
+                .setHostName("localhost");
         String sql = "CREATE TABLE UpdateStructureTest (id int , col1 int, col2 int, col3 int);";
         db.connect().createStatement().execute(sql);
     }
@@ -47,8 +46,8 @@ public class MySQLDBTest {
     
     @Test
     public void testConnect() throws SQLException {
-        Connection result = db.connect();
-        assertTrue("Should connect to DB in 30 Seconds", result.isValid(30));
+        db.connect();
+        assertTrue("Should connect to DB in 30 Seconds", true);      
     }
 
     @Test
@@ -66,7 +65,7 @@ public class MySQLDBTest {
     @Test
     public void testGetDBTables() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        assertTrue("CustomerDemographics table should be in the collection",d.containsKey("CustomerDemographics"));
+        assertTrue("CustomerDemographics table should be in the collection",d.containsKey("customerdemographics"));
     }
     
     @Test
@@ -77,7 +76,7 @@ public class MySQLDBTest {
                                     "OrderID","CustomerID","EmployeeID","ShipName",
                                      "ShipAddress","ShipPostalCode","ShipCountry"};
         
-        Table t = d.get("Orders");
+        Table t = d.get("orders");
         Column c;
         for(String col : expectedColumns){
             c = t.getColumn(col);
@@ -89,22 +88,22 @@ public class MySQLDBTest {
     @Test
     public void testIdentifyPrimaryKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("Employees");
+        Table t = d.get("employees");
         db.identifyKeys(t);
-        Column c = d.get("Employees").getPrimaryKeyColumns().get(0);
+        Column c = d.get("employees").getPrimaryKeyColumns().get(0);
         
         assertTrue("EmployeeID should be the first and only primary key: ",
                 c.getObjectName().equals("EmployeeID"));
         
         assertTrue("There should only be 1 primary key in this table: ",
-                d.get("Employees").getPrimaryKeyColumns().size()==1);
+                d.get("employees").getPrimaryKeyColumns().size()==1);
         
     }
     
     @Test
     public void testIdentifyForeignKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("Orders");
+        Table t = d.get("orders");
         db.identifyKeys(t);
         ArrayList<Column> c = t.getForeignKeyColumns();
         
@@ -127,7 +126,7 @@ public class MySQLDBTest {
     @Test
     public void testBridgeTableKeysAreForeignKeys() throws SQLException{
         Map<String, Table> d = db.getDBTables();
-        Table t = d.get("EmployeeTerritories");
+        Table t = d.get("employeeterritories");
         db.identifyKeys(t);
         ArrayList<Column> c = t.getForeignKeyColumns();
         
@@ -149,7 +148,7 @@ public class MySQLDBTest {
     
     @Test
     public void testCollectStats() throws SQLException{
-        Table t = db.getDBTables().get("Orders");
+        Table t = db.getDBTables().get("orders");
         db.collectStats(t);
         assertTrue("Orders table should have 830 rows.", t.getRowCount()==830);
         assertTrue("Last stat timestamp should have been updated.", t.getLastStatDate()!=null);
@@ -159,8 +158,8 @@ public class MySQLDBTest {
     public void testUpdateStructureNewColumn() throws SQLException{
         Table t = db.getDBTables().get("UpdateStructureTest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest ADD COLUMN new_col1 int;");
-        
+          .execute("ALTER TABLE UpdateStructureTest ADD new_col1 int;");
+
         db.updateTableStructure(t);
         assertTrue("new_col1 column should have be added to the table.", t.getColumn("new_col1") != null);
     }
@@ -169,7 +168,7 @@ public class MySQLDBTest {
     public void testUpdateStructureRemoveColumn() throws SQLException{
         Table t = db.getDBTables().get("UpdateStructureTest");
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest DROP COLUMN col1;");
+          .execute("ALTER TABLE UpdateStructureTest DROP col1;");
         
         db.updateTableStructure(t);
         assertTrue("col1 column should have been removed from the table.", t.getColumn("col1") == null);
@@ -179,8 +178,14 @@ public class MySQLDBTest {
     @Test
     public void testUpdateStructureUpdateColumnType() throws SQLException{
         Table t = db.getDBTables().get("UpdateStructureTest");
+        
+        // cannot simply alter column datatypes in teradata
+        // we have to drop and create new table
         db.connect().createStatement()
-          .execute("ALTER TABLE UpdateStructureTest MODIFY new_col1 varchar(22);");
+          .execute("DROP TABLE UpdateStructureTest;");
+        
+        String sql = "CREATE TABLE UpdateStructureTest (id int , col1 int, col2 int, col3 int,new_col1 varchar(22) not null);";
+        db.connect().createStatement().execute(sql);
         
         db.updateTableStructure(t);
         assertTrue("new_col1 column should now have String datatype.", 
@@ -204,7 +209,7 @@ public class MySQLDBTest {
     public void testGetSchemas(){
         try {
             db.getSchemas();
-            fail("MySQL doesnt support schemas so this method should throw an exception.");
+            fail("Teradata doesnt support schemas so this method should throw an exception.");
         } catch (Exception ex) {
             assertTrue(true);
         }
