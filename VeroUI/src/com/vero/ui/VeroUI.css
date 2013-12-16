@@ -118,17 +118,16 @@
 }
 
 .label-pane {
-    
+    -fx-alignment: center-left;
+    -fx-fill-height: true;
+    -fx-padding: 0 5 0 10;
 }
 
 .object-pane {
-    -fx-alignment: center-left;
-    -fx-fill-height: true;
     -fx-border-color: -fx-main-background-color;
     -fx-border-width: 3;
     -fx-border-radius: 5;
     -fx-border-insets: -3;
-    -fx-padding: 0 5 0 10;
 }
 
 .datasource-object-pane {
@@ -189,6 +188,17 @@
 
 .drop-pane {
     -fx-spacing: 5;
+}
+
+.placeholder-pane {
+    -fx-border-color: -fx-light-grey-color;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.placeholder-pane .label {
+    -fx-text-fill: -fx-hint-text-color;
+    -fx-font: bold italic 12px "Helvetica";
 }
 
 .table-join-pane {

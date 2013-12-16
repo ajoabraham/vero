@@ -20,6 +20,7 @@ import com.vero.ui.object.DragManager;
 import com.vero.ui.object.MetricObjectPane;
 import com.vero.ui.object.ObjectPane;
 import com.vero.ui.object.TableObjectPane;
+import com.vero.ui.report.PlaceholderPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,5 +73,9 @@ public final class LabelPaneFactory {
         }
         
         return objectPane;
+    }
+    
+    public LabelPane createPlaceholderPane(String text) {
+        return new PlaceholderPane(text);
     }
 }
