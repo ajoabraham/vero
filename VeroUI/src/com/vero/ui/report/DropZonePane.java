@@ -17,11 +17,11 @@ import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_WIDTH;
 import static com.vero.ui.common.CSSConstants.*;
+import static com.vero.ui.common.ObjectType.TABLE_JOIN;
 import com.vero.ui.object.DropPane;
 import com.vero.ui.object.DropPaneFactory;
 import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -33,11 +33,7 @@ import javafx.scene.layout.VBox;
  * @author Tai Hu
  */
 public class DropZonePane extends VBox {
-    private static final String ATTRIBUTE_PLACEHOLDER_HINT = "drag attributes or columns here...";
-    private static final String METRIC_PLACEHOLDER_HINT = "drag metrics or columns here...";
-    private static final String TABLE_PLACEHOLDER_HINT = "drag tables here as query hints...";
-    private static final String TABLE_JOIN_PLACEHOLDER_HINT = "This is not a drop zone...";
-
+    
     public DropZonePane() {
         buildUI();
     }
@@ -58,7 +54,7 @@ public class DropZonePane extends VBox {
         
         DropPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
         attributeDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(ATTRIBUTE_PLACEHOLDER_HINT));
+                labelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         getChildren().add(attributeDropPane);
 
         Label metricsLabel = new Label("METRICS");
@@ -68,7 +64,7 @@ public class DropZonePane extends VBox {
 
         DropPane metricDropPane = dropPaneFactory.createDropPane(METRIC, true);
         metricDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(METRIC_PLACEHOLDER_HINT));
+                labelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         getChildren().add(metricDropPane);
 
         Label tablesLabel = new Label("TABLES");
@@ -78,7 +74,7 @@ public class DropZonePane extends VBox {
 
         DropPane tableDropPane = dropPaneFactory.createDropPane(TABLE, true);
         tableDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(TABLE_PLACEHOLDER_HINT));
+                labelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
         getChildren().add(tableDropPane);
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
@@ -86,7 +82,10 @@ public class DropZonePane extends VBox {
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(tableJoinsLabel);
         
-        getChildren().add(labelPaneFactory.createPlaceholderPane(TABLE_JOIN_PLACEHOLDER_HINT));
+        DropPane tableJoinDropPane = dropPaneFactory.createDropPane(TABLE_JOIN, false);
+        tableJoinDropPane.getChildren().add(
+                labelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
+        getChildren().add(tableJoinDropPane);
     }
 
     private Pane buildObjectPane(String labelText, ObjectType type) {

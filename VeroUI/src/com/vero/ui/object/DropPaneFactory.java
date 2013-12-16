@@ -7,6 +7,7 @@
 package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -43,8 +44,11 @@ public final class DropPaneFactory {
             case METRIC:
                 dropPane = new MetricDropPane();
                 break;
+            case TABLE_JOIN:
+                dropPane = new TableJoinDropPane();
+                break;
             default:
-                logger.severe("Invalid object type - " + type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }
         
         if (isDroppable) {

@@ -7,19 +7,19 @@
 package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.METRIC;
+import static com.vero.ui.common.ObjectType.TABLE_JOIN;
 
 /**
  *
  * @author Tai Hu
  */
-public class MetricDropPane extends DropPane {
-    public MetricDropPane() {
+public class TableJoinDropPane extends DropPane {
+    public TableJoinDropPane() {
         
     }
     
     @Override
     public ObjectType getType() {
-        return METRIC;
+        return TABLE_JOIN;
     }
 }

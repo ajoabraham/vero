@@ -201,6 +201,13 @@
     -fx-font: bold italic 12px "Helvetica";
 }
 
+.drop-hint-pane {
+    -fx-border-color: -fx-light-grey-color;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-border-style: dashed centered line-cap round;
+}
+
 .table-join-pane {
     -fx-spacing: 15;
     -fx-alignment: center;

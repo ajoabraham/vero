@@ -48,4 +48,5 @@ public interface CSSConstants {
     public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
     public static final String CLASS_DROP_PANE = "drop-pane";
     public static final String CLASS_PLACEHOLDER_PANE = "placeholder-pane";
+    public static final String CLASS_DROP_HINT_PANE = "drop-hint-pane";
 }
