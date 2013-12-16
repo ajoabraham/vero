@@ -44,7 +44,10 @@ public interface CSSConstants {
     /**
      * ID for drop zone pane
      */
+    // ID for drop zone main scroll pane
     public static final String ID_DROP_ZONE_PANE = "drop-zone-pane";
+    // style class for actual content pane inside of drop zone pane.
+    public static final String CLASS_DROP_ZONE_CONTENT_PANE = "drop-zone-content-pane";
     public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
     public static final String CLASS_DROP_PANE = "drop-pane";
     public static final String CLASS_PLACEHOLDER_PANE = "placeholder-pane";

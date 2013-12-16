@@ -16,6 +16,38 @@
 }
 
 /*******************************************************************************
+ * Style for all scroll bar in the application.
+ ******************************************************************************/
+.scroll-bar:vertical {
+    -fx-background-color: -fx-media-grey-color;
+    -fx-background-insets: 0, 0 0 0 1;
+    -fx-padding: 0.0 0.0 0.0 0.0;
+}
+
+.scroll-bar .increment-button {
+    -fx-background-color: -fx-media-grey-color;
+}
+
+.scroll-bar .decrement-button {
+    -fx-background-color: -fx-media-grey-color;
+}
+
+.scroll-bar .track {
+    -fx-background-color: -fx-media-grey-color;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:horizontal{
+    -fx-background-insets: 0, 1 0 0 0;
+    -fx-padding: 0.0 0.0 0.0 0.0;
+}
+
+/*******************************************************************************
  * Style for main window
  ******************************************************************************/
 #root-pane {
@@ -180,10 +212,14 @@
  * Style for Report Pane
  ******************************************************************************/
 #drop-zone-pane {
-    -fx-spacing: 5;
-    -fx-padding: 10 10 10 10;
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
+    -fx-background-color: transparent;
+}
+
+#drop-zone-pane .drop-zone-content-pane {
+    -fx-spacing: 5;
+    -fx-padding: 10 10 10 10;
 }
 
 .drop-pane {
@@ -750,7 +786,7 @@
     -fx-padding: 1;  0.083333em; 
 }*/
 
-.tree-view .scroll-bar:vertical {
+/*.tree-view .scroll-bar:vertical {
     -fx-background-color: -fx-media-grey-color;
     -fx-background-insets: 0, 0 0 0 1;
     -fx-padding: 0.0 0.0 0.0 0.0;
@@ -777,7 +813,7 @@
 .tree-view .scroll-bar:horizontal{
     -fx-background-insets: 0, 1 0 0 0;
     -fx-padding: 0.0 0.0 0.0 0.0;
-}
+}*/
 
 .tree-view:disabled {
     -fx-opacity: -fx-disabled-opacity;

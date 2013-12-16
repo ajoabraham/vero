@@ -7,11 +7,9 @@ package com.vero.ui.report;
 
 import com.vero.ui.LabelPaneFactory;
 import com.vero.ui.common.ImageList;
-import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.METRIC;
 import static com.vero.ui.common.ObjectType.TABLE;
-import static com.vero.ui.common.ObjectType.COLUMN;
 import static com.vero.ui.common.UIConstants.DROP_ZONE_PANE_WIDTH;
 import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.UIConstants.TABLE_LABEL_HEIGHT;
@@ -20,19 +18,18 @@ import static com.vero.ui.common.CSSConstants.*;
 import static com.vero.ui.common.ObjectType.TABLE_JOIN;
 import com.vero.ui.object.DropPane;
 import com.vero.ui.object.DropPaneFactory;
-import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
  *
  * @author Tai Hu
  */
-public class DropZonePane extends VBox {
+public class DropZonePane extends ScrollPane {
     
     public DropZonePane() {
         buildUI();
@@ -41,79 +38,58 @@ public class DropZonePane extends VBox {
     private void buildUI() {
         setId(ID_DROP_ZONE_PANE);
         setPrefWidth(DROP_ZONE_PANE_WIDTH);
+        setFitToWidth(true);
+        VBox contentPane = new VBox();
+        contentPane.getStyleClass().add(CLASS_DROP_ZONE_CONTENT_PANE);
+        setContent(contentPane);
 
         DropPaneFactory dropPaneFactory = DropPaneFactory.getInstance();
         LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
         
-        getChildren().add(labelPaneFactory.createReportNameEditablePane("REPORT BLOCK"));
+        contentPane.getChildren().add(labelPaneFactory.createReportNameEditablePane("REPORT BLOCK"));
 
         Label attributesLabel = new Label("ATTRIBUTES");
         attributesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-        getChildren().add(attributesLabel);
+        contentPane.getChildren().add(attributesLabel);
         
         DropPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
         attributeDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
-        getChildren().add(attributeDropPane);
+        contentPane.getChildren().add(attributeDropPane);
 
         Label metricsLabel = new Label("METRICS");
         metricsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-        getChildren().add(metricsLabel);
+        contentPane.getChildren().add(metricsLabel);
 
         DropPane metricDropPane = dropPaneFactory.createDropPane(METRIC, true);
         metricDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
-        getChildren().add(metricDropPane);
+        contentPane.getChildren().add(metricDropPane);
 
         Label tablesLabel = new Label("TABLES");
         tablesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-        getChildren().add(tablesLabel);
+        contentPane.getChildren().add(tablesLabel);
 
         DropPane tableDropPane = dropPaneFactory.createDropPane(TABLE, true);
         tableDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
-        getChildren().add(tableDropPane);
+        contentPane.getChildren().add(tableDropPane);
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
         tableJoinsLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-        getChildren().add(tableJoinsLabel);
+        contentPane.getChildren().add(tableJoinsLabel);
         
         DropPane tableJoinDropPane = dropPaneFactory.createDropPane(TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
-        getChildren().add(tableJoinDropPane);
+        contentPane.getChildren().add(tableJoinDropPane);
     }
 
-    private Pane buildObjectPane(String labelText, ObjectType type) {
-        HBox objectPane = new HBox();
-        objectPane.getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(type));
-        objectPane.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-
-        if (type == TABLE) {
-            ImageView tableImageView = new ImageView();
-            tableImageView.getStyleClass().add("object-table-imageview");
-            objectPane.getChildren().add(tableImageView);
-        }
-
-        Label label = new Label(labelText);
-        HBox.setHgrow(label, Priority.ALWAYS);
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.getStyleClass().add(CLASS_OBJECT_LABEL);
-        objectPane.getChildren().add(label);
-
-        if (type == TABLE) {
-            ImageView statusImageView = new ImageView();
-            statusImageView.getStyleClass().add("object-table-status-imageview");
-            objectPane.getChildren().add(statusImageView);
-        }
-
-        return objectPane;
-    }
-
+   
     private Pane buildTableJoinPane() {
         HBox tableJoinPane = new HBox();
         tableJoinPane.getStyleClass().add("table-join-pane");
