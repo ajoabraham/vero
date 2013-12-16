@@ -35,9 +35,19 @@ public class Stage {
         HashMap inMetric = inSession.getMetrics();
         HashMap inJoindef = inSession.getJoins();
         
-        Map<String, Attribute> map = inAttr;
-        for (Map.Entry<String, Attribute> entry : map.entrySet()) {
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());                        
+        Map<String, Attribute> attrMap = inAttr;
+        for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
+            System.out.println("Attr Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
+        
+        Map<String, Metric> metMap = inMetric;
+        for (Map.Entry<String, Metric> entry : metMap.entrySet()) {
+            System.out.println("Met Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
+        
+        Map<String, Joindef> jdMap = inJoindef;
+        for (Map.Entry<String, Joindef> entry : jdMap.entrySet()) {
+            System.out.println("JD Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
     }
 }
