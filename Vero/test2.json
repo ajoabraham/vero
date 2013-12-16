@@ -130,7 +130,7 @@
             "expressions": [
                 {
                     "definition": "name",
-                    "coloumns": [
+                    "columns": [
                         ["name", "Departments"]
                     ]
                 }
@@ -140,7 +140,7 @@
             "name": "Student Department Name",
             "expressions": [
                 {
-                    "defintion": "name",
+                    "definition": "name",
                     "columns": [
                         ["name", "Departments"]
                     ]

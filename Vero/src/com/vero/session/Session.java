@@ -9,11 +9,11 @@ import static com.vero.utility.Utility.*;
 import java.util.HashMap;
 
 public class Session {    
-    HashMap<String, DataSource> dataSources;
+    private HashMap<String, DataSource> dataSources;
     // ArrayList<> 
-    HashMap<String, Attribute> attributes;
-    HashMap<String, Metric> metrics;
-    HashMap<String, JoinDefinition> joins;
+    private HashMap<String, Attribute> attributes;
+    private HashMap<String, Metric> metrics;
+    private HashMap<String, JoinDefinition> joins;
     // ArrayList<JoinDefMera> joindefs;
     
     public Session() {

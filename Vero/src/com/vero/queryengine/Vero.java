@@ -45,9 +45,8 @@ public class Vero {
     public static void queryEngineTest1() {
         // session
         Session userSession;
-        TestParser testParser = new TestParser("test1.json");
-        
-        userSession = testParser.parse();
+        TestParser testParser = new TestParser("test1.json");        
+        userSession = testParser.parse();                
         
         System.out.println("Dumping sql...");
         // start generating sql
@@ -232,17 +231,19 @@ public class Vero {
     
     public static void queryEngineTest2() {
         // session
-        Session userSession;
-        TestParser testParser = new TestParser("test1.json");
+        TestParser testParser = new TestParser("test2.json");        
+        Session userSession = testParser.parse();
+                
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
         
-        userSession = testParser.parse();
     }
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        queryEngineTest1();
-        //queryEngineTest2();
+        // queryEngineTest1();
+        queryEngineTest2();
     }
 }

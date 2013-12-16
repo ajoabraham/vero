@@ -6,10 +6,20 @@
 
 package com.vero.queryengine;
 
+import com.vero.session.Session;
+
 /**
  *
  * @author yulinwen
  */
 public class QueryEngine {
+    private Stage stage;
     
+    public QueryEngine() {
+        stage = new Stage();
+    }
+    
+    public void preprocess(Session inSession) {
+        stage.preprocess(inSession);
+    }
 }
