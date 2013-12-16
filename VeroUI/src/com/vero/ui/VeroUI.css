@@ -208,6 +208,24 @@
     -fx-border-style: dashed centered line-cap round;
 }
 
+.editable-pane {
+    -fx-background-color: -fx-ds-tbl-background-color;
+    -fx-background-radius: 5;
+}
+
+.editable-pane .label {
+    -fx-font: bold normal 12px "Helvetica";
+    -fx-text-fill: -fx-default-text-color;
+    -fx-alignment: center-left;
+}
+
+.editable-pane .text-field {
+    -fx-background-color: -fx-ds-tbl-background-color;
+    -fx-background-radius: 5;
+    -fx-text-fill: -fx-default-text-color;
+    -fx-font: bold normal 12px "Helvetica";
+}
+
 .table-join-pane {
     -fx-spacing: 15;
     -fx-alignment: center;

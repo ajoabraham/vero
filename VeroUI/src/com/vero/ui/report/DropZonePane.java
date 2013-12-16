@@ -42,15 +42,15 @@ public class DropZonePane extends VBox {
         setId(ID_DROP_ZONE_PANE);
         setPrefWidth(DROP_ZONE_PANE_WIDTH);
 
-        getChildren().add(buildObjectPane("REPORT BLOCK", COLUMN));
+        DropPaneFactory dropPaneFactory = DropPaneFactory.getInstance();
+        LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
+        
+        getChildren().add(labelPaneFactory.createReportNameEditablePane("REPORT BLOCK"));
 
         Label attributesLabel = new Label("ATTRIBUTES");
         attributesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         getChildren().add(attributesLabel);
-
-        DropPaneFactory dropPaneFactory = DropPaneFactory.getInstance();
-        LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
         
         DropPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
         attributeDropPane.getChildren().add(

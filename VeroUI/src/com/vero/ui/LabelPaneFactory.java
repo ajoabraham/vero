@@ -22,6 +22,7 @@ import com.vero.ui.object.ObjectPane;
 import com.vero.ui.object.TableObjectPane;
 import com.vero.ui.report.DropHintPane;
 import com.vero.ui.report.PlaceholderPane;
+import com.vero.ui.report.ReportNameEditablePane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,5 +83,9 @@ public final class LabelPaneFactory {
     
     public LabelPane createDropHintPane() {
         return new DropHintPane();
+    }
+    
+    public LabelPane createReportNameEditablePane(String text) {
+        return new ReportNameEditablePane(text);
     }
 }
