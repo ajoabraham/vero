@@ -8,7 +8,9 @@ package com.vero.ui.navigation;
 
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
 import static com.vero.ui.constants.ObjectType.TABLE;
+
 import com.vero.ui.model.UIData;
+
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
@@ -30,6 +32,7 @@ public class ObjectTreeCellFactory implements Callback<TreeView<ObjectPane>, Tre
 
             @Override
             public void handle(MouseEvent event) {
+                @SuppressWarnings("unchecked")
                 ObjectTreeItem<? extends UIData> treeItem = (ObjectTreeItem<? extends UIData>) ((TreeCell<ObjectPane>) event.getSource()).getTreeItem();                                
                 if ((treeItem.getObjectData().getType() == DATASOURCE 
                         || treeItem.getObjectData().getType() == TABLE)

@@ -15,38 +15,38 @@ import java.util.logging.Logger;
  *
  * @author Tai Hu
  */
-public final class DropPaneFactory {
-    private static final Logger logger = Logger.getLogger(DropPaneFactory.class.getName());
+public final class DropTargetPaneFactory {
+    private static final Logger logger = Logger.getLogger(DropTargetPaneFactory.class.getName());
     
-    private static DropPaneFactory INSTANCE = null;
+    private static DropTargetPaneFactory INSTANCE = null;
     
-    private DropPaneFactory() {
+    private DropTargetPaneFactory() {
         
     }
     
-    public static DropPaneFactory getInstance() {
+    public static DropTargetPaneFactory getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new DropPaneFactory();
+            INSTANCE = new DropTargetPaneFactory();
         }
         
         return INSTANCE;
     }
     
-    public DropPane createDropPane(ObjectType type, boolean isDroppable) {
-        DropPane dropPane = null;
+    public DropTargetPane createDropPane(ObjectType type, boolean isDroppable) {
+        DropTargetPane dropPane = null;
         
         switch (type) {
             case TABLE:
-                dropPane = new TableDropPane();
+                dropPane = new TableDropTargetPane();
                 break;
             case ATTRIBUTE:
-                dropPane = new AttributeDropPane();
+                dropPane = new AttributeDropTargetPane();
                 break;
             case METRIC:
-                dropPane = new MetricDropPane();
+                dropPane = new MetricDropTargetPane();
                 break;
             case TABLE_JOIN:
-                dropPane = new TableJoinDropPane();
+                dropPane = new TableJoinDropTargetPane();
                 break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);

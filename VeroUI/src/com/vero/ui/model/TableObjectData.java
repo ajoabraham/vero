@@ -15,6 +15,8 @@ import java.util.List;
  * @author Tai Hu
  */
 public class TableObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private String name = null;
     private List<ColumnObjectData> columnObjectDataList = null;
     private List<AttributeObjectData> attributeObjectDataList = null;

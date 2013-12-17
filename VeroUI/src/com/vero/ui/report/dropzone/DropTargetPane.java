@@ -25,8 +25,8 @@ import javafx.scene.layout.VBox;
  *
  * @author Tai Hu
  */
-public abstract class DropPane extends VBox implements DroppableObject {
-    private static final Logger logger = Logger.getLogger(DropPane.class.getName());
+public abstract class DropTargetPane extends VBox implements DroppableObject {
+    private static final Logger logger = Logger.getLogger(DropTargetPane.class.getName());
     
     private static final String ATTRIBUTE_PLACEHOLDER_HINT = "drag attributes or columns here...";
     private static final String METRIC_PLACEHOLDER_HINT = "drag metrics or columns here...";
@@ -35,7 +35,7 @@ public abstract class DropPane extends VBox implements DroppableObject {
     
     private LabelPaneFactory labelPaneFactory = null;
     
-    public DropPane() {
+    public DropTargetPane() {
         labelPaneFactory = LabelPaneFactory.getInstance();
         getStyleClass().add(CLASS_DROP_PANE);
         setPrefHeight(DEFAULT_DROP_PANE_HEIGHT);

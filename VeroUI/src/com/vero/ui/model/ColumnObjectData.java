@@ -14,6 +14,8 @@ import static com.vero.ui.constants.ObjectType.COLUMN;
  * @author Tai Hu
  */
 public class ColumnObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private String name = null;
     
     public ColumnObjectData() {

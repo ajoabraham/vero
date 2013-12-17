@@ -14,6 +14,8 @@ import java.io.Serializable;
  * @author Tai Hu
  */
 public abstract class UIData implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private long Id = 0L;
     
     public UIData() {

@@ -15,6 +15,8 @@ import com.vero.ui.constants.TableJoinType;
  * @author Tai Hu
  */
 public class TableJoinObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private String leftTableName = null;
     private String rightTableName = null;
     private TableJoinType tableJoinType = null;

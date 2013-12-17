@@ -14,6 +14,8 @@ import static com.vero.ui.constants.ObjectType.METRIC;
  * @author Tai Hu
  */
 public class MetricObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private String name = null;
     
     public MetricObjectData() {

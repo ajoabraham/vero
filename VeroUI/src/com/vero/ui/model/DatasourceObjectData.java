@@ -17,6 +17,8 @@ import java.util.List;
  * @author Tai Hu
  */
 public class DatasourceObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private String name = null;
     private List<TableObjectData> tableObjectDataList = null;
     private DatasourceStatus status = INACTIVE;

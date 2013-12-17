@@ -7,20 +7,19 @@
 package com.vero.ui.report.dropzone;
 
 import com.vero.ui.constants.ObjectType;
-import static com.vero.ui.constants.ObjectType.TABLE;
+import static com.vero.ui.constants.ObjectType.METRIC;
 
 /**
  *
  * @author Tai Hu
  */
-public class TableDropPane extends DropPane {
-
-    public TableDropPane() {
+public class MetricDropTargetPane extends DropTargetPane {
+    public MetricDropTargetPane() {
         
     }
     
     @Override
     public ObjectType getType() {
-        return TABLE;
-    }    
+        return METRIC;
+    }
 }

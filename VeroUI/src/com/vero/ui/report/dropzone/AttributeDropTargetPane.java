@@ -7,20 +7,20 @@
 package com.vero.ui.report.dropzone;
 
 import com.vero.ui.constants.ObjectType;
-import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
-import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
+import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 
 /**
  *
  * @author Tai Hu
  */
-public class TableJoinDropPane extends DropPane {
-    public TableJoinDropPane() {
-        setPrefHeight(DEFAULT_DROP_PANE_HEIGHT * 2 + 5);
+public class AttributeDropTargetPane extends DropTargetPane {
+    
+    public AttributeDropTargetPane() {
+        
     }
     
     @Override
     public ObjectType getType() {
-        return TABLE_JOIN;
+        return ATTRIBUTE;
     }
 }

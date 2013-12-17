@@ -15,6 +15,8 @@ import java.util.List;
  * @author Tai Hu
  */
 public class RootObjectData extends UIData {
+    private static final long serialVersionUID = 1L;
+    
     private List<DatasourceObjectData> datasourceObjectDataList = null;
     
     public RootObjectData() {
