@@ -24,8 +24,8 @@ public interface UIConstants {
     // Object pane should fill navigation pane width
     public static final double DEFAULT_LABEL_PANE_HEIGHT = 31;
     
-    public static final double TABLE_LABEL_WIDTH = 31;
-    public static final double TABLE_LABEL_HEIGHT = 31;
+//    public static final double TABLE_LABEL_WIDTH = 50;
+//    public static final double TABLE_LABEL_HEIGHT = 31;
     
 //    public static final double EDIT_BUTTON_WIDTH = 40;
 //    public static final double EDIT_BUTTON_HEIGHT = 15;

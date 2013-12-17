@@ -8,6 +8,7 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.TABLE_JOIN;
+import static com.vero.ui.common.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 
 /**
  *
@@ -15,7 +16,7 @@ import static com.vero.ui.common.ObjectType.TABLE_JOIN;
  */
 public class TableJoinDropPane extends DropPane {
     public TableJoinDropPane() {
-        
+        setPrefHeight(DEFAULT_DROP_PANE_HEIGHT * 2 + 5);
     }
     
     @Override

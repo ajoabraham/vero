@@ -7,7 +7,6 @@
 package com.vero.ui.object;
 
 import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_LABEL;
-import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_PANE;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.METRIC;
 import com.vero.ui.model.MetricObjectData;
@@ -30,7 +29,7 @@ public class MetricObjectPane extends ObjectPane {
     }
     
     private void buildUI() {
-        getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
 
         Label label = new Label(data.getName());
         HBox.setHgrow(label, Priority.ALWAYS);

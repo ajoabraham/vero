@@ -8,7 +8,6 @@ package com.vero.ui.object;
 
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.TABLE;
-import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.common.CSSConstants.*;
 import com.vero.ui.common.ImageList;
 import com.vero.ui.model.TableObjectData;
@@ -32,7 +31,7 @@ public class TableObjectPane extends ObjectPane {
     }
     
     private void buildUI() {
-        getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
         
         ImageView tableImageView = new ImageView(ImageList.IMAGE_UNKNOWN_TABLE);
         getChildren().add(tableImageView);
