@@ -5,12 +5,14 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.JoinDefinition;
 import com.vero.admin.DataSource;
 import com.vero.admin.DeleteTeradata;
+import com.vero.metadata.Table;
 import static com.vero.utility.Utility.*;
 import java.util.HashMap;
 
 public class Session {    
     private HashMap<String, DataSource> dataSources;
     // ArrayList<> 
+    private HashMap<String, Table> tables; // FIXME: restrcted to single DS
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;
     private HashMap<String, JoinDefinition> joins;
@@ -18,6 +20,7 @@ public class Session {
     
     public Session() {
         dataSources = new HashMap();
+        tables = new HashMap();
         attributes = new HashMap();
         metrics = new HashMap();
         joins = new HashMap();
@@ -32,6 +35,10 @@ public class Session {
         }
     }
 
+    public void addTable(Table inTable) {
+        tables.put(inTable.getPhysicalName(), inTable);
+    }
+    
     public void addAttributeMeta(Attribute inAttr) {
         attributes.put(inAttr.getName(), inAttr);
     }
@@ -50,6 +57,10 @@ public class Session {
     
     public DataSource getDataSource(String inName) {        
         return dataSources.get(inName);        
+    }
+    
+    public Table getTable(String inName) {
+        return tables.get(inName);
     }
     
     public HashMap getAttributes() {

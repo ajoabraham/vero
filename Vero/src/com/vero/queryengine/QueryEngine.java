@@ -42,12 +42,13 @@ public class QueryEngine {
     public QueryEngine() {
         stage = new Stage();
         joinGraph = new WeightedMultigraph(new ClassBasedEdgeFactory<Attribute, EdgeUnit>(EdgeUnit.class));
-        testGraph = new WeightedMultigraph(new ClassBasedEdgeFactory<String, EdgeUnit>(EdgeUnit.class));        
+        //testGraph = new WeightedMultigraph(new ClassBasedEdgeFactory<String, EdgeUnit>(EdgeUnit.class));        
     }
             
     public void preprocess(Session inSession) {
         stage.preprocess(inSession);
         
+        /*
         testGraph.addVertex("V1");
         testGraph.addVertex("V2");
         testGraph.addVertex("V3");
@@ -64,7 +65,7 @@ public class QueryEngine {
         EdgeUnit e3 = new EdgeUnit();
         testGraph.setEdgeWeight(e3, 7);
         testGraph.addEdge("V2", "V4", e3);
-        
+      
         EdgeUnit e4 = new EdgeUnit();
         testGraph.setEdgeWeight(e4, 8);
         testGraph.addEdge("V4", "V3", e4);
@@ -72,8 +73,14 @@ public class QueryEngine {
         EdgeUnit e5 = new EdgeUnit();
         testGraph.setEdgeWeight(e5, 4);
         testGraph.addEdge("V4", "V3", e5);
+        */
         
-        KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(testGraph);
+        // loop on attributes/metrics
+        
+        // for each expression, find tables used and connect vertex and create edges
+        
+        // mst algo
+        KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
         System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
         
     }

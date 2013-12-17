@@ -108,6 +108,7 @@ public class TestParser {
                             break;
                     }
 
+                    testSession.addTable(aTable);
                     specificDS.addTable(aTable);
                 } else {
                     System.out.println("WARNING: Can't find specificDS...");

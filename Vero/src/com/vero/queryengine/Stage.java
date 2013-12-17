@@ -19,11 +19,13 @@ import java.util.Map;
  */
 public class Stage {      
     private class ReferenceUnit {
+        private int rowCount;
         private HashMap<String, Attribute> attrHT;
         private HashMap<String, Metric> metricHT;
         private HashMap<String, JoinDefinition> joindefHT;
                         
         public ReferenceUnit() {
+            rowCount = -1;
             attrHT = new HashMap();
             metricHT = new HashMap();
             joindefHT = new HashMap();
@@ -50,7 +52,8 @@ public class Stage {
             
             for (String tableName: elements) {
                 if (!table2ReferenceUnitHT.containsKey(tableName)) {
-                    ReferenceUnit rU = new ReferenceUnit();
+                    ReferenceUnit rU = new ReferenceUnit();                    
+                    rU.rowCount = inSession.getTable(tableName).getRowCount();                    
                     table2ReferenceUnitHT.put(tableName, rU);
                     rU.joindefHT.put(joinDef.getName(), joinDef);
                 } else {
@@ -69,6 +72,7 @@ public class Stage {
         for (Map.Entry<String, ReferenceUnit> entry1 : dumpTMap.entrySet()) {
             System.out.println("dumpT Key = " + entry1.getKey() + ", Value = " + entry1.getValue());
             ReferenceUnit rU = entry1.getValue();
+            System.out.println("rowCount = " + rU.rowCount);
             Map<String, JoinDefinition> dumpJMap = rU.joindefHT;
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
                 System.out.println("dumpJ Key = " + entry2.getKey() + ", Value = " + entry2.getValue());
