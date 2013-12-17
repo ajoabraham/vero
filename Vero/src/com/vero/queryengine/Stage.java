@@ -37,9 +37,9 @@ public class Stage {
     }
     
     public void preprocess(Session inSession) {
-        HashMap inAttr = inSession.getAttributes();
-        HashMap inMetric = inSession.getMetrics();
-        HashMap inJoindef = inSession.getJoins();
+        HashMap inAttr = new HashMap(inSession.getAttributes());
+        HashMap inMetric = new HashMap(inSession.getMetrics());
+        HashMap inJoindef = new HashMap(inSession.getJoins());
 
         Map<String, JoinDefinition> jdMap = inJoindef;
         for (Map.Entry<String, JoinDefinition> entry : jdMap.entrySet()) {
