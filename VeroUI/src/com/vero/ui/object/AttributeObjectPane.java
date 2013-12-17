@@ -7,10 +7,8 @@
 package com.vero.ui.object;
 
 import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_LABEL;
-import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_PANE;
 import com.vero.ui.common.ObjectType;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
-import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
@@ -31,7 +29,7 @@ public class AttributeObjectPane extends ObjectPane {
     }
     
     private void buildUI() {
-        getStyleClass().addAll(CLASS_OBJECT_PANE, UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
 
         Label label = new Label(data.getName());
         HBox.setHgrow(label, Priority.ALWAYS);

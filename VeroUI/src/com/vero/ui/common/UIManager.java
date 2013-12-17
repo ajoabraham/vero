@@ -53,18 +53,14 @@ public final class UIManager {
     }
     
     public void showDatasourceNavigationPane() {
-        if (datasourceNavigationPane != null && datasourceNavigationPane.getParent() != null) {
-            StackPane parent = (StackPane) datasourceNavigationPane.getParent();
-            parent.getChildren().remove(datasourceNavigationPane);
-            parent.getChildren().add(datasourceNavigationPane);
+        if (datasourceNavigationPane != null) {
+            datasourceNavigationPane.toFront();
         }
     }
     
     public void showReportNavigationPane() {
-        if (reportNavigationPane != null && reportNavigationPane.getParent() != null) {
-            StackPane parent = (StackPane) reportNavigationPane.getParent();
-            parent.getChildren().remove(reportNavigationPane);
-            parent.getChildren().add(reportNavigationPane);
+        if (reportNavigationPane != null) {
+            reportNavigationPane.toFront();
         }        
     }
 }

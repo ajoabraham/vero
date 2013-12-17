@@ -49,6 +49,9 @@ public final class UIUtils {
             case METRIC:
                 styleClass = CLASS_METRIC_OBJECT_PANE;
                 break;
+            case TABLE_JOIN:
+                styleClass = CLASS_TABLE_JOIN_OBJECT_PANE;
+                break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }

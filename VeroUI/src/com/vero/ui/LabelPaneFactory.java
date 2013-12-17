@@ -7,10 +7,12 @@
 package com.vero.ui;
 
 import com.vero.ui.common.ObjectType;
+import com.vero.ui.common.TableJoinType;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.object.AttributeObjectPane;
@@ -19,6 +21,7 @@ import com.vero.ui.object.DatasourceObjectPane;
 import com.vero.ui.object.DragManager;
 import com.vero.ui.object.MetricObjectPane;
 import com.vero.ui.object.ObjectPane;
+import com.vero.ui.object.TableJoinObjectPane;
 import com.vero.ui.object.TableObjectPane;
 import com.vero.ui.report.DropHintPane;
 import com.vero.ui.report.PlaceholderPane;
@@ -87,5 +90,9 @@ public final class LabelPaneFactory {
     
     public LabelPane createReportNameEditablePane(String text) {
         return new ReportNameEditablePane(text);
+    }
+    
+    public LabelPane createTableJoinPane(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
+        return new TableJoinObjectPane(new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
     }
 }

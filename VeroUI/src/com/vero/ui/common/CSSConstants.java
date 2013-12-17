@@ -37,6 +37,7 @@ public interface CSSConstants {
     public static final String CLASS_OBJECT_LABEL = "object-label";
     public static final String CLASS_DATASOURCE_OBJECT_PANE = "datasource-object-pane";
     public static final String CLASS_TABLE_OBJECT_PANE = "table-object-pane";
+    public static final String CLASS_TABLE_JOIN_OBJECT_PANE = "table-join-object-pane";
     public static final String CLASS_COLUMN_OBJECT_PANE = "column-object-pane";
     public static final String CLASS_ATTRIBUTE_OBJECT_PANE = "attribute-object-pane";
     public static final String CLASS_METRIC_OBJECT_PANE = "metric-object-pane";

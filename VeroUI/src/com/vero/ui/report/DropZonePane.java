@@ -6,23 +6,18 @@
 package com.vero.ui.report;
 
 import com.vero.ui.LabelPaneFactory;
-import com.vero.ui.common.ImageList;
 import static com.vero.ui.common.ObjectType.ATTRIBUTE;
 import static com.vero.ui.common.ObjectType.METRIC;
 import static com.vero.ui.common.ObjectType.TABLE;
 import static com.vero.ui.common.UIConstants.DROP_ZONE_PANE_WIDTH;
 import static com.vero.ui.common.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
-import static com.vero.ui.common.UIConstants.TABLE_LABEL_HEIGHT;
-import static com.vero.ui.common.UIConstants.TABLE_LABEL_WIDTH;
 import static com.vero.ui.common.CSSConstants.*;
 import static com.vero.ui.common.ObjectType.TABLE_JOIN;
+import static com.vero.ui.common.TableJoinType.INNER_JOIN;
 import com.vero.ui.object.DropPane;
 import com.vero.ui.object.DropPaneFactory;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -86,35 +81,8 @@ public class DropZonePane extends ScrollPane {
         DropPane tableJoinDropPane = dropPaneFactory.createDropPane(TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
+        tableJoinDropPane.getChildren().add(
+                labelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
         contentPane.getChildren().add(tableJoinDropPane);
-    }
-
-   
-    private Pane buildTableJoinPane() {
-        HBox tableJoinPane = new HBox();
-        tableJoinPane.getStyleClass().add("table-join-pane");
-        tableJoinPane.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-
-//        Button editButton = new Button();
-//        editButton.getStyleClass().add("edit-button");
-//        editButton.setPrefSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
-//        editButton.setMinSize(EDIT_BUTTON_WIDTH, EDIT_BUTTON_HEIGHT);
-//        tableJoinPane.getChildren().add(editButton);
-
-        Label leftTableLabel = new Label("T1");
-        leftTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
-        leftTableLabel.getStyleClass().add("table-label");
-        tableJoinPane.getChildren().add(leftTableLabel);
-
-        Label joinLabel = new Label(null, new ImageView(ImageList.IMAGE_INNER_JOIN));
-        joinLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
-        tableJoinPane.getChildren().add(joinLabel);
-
-        Label rightTableLabel = new Label("T2");
-        rightTableLabel.setPrefSize(TABLE_LABEL_WIDTH, TABLE_LABEL_HEIGHT);
-        rightTableLabel.getStyleClass().add("table-label");
-        tableJoinPane.getChildren().add(rightTableLabel);
-
-        return tableJoinPane;
     }
 }

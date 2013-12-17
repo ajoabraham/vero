@@ -7,6 +7,7 @@
 package com.vero.ui.object;
 
 import com.vero.ui.LabelPane;
+import static com.vero.ui.common.CSSConstants.CLASS_OBJECT_PANE;
 import com.vero.ui.common.ObjectType;
 import com.vero.ui.model.UIData;
 import javafx.scene.Node;
@@ -19,6 +20,7 @@ import javafx.scene.input.MouseEvent;
  */
 public abstract class ObjectPane extends LabelPane implements DraggableObject {
     public ObjectPane() {
+        getStyleClass().addAll(CLASS_OBJECT_PANE);
     }
     
     public abstract ObjectType getType();

@@ -262,20 +262,16 @@
     -fx-font: bold normal 12px "Helvetica";
 }
 
-.table-join-pane {
+.table-join-object-pane {
+    -fx-padding: 0;
     -fx-spacing: 15;
     -fx-alignment: center;
+    -fx-fill-height: true;
 }
 
-/*.edit-button {
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-    -fx-background-color: transparent;
-    -fx-background-image: url("images/edit_join_def_icon.png");
-}*/
-
-.table-label {
+.table-join-object-pane .label {
     -fx-background-color: -fx-ds-tbl-background-color;
+    -fx-background-radius: 5;
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
     -fx-alignment: center;
