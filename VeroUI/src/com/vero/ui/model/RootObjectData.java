@@ -6,8 +6,8 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.ROOT;
+import com.vero.ui.constants.ObjectType;
+import static com.vero.ui.constants.ObjectType.ROOT;
 import java.util.List;
 
 /**

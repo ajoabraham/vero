@@ -6,8 +6,8 @@
 
 package com.vero.ui.model;
 
-import static com.vero.ui.common.ObjectType.TABLE;
-import com.vero.ui.common.ObjectType;
+import static com.vero.ui.constants.ObjectType.TABLE;
+import com.vero.ui.constants.ObjectType;
 import java.util.List;
 
 /**

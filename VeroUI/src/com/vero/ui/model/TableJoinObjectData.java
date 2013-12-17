@@ -6,9 +6,9 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.TABLE_JOIN;
-import com.vero.ui.common.TableJoinType;
+import com.vero.ui.constants.ObjectType;
+import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
+import com.vero.ui.constants.TableJoinType;
 
 /**
  *

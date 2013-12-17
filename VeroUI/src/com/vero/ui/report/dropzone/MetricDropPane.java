@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui.model;
+package com.vero.ui.report.dropzone;
 
 import com.vero.ui.constants.ObjectType;
 import static com.vero.ui.constants.ObjectType.METRIC;
@@ -13,10 +13,8 @@ import static com.vero.ui.constants.ObjectType.METRIC;
  *
  * @author Tai Hu
  */
-public class MetricObjectData extends UIData {
-    private String name = null;
-    
-    public MetricObjectData() {
+public class MetricDropPane extends DropPane {
+    public MetricDropPane() {
         
     }
     
@@ -24,12 +22,4 @@ public class MetricObjectData extends UIData {
     public ObjectType getType() {
         return METRIC;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }    
 }

@@ -6,8 +6,8 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.COLUMN;
+import com.vero.ui.constants.ObjectType;
+import static com.vero.ui.constants.ObjectType.COLUMN;
 
 /**
  *

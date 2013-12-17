@@ -8,7 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static com.vero.ui.common.UIConstants.*;
+import static com.vero.ui.constants.UIConstants.*;
 //import javafx.stage.StageStyle;
 
 /**

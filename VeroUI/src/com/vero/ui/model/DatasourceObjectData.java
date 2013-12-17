@@ -6,10 +6,10 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.common.DatasourceStatus;
-import static com.vero.ui.common.DatasourceStatus.INACTIVE;
-import com.vero.ui.common.ObjectType;
-import static com.vero.ui.common.ObjectType.DATASOURCE;
+import com.vero.ui.constants.DatasourceStatus;
+import static com.vero.ui.constants.DatasourceStatus.INACTIVE;
+import com.vero.ui.constants.ObjectType;
+import static com.vero.ui.constants.ObjectType.DATASOURCE;
 import java.util.List;
 
 /**

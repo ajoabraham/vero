@@ -6,13 +6,13 @@
 
 package com.vero.ui.util;
 
-import com.vero.ui.common.ObjectType;
+import com.vero.ui.constants.ObjectType;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 
-import static com.vero.ui.common.CSSConstants.*;
-import com.vero.ui.common.ImageList;
-import com.vero.ui.common.TableJoinType;
+import static com.vero.ui.constants.CSSConstants.*;
+import com.vero.ui.constants.ImageList;
+import com.vero.ui.constants.TableJoinType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.image.Image;

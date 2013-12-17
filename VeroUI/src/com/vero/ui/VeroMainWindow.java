@@ -4,6 +4,8 @@
  */
 package com.vero.ui;
 
+import com.vero.ui.menu.VeroMenuBar;
+import com.vero.ui.menu.VeroToolBar;
 import com.vero.ui.common.UIManager;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -11,8 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 
-import static com.vero.ui.common.UIConstants.*;
-import static com.vero.ui.common.CSSConstants.*;
+import static com.vero.ui.constants.UIConstants.*;
+import static com.vero.ui.constants.CSSConstants.*;
 import com.vero.ui.model.ReportData;
 import com.vero.ui.report.ReportTabManager;
 import javafx.scene.layout.StackPane;

@@ -6,7 +6,7 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.common.ObjectType;
+import com.vero.ui.constants.ObjectType;
 import java.io.Serializable;
 
 /**
