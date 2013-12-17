@@ -20,7 +20,11 @@ public interface ImageList {
     public static final Image IMAGE_RUN = new Image(VeroUI.class.getResourceAsStream("images/icon_run.png"));
     public static final Image IMAGE_ADD_BLOCK = new Image(VeroUI.class.getResourceAsStream("images/icon_add_block.png"));
     public static final Image IMAGE_DELETE = new Image(VeroUI.class.getResourceAsStream("images/icon_delete.png"));
+    public static final Image IMAGE_FULL_OUTER_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_full_outer_join.png"));
+    public static final Image IMAGE_CROSS_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_cross_join.png"));
     public static final Image IMAGE_INNER_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_inner_join.png"));
+    public static final Image IMAGE_LEFT_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_left_join.png"));
+    public static final Image IMAGE_RIGHT_JOIN = new Image(VeroUI.class.getResourceAsStream("images/icon_right_join.png"));
     public static final Image IMAGE_COMMENT = new Image(VeroUI.class.getResourceAsStream("images/icon_comment.png"));
     public static final Image IMAGE_ACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/icon_active_circle.png"));
     public static final Image IMAGE_INACTIVE_CIRCLE = new Image(VeroUI.class.getResourceAsStream("images/icon_inactive_circle.png"));

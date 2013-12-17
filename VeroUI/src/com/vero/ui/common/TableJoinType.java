@@ -11,8 +11,36 @@ package com.vero.ui.common;
  * @author Tai Hu
  */
 public enum TableJoinType {
-    FULL_OUTER_JOIN,
-    INNER_JOIN,
-    LEFT_JOIN,
-    RIGHT_JOIN
+    FULL_OUTER_JOIN {
+        @Override
+        public TableJoinType next() {
+            return CROSS_JOIN;
+        }
+    },
+    CROSS_JOIN {
+      @Override
+      public TableJoinType next() {
+          return INNER_JOIN;
+      }  
+    },
+    INNER_JOIN {
+        @Override
+        public TableJoinType next() {
+            return LEFT_JOIN;
+        }
+    },
+    LEFT_JOIN {
+        @Override
+        public TableJoinType next() {
+            return RIGHT_JOIN;
+        }
+    },
+    RIGHT_JOIN {
+        @Override
+        public TableJoinType next() {
+            return FULL_OUTER_JOIN;
+        }
+    };
+    
+    public abstract TableJoinType next();
 }

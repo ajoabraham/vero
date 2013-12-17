@@ -11,8 +11,11 @@ import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 
 import static com.vero.ui.common.CSSConstants.*;
+import com.vero.ui.common.ImageList;
+import com.vero.ui.common.TableJoinType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBoxBuilder;
 
 /**
@@ -57,5 +60,31 @@ public final class UIUtils {
         }
         
         return styleClass;
+    }
+    
+    public static Image getTableJoinImage(TableJoinType type) {
+        Image image = null;
+        
+        switch (type) {
+            case FULL_OUTER_JOIN:
+                image = ImageList.IMAGE_FULL_OUTER_JOIN;
+                break;
+            case CROSS_JOIN:
+                image = ImageList.IMAGE_CROSS_JOIN;
+                break;
+            case INNER_JOIN:
+                image = ImageList.IMAGE_INNER_JOIN;
+                break;
+            case LEFT_JOIN:
+                image = ImageList.IMAGE_LEFT_JOIN;
+                break;
+            case RIGHT_JOIN:
+                image = ImageList.IMAGE_RIGHT_JOIN;
+                break;
+            default:
+                logger.log(Level.SEVERE, "Invalid table join type - {0}", type);
+        }
+        
+        return image;
     }
 }
