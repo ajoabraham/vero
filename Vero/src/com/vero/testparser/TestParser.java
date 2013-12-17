@@ -252,7 +252,7 @@ public class TestParser {
                 );
                 testSession.addJoinMeta(aJoin);
             }
-            System.out.println("------------------------------");                                              
+            System.out.println("------------------------------");
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
         }        

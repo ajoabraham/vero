@@ -236,7 +236,7 @@ public class Vero {
                 
         QueryEngine queryEngine = new QueryEngine();
         queryEngine.preprocess(userSession);
-        
+                              
     }
     
     /**
