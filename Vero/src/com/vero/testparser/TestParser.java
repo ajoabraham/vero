@@ -134,7 +134,15 @@ public class TestParser {
                         case "integer":
                             aColumn = new Column(oneJSONColumnObj.getString("name"),"Int", 10,
                                 aTable);
-                            break;                                        
+                            break;
+                        case "date":
+                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Date", 10,
+                                aTable);
+                            break;
+                        case "boolean":
+                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Bool", 10,
+                                aTable);
+                            break;
                         default:
                             System.out.println("ERROR: type is not defined...");
                             aColumn = new Column();

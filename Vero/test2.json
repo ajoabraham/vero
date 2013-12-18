@@ -14,7 +14,7 @@
             "columns": [
                 {
                     "name": "prof_id",
-                    "type": "int",
+                    "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
@@ -26,7 +26,7 @@
                 },
                 {
                     "name": "course_id",
-                    "type": "int",
+                    "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
@@ -84,7 +84,7 @@
                 },
                 {
                     "name": "dept_id",
-                    "type": "int",
+                    "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 }
@@ -110,7 +110,7 @@
                 },
                 {
                     "name": "dept_id",
-                    "type": "int",
+                    "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
@@ -155,7 +155,7 @@
                 {
                     "definition": "count(distinct course_id)",
                     "columns": [
-                        ["course_id", "LessonFact"]
+                        ["course_id", "LessonsFact"]
                     ]
                 }
             ]

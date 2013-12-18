@@ -21,10 +21,12 @@ public class Expression implements Filterable {
     }
 
     public void addTable(Table inTab) {
-        tables.add(inTab);
+        if (inTab != null) {        
+            tables.add(inTab);
+        }
     }
 
-    public void addTables(ArrayList<Table> inTables) {
+    public void addTables(ArrayList<Table> inTables) {        
         tables.addAll(inTables);
     }
 

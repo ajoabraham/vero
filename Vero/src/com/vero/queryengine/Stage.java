@@ -7,10 +7,14 @@
 package com.vero.queryengine;
 
 import com.vero.metadata.Attribute;
+import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
+import com.vero.metadata.Table;
 import com.vero.session.Session;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -38,10 +42,9 @@ public class Stage {
         table2ReferenceUnitHT = new HashMap();
     }
     
-    public void preprocess(Session inSession) {
-        HashMap inJoindef = new HashMap(inSession.getJoins());
-
+    public void preprocess(Session inSession) {        
         // associate table with joindefs
+        HashMap inJoindef = new HashMap(inSession.getJoins());
         Map<String, JoinDefinition> jdMap = inJoindef;
         for (Map.Entry<String, JoinDefinition> entry : jdMap.entrySet()) {
             System.out.println("JD Key = " + entry.getKey() + ", Value = " + entry.getValue());
@@ -65,9 +68,37 @@ public class Stage {
         }
         
         // associate table with attribute
+        HashMap inAttr = new HashMap(inSession.getAttributes());
+        Map<String, Attribute> attrMap = inAttr;
+        for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
+            Attribute attr = entry.getValue();
+             
+            ArrayList<Table> listTables = attr.retrieveTables();
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
+
+                while (iterTable.hasNext()) {
+                    setAttributeByTable(iterTable.next().getPhysicalName(), attr);
+                }
+            }
+        }
         
         // associate table with metric
+        HashMap inMetric = new HashMap(inSession.getMetrics());
+        Map<String, Metric> metricMap = inMetric;
+        for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
+            Metric met = entry.getValue();
+            
+            ArrayList<Table> listTables = met.retrieveTables();            
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
 
+                while (iterTable.hasNext()) {
+                    setMetricByTable(iterTable.next().getPhysicalName(), met);
+                }
+            }            
+        }
+        
         // dump table2ReferenceUnitHT
         System.out.println("dumping table2ReferenceUnitHT");
         System.out.println("------------------------------");
@@ -80,6 +111,18 @@ public class Stage {
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
                 System.out.println("dumpJ Key = " + entry2.getKey() + ", Value = " + entry2.getValue());
             }
+        }
+    }
+    
+    private void setAttributeByTable(String inTable, Attribute inAttr) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            table2ReferenceUnitHT.get(inTable).attrHT.put(inAttr.getName(), inAttr);
+        }
+    }
+    
+    private void setMetricByTable(String inTable, Metric inMetric) {        
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            table2ReferenceUnitHT.get(inTable).metricHT.put(inMetric.getName(), inMetric);
         }
     }
     
