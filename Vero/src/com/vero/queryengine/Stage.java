@@ -111,6 +111,14 @@ public class Stage {
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
                 System.out.println("dumpJ Key = " + entry2.getKey() + ", Value = " + entry2.getValue());
             }
+            Map<String, Attribute> dumpAMap = rU.attrHT;
+            for (Map.Entry<String, Attribute> entry3 : dumpAMap.entrySet()) {
+                System.out.println("dumpA Key = " + entry3.getKey() + ", Value = " + entry3.getValue());
+            }
+            Map<String, Metric> dumpMMap = rU.metricHT;
+            for (Map.Entry<String, Metric> entry4 : dumpMMap.entrySet()) {
+                System.out.println("dumpM Key = " + entry4.getKey() + ", Value = " + entry4.getValue());
+            }
         }
     }
     
