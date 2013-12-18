@@ -9,7 +9,6 @@ package com.vero.ui.common;
 import com.vero.ui.navigation.DatasourceNavigationPane;
 import com.vero.ui.navigation.ReportNavigationPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
 /**
  * All UI components are registered with UIManager once created.

@@ -6,8 +6,8 @@
 
 package com.vero.ui.report;
 
-import com.vero.ui.report.querypane.ReportPane;
 import com.vero.ui.model.ReportData;
+
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 

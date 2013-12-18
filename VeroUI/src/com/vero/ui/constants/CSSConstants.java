@@ -54,4 +54,12 @@ public interface CSSConstants {
     public static final String CLASS_PLACEHOLDER_PANE = "placeholder-pane";
     public static final String CLASS_DROP_HINT_PANE = "drop-hint-pane";
     public static final String CLASS_EDITABLE_PANE = "editable-pane";
+    
+    /**
+     * ID for query pane
+     */
+    public static final String CLASS_QUERY_PANE = "query-pane";
+    public static final String CLASS_GLOBAL_FILTER_PANE = "global-filter-pane";
+    public static final String CLASS_COMMENT_BLOCK_PANE = "comment-block-pane";
+    public static final String CLASS_REPORT_BLOCK_PANE = "report-block-pane";
 }

@@ -277,19 +277,19 @@
     -fx-alignment: center;
 }
 
-#query-pane {
+.query-pane {
     -fx-padding: 20;
     -fx-spacing: 20;
 }
 
-#global-filter-pane {
+.global-filter-pane {
     -fx-border-color: -fx-global-filter-border-color;
     -fx-border-radius: 5;
     -fx-border-width: 1;
     -fx-padding: 0 10 10 0;
 }
 
-#global-filter-pane #global-filter-text-field {
+.global-filter-pane .text-field {
     -fx-background-color: transparent;
     -fx-prompt-text-fill: -fx-hint-text-color;
     -fx-font: bold italic 12px "Helvetica";
@@ -297,34 +297,34 @@
     -fx-padding: 0 0 0 10;
 }
 
-#comment-pane {
+.comment-block-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-radius: 5;
     -fx-border-width: 1;
     -fx-padding: 10 10 10 10;
 }
 
-#comment-pane #comment-label {
+.comment-block-pane .label {
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: -fx-comment-text-color;
     -fx-wrap-text: true;
     -fx-padding: 0 0 0 10;
 }
 
-#report-block-pane {
+.report-block-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-radius: 5;
     -fx-border-width: 1;
     -fx-padding: 0 10 10 10;
 }
 
-#report-block-pane HBox {
+.report-block-pane HBox {
     -fx-padding: 5 0 5 0;
     -fx-spacing: 2;
     -fx-alignment: center-left;
 }
 
-#report-block-pane #report-block-text-area {
+.report-block-pane .text-area {
     -fx-background-color: -fx-main-background-color;
     -fx-text-fill: -fx-default-text-color;
 }

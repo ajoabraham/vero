@@ -8,6 +8,7 @@ package com.vero.ui.common;
 
 import com.vero.ui.report.dropzone.DropTargetPane;
 import com.vero.ui.model.UIData;
+
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.DragEvent;
@@ -31,6 +32,7 @@ public class DropManager implements EventHandler<DragEvent> {
     
     @Override
     public void handle(DragEvent event) {
+        @SuppressWarnings("unchecked")
         EventType<DragEvent> eventType = (EventType<DragEvent>) event.getEventType();
         if (eventType == DragEvent.DRAG_OVER) {
             handleDragOverEvent(event);
