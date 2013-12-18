@@ -75,6 +75,18 @@ public class JoinDefinition {
     public String getExpression() {
         return expression;
     }
+
+    public String getOtherTable(String inTable) {
+        if (this.hasTable(inTable)) {
+            if (inTable.equals(tleft)) {
+                return tright;
+            } else {
+                return tleft;
+            }
+        } else {
+            return null;
+        }
+    }
     
     public boolean hasTable(String inTable) {
         return (inTable.equals(tleft) || inTable.equals(tright));

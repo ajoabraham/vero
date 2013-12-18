@@ -48,6 +48,23 @@ public class Metric implements Filterable {
         return expressions;
     }
 
+    public ArrayList<Table> retrieveTables() {        
+        ArrayList<Expression> aList = this.getExpressions();
+        
+        if (aList.size() > 0) {
+            ArrayList<Table> retList = new ArrayList();
+            Iterator<Expression> iter = aList.iterator();
+
+            while (iter.hasNext()) {
+                retList.addAll(iter.next().getTables());
+            }
+
+            return retList;
+        } else {
+            return null;
+        }
+    }
+        
     public static void main(String[] args) {
         // TODO Auto-generated method stub
         System.out.println("AttributeMeta starts...");

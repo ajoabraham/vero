@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author yulinwen
  */
-public class Stage {      
+public class Stage {
     private class ReferenceUnit {
         private int rowCount;
         private HashMap<String, Attribute> attrHT;
@@ -31,7 +31,7 @@ public class Stage {
             joindefHT = new HashMap();
         }
     }
-       
+    
     private HashMap<String, ReferenceUnit> table2ReferenceUnitHT;
     
     public Stage() {
@@ -39,10 +39,9 @@ public class Stage {
     }
     
     public void preprocess(Session inSession) {
-        HashMap inAttr = new HashMap(inSession.getAttributes());
-        HashMap inMetric = new HashMap(inSession.getMetrics());
         HashMap inJoindef = new HashMap(inSession.getJoins());
 
+        // associate table with joindefs
         Map<String, JoinDefinition> jdMap = inJoindef;
         for (Map.Entry<String, JoinDefinition> entry : jdMap.entrySet()) {
             System.out.println("JD Key = " + entry.getKey() + ", Value = " + entry.getValue());
@@ -52,8 +51,8 @@ public class Stage {
             
             for (String tableName: elements) {
                 if (!table2ReferenceUnitHT.containsKey(tableName)) {
-                    ReferenceUnit rU = new ReferenceUnit();                    
-                    rU.rowCount = inSession.getTable(tableName).getRowCount();                    
+                    ReferenceUnit rU = new ReferenceUnit(); 
+                    rU.rowCount = inSession.getTable(tableName).getRowCount();
                     table2ReferenceUnitHT.put(tableName, rU);
                     rU.joindefHT.put(joinDef.getName(), joinDef);
                 } else {
@@ -64,6 +63,10 @@ public class Stage {
                 }
             }
         }
+        
+        // associate table with attribute
+        
+        // associate table with metric
 
         // dump table2ReferenceUnitHT
         System.out.println("dumping table2ReferenceUnitHT");
@@ -76,17 +79,23 @@ public class Stage {
             Map<String, JoinDefinition> dumpJMap = rU.joindefHT;
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
                 System.out.println("dumpJ Key = " + entry2.getKey() + ", Value = " + entry2.getValue());
-            }            
-        }                
-                
-        Map<String, Attribute> attrMap = inAttr;
-        for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
-            System.out.println("Attr Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            }
         }
-        
-        Map<String, Metric> metMap = inMetric;
-        for (Map.Entry<String, Metric> entry : metMap.entrySet()) {
-            System.out.println("Met Key = " + entry.getKey() + ", Value = " + entry.getValue());
-        }        
+    }
+    
+    public HashMap<String, JoinDefinition> getJoindefHTByTable(String inTable) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            return table2ReferenceUnitHT.get(inTable).joindefHT;
+        } else {
+            return null;
+        }
+    }
+    
+    public int getRowCountByTable(String inTable) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            return table2ReferenceUnitHT.get(inTable).rowCount;
+        } else {
+            return -1;
+        }
     }
 }
