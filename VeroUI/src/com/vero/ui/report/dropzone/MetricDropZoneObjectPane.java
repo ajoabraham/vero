@@ -8,7 +8,6 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.MetricObjectData;
-import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.util.UIUtils;
 
 /**
@@ -16,7 +15,7 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class MetricDropZoneObjectPane extends ObjectPane {
+public class MetricDropZoneObjectPane extends DropZoneObjectPane {
     private MetricObjectData data = null;
     
     public MetricDropZoneObjectPane(MetricObjectData data) {

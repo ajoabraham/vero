@@ -6,20 +6,22 @@
 
 package com.vero.ui.report.dropzone;
 
-import com.vero.ui.navigation.ObjectPane;
-import com.vero.ui.common.LabelPaneFactory;
 import static com.vero.ui.constants.CSSConstants.CLASS_DROP_PANE;
-import com.vero.ui.constants.ObjectType;
 import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
-import com.vero.ui.model.UIData;
-import com.vero.ui.common.DroppableObject;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
+
+import com.vero.ui.common.DroppableObject;
+import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.UIData;
 
 /**
  *
@@ -89,8 +91,8 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
-        ObjectPane objectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
-        getChildren().add(getChildren().size() - 1, objectPane);
+        DropZoneObjectPane dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
+        getChildren().add(getChildren().size() - 1, dropZoneObjectPane);
     }
     
     public String getPlaceholderText() {

@@ -23,6 +23,7 @@ import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.navigation.TableObjectPane;
 import com.vero.ui.report.dropzone.AttributeDropZoneObjectPane;
 import com.vero.ui.report.dropzone.DropHintPane;
+import com.vero.ui.report.dropzone.DropZoneObjectPane;
 import com.vero.ui.report.dropzone.MetricDropZoneObjectPane;
 import com.vero.ui.report.dropzone.PlaceholderPane;
 import com.vero.ui.report.dropzone.ReportNameEditablePane;
@@ -83,27 +84,27 @@ public final class LabelPaneFactory {
         return objectPane;
     }
     
-    public ObjectPane createDropZoneObjectPane(ObjectType type, UIData data) {
-       ObjectPane objectPane = null;
+    public DropZoneObjectPane createDropZoneObjectPane(ObjectType type, UIData data) {
+       DropZoneObjectPane dropZoneObjectPane = null;
         
         switch (type) {
             case TABLE:
-                objectPane = new TableDropZoneObjectPane((TableObjectData) data);                
+                dropZoneObjectPane = new TableDropZoneObjectPane((TableObjectData) data);                
                 break;
             case ATTRIBUTE:
-                objectPane = new AttributeDropZoneObjectPane((AttributeObjectData) data);
+                dropZoneObjectPane = new AttributeDropZoneObjectPane((AttributeObjectData) data);
                 break;
             case METRIC:
-                objectPane = new MetricDropZoneObjectPane((MetricObjectData) data);               
+                dropZoneObjectPane = new MetricDropZoneObjectPane((MetricObjectData) data);               
                 break;
             case TABLE_JOIN:
-                objectPane = new TableJoinDropZoneObjectPane((TableJoinObjectData) data);               
+                dropZoneObjectPane = new TableJoinDropZoneObjectPane((TableJoinObjectData) data);               
                 break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }
         
-        return objectPane;
+        return dropZoneObjectPane;
     }
     
     public LabelPane createPlaceholderPane(String text) {

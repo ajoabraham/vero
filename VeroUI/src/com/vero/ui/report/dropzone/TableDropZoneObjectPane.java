@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.TableObjectData;
-import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.util.UIUtils;
 
 /**
@@ -18,7 +17,7 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class TableDropZoneObjectPane extends ObjectPane {
+public class TableDropZoneObjectPane extends DropZoneObjectPane {
     private TableObjectData data = null;
     
     public TableDropZoneObjectPane(TableObjectData data) {

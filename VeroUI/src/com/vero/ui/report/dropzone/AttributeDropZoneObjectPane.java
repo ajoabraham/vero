@@ -8,7 +8,6 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.AttributeObjectData;
-import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.util.UIUtils;
 
 /**
@@ -16,7 +15,7 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class AttributeDropZoneObjectPane extends ObjectPane {
+public class AttributeDropZoneObjectPane extends DropZoneObjectPane {
     private AttributeObjectData data = null;
     
     public AttributeDropZoneObjectPane(AttributeObjectData data) {
