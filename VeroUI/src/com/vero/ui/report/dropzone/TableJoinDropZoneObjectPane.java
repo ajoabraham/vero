@@ -4,15 +4,20 @@
  * and open the template in the editor.
  */
 
-package com.vero.ui.navigation;
+package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_PANE;
+
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
+
 import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
+
 import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.TableJoinObjectData;
+import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.util.UIUtils;
+
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -24,12 +29,12 @@ import javafx.scene.layout.Priority;
  *
  * @author Tai Hu
  */
-public class TableJoinObjectPane extends ObjectPane implements EventHandler<MouseEvent> {
+public class TableJoinDropZoneObjectPane extends ObjectPane implements EventHandler<MouseEvent> {
     private TableJoinObjectData data = null;
 
     private ImageView tableJoinImageView = null;
     
-    public TableJoinObjectPane(TableJoinObjectData data) {
+    public TableJoinDropZoneObjectPane(TableJoinObjectData data) {
         this.data = data;
         buildUI();
     }

@@ -89,7 +89,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
-        ObjectPane objectPane = LabelPaneFactory.getInstance().createObjectPane(getType(), transferData, false);
+        ObjectPane objectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
         getChildren().add(getChildren().size() - 1, objectPane);
     }
     
