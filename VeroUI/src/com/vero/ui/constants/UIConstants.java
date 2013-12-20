@@ -33,4 +33,9 @@ public interface UIConstants {
     public static final double REPORT_BLOCK_PANE_HEIGHT = 400;
     
     public static final double DEFAULT_DROP_PANE_HEIGHT = DEFAULT_LABEL_PANE_HEIGHT;
+    
+    public static final double DOCKED_EDITOR_PANE_WIDTH = 730;
+    public static final double DOCKED_EDITOR_PANE_HEIGHT = 250;
+    public static final double EDITOR_PANE_ICON_WIDTH = 24;
+    public static final double EDITOR_PANE_ICON_HEIGHT = 24;
 }

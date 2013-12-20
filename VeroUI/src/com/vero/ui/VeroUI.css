@@ -330,6 +330,42 @@
 }
 
 /*******************************************************************************
+ * Editor Panes
+ ******************************************************************************/
+.editor-pane {
+	-fx-background-color: -fx-main-background-color;
+	-fx-border-color: -fx-light-grey-color;
+	-fx-border-width: 1;
+}
+
+.docked-editor-pane {
+}
+
+.undocked-editor-pane {
+	
+}
+
+.editor-pane-tool-bar {
+	-fx-padding: 5;
+	-fx-spacing: 5;
+}
+
+.editor-pane-tool-bar .button {
+	-fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-padding: 3;
+    -fx-text-fill: -fx-default-text-color;
+    -fx-font: bold normal 12px "Helvetica";
+}
+
+.metric-icon-label {
+	-fx-background-image: url("images/bg_metric.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;
+}
+
+/*******************************************************************************
  * All styles below this line are customized based on standard caspian.css     *
  ******************************************************************************/
 /*******************************************************************************

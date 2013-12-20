@@ -11,7 +11,8 @@ import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import javafx.scene.layout.HBox;
 
 /**
- *
+ * Top level class for all object type pane (small shaped pane)
+ * 
  * @author Tai Hu
  */
 public abstract class LabelPane extends HBox {

@@ -24,13 +24,13 @@ import javafx.scene.layout.Priority;
  *
  * @author Tai Hu
  */
-public abstract class EditablePane extends LabelPane implements EventHandler<Event>, ChangeListener<Boolean> {
+public abstract class EditableObjectPane extends LabelPane implements EventHandler<Event>, ChangeListener<Boolean> {
     private String text = null;
     private TextField textField = null;
     private Label label = null;
     private boolean editable = false;
     
-    public EditablePane(String text) {
+    public EditableObjectPane(String text) {
         this.text = text;
         getStyleClass().add(CLASS_EDITABLE_PANE);        
     

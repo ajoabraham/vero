@@ -87,4 +87,18 @@ public final class UIUtils {
         
         return image;
     }
+    
+    public static String getEditorPaneIconStyleClass(ObjectType type) {
+        String styleClass = "unknown";
+        
+        switch (type) {
+            case METRIC:
+                styleClass = CLASS_METRIC_ICON_LABEL;
+                break;
+            default:
+                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
+        }
+        
+        return styleClass;
+    }
 }

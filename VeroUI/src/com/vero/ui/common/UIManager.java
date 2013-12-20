@@ -8,7 +8,9 @@ package com.vero.ui.common;
 
 import com.vero.ui.navigation.DatasourceNavigationPane;
 import com.vero.ui.navigation.ReportNavigationPane;
+
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 /**
  * All UI components are registered with UIManager once created.
@@ -19,6 +21,8 @@ import javafx.scene.layout.Pane;
  */
 public final class UIManager {
     private static UIManager INSTANCE = null;
+    
+    private Pane veroRootPane = null;
     
     private Pane datasourceNavigationPane = null;
     private Pane reportNavigationPane = null;
@@ -61,5 +65,13 @@ public final class UIManager {
         if (reportNavigationPane != null) {
             reportNavigationPane.toFront();
         }        
+    }
+    
+    public Pane getVeroRootPane() {
+	if (veroRootPane == null) {
+	    veroRootPane = new StackPane();
+	}
+	
+	return veroRootPane;
     }
 }

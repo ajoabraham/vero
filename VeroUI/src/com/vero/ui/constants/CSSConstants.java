@@ -63,4 +63,13 @@ public interface CSSConstants {
     public static final String CLASS_GLOBAL_FILTER_PANE = "global-filter-pane";
     public static final String CLASS_COMMENT_BLOCK_PANE = "comment-block-pane";
     public static final String CLASS_REPORT_BLOCK_PANE = "report-block-pane";
+    
+    /**
+     * ID for editor pane
+     */
+    public static final String CLASS_EDITOR_PANE = "editor-pane";
+    public static final String CLASS_DOCKED_EDITOR_PANE = "docked-editor-pane";
+    public static final String CLASS_UNDOCKED_EDITOR_PANE = "undocked-editor-pane";
+    public static final String CLASS_EDITOR_PANE_TOOL_BAR = "editor-pane-tool-bar";
+    public static final String CLASS_METRIC_ICON_LABEL = "metric-icon-label"; 
 }

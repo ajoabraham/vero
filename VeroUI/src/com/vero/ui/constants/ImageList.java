@@ -35,4 +35,7 @@ public interface ImageList {
     public static final Image IMAGE_DIM_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_dim_table.png"));
     public static final Image IMAGE_FACT_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_fact_table.png"));
     public static final Image IMAGE_UNKNOWN_TABLE = new Image(VeroUI.class.getResourceAsStream("images/icon_unknown_table.png"));
+    public static final Image IMAGE_UNDOCK = new Image(VeroUI.class.getResourceAsStream("images/icon_undock.png"));
+    public static final Image IMAGE_OK = new Image(VeroUI.class.getResourceAsStream("images/icon_ok.png"));
+    public static final Image IMAGE_CANCEL = new Image(VeroUI.class.getResourceAsStream("images/icon_cancel.png"));
 }

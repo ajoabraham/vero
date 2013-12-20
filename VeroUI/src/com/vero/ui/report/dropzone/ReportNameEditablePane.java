@@ -10,7 +10,7 @@ package com.vero.ui.report.dropzone;
  *
  * @author Tai Hu
  */
-public class ReportNameEditablePane extends EditablePane {
+public class ReportNameEditablePane extends EditableObjectPane {
 
     public ReportNameEditablePane(String text) {
         super(text);
