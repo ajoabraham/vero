@@ -341,6 +341,22 @@
 .docked-editor-pane {
 }
 
+.docked-editor-pane .content-pane {
+	-fx-background-color: -fx-nav-background-color;
+	-fx-padding: 10;
+	-fx-spacing: 10;
+}
+
+.docked-editor-pane .content-pane .label {
+	-fx-font: bold normal 12px "Helvetica";
+    -fx-text-fill: -fx-default-text-color;
+}
+
+.docked-editor-pane .content-pane .object-container-pane {
+	-fx-background-color: -fx-button-hover-border-color;
+	-fx-background-radius: 5;
+}
+
 .undocked-editor-pane {
 	
 }

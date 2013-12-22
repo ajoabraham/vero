@@ -1,5 +1,6 @@
 package com.vero.ui.editor;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_DOCKED_EDITOR_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_EDITOR_PANE_TOOL_BAR;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.DOCKED_EDITOR_PANE_HEIGHT;
@@ -28,6 +29,7 @@ public abstract class DockedEditorPane extends EditorPane implements EventHandle
     Button cancelButton = null;
     
     public DockedEditorPane() {
+        getStyleClass().add(CLASS_DOCKED_EDITOR_PANE);
         setPrefSize(DOCKED_EDITOR_PANE_WIDTH, DOCKED_EDITOR_PANE_HEIGHT);
         setMaxSize(DOCKED_EDITOR_PANE_WIDTH, DOCKED_EDITOR_PANE_HEIGHT);
         
