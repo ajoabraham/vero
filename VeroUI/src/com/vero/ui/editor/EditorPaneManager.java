@@ -3,6 +3,8 @@ package com.vero.ui.editor;
 import static com.vero.ui.constants.ObjectType.METRIC;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import com.vero.ui.common.UIManager;
 
@@ -13,7 +15,7 @@ import com.vero.ui.common.UIManager;
  */
 public final class EditorPaneManager {
     private static EditorPaneManager INSTANCE = null;
-
+    
     private EditorPane dockedMetricEditorPane = null;
     private EditorPane undockedMetricEditorPane = null;
 
@@ -47,8 +49,11 @@ public final class EditorPaneManager {
     }
 
     public void showUndockedMetricEditorPane() {
-        if (undockedMetricEditorPane == null) {
-            undockedMetricEditorPane = editorPaneFactory.createUndockedEditorPane(METRIC);
+        if (undockedMetricEditorPane == null) { 
+            Stage stage = new Stage();
+            stage.initOwner(uiManager.getPrimaryStage());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            undockedMetricEditorPane = editorPaneFactory.createUndockedEditorPane(METRIC, stage);
         }
     }
 

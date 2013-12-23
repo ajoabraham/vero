@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.util.UIUtils;
@@ -25,12 +26,15 @@ import com.vero.ui.util.UIUtils;
  *
  */
 public abstract class UndockedEditorPane extends EditorPane implements EventHandler<ActionEvent> {
+    Stage stage = null;
+    
     Button dockButton = null;
     Button previewButton = null;
     Button okButton = null;
     Button cancelButton = null;
     
-    public UndockedEditorPane() {
+    public UndockedEditorPane(Stage stage) {
+        this.stage = stage;
         getStyleClass().add(CLASS_UNDOCKED_EDITOR_PANE);
         setPrefSize(UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
         setMaxSize(UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
@@ -80,5 +84,12 @@ public abstract class UndockedEditorPane extends EditorPane implements EventHand
     }    
     
     protected void handleCancelEvent() {
+        if (stage != null) {
+            stage.close();
+        }
+    }
+    
+    public Stage getStage() {
+        return stage;
     }
 }

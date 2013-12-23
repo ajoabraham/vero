@@ -3,6 +3,8 @@ package com.vero.ui.editor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.stage.Stage;
+
 import com.vero.ui.constants.ObjectType;
 
 /**
@@ -44,13 +46,13 @@ public final class EditorPaneFactory {
         return editorPane;
     }
     
-    public EditorPane createUndockedEditorPane(ObjectType type) {
+    public EditorPane createUndockedEditorPane(ObjectType type, Stage stage) {
         EditorPane editorPane = null;
         switch (type) {
             case ATTRIBUTE:
                 break;
             case METRIC:
-                editorPane = new UndockedMetricEditorPane();
+                editorPane = new UndockedMetricEditorPane(stage);
                 break;
             case TABLE_JOIN:
                 break;
