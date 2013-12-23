@@ -375,6 +375,16 @@
     -fx-font: bold normal 12px "Helvetica";
 }
 
+.editor-pane-tool-bar .button:hover {
+	-fx-border-color: -fx-button-hover-border-color;
+	-fx-border-radius: 5;
+}
+
+.editor-pane-tool-bar .button:pressed {
+	-fx-background-color: derive(-fx-nav-background-color, 50%);
+	-fx-background-radius: 5;
+}
+
 .metric-icon-label {
 	-fx-background-image: url("images/bg_metric.png");
     -fx-background-repeat: repeat;
