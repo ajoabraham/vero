@@ -38,4 +38,6 @@ public interface ImageList {
     public static final Image IMAGE_UNDOCK = new Image(VeroUI.class.getResourceAsStream("images/icon_undock.png"));
     public static final Image IMAGE_OK = new Image(VeroUI.class.getResourceAsStream("images/icon_ok.png"));
     public static final Image IMAGE_CANCEL = new Image(VeroUI.class.getResourceAsStream("images/icon_cancel.png"));
+    public static final Image IMAGE_DOCK = new Image(VeroUI.class.getResourceAsStream("images/icon_dock.png"));
+    public static final Image IMAGE_PREVIEW = new Image(VeroUI.class.getResourceAsStream("images/icon_preview.png"));
 }

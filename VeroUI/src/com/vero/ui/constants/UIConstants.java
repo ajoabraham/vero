@@ -36,6 +36,8 @@ public interface UIConstants {
     
     public static final double DOCKED_EDITOR_PANE_WIDTH = 730;
     public static final double DOCKED_EDITOR_PANE_HEIGHT = 250;
+    public static final double UNDOCKED_EDITOR_PANE_WIDTH = 700;
+    public static final double UNDOCKED_EDITOR_PANE_HEIGHT = 450;
     public static final double EDITOR_PANE_ICON_WIDTH = 24;
     public static final double EDITOR_PANE_ICON_HEIGHT = 24;
     public static final double OBJECT_CONTAINER_PANE_HEIGHT = 40;

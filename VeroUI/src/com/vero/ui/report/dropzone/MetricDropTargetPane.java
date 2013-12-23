@@ -6,14 +6,12 @@
 
 package com.vero.ui.report.dropzone;
 
+import static com.vero.ui.constants.ObjectType.METRIC;
 import javafx.scene.input.DragEvent;
 
 import com.vero.ui.constants.ObjectType;
-import com.vero.ui.editor.EditorPaneFactory;
 import com.vero.ui.editor.EditorPaneManager;
 import com.vero.ui.model.UIData;
-
-import static com.vero.ui.constants.ObjectType.METRIC;
 
 /**
  *
