@@ -8,8 +8,14 @@ package com.vero.queryengine;
 
 import com.vero.metadata.Attribute;
 import com.vero.metadata.JoinDefinition;
+import com.vero.metadata.Metric;
+import com.vero.metadata.Table;
+import static com.vero.queryengine.QueryEngine.VertexType.*;
 import com.vero.session.Session;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import org.jgrapht.alg.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
@@ -41,6 +47,48 @@ public class QueryEngine {
             return super.getWeight();
         }
     }
+    
+    public static enum VertexType {
+        VERTEX_TYPE_NONE,
+        VERTEX_TYPE_ATTRIBUTE,
+        VERTEX_TYPE_METRIC,
+        VERTEX_TYPE_HARDHINT
+    }
+    
+    private class VertexUnit {
+        private VertexType type;
+        private Object content;
+        
+        public VertexUnit() {
+            type = VERTEX_TYPE_NONE;
+            content = null;
+        }
+        
+        public void setType(VertexType inType) {
+            type = inType;
+        }
+        
+        public VertexType getType() {
+            return type;
+        }
+        
+        public void setContent(Object inContent) {
+            content = inContent;
+        }
+        
+        public ArrayList<Table> retrieveTables() {
+            if (type == VERTEX_TYPE_ATTRIBUTE) {
+                return ((Attribute)content).retrieveTables();
+            } else if (type == VERTEX_TYPE_METRIC) {
+                return ((Metric)content).retrieveTables();
+            } else if (type == VERTEX_TYPE_HARDHINT) {
+                System.out.println("VERTEX_TYPE_HARDHINT not implemented yet");
+                return null;
+            } else {
+                return null;
+            }
+        }
+    }
         
     private Stage stage;
     private WeightedMultigraph<Attribute, EdgeUnit> joinGraph;
@@ -54,7 +102,35 @@ public class QueryEngine {
         stage.preprocess(inSession);
 
         //expirimentOnGraph();
+        
         // loop on attributes/metrics
+        HashMap<String, Attribute> allAttrs = stage.getAttributes();
+        Map<String, Attribute> attrMap = allAttrs;
+        for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
+            Attribute attr = entry.getValue();
+             
+            ArrayList<Table> listTables = attr.retrieveTables();
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
+
+                while (iterTable.hasNext()) {                    
+                }
+            }
+        }
+        
+        HashMap<String, Metric> allMetrics = stage.getMetrics();
+        Map<String, Metric> metricMap = allMetrics;
+        for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
+            Metric met = entry.getValue();
+            
+            ArrayList<Table> listTables = met.retrieveTables();            
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
+
+                while (iterTable.hasNext()) {
+                }
+            }            
+        }
         
         // for each expression, find tables used and connect vertex and create edges
         

@@ -37,9 +37,13 @@ public class Stage {
     }
     
     private HashMap<String, ReferenceUnit> table2ReferenceUnitHT;
+    private HashMap<String, Attribute> attributes;
+    private HashMap<String, Metric> metrics;
     
     public Stage() {
         table2ReferenceUnitHT = new HashMap();
+        attributes = null;
+        metrics = null;
     }
     
     public void preprocess(Session inSession) {        
@@ -68,8 +72,8 @@ public class Stage {
         }
         
         // associate table with attribute
-        HashMap inAttr = new HashMap(inSession.getAttributes());
-        Map<String, Attribute> attrMap = inAttr;
+        attributes = new HashMap(inSession.getAttributes());
+        Map<String, Attribute> attrMap = attributes;
         for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
             Attribute attr = entry.getValue();
              
@@ -84,8 +88,8 @@ public class Stage {
         }
         
         // associate table with metric
-        HashMap inMetric = new HashMap(inSession.getMetrics());
-        Map<String, Metric> metricMap = inMetric;
+        metrics = new HashMap(inSession.getMetrics());
+        Map<String, Metric> metricMap = metrics;
         for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
             Metric met = entry.getValue();
             
@@ -148,5 +152,13 @@ public class Stage {
         } else {
             return -1;
         }
+    }
+    
+    public HashMap getAttributes() {
+        return attributes;
+    }
+
+    public HashMap getMetrics() {
+        return metrics;
     }
 }
