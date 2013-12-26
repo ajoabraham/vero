@@ -141,18 +141,7 @@ public class QueryEngine {
                                     joinGraph.addEdge(pu, otherPU, aEU);
                                 }
                             }                            
-                        }
-                        
-                        ArrayList<Table> otherHardhintsAL = stage.getHardhintALByTable(otherTable);
-                        if (otherHardhintsAL.size() > 0) {
-                            Iterator<Table> otherTableIter = otherHardhintsAL.iterator();
-                            while (otherTableIter.hasNext()) {
-                                Table otherTab = otherTableIter.next();
-                                
-                                System.out.println("Other HH: " + otherTab.getPhysicalName());
-                                
-                            }
-                        }
+                        }                       
                     }
                 }
             }
