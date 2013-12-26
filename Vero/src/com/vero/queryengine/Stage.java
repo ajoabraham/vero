@@ -7,7 +7,6 @@
 package com.vero.queryengine;
 
 import com.vero.metadata.Attribute;
-import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
@@ -16,19 +15,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  *
  * @author yulinwen
  */
 public class Stage {
-    private class ReferenceUnit {
+    private class ReferenceUnit1 {
         private int rowCount;
         private HashMap<String, Attribute> attrHT;
         private HashMap<String, Metric> metricHT;
         private HashMap<String, JoinDefinition> joindefHT;
                         
-        public ReferenceUnit() {
+        public ReferenceUnit1() {
             rowCount = -1;
             attrHT = new HashMap();
             metricHT = new HashMap();
@@ -36,14 +36,34 @@ public class Stage {
         }
     }
     
-    private HashMap<String, ReferenceUnit> table2ReferenceUnitHT;
+    private class ReferenceUnit2 {
+        private JoinDefinition joinDef;
+        private ProcessingUnit processingUnit;
+        
+        public ReferenceUnit2() {
+            joinDef = null;
+            processingUnit = null;
+        }
+        
+        public void setJoinDef(JoinDefinition inJD) {
+            joinDef = inJD;
+        }
+        
+        public void setProcessingUnit(ProcessingUnit inPU) {
+            processingUnit = inPU;
+        }
+    }
+    
+    private HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;
+    private HashMap<UUID, ProcessingUnit> processingUnits;
     
     public Stage() {
         table2ReferenceUnitHT = new HashMap();
         attributes = null;
         metrics = null;
+        processingUnits = new HashMap();
     }
     
     public void preprocess(Session inSession) {        
@@ -58,12 +78,12 @@ public class Stage {
             
             for (String tableName: elements) {
                 if (!table2ReferenceUnitHT.containsKey(tableName)) {
-                    ReferenceUnit rU = new ReferenceUnit(); 
+                    ReferenceUnit1 rU = new ReferenceUnit1(); 
                     rU.rowCount = inSession.getTable(tableName).getRowCount();
                     table2ReferenceUnitHT.put(tableName, rU);
                     rU.joindefHT.put(joinDef.getName(), joinDef);
                 } else {
-                    ReferenceUnit rU = table2ReferenceUnitHT.get(tableName);
+                    ReferenceUnit1 rU = table2ReferenceUnitHT.get(tableName);
                     if (!rU.joindefHT.containsKey(joinDef.getName())) {
                         rU.joindefHT.put(joinDef.getName(), joinDef);
                     }
@@ -76,6 +96,11 @@ public class Stage {
         Map<String, Attribute> attrMap = attributes;
         for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
             Attribute attr = entry.getValue();
+            
+            ProcessingUnit aPU = new ProcessingUnit();
+            aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
+            aPU.setContent(attr);
+            processingUnits.put(aPU.getUUID(), aPU);
              
             ArrayList<Table> listTables = attr.retrieveTables();
             if (listTables.size() > 0) {
@@ -92,6 +117,10 @@ public class Stage {
         Map<String, Metric> metricMap = metrics;
         for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
             Metric met = entry.getValue();
+            ProcessingUnit aPU = new ProcessingUnit();
+            aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
+            aPU.setContent(met);
+            processingUnits.put(aPU.getUUID(), aPU);            
             
             ArrayList<Table> listTables = met.retrieveTables();            
             if (listTables.size() > 0) {
@@ -103,17 +132,22 @@ public class Stage {
             }            
         }
         
+        // associate table with hardhint
+        
+        // create pu2ReferenceUnitHT
+        
         // dump table2ReferenceUnitHT
         System.out.println("dumping table2ReferenceUnitHT");
         System.out.println("------------------------------");
-        Map<String, ReferenceUnit> dumpTMap = table2ReferenceUnitHT;
-        for (Map.Entry<String, ReferenceUnit> entry1 : dumpTMap.entrySet()) {
+        Map<String, ReferenceUnit1> dumpTMap = table2ReferenceUnitHT;
+        for (Map.Entry<String, ReferenceUnit1> entry1 : dumpTMap.entrySet()) {
             System.out.println("dumpT Key = " + entry1.getKey() + ", Value = " + entry1.getValue());
-            ReferenceUnit rU = entry1.getValue();
+            ReferenceUnit1 rU = entry1.getValue();
             System.out.println("rowCount = " + rU.rowCount);
             Map<String, JoinDefinition> dumpJMap = rU.joindefHT;
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
                 System.out.println("dumpJ Key = " + entry2.getKey() + ", Value = " + entry2.getValue());
+                // System.out.println("L table = " + entry2.getValue().getTLeft() + ", R table = " + entry2.getValue().getTRight());
             }
             Map<String, Attribute> dumpAMap = rU.attrHT;
             for (Map.Entry<String, Attribute> entry3 : dumpAMap.entrySet()) {
@@ -160,5 +194,9 @@ public class Stage {
 
     public HashMap getMetrics() {
         return metrics;
+    }
+    
+    public HashMap getPUs() {
+        return processingUnits;
     }
 }

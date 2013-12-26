@@ -130,7 +130,7 @@
             "expressions": [
                 {
                     "definition": "name",
-                    "coloumns": [
+                    "columns": [
                         ["name", "Departments"]
                     ]
                 }
@@ -140,7 +140,7 @@
             "name": "Student Department Name",
             "expressions": [
                 {
-                    "defintion": "name",
+                    "definition": "name",
                     "columns": [
                         ["name", "Departments"]
                     ]
@@ -155,7 +155,7 @@
                 {
                     "definition": "count(distinct course_id)",
                     "columns": [
-                        ["course_id", "LessonFact"]
+                        ["course_id", "LessonsFact"]
                     ]
                 }
             ]

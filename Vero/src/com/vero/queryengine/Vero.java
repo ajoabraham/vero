@@ -235,8 +235,16 @@ public class Vero {
         Session userSession = testParser.parse();
                 
         QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);
-                              
+        queryEngine.preprocess(userSession);                              
+    }
+    
+    public static void queryEngineTest3() {
+        // session
+        TestParser testParser = new TestParser("test3.json");        
+        Session userSession = testParser.parse();
+                
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);                              
     }
     
     /**
@@ -244,6 +252,7 @@ public class Vero {
      */
     public static void main(String[] args) {
         // queryEngineTest1();
-        queryEngineTest2();
+        // queryEngineTest2();
+        queryEngineTest3();
     }
 }
