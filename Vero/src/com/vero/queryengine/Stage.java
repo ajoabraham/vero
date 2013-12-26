@@ -14,6 +14,7 @@ import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,12 +28,14 @@ public class Stage {
         private HashMap<String, Attribute> attrHT;
         private HashMap<String, Metric> metricHT;
         private HashMap<String, JoinDefinition> joindefHT;
+        private ArrayList<String> hardhintsAL;
                         
         public ReferenceUnit1() {
             rowCount = -1;
             attrHT = new HashMap();
             metricHT = new HashMap();
             joindefHT = new HashMap();
+            hardhintsAL = new ArrayList();
         }
     }
     
@@ -57,16 +60,36 @@ public class Stage {
     private HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;
+    private ArrayList<String> hardhints;
     private HashMap<UUID, ProcessingUnit> processingUnits;
     
     public Stage() {
         table2ReferenceUnitHT = new HashMap();
         attributes = null;
         metrics = null;
+        hardhints = null;
         processingUnits = new HashMap();
     }
     
-    public void preprocess(Session inSession) {        
+    public void preprocess(Session inSession) {                
+        // associate table with hardhint
+        hardhints = new ArrayList(inSession.getHardhints());
+        List<String> hardhintaAL = hardhints;
+        for (int i = 0; i < hardhintaAL.size(); i++) {
+            String tableName = hardhintaAL.get(i);
+            
+            if (!table2ReferenceUnitHT.containsKey(tableName)) {
+                ReferenceUnit1 rU = new ReferenceUnit1(); 
+                rU.rowCount = inSession.getTable(tableName).getRowCount();
+                table2ReferenceUnitHT.put(tableName, rU);
+                rU.hardhintsAL.add(tableName);
+            } else {
+                ReferenceUnit1 rU = table2ReferenceUnitHT.get(tableName);
+                // FIXME: may intriduce duplicate
+                rU.hardhintsAL.add(tableName);
+            }
+        }
+        
         // associate table with joindefs
         HashMap inJoindef = new HashMap(inSession.getJoins());
         Map<String, JoinDefinition> jdMap = inJoindef;
@@ -130,10 +153,7 @@ public class Stage {
                     setMetricByTable(iterTable.next().getPhysicalName(), met);
                 }
             }            
-        }
-        
-        // associate table with hardhint
-        
+        }                
         // create pu2ReferenceUnitHT
         
         // dump table2ReferenceUnitHT
@@ -169,6 +189,22 @@ public class Stage {
     private void setMetricByTable(String inTable, Metric inMetric) {        
         if (table2ReferenceUnitHT.containsKey(inTable)) {
             table2ReferenceUnitHT.get(inTable).metricHT.put(inMetric.getName(), inMetric);
+        }
+    }
+    
+    public HashMap<String, Attribute> getAttributeHTByTable(String inTable) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            return table2ReferenceUnitHT.get(inTable).attrHT;
+        } else {
+            return null;
+        }
+    }
+    
+    public HashMap<String, Metric> getMetricHTByTable(String inTable) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            return table2ReferenceUnitHT.get(inTable).metricHT;
+        } else {
+            return null;
         }
     }
     

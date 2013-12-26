@@ -262,10 +262,23 @@ public class TestParser {
                 testSession.addJoinMeta(aJoin);
             }
             System.out.println("------------------------------");
+            
+            // parsing hardhints
+            JSONArray jsonHHsArray = root.getJSONArray("hardhints");
+            int HHsArraySize = jsonHHsArray.length();
+
+            for (int i = 0; i < HHsArraySize; i++) {
+                String hhName = jsonHHsArray.getString(i);
+                System.out.println("json hh object " + i + ": " + hhName);
+                // HH
+                testSession.addHardhintMeta(hhName);
+            }
+            
+            System.out.println("------------------------------");
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
-        }        
-                        
+        }
+        
         return testSession;
     }    
 }

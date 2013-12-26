@@ -7,6 +7,7 @@ import com.vero.admin.DataSource;
 import com.vero.admin.DeleteTeradata;
 import com.vero.metadata.Table;
 import static com.vero.utility.Utility.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Session {    
@@ -16,6 +17,7 @@ public class Session {
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;
     private HashMap<String, JoinDefinition> joins;
+    private ArrayList<String> hardhints;
     // ArrayList<JoinDefMera> joindefs;
     
     public Session() {
@@ -24,6 +26,7 @@ public class Session {
         attributes = new HashMap();
         metrics = new HashMap();
         joins = new HashMap();
+        hardhints = new ArrayList();
     }
     
     public void addDataSource(String inType, String inName, String inDescription) {
@@ -50,6 +53,10 @@ public class Session {
     public void addJoinMeta(JoinDefinition inJoin) {
         joins.put(inJoin.getName(), inJoin);
     }
+
+    public void addHardhintMeta(String inHardhint) {
+        hardhints.add(inHardhint);
+    }
     
     public HashMap getAllDataSources() {
         return dataSources;
@@ -73,6 +80,10 @@ public class Session {
     
     public HashMap getJoins() {
         return joins;
+    }
+    
+    public ArrayList getHardhints() {
+        return hardhints;
     }
     
     public void dump() {

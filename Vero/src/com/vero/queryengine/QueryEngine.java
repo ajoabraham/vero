@@ -74,15 +74,41 @@ public class QueryEngine {
         // for each table, find where it is used and connect vertex and create edges
         for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
             ProcessingUnit pu = entry.getValue();
-            
+            System.out.println("curPD = " + pu);
             ArrayList<Table> listTables = pu.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 
-                /*
                 while (iterTable.hasNext()) {
+                    Table aTab = iterTable.next();
+                    System.out.println("Processing table: " + aTab.getPhysicalName());
+                    HashMap<String, JoinDefinition> tabJD = stage.getJoindefHTByTable(aTab.getPhysicalName());
+                    HashMap<String, JoinDefinition> allTabJDs = tabJD;
+                    Map<String, JoinDefinition> allJDMap = allTabJDs;
+                    for (Map.Entry<String, JoinDefinition> jdEntry : allJDMap.entrySet()) {
+                        JoinDefinition curJD = jdEntry.getValue();
+                        String otherTable = curJD.getOtherTable(aTab.getPhysicalName());
+                        System.out.println("curJD = " + curJD.getName() + ", other table = " + otherTable);                                                
+                        
+                        HashMap<String, Attribute> otherAttrHT = stage.getAttributeHTByTable(otherTable);
+                        HashMap<String, Attribute> allOtherAttrs = otherAttrHT;
+                        Map<String, Attribute> allOtherAttrsMap = allOtherAttrs;
+                        for (Map.Entry<String, Attribute> allOtherAttrsEntry : allOtherAttrsMap.entrySet()) {
+                            Attribute otherAttr = allOtherAttrsEntry.getValue();
+                            
+                            System.out.println("Other Attr: " + otherAttr.getName());
+                        }                                                
+                        
+                        HashMap<String, Metric> otherMetricHT = stage.getMetricHTByTable(otherTable);
+                        HashMap<String, Metric> allOtherMetrics = otherMetricHT;
+                        Map<String, Metric> allOtherMetricsMap = allOtherMetrics;
+                        for (Map.Entry<String, Metric> allOtherMetricsEntry : allOtherMetricsMap.entrySet()) {
+                            Metric otherMetric = allOtherMetricsEntry.getValue();
+                            
+                            System.out.println("Other Metric: " + otherMetric.getName());
+                        }
+                    }                    
                 }
-                */
             }
         }
         
