@@ -57,8 +57,9 @@ public class ProcessingUnit {
         } else if (type == PUTYPE_METRIC) {
             return ((Metric)content).retrieveTables();
         } else if (type == PUTYPE_HARDHINT) {
-            System.out.println("PUTYPE_HARDHINT not implemented yet");
-            return null;
+            ArrayList<Table> aAL = new ArrayList();
+            aAL.add((Table)content);
+            return aAL;
         } else {
             return null;
         }

@@ -78,6 +78,11 @@ public class Stage {
         for (int i = 0; i < hardhintaAL.size(); i++) {
             String tableName = hardhintaAL.get(i);
             
+            ProcessingUnit aPU = new ProcessingUnit();
+            aPU.setType(ProcessingUnit.PUType.PUTYPE_HARDHINT);
+            aPU.setContent(inSession.getTable(tableName));
+            processingUnits.put(aPU.getUUID(), aPU);
+            
             if (!table2ReferenceUnitHT.containsKey(tableName)) {
                 ReferenceUnit1 rU = new ReferenceUnit1(); 
                 rU.rowCount = inSession.getTable(tableName).getRowCount();
@@ -143,17 +148,18 @@ public class Stage {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
             aPU.setContent(met);
-            processingUnits.put(aPU.getUUID(), aPU);            
+            processingUnits.put(aPU.getUUID(), aPU); 
             
-            ArrayList<Table> listTables = met.retrieveTables();            
+            ArrayList<Table> listTables = met.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 
                 while (iterTable.hasNext()) {
                     setMetricByTable(iterTable.next().getPhysicalName(), met);
                 }
-            }            
-        }                
+            }
+        }
+        
         // create pu2ReferenceUnitHT
         
         // dump table2ReferenceUnitHT

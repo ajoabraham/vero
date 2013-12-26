@@ -67,6 +67,7 @@ public class QueryEngine {
         for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
             ProcessingUnit pu = entry.getValue();
             
+            System.out.println("Adding vertex: " + pu + ", type: " + pu.getType());
             joinGraph.addVertex(pu);
         }
         
