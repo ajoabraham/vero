@@ -75,7 +75,7 @@ public class QueryEngine {
         // for each table, find where it is used and connect vertex and create edges
         for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
             ProcessingUnit pu = entry.getValue();
-            System.out.println("curPD = " + pu);
+            System.out.println("### Current PU = " + pu);
             ArrayList<Table> listTables = pu.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
@@ -98,6 +98,18 @@ public class QueryEngine {
                             Attribute otherAttr = allOtherAttrsEntry.getValue();
                             
                             System.out.println("Other Attr: " + otherAttr.getName());
+                            Map<UUID, ProcessingUnit> OtherPUMap = allPUs;
+                            for (Map.Entry<UUID, ProcessingUnit> otherPUEntry : OtherPUMap.entrySet()) {
+                                ProcessingUnit otherPU = otherPUEntry.getValue();
+                                
+                                if (otherPU.getContent() == otherAttr) {
+                                    System.out.println("Found PU == otherAttr");
+                                    
+                                    EdgeUnit aEU = new EdgeUnit();
+                                    joinGraph.setEdgeWeight(aEU, 5);
+                                    joinGraph.addEdge(pu, otherPU, aEU);
+                                }
+                            }
                         }                                                
                         
                         HashMap<String, Metric> otherMetricHT = stage.getMetricHTByTable(otherTable);
@@ -107,8 +119,30 @@ public class QueryEngine {
                             Metric otherMetric = allOtherMetricsEntry.getValue();
                             
                             System.out.println("Other Metric: " + otherMetric.getName());
+                            Map<UUID, ProcessingUnit> OtherPUMap = allPUs;
+                            for (Map.Entry<UUID, ProcessingUnit> otherPUEntry : OtherPUMap.entrySet()) {
+                                ProcessingUnit otherPU = otherPUEntry.getValue();
+                                
+                                if (otherPU.getContent() == otherMetric) {
+                                    System.out.println("Found PU == otherMetric");
+                                    
+                                    EdgeUnit aEU = new EdgeUnit();
+                                    joinGraph.setEdgeWeight(aEU, 5);
+                                    joinGraph.addEdge(pu, otherPU, aEU);
+                                }
+                            }                            
                         }
-                    }                    
+                        
+                        ArrayList<Table> otherHardhintsAL = stage.getHardhintALByTable(otherTable);
+                        if (otherHardhintsAL.size() > 0) {
+                            Iterator<Table> otherTableIter = otherHardhintsAL.iterator();
+                            while (otherTableIter.hasNext()) {
+                                Table otherTab = otherTableIter.next();
+                                
+                                System.out.println("Other HH: " + otherTab.getPhysicalName());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -116,10 +150,10 @@ public class QueryEngine {
         // loop each vertex and remove edges that have same definition until one left        
         
         // mst algo
-        //KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
-        //System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());        
+        KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
+        System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());        
     }
-    
+        
     private void expirimentOnGraph() {
         WeightedMultigraph<String, EdgeUnit> testGraph
             = new WeightedMultigraph(new ClassBasedEdgeFactory<String, EdgeUnit>(EdgeUnit.class));

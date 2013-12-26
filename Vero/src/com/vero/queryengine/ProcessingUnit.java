@@ -51,6 +51,10 @@ public class ProcessingUnit {
         content = inContent;
     }
 
+    public Object getContent() {
+        return content;
+    }
+    
     public ArrayList<Table> retrieveTables() {
         if (type == PUTYPE_ATTRIBUTE) {
             return ((Attribute)content).retrieveTables();

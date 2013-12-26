@@ -28,7 +28,7 @@ public class Stage {
         private HashMap<String, Attribute> attrHT;
         private HashMap<String, Metric> metricHT;
         private HashMap<String, JoinDefinition> joindefHT;
-        private ArrayList<String> hardhintsAL;
+        private ArrayList<Table> hardhintsAL;
                         
         public ReferenceUnit1() {
             rowCount = -1;
@@ -77,21 +77,22 @@ public class Stage {
         List<String> hardhintaAL = hardhints;
         for (int i = 0; i < hardhintaAL.size(); i++) {
             String tableName = hardhintaAL.get(i);
+            Table curTable = inSession.getTable(tableName);
             
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_HARDHINT);
-            aPU.setContent(inSession.getTable(tableName));
+            aPU.setContent(curTable);
             processingUnits.put(aPU.getUUID(), aPU);
             
             if (!table2ReferenceUnitHT.containsKey(tableName)) {
                 ReferenceUnit1 rU = new ReferenceUnit1(); 
                 rU.rowCount = inSession.getTable(tableName).getRowCount();
                 table2ReferenceUnitHT.put(tableName, rU);
-                rU.hardhintsAL.add(tableName);
+                rU.hardhintsAL.add(curTable);
             } else {
                 ReferenceUnit1 rU = table2ReferenceUnitHT.get(tableName);
                 // FIXME: may intriduce duplicate
-                rU.hardhintsAL.add(tableName);
+                rU.hardhintsAL.add(curTable);
             }
         }
         
@@ -221,7 +222,15 @@ public class Stage {
             return null;
         }
     }
-    
+
+    public ArrayList<Table> getHardhintALByTable(String inTable) {
+        if (table2ReferenceUnitHT.containsKey(inTable)) {
+            return table2ReferenceUnitHT.get(inTable).hardhintsAL;
+        } else {
+            return null;
+        }
+    }
+        
     public int getRowCountByTable(String inTable) {
         if (table2ReferenceUnitHT.containsKey(inTable)) {
             return table2ReferenceUnitHT.get(inTable).rowCount;
