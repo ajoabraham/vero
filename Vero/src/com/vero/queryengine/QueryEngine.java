@@ -106,11 +106,12 @@ public class QueryEngine {
                                     System.out.println("Found PU == otherAttr");
                                     int rowCost = aTab.getRowCount();
                                     int otherRowCost = inSession.getTable(otherTable).getRowCount();
-                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost);
+                                    double weight = (double)rowCost * (double)otherRowCost;
+                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost + ", weight = " + weight);
                                     
                                     EdgeUnit aEU = new EdgeUnit();
                                     aEU.setJoinDef(curJD);
-                                    joinGraph.setEdgeWeight(aEU, rowCost*otherRowCost/100000000);
+                                    joinGraph.setEdgeWeight(aEU, weight);
                                     joinGraph.addEdge(pu, otherPU, aEU);
                                 }
                             }
@@ -131,11 +132,12 @@ public class QueryEngine {
                                     System.out.println("Found PU == otherMetric");
                                     int rowCost = aTab.getRowCount();
                                     int otherRowCost = inSession.getTable(otherTable).getRowCount();
-                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost);
+                                    double weight = (double)rowCost * (double)otherRowCost;
+                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost + ", weight = " + weight);
                                     
                                     EdgeUnit aEU = new EdgeUnit();
                                     aEU.setJoinDef(curJD);
-                                    joinGraph.setEdgeWeight(aEU, rowCost*otherRowCost/100000000);
+                                    joinGraph.setEdgeWeight(aEU, weight);
                                     joinGraph.addEdge(pu, otherPU, aEU);
                                 }
                             }                            
