@@ -104,9 +104,13 @@ public class QueryEngine {
                                 
                                 if (otherPU.getContent() == otherAttr) {
                                     System.out.println("Found PU == otherAttr");
+                                    int rowCost = aTab.getRowCount();
+                                    int otherRowCost = inSession.getTable(otherTable).getRowCount();
+                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost);
                                     
                                     EdgeUnit aEU = new EdgeUnit();
-                                    joinGraph.setEdgeWeight(aEU, 5);
+                                    aEU.setJoinDef(curJD);
+                                    joinGraph.setEdgeWeight(aEU, rowCost*otherRowCost/100000000);
                                     joinGraph.addEdge(pu, otherPU, aEU);
                                 }
                             }
@@ -125,9 +129,13 @@ public class QueryEngine {
                                 
                                 if (otherPU.getContent() == otherMetric) {
                                     System.out.println("Found PU == otherMetric");
+                                    int rowCost = aTab.getRowCount();
+                                    int otherRowCost = inSession.getTable(otherTable).getRowCount();
+                                    System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost);
                                     
                                     EdgeUnit aEU = new EdgeUnit();
-                                    joinGraph.setEdgeWeight(aEU, 5);
+                                    aEU.setJoinDef(curJD);
+                                    joinGraph.setEdgeWeight(aEU, rowCost*otherRowCost/100000000);
                                     joinGraph.addEdge(pu, otherPU, aEU);
                                 }
                             }                            
@@ -140,6 +148,7 @@ public class QueryEngine {
                                 Table otherTab = otherTableIter.next();
                                 
                                 System.out.println("Other HH: " + otherTab.getPhysicalName());
+                                
                             }
                         }
                     }
@@ -151,7 +160,11 @@ public class QueryEngine {
         
         // mst algo
         KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
-        System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());        
+        System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
+        Set<EdgeUnit> euSet = kmt.getMinimumSpanningTreeEdgeSet();
+        for (EdgeUnit eu : euSet) {
+            System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight());
+        }
     }
         
     private void expirimentOnGraph() {
