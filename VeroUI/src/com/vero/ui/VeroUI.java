@@ -4,13 +4,15 @@
  */
 package com.vero.ui;
 
-import com.vero.ui.common.UIManager;
-
+import static com.vero.ui.constants.UIConstants.MAIN_WINDOW_HEIGHT;
+import static com.vero.ui.constants.UIConstants.MAIN_WINDOW_WIDTH;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import static com.vero.ui.constants.UIConstants.*;
+
+import com.vero.ui.common.UIManager;
+import com.vero.ui.util.UIUtils;
 
 //import javafx.stage.StageStyle;
 
@@ -32,7 +34,7 @@ public class VeroUI extends Application {
         // primaryStage.initStyle(StageStyle.UNDECORATED);
 
         Scene scene = new Scene(rootPane, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
-        scene.getStylesheets().add(VeroUI.class.getResource("VeroUI.css").toExternalForm());
+        scene.getStylesheets().add(UIUtils.getVeroCSSStyleSheet());
 
         primaryStage.setTitle("Vero Analytic");
         primaryStage.setScene(scene);

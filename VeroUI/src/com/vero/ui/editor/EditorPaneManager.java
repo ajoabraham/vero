@@ -1,14 +1,12 @@
 package com.vero.ui.editor;
 
 import static com.vero.ui.constants.ObjectType.METRIC;
-import static com.vero.ui.constants.UIConstants.*;
+import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_WIDTH;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import com.vero.ui.VeroUI;
+import com.vero.ui.common.PopupDialog;
 import com.vero.ui.common.UIManager;
 
 /**
@@ -53,14 +51,9 @@ public final class EditorPaneManager {
 
     public void showUndockedMetricEditorPane() {
         if (undockedMetricEditorPane == null) { 
-            Stage stage = new Stage();
-            stage.initOwner(uiManager.getPrimaryStage());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            undockedMetricEditorPane = (UndockedEditorPane) editorPaneFactory.createUndockedEditorPane(METRIC, stage);
-            Scene scene = new Scene(undockedMetricEditorPane, 
-                    UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
-            scene.getStylesheets().add(VeroUI.class.getResource("VeroUI.css").toExternalForm());
-            stage.setScene(scene);
+            PopupDialog dialog = new PopupDialog(uiManager.getPrimaryStage());
+            undockedMetricEditorPane = (UndockedEditorPane) editorPaneFactory.createUndockedEditorPane(METRIC, dialog);
+            dialog.createScene(undockedMetricEditorPane, UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
         }
         
         undockedMetricEditorPane.getStage().show();

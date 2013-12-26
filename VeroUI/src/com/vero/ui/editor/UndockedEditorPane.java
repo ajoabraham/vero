@@ -73,7 +73,7 @@ public abstract class UndockedEditorPane extends EditorPane implements EventHand
     @Override
     public void handle(ActionEvent event) { 
         if (event.getSource() == dockButton) {
-            
+            handleDockEvent();
         }
         else if (event.getSource() == okButton) {
             
@@ -83,10 +83,13 @@ public abstract class UndockedEditorPane extends EditorPane implements EventHand
         }
     }    
     
+    protected void handleDockEvent() {
+        EditorPaneManager.getInstance().hideUndockedMetricEditorPane();
+        EditorPaneManager.getInstance().showDockedMetricEditorPane();
+    }
+    
     protected void handleCancelEvent() {
-        if (stage != null) {
-            stage.close();
-        }
+        EditorPaneManager.getInstance().hideUndockedMetricEditorPane();
     }
     
     public Stage getStage() {

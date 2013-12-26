@@ -11,6 +11,8 @@ package com.vero.ui.constants;
  * @author Tai Hu
  */
 public interface CSSConstants {
+    public static final String VERO_CSS_FILE = "VeroUI.css";
+    
     /**
      * ID for VERO main window
      */
