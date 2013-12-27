@@ -194,11 +194,16 @@ public class QueryEngine {
                 }
             }
         }
+
+        // dump graph
+        System.out.println("#### Before remove extra edges...");
+        dumpGraph(joinGraph);        
         
         // loop each vertex and remove edges that have same definition until one left        
         removeExtraEdges(joinGraph);
         
         // dump graph
+        System.out.println("#### After remove extra edges...");
         dumpGraph(joinGraph);
         
         // mst algo
@@ -259,12 +264,25 @@ public class QueryEngine {
                 ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();                
                 int sizeCurJDRemoveUnitLinkedPUAL = curJDRemoveUnitLinkedPUAL.size();
                 
-                Collections.sort(curJDRemoveUnitLinkedPUAL);
-                System.out.println("### Before sorting...");
-                for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
-                    ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);                                       
-                    System.out.println("  LinkedPU: " + curPU.getContent() + ", removeCount = " + curPU.getRemoveCount());                    
-                }                
+                if (sizeCurJDRemoveUnitLinkedPUAL > 1) {
+                    int difference = curJDRemoveUnit.getUsedCount() - 1;
+                    
+                    Collections.sort(curJDRemoveUnitLinkedPUAL);
+                    
+                    // dump
+                    for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
+                        ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
+                        System.out.println("  LinkedPU: " + curPU.getContent() + ", removeCount = " + curPU.getRemoveCount());
+                    }
+                    
+                    // try to remove from the head of ArrayList because it is sorted
+                    for (int j = 0; j<difference; j++) {
+                        ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
+                        int removeCount = curPU.getRemoveCount();
+                        inGraph.removeEdge(pu, curPU);
+                        curPU.setRemoveCount(removeCount+1);
+                    }
+                }
             }            
         }
     }
