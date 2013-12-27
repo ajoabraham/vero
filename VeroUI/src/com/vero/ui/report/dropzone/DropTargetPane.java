@@ -8,7 +8,6 @@ package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_DROP_PANE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
-import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -34,8 +33,11 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     private static final String METRIC_PLACEHOLDER_HINT = "drag metrics or columns here...";
     private static final String TABLE_PLACEHOLDER_HINT = "drag tables here as query hints...";
     private static final String TABLE_JOIN_PLACEHOLDER_HINT = "This is not a drop zone...";
-    
+        
     private LabelPaneFactory labelPaneFactory = null;
+    
+    private int currentDropIndex = -1;
+    private boolean isEmpty = false;
     
     public DropTargetPane() {
         labelPaneFactory = LabelPaneFactory.getInstance();
@@ -58,7 +60,27 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 
     
     @Override
-    public void handleDragOverEvent(DragEvent event) {    
+    public void handleDragOverEvent(DragEvent event) {
+        if (!isEmpty) {
+            int index = computeDropIndex(event.getY());
+            List<Node> children = getChildren();
+if (currentDropIndex != index) System.out.println("Index = " + index + " current index = " + currentDropIndex);            
+            if (index <= children.size()) {
+                // Very first time
+                if (currentDropIndex == -1) {
+                    double newHeight = computePrefHeight(children.size() + 1);
+                    setPrefHeight(newHeight);
+                    children.add(index, labelPaneFactory.createDropHintPane());
+                    currentDropIndex = index;
+                }
+                else if (index > currentDropIndex + 1 || index < currentDropIndex - 1){
+                    children.add(index, labelPaneFactory.createDropHintPane());
+                    children.remove(currentDropIndex);
+                    
+                    currentDropIndex = index > currentDropIndex ? index - 1 : index;
+                }
+            }
+        }
     }
 
     @Override
@@ -68,10 +90,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         // Empty drop pane
         if (children.get(0) instanceof PlaceholderPane) {
             children.set(0, labelPaneFactory.createDropHintPane());
-        }
-        else {
-            children.add(labelPaneFactory.createDropHintPane());
-            setPrefHeight(children.size() * (DEFAULT_LABEL_PANE_HEIGHT + 5));
+            isEmpty = true;
         }
     }
 
@@ -80,19 +99,24 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         List<Node> children = getChildren();
         
         // Empty drop pane
-        if (children.size() == 1 && children.get(0) instanceof DropHintPane) {
+        if (isEmpty) {
             children.set(0, labelPaneFactory.createPlaceholderPane(getPlaceholderText()));
-        }
-        else {
-            children.remove((children.size() - 1));
-            setPrefHeight(children.size() * (DEFAULT_LABEL_PANE_HEIGHT + 5));
         }
     }
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
         DropZoneObjectPane dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
-        getChildren().add(getChildren().size() - 1, dropZoneObjectPane);
+        
+        if (isEmpty) {
+            getChildren().set(0, dropZoneObjectPane);
+        }
+        else {
+            getChildren().set(currentDropIndex, dropZoneObjectPane);
+        }
+        
+        isEmpty = false;
+        currentDropIndex = -1;
     }
     
     public String getPlaceholderText() {
@@ -115,5 +139,21 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         }
         
         return text;
+    }
+    
+    private int computeDropIndex(double y) {
+        double objectPaneHeight = 31;
+        double spacing = getSpacing();
+        double topPadding = getPadding().getTop();
+//System.out.println("Object pane height = " + objectPaneHeight + " spacing = " + spacing + " padding = " + topPadding);        
+        return (int) ((y - topPadding) / (objectPaneHeight + spacing));
+    }
+    
+    private double computePrefHeight(int size) {
+        double objectPaneHeight = getChildren().get(0).getBoundsInLocal().getHeight();
+        double spacing = getSpacing();
+        double padding = getPadding().getTop() + getPadding().getBottom();
+        
+        return padding + (objectPaneHeight * size) + (spacing * (size - 1));
     }
 }

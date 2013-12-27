@@ -6,13 +6,12 @@
 
 package com.vero.ui.common;
 
-import com.vero.ui.report.dropzone.DropTargetPane;
-import com.vero.ui.model.UIData;
-
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
+
+import com.vero.ui.model.UIData;
 
 /**
  *
@@ -26,7 +25,7 @@ public class DropManager implements EventHandler<DragEvent> {
         enableDropping();
     }
     
-    public static DropManager newInstance(DropTargetPane target) {
+    public static DropManager newInstance(DroppableObject target) {
         return new DropManager(target);
     }
     
