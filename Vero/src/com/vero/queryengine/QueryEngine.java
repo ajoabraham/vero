@@ -12,6 +12,7 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -249,25 +250,22 @@ public class QueryEngine {
                 }
             }
             
-            // dump for debug
+            // find and remove edge
             int sizeJDRemoveAL = jdRemoveAL.size();
             System.out.println("### JDRemoveAL: " + pu.getContent() + ", size = " + sizeJDRemoveAL);
             for (int i = 0; i <sizeJDRemoveAL; i++) {
                 JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
                 System.out.println("JoinDef: " + curJDRemoveUnit.getJoinDef().getName() + ", usedCount = " + curJDRemoveUnit.getUsedCount());
-                ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();
+                ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();                
                 int sizeCurJDRemoveUnitLinkedPUAL = curJDRemoveUnitLinkedPUAL.size();
+                
+                Collections.sort(curJDRemoveUnitLinkedPUAL);
+                System.out.println("### Before sorting...");
                 for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
-                    ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
-                    System.out.println("  LinkedPU: " + curPU.getContent());
-                }
-            }
-            
-            // find and remove edge
-            sizeJDRemoveAL = jdRemoveAL.size();
-            for (int i = 0; i <sizeJDRemoveAL; i++) {
-                JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
-            }
+                    ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);                                       
+                    System.out.println("  LinkedPU: " + curPU.getContent() + ", removeCount = " + curPU.getRemoveCount());                    
+                }                
+            }            
         }
     }
     

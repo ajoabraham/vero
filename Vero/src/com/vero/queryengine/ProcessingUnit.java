@@ -17,7 +17,7 @@ import java.util.UUID;
  *
  * @author yulinwen
  */
-public class ProcessingUnit {
+public class ProcessingUnit implements Comparable<ProcessingUnit> {
     public static enum PUType {
         PUTYPE_NONE,
         PUTYPE_ATTRIBUTE,
@@ -77,5 +77,16 @@ public class ProcessingUnit {
         } else {
             return null;
         }
-    }    
+    }
+    
+    @Override
+    public int compareTo(ProcessingUnit inPU) {
+        if (this.removeCount < inPU.getRemoveCount()) {
+            return -1;
+        } else if (this.removeCount > inPU.getRemoveCount()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
