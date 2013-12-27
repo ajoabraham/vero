@@ -38,25 +38,7 @@ public class Stage {
             hardhintsAL = new ArrayList();
         }
     }
-    
-    private class ReferenceUnit2 {
-        private JoinDefinition joinDef;
-        private ProcessingUnit processingUnit;
         
-        public ReferenceUnit2() {
-            joinDef = null;
-            processingUnit = null;
-        }
-        
-        public void setJoinDef(JoinDefinition inJD) {
-            joinDef = inJD;
-        }
-        
-        public void setProcessingUnit(ProcessingUnit inPU) {
-            processingUnit = inPU;
-        }
-    }
-    
     private HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;

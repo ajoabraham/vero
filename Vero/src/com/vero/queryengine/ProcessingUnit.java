@@ -28,11 +28,13 @@ public class ProcessingUnit {
     private UUID uuid;
     private PUType type;
     private Object content;
+    private int removeCount;
 
     public ProcessingUnit() {
         uuid = UUID.randomUUID();
         type = PUTYPE_NONE;
         content = null;
+        removeCount = 0;
     }
 
     public UUID getUUID() {
@@ -53,6 +55,14 @@ public class ProcessingUnit {
 
     public Object getContent() {
         return content;
+    }
+    
+    public void setRemoveCount(int setValue) {
+        removeCount = setValue;
+    }
+    
+    public int getRemoveCount() {
+        return removeCount;
     }
     
     public ArrayList<Table> retrieveTables() {

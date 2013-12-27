@@ -41,6 +41,14 @@ public class QueryEngine {
         public void setJoinDef(JoinDefinition inJoinDef) {
             joinDef = inJoinDef;
         }
+
+        public Object retrieveOtherEndPoint(Object thisEndPoint) {
+            if (this.getSource() == thisEndPoint) {
+                return this.getTarget();
+            } else {
+                return this.getSource();
+            }
+        }
         
         @Override
         public double getWeight() {
@@ -48,8 +56,44 @@ public class QueryEngine {
         }
     }
     
-    private Stage stage;
-    private WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph;
+    private class JDRemoveUnit {
+        private JoinDefinition joinDef;
+        private int usedCount;
+        private ArrayList<ProcessingUnit> linkedPU;
+        
+        public JDRemoveUnit() {
+            joinDef = null;
+            usedCount = 0;
+            linkedPU = new ArrayList();
+        }
+        
+        public void setJoinDef(JoinDefinition inJD) {
+            joinDef = inJD;
+        }
+        
+        public JoinDefinition getJoinDef() {
+            return joinDef;
+        }
+        
+        public void setUsedCount(int setValue) {
+            usedCount = setValue;
+        }
+        
+        public int getUsedCount() {
+            return usedCount;
+        }
+        
+        public void addLinkedPU(ProcessingUnit inPU) {
+            linkedPU.add(inPU);
+        }
+        
+        public ArrayList<ProcessingUnit> getLinkedPU() {
+            return linkedPU;
+        }        
+    }
+    
+    private final Stage stage;
+    private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph;
     
     public QueryEngine() {
         stage = new Stage();
@@ -151,7 +195,7 @@ public class QueryEngine {
         }
         
         // loop each vertex and remove edges that have same definition until one left        
-        
+        removeExtraEdges(joinGraph);
         
         // dump graph
         dumpGraph(joinGraph);
@@ -162,6 +206,54 @@ public class QueryEngine {
         Set<EdgeUnit> euSet = kmt.getMinimumSpanningTreeEdgeSet();
         for (EdgeUnit eu : euSet) {
             System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight());
+        }
+    }
+    
+    private void removeExtraEdges(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
+        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        for (ProcessingUnit pu : graphVertexSet) {
+            ArrayList<JDRemoveUnit> jdRemoveAL = new ArrayList();                        
+            Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
+            
+            // build remove array
+            for (EdgeUnit eu : graphEdgeSet) {
+                int sizeJDRemoveAL = jdRemoveAL.size();
+                
+                if (sizeJDRemoveAL == 0) {
+                    JDRemoveUnit aJDRemoveUnit = new JDRemoveUnit();
+                    aJDRemoveUnit.setJoinDef(eu.getJoinDef());
+                    aJDRemoveUnit.setUsedCount(1);
+                    aJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));     
+                    jdRemoveAL.add(aJDRemoveUnit);
+                } else {
+                    for (int i = 0; i <sizeJDRemoveAL; i++) {
+                        JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
+                        
+                        if (curJDRemoveUnit.getJoinDef() == eu.getJoinDef()) {                           
+                            int usedCount = curJDRemoveUnit.getUsedCount();
+                            System.out.println("Found equal joindef!!!");
+                            
+                            curJDRemoveUnit.setUsedCount(usedCount+1);
+                            curJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));
+                        } else {
+                            JDRemoveUnit aJDRemoveUnit = new JDRemoveUnit();
+                            aJDRemoveUnit.setJoinDef(eu.getJoinDef());
+                            aJDRemoveUnit.setUsedCount(1);
+                            aJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));
+                            jdRemoveAL.add(aJDRemoveUnit);
+                        }
+                    }
+                }
+            }
+            
+            // dump for debug
+            int sizeJDRemoveAL = jdRemoveAL.size();
+            System.out.println("### JDRemoveAL: " + pu.getContent() + ", size = " + sizeJDRemoveAL);
+            for (int i = 0; i <sizeJDRemoveAL; i++) {
+                JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
+                System.out.println("JoinDef: " + curJDRemoveUnit.getJoinDef().getName() + ", usedCount = " + curJDRemoveUnit.getUsedCount());
+            }
+            // find and remove edge
         }
     }
     
