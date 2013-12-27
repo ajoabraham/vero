@@ -226,22 +226,25 @@ public class QueryEngine {
                     aJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));     
                     jdRemoveAL.add(aJDRemoveUnit);
                 } else {
+                    boolean found = false;
                     for (int i = 0; i <sizeJDRemoveAL; i++) {
-                        JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
+                        JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);                        
                         
-                        if (curJDRemoveUnit.getJoinDef() == eu.getJoinDef()) {                           
+                        if (curJDRemoveUnit.getJoinDef() == eu.getJoinDef()) {
+                            found = true;
                             int usedCount = curJDRemoveUnit.getUsedCount();
-                            System.out.println("Found equal joindef!!!");
                             
                             curJDRemoveUnit.setUsedCount(usedCount+1);
                             curJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));
-                        } else {
-                            JDRemoveUnit aJDRemoveUnit = new JDRemoveUnit();
-                            aJDRemoveUnit.setJoinDef(eu.getJoinDef());
-                            aJDRemoveUnit.setUsedCount(1);
-                            aJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));
-                            jdRemoveAL.add(aJDRemoveUnit);
                         }
+                    }
+                    
+                    if (found == false) {
+                        JDRemoveUnit aJDRemoveUnit = new JDRemoveUnit();
+                        aJDRemoveUnit.setJoinDef(eu.getJoinDef());
+                        aJDRemoveUnit.setUsedCount(1);
+                        aJDRemoveUnit.addLinkedPU((ProcessingUnit)eu.retrieveOtherEndPoint(pu));
+                        jdRemoveAL.add(aJDRemoveUnit);
                     }
                 }
             }
@@ -252,8 +255,19 @@ public class QueryEngine {
             for (int i = 0; i <sizeJDRemoveAL; i++) {
                 JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
                 System.out.println("JoinDef: " + curJDRemoveUnit.getJoinDef().getName() + ", usedCount = " + curJDRemoveUnit.getUsedCount());
+                ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();
+                int sizeCurJDRemoveUnitLinkedPUAL = curJDRemoveUnitLinkedPUAL.size();
+                for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
+                    ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
+                    System.out.println("  LinkedPU: " + curPU.getContent());
+                }
             }
+            
             // find and remove edge
+            sizeJDRemoveAL = jdRemoveAL.size();
+            for (int i = 0; i <sizeJDRemoveAL; i++) {
+                JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
+            }
         }
     }
     
