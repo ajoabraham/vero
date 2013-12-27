@@ -8,6 +8,7 @@ package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_DROP_PANE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         if (!isEmpty) {
             int index = computeDropIndex(event.getY());
             List<Node> children = getChildren();
-if (currentDropIndex != index) System.out.println("Index = " + index + " current index = " + currentDropIndex);            
+//if (currentDropIndex != index) System.out.println("Index = " + index + " current index = " + currentDropIndex);            
             if (index <= children.size()) {
                 // Very first time
                 if (currentDropIndex == -1) {
@@ -73,9 +74,9 @@ if (currentDropIndex != index) System.out.println("Index = " + index + " current
                     children.add(index, labelPaneFactory.createDropHintPane());
                     currentDropIndex = index;
                 }
-                else if (index > currentDropIndex + 1 || index < currentDropIndex - 1){
+                else if (index != currentDropIndex && index != currentDropIndex + 1 ){
                     children.add(index, labelPaneFactory.createDropHintPane());
-                    children.remove(currentDropIndex);
+                    children.remove(index < currentDropIndex ? currentDropIndex + 1 : currentDropIndex);
                     
                     currentDropIndex = index > currentDropIndex ? index - 1 : index;
                 }
@@ -142,18 +143,15 @@ if (currentDropIndex != index) System.out.println("Index = " + index + " current
     }
     
     private int computeDropIndex(double y) {
-        double objectPaneHeight = 31;
         double spacing = getSpacing();
-        double topPadding = getPadding().getTop();
-//System.out.println("Object pane height = " + objectPaneHeight + " spacing = " + spacing + " padding = " + topPadding);        
-        return (int) ((y - topPadding) / (objectPaneHeight + spacing));
+        double topPadding = getPadding().getTop();        
+        return (int) ((y - topPadding) / (DEFAULT_LABEL_PANE_HEIGHT + spacing));
     }
     
     private double computePrefHeight(int size) {
-        double objectPaneHeight = getChildren().get(0).getBoundsInLocal().getHeight();
         double spacing = getSpacing();
         double padding = getPadding().getTop() + getPadding().getBottom();
         
-        return padding + (objectPaneHeight * size) + (spacing * (size - 1));
+        return padding + (DEFAULT_LABEL_PANE_HEIGHT * size) + (spacing * (size - 1));
     }
 }
