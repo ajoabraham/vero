@@ -65,7 +65,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         if (!isEmpty) {
             int index = computeDropIndex(event.getY());
             List<Node> children = getChildren();
-//if (currentDropIndex != index) System.out.println("Index = " + index + " current index = " + currentDropIndex);            
+            
             if (index <= children.size()) {
                 // Very first time
                 if (currentDropIndex == -1) {
@@ -145,7 +145,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     private int computeDropIndex(double y) {
         double spacing = getSpacing();
         double topPadding = getPadding().getTop();        
-        return (int) ((y - topPadding) / (DEFAULT_LABEL_PANE_HEIGHT + spacing));
+        return (int) Math.round((y - topPadding) / (DEFAULT_LABEL_PANE_HEIGHT + spacing));
     }
     
     private double computePrefHeight(int size) {
