@@ -42,7 +42,7 @@ import org.jgrapht.alg.*;
  * @author yulinwen
  */
 public class Vero {    
-    public static void queryEngineTest1() {
+    public static void queryEngineOldTest1() {
         // session
         Session userSession;
         TestParser testParser = new TestParser("test1.json");        
@@ -229,30 +229,40 @@ public class Vero {
         System.out.println("Output sql is: " + sqlString);
     }
     
-    public static void queryEngineTest2() {
+    public static void queryEngineTest1() {
         // session
-        TestParser testParser = new TestParser("test2.json");        
+        TestParser testParser = new TestParser("test1.json");
         Session userSession = testParser.parse();
                 
         QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);                              
+        queryEngine.preprocess(userSession);
+    }
+    
+    
+    public static void queryEngineTest2() {
+        // session
+        TestParser testParser = new TestParser("test2.json");
+        Session userSession = testParser.parse();
+                
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
     }
     
     public static void queryEngineTest3() {
         // session
-        TestParser testParser = new TestParser("test3.json");        
+        TestParser testParser = new TestParser("test3.json");
         Session userSession = testParser.parse();
                 
         QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);                              
+        queryEngine.preprocess(userSession);
     }
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // queryEngineTest1();
+        queryEngineTest1();
         // queryEngineTest2();
-        queryEngineTest3();
+        // queryEngineTest3();
     }
 }
