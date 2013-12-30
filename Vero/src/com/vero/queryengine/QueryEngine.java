@@ -202,6 +202,9 @@ public class QueryEngine {
         // loop each vertex and remove edges that have same definition until one left        
         removeExtraEdges(joinGraph);
         
+        // assign table alias
+        assignTableAlias(joinGraph);
+        
         // dump graph
         System.out.println("#### After remove extra edges...");
         dumpGraph(joinGraph);
@@ -287,12 +290,22 @@ public class QueryEngine {
         }
     }
     
+    private void assignTableAlias(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
+        int aliasCount = 0;
+        
+        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        for (ProcessingUnit pu : graphVertexSet) {
+            pu.setTableAlias("T"+aliasCount);
+            aliasCount++;
+        }
+    }
+    
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
         System.out.println("### Dumping graph...");
         Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
         int vertexCount = 0;
         for (ProcessingUnit pu : graphVertexSet) {
-            System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent());
+            System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
             Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
             
             int edgeCount = 0;

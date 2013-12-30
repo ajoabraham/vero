@@ -29,12 +29,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     private PUType type;
     private Object content;
     private int removeCount;
-
+    private String tableAlias;
+    
     public ProcessingUnit() {
         uuid = UUID.randomUUID();
         type = PUTYPE_NONE;
         content = null;
         removeCount = 0;
+        tableAlias = null;
     }
 
     public UUID getUUID() {
@@ -63,6 +65,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     
     public int getRemoveCount() {
         return removeCount;
+    }
+
+    public void setTableAlias(String inAlias) {
+        tableAlias = inAlias;
+    }
+
+    public String getTableAlias() {
+        return tableAlias;
     }
     
     public ArrayList<Table> retrieveTables() {
