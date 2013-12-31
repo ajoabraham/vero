@@ -68,17 +68,6 @@
     ],
     "attributes": [
         {
-            "name": "Department Name",
-            "expressions": [
-                {
-                    "definition": "name",
-                    "columns": [
-                        ["name", "Departments"]
-                    ]
-                }
-            ]
-        },
-        {
             "name": "Department School",
             "expressions": [
                 {
