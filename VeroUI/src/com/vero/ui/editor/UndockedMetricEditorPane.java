@@ -1,22 +1,16 @@
 package com.vero.ui.editor;
 
-import static com.vero.ui.constants.ObjectType.METRIC;
 import javafx.stage.Stage;
 
-import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.MetricObjectData;
 
 /**
  * 
  * @author Tai Hu
  *
  */
-public class UndockedMetricEditorPane extends UndockedEditorPane {
-    public UndockedMetricEditorPane(Stage stage) {
-        super(stage);
+public class UndockedMetricEditorPane extends UndockedEditorPane<MetricObjectData> {
+    public UndockedMetricEditorPane(Stage stage, MetricObjectData data) {
+        super(stage, data);
     }
-
-    @Override
-    public ObjectType getType() {
-        return METRIC;
-    } 
 }

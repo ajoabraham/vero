@@ -1,12 +1,10 @@
 package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_LABEL;
-import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.util.UIUtils;
 
@@ -15,11 +13,11 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class AttributeDropZoneObjectPane extends DropZoneObjectPane {
+public class AttributeDropZoneObjectPane extends DropZoneObjectPane<AttributeObjectData> {
     private AttributeObjectData data = null;
     
     public AttributeDropZoneObjectPane(AttributeObjectData data) {
-        this.data = data;
+        super(data);
         buildUI();
     }
     
@@ -32,10 +30,4 @@ public class AttributeDropZoneObjectPane extends DropZoneObjectPane {
         label.getStyleClass().add(CLASS_OBJECT_LABEL);
         getChildren().add(label);
     }
-    
-    @Override
-    public ObjectType getType() {
-        return ATTRIBUTE;
-    }
-
 }

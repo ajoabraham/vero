@@ -6,10 +6,14 @@
 
 package com.vero.ui.report;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.scene.layout.BorderPane;
 
-import com.vero.ui.editor.DockContainer;
-import com.vero.ui.editor.DockedEditorPane;
+import com.vero.ui.common.DockEvent;
+import com.vero.ui.editor.DockHandler;
+import com.vero.ui.model.UIData;
 import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryPane;
 
@@ -17,7 +21,8 @@ import com.vero.ui.report.querypane.QueryPane;
  *
  * @author Tai Hu
  */
-public class ReportPane extends BorderPane implements DockContainer {
+public class ReportPane extends BorderPane implements DockHandler {
+    private static final Logger logger = Logger.getLogger(ReportPane.class.getName());
     
     public ReportPane() {
         buildUI();
@@ -29,7 +34,31 @@ public class ReportPane extends BorderPane implements DockContainer {
     }
 
     @Override
-    public void showDockedPane(DockedEditorPane dockedEditorPane) {
-        setBottom(dockedEditorPane);
+    public void handle(DockEvent dockEvent) {
+        switch (dockEvent.getType()) {
+            case DOCK:
+                handleDockEvent(dockEvent.getData());
+                break;
+            case UNDOCK:
+                handleUndockEvent();
+                break;
+            case CANCEL:
+                handleCancelEvent();
+                break;
+            default:
+              logger.log(Level.SEVERE, "Invalid dock event type - {0}", dockEvent.getType());
+        }
+    }
+    
+    private void handleDockEvent(UIData data) {
+        
+    }
+    
+    private void handleUndockEvent() {
+        
+    }
+    
+    private void handleCancelEvent() {
+        
     }
 }

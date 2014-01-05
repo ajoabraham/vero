@@ -34,7 +34,6 @@ public interface UIConstants {
     
     public static final double DEFAULT_DROP_PANE_HEIGHT = DEFAULT_LABEL_PANE_HEIGHT;
     
-    public static final double DOCKED_EDITOR_PANE_WIDTH = 730;
     public static final double DOCKED_EDITOR_PANE_HEIGHT = 250;
     public static final double UNDOCKED_EDITOR_PANE_WIDTH = 700;
     public static final double UNDOCKED_EDITOR_PANE_HEIGHT = 450;

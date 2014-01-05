@@ -2,25 +2,24 @@ package com.vero.ui.editor;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_CONTENT_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_CONTAINER_PANE;
-import static com.vero.ui.constants.ObjectType.METRIC;
 import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.MetricObjectData;
 
 /**
  * 
  * @author Tai Hu
  *
  */
-public class DockedMetricEditorPane extends DockedEditorPane {
+public class DockedMetricEditorPane extends DockedEditorPane<MetricObjectData> {
     private TextField formulaTextField = null;
     
-    public DockedMetricEditorPane() {
-        super();
+    public DockedMetricEditorPane(MetricObjectData data) {
+        super(data);
         buildUI();
     }
     
@@ -58,10 +57,5 @@ public class DockedMetricEditorPane extends DockedEditorPane {
         contentPane.getChildren().add(orderByPane);
         
         setCenter(contentPane);
-    }
-
-    @Override
-    public ObjectType getType() {
-        return METRIC;
     }
 }

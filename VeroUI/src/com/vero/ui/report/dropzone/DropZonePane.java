@@ -37,7 +37,7 @@ public class DropZonePane extends ScrollPane {
     }
 
     private void buildUI() {
-        setId(ID_DROP_ZONE_PANE);
+        getStyleClass().add(CLASS_DROP_ZONE_PANE);
         setPrefWidth(DROP_ZONE_PANE_WIDTH);
         setFitToWidth(true);
         VBox contentPane = new VBox();
@@ -55,7 +55,7 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(attributesLabel);
         
         DropTargetPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
-        attributeDropPane.setDockContainer(reportPane);
+        attributeDropPane.setDockHandler(reportPane);
         attributeDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         contentPane.getChildren().add(attributeDropPane);
@@ -66,7 +66,7 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(metricsLabel);
 
         DropTargetPane metricDropPane = dropPaneFactory.createDropPane(METRIC, true);
-        metricDropPane.setDockContainer(reportPane);
+        metricDropPane.setDockHandler(reportPane);
         metricDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         contentPane.getChildren().add(metricDropPane);
@@ -77,6 +77,7 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(tablesLabel);
 
         DropTargetPane tableDropPane = dropPaneFactory.createDropPane(TABLE, true);
+        tableDropPane.setDockHandler(reportPane);
         tableDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
         contentPane.getChildren().add(tableDropPane);

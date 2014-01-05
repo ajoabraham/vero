@@ -211,13 +211,13 @@
 /*******************************************************************************
  * Style for Report Pane
  ******************************************************************************/
-#drop-zone-pane {
+.drop-zone-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
     -fx-background-color: transparent;
 }
 
-#drop-zone-pane .drop-zone-content-pane {
+.drop-zone-pane .drop-zone-content-pane {
     -fx-spacing: 5;
     -fx-padding: 10 10 10 10;
 }
@@ -278,7 +278,11 @@
 }
 
 .query-pane {
-    -fx-padding: 20;
+	-fx-background-color: transparent;
+}
+
+.query-pane .query-content-pane {
+	-fx-padding: 20;
     -fx-spacing: 20;
 }
 

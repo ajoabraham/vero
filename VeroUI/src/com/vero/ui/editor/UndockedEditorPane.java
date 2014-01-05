@@ -7,6 +7,7 @@ import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_WIDTH;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_WIDTH;
+import static com.vero.ui.constants.DockEventType.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -17,7 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
+import com.vero.ui.common.DockEvent;
+import com.vero.ui.common.DockEventBuilder;
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
 
 /**
@@ -25,7 +29,7 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public abstract class UndockedEditorPane extends EditorPane implements EventHandler<ActionEvent> {
+public abstract class UndockedEditorPane<T extends UIData> extends EditorPane<T> implements EventHandler<ActionEvent> {
     Stage stage = null;
     
     Button dockButton = null;
@@ -33,7 +37,10 @@ public abstract class UndockedEditorPane extends EditorPane implements EventHand
     Button okButton = null;
     Button cancelButton = null;
     
-    public UndockedEditorPane(Stage stage) {
+    private DockHandler dockHandler = null;
+    
+    public UndockedEditorPane(Stage stage, T data) {
+        super(data);
         this.stage = stage;
         getStyleClass().add(CLASS_UNDOCKED_EDITOR_PANE);
         setPrefSize(UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
@@ -82,17 +89,34 @@ public abstract class UndockedEditorPane extends EditorPane implements EventHand
             handleCancelEvent();
         }
     }    
-    
+
     protected void handleDockEvent() {
-        EditorPaneManager.getInstance().hideUndockedMetricEditorPane();
-        EditorPaneManager.getInstance().showDockedMetricEditorPane();
+        stage.close();
+        if (getDockHandler() != null) {
+            DockEvent dockEvent = DockEventBuilder.create().type(DOCK).data(getData()).build();
+            getDockHandler().handle(dockEvent);
+        }
     }
     
     protected void handleCancelEvent() {
-        EditorPaneManager.getInstance().hideUndockedMetricEditorPane();
+        stage.close();
     }
     
     public Stage getStage() {
         return stage;
+    }
+    
+    /**
+     * @return the dockHandler
+     */
+    public DockHandler getDockHandler() {
+        return dockHandler;
+    }
+
+    /**
+     * @param dockHandler the dockHandler to set
+     */
+    public void setDockHandler(DockHandler dockHandler) {
+        this.dockHandler = dockHandler;
     }
 }

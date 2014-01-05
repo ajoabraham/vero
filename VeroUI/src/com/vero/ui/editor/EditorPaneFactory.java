@@ -5,7 +5,8 @@ import java.util.logging.Logger;
 
 import javafx.stage.Stage;
 
-import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.UIData;
 
 /**
  * 
@@ -29,37 +30,37 @@ public final class EditorPaneFactory {
         return INSTANCE;
     }
 
-    public DockedEditorPane createDockedEditorPane(ObjectType type) {
-        DockedEditorPane dockedEditorPane = null;
-        switch (type) {
+    public DockedEditorPane<? extends UIData> createDockedEditorPane(UIData data) {
+        DockedEditorPane<? extends UIData> dockedEditorPane = null;
+        switch (data.getType()) {
             case ATTRIBUTE:
                 break;
             case METRIC:
-                dockedEditorPane = new DockedMetricEditorPane();
+                dockedEditorPane = new DockedMetricEditorPane((MetricObjectData) data);
                 break;
             case TABLE_JOIN:
                 break;
             default:
-                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", data.getType());
         }
 
         return dockedEditorPane;
     }
     
-    public EditorPane createUndockedEditorPane(ObjectType type, Stage stage) {
-        EditorPane editorPane = null;
-        switch (type) {
+    public UndockedEditorPane<? extends UIData> createUndockedEditorPane(Stage stage, UIData data) {
+        UndockedEditorPane<? extends UIData> undockedEditorPane = null;
+        switch (data.getType()) {
             case ATTRIBUTE:
                 break;
             case METRIC:
-                editorPane = new UndockedMetricEditorPane(stage);
+                undockedEditorPane = new UndockedMetricEditorPane(stage, (MetricObjectData) data);
                 break;
             case TABLE_JOIN:
                 break;
             default:
-                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", data.getType());
         }
 
-        return editorPane;
+        return undockedEditorPane;
     }
 }

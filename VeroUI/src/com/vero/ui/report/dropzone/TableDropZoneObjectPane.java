@@ -1,14 +1,12 @@
 package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_LABEL;
-import static com.vero.ui.constants.ObjectType.TABLE;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ImageList;
-import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.util.UIUtils;
 
@@ -17,11 +15,11 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class TableDropZoneObjectPane extends DropZoneObjectPane {
+public class TableDropZoneObjectPane extends DropZoneObjectPane<TableObjectData> {
     private TableObjectData data = null;
     
     public TableDropZoneObjectPane(TableObjectData data) {
-        this.data = data;
+        super(data);
         buildUI();
     }
     
@@ -37,10 +35,4 @@ public class TableDropZoneObjectPane extends DropZoneObjectPane {
         label.getStyleClass().add(CLASS_OBJECT_LABEL);
         getChildren().add(label);
     }
-    
-    @Override
-    public ObjectType getType() {
-        return TABLE;
-    }
-
 }

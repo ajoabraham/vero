@@ -84,10 +84,10 @@ public final class LabelPaneFactory {
         return objectPane;
     }
     
-    public DropZoneObjectPane createDropZoneObjectPane(ObjectType type, UIData data) {
-       DropZoneObjectPane dropZoneObjectPane = null;
+    public DropZoneObjectPane<? extends UIData> createDropZoneObjectPane(UIData data) {
+       DropZoneObjectPane<? extends UIData> dropZoneObjectPane = null;
         
-        switch (type) {
+        switch (data.getType()) {
             case TABLE:
                 dropZoneObjectPane = new TableDropZoneObjectPane((TableObjectData) data);                
                 break;
@@ -101,7 +101,7 @@ public final class LabelPaneFactory {
                 dropZoneObjectPane = new TableJoinDropZoneObjectPane((TableJoinObjectData) data);               
                 break;
             default:
-                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
+                logger.log(Level.SEVERE, "Invalid object type - {0}", data.getType());
         }
         
         return dropZoneObjectPane;

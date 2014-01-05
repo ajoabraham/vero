@@ -4,6 +4,7 @@ import static com.vero.ui.constants.CSSConstants.CLASS_EDITOR_PANE;
 import javafx.scene.layout.BorderPane;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.UIData;
 
 /**
  * Top level class for all dock/undock data editors
@@ -11,10 +12,17 @@ import com.vero.ui.constants.ObjectType;
  * @author Tai Hu
  *
  */
-public abstract class EditorPane extends BorderPane {
-    public EditorPane() {
+public abstract class EditorPane<T extends UIData> extends BorderPane {
+    private T data = null;
+    public EditorPane(T data) {
         getStyleClass().add(CLASS_EDITOR_PANE);
     }
     
-    public abstract ObjectType getType();
+    public ObjectType getType() {
+        return data.getType();
+    }
+    
+    public T getData() {
+        return data;
+    }
 }

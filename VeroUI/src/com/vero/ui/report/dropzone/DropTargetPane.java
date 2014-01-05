@@ -21,16 +21,14 @@ import javafx.scene.layout.VBox;
 import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
-import com.vero.ui.editor.DockContainer;
 import com.vero.ui.editor.DockHandler;
-import com.vero.ui.editor.DockedEditorPane;
 import com.vero.ui.model.UIData;
 
 /**
  *
  * @author Tai Hu
  */
-public abstract class DropTargetPane extends VBox implements DroppableObject, DockHandler {
+public abstract class DropTargetPane extends VBox implements DroppableObject {
     private static final Logger logger = Logger.getLogger(DropTargetPane.class.getName());
     
     private static final String ATTRIBUTE_PLACEHOLDER_HINT = "drag attributes or columns here...";
@@ -42,7 +40,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Do
     
     private int currentDropIndex = -1;
     private boolean isEmpty = false;
-    private DockContainer dockContainer = null;
+    private DockHandler dockHandler = null;
     
     public DropTargetPane() {
         labelPaneFactory = LabelPaneFactory.getInstance();
@@ -111,8 +109,8 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Do
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
-        DropZoneObjectPane dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
-        dropZoneObjectPane.setDockHandler(this);
+        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(transferData);
+        dropZoneObjectPane.setDockHandler(dockHandler);
         
         if (isEmpty) {
             getChildren().set(0, dropZoneObjectPane);
@@ -159,19 +157,18 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Do
         
         return padding + (DEFAULT_LABEL_PANE_HEIGHT * size) + (spacing * (size - 1));
     }
-    
-    @Override
-    public void handle(DockedEditorPane dockedEditorPane) {
-        if (dockContainer != null) {
-            dockContainer.showDockedPane(dockedEditorPane);
-        }
+
+    /**
+     * @return the dockHandler
+     */
+    public DockHandler getDockHandler() {
+        return dockHandler;
     }
 
-    public DockContainer getDockContainer() {
-        return dockContainer;
-    }
-
-    public void setDockContainer(DockContainer dockContainer) {
-        this.dockContainer = dockContainer;
+    /**
+     * @param dockHandler the dockHandler to set
+     */
+    public void setDockHandler(DockHandler dockHandler) {
+        this.dockHandler = dockHandler;
     }
 }

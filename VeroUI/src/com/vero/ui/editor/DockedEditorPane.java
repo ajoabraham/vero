@@ -4,7 +4,6 @@ import static com.vero.ui.constants.CSSConstants.CLASS_DOCKED_EDITOR_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_EDITOR_PANE_TOOL_BAR;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.DOCKED_EDITOR_PANE_HEIGHT;
-import static com.vero.ui.constants.UIConstants.DOCKED_EDITOR_PANE_WIDTH;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_WIDTH;
 import javafx.event.ActionEvent;
@@ -17,21 +16,23 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
 /**
  * 
  * @author Tai Hu
  *
  */
-public abstract class DockedEditorPane extends EditorPane implements EventHandler<ActionEvent> {
+public abstract class DockedEditorPane<T extends UIData> extends EditorPane<T> implements EventHandler<ActionEvent> {
     Button undockButton = null;
     Button okButton = null;
     Button cancelButton = null;
     
-    public DockedEditorPane() {
+    public DockedEditorPane(T data) {
+        super(data);
         getStyleClass().add(CLASS_DOCKED_EDITOR_PANE);
-        setPrefSize(DOCKED_EDITOR_PANE_WIDTH, DOCKED_EDITOR_PANE_HEIGHT);
-        setMaxSize(DOCKED_EDITOR_PANE_WIDTH, DOCKED_EDITOR_PANE_HEIGHT);
+        setPrefHeight(DOCKED_EDITOR_PANE_HEIGHT);
+        setMaxHeight(DOCKED_EDITOR_PANE_HEIGHT);
         
         // Create tool bar at top
         HBox toolbar = new HBox();
@@ -76,11 +77,10 @@ public abstract class DockedEditorPane extends EditorPane implements EventHandle
     }    
     
     protected void handleCancelEvent() {
-        EditorPaneManager.getInstance().hideDockedMetricEditorPane();
+        
     }
     
     protected void handleUndockEvent() {
-        EditorPaneManager.getInstance().hideDockedMetricEditorPane();
-        EditorPaneManager.getInstance().showUndockedMetricEditorPane();
+        
     }
 }

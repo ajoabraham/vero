@@ -48,7 +48,7 @@ public interface CSSConstants {
      * ID for drop zone pane
      */
     // ID for drop zone main scroll pane
-    public static final String ID_DROP_ZONE_PANE = "drop-zone-pane";
+    public static final String CLASS_DROP_ZONE_PANE = "drop-zone-pane";
     // style class for actual content pane inside of drop zone pane.
     public static final String CLASS_DROP_ZONE_CONTENT_PANE = "drop-zone-content-pane";
     public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
@@ -62,6 +62,7 @@ public interface CSSConstants {
      * ID for query pane
      */
     public static final String CLASS_QUERY_PANE = "query-pane";
+    public static final String CLASS_QUERY_CONTENT_PANE = "query-content-pane";
     public static final String CLASS_GLOBAL_FILTER_PANE = "global-filter-pane";
     public static final String CLASS_COMMENT_BLOCK_PANE = "comment-block-pane";
     public static final String CLASS_REPORT_BLOCK_PANE = "report-block-pane";
