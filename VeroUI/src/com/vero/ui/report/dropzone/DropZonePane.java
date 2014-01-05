@@ -6,6 +6,7 @@
 package com.vero.ui.report.dropzone;
 
 import com.vero.ui.common.LabelPaneFactory;
+
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 import static com.vero.ui.constants.ObjectType.METRIC;
 import static com.vero.ui.constants.ObjectType.TABLE;
@@ -14,8 +15,11 @@ import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 import static com.vero.ui.constants.CSSConstants.*;
 import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
 import static com.vero.ui.constants.TableJoinType.INNER_JOIN;
+
+import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropTargetPane;
 import com.vero.ui.report.dropzone.DropTargetPaneFactory;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -25,8 +29,10 @@ import javafx.scene.layout.VBox;
  * @author Tai Hu
  */
 public class DropZonePane extends ScrollPane {
+    private ReportPane reportPane = null;
     
-    public DropZonePane() {
+    public DropZonePane(ReportPane reportPane) {
+        this.reportPane = reportPane;
         buildUI();
     }
 
@@ -49,6 +55,7 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(attributesLabel);
         
         DropTargetPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
+        attributeDropPane.setDockContainer(reportPane);
         attributeDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         contentPane.getChildren().add(attributeDropPane);
@@ -59,6 +66,7 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(metricsLabel);
 
         DropTargetPane metricDropPane = dropPaneFactory.createDropPane(METRIC, true);
+        metricDropPane.setDockContainer(reportPane);
         metricDropPane.getChildren().add(
                 labelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         contentPane.getChildren().add(metricDropPane);

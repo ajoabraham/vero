@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.editor.DockedEditorPane;
+import com.vero.ui.editor.EditorPaneFactory;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.util.UIUtils;
 
@@ -36,5 +38,13 @@ public class MetricDropZoneObjectPane extends DropZoneObjectPane {
     @Override
     public ObjectType getType() {
         return METRIC;
+    }
+    
+    @Override
+    protected void handleDoubleClick() {
+        if (getDockHandler() != null) {
+            DockedEditorPane dockedEditorPane = EditorPaneFactory.getInstance().createDockedEditorPane(METRIC);
+            getDockHandler().handle(dockedEditorPane);
+        }
     }
 }

@@ -21,13 +21,16 @@ import javafx.scene.layout.VBox;
 import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.editor.DockContainer;
+import com.vero.ui.editor.DockHandler;
+import com.vero.ui.editor.DockedEditorPane;
 import com.vero.ui.model.UIData;
 
 /**
  *
  * @author Tai Hu
  */
-public abstract class DropTargetPane extends VBox implements DroppableObject {
+public abstract class DropTargetPane extends VBox implements DroppableObject, DockHandler {
     private static final Logger logger = Logger.getLogger(DropTargetPane.class.getName());
     
     private static final String ATTRIBUTE_PLACEHOLDER_HINT = "drag attributes or columns here...";
@@ -39,6 +42,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     
     private int currentDropIndex = -1;
     private boolean isEmpty = false;
+    private DockContainer dockContainer = null;
     
     public DropTargetPane() {
         labelPaneFactory = LabelPaneFactory.getInstance();
@@ -108,6 +112,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
         DropZoneObjectPane dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(getType(), transferData);
+        dropZoneObjectPane.setDockHandler(this);
         
         if (isEmpty) {
             getChildren().set(0, dropZoneObjectPane);
@@ -153,5 +158,20 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         double padding = getPadding().getTop() + getPadding().getBottom();
         
         return padding + (DEFAULT_LABEL_PANE_HEIGHT * size) + (spacing * (size - 1));
+    }
+    
+    @Override
+    public void handle(DockedEditorPane dockedEditorPane) {
+        if (dockContainer != null) {
+            dockContainer.showDockedPane(dockedEditorPane);
+        }
+    }
+
+    public DockContainer getDockContainer() {
+        return dockContainer;
+    }
+
+    public void setDockContainer(DockContainer dockContainer) {
+        this.dockContainer = dockContainer;
     }
 }

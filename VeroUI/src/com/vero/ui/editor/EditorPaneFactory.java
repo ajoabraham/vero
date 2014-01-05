@@ -29,13 +29,13 @@ public final class EditorPaneFactory {
         return INSTANCE;
     }
 
-    public EditorPane createDockedEditorPane(ObjectType type) {
-        EditorPane editorPane = null;
+    public DockedEditorPane createDockedEditorPane(ObjectType type) {
+        DockedEditorPane dockedEditorPane = null;
         switch (type) {
             case ATTRIBUTE:
                 break;
             case METRIC:
-                editorPane = new DockedMetricEditorPane();
+                dockedEditorPane = new DockedMetricEditorPane();
                 break;
             case TABLE_JOIN:
                 break;
@@ -43,7 +43,7 @@ public final class EditorPaneFactory {
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }
 
-        return editorPane;
+        return dockedEditorPane;
     }
     
     public EditorPane createUndockedEditorPane(ObjectType type, Stage stage) {

@@ -8,6 +8,8 @@ package com.vero.ui.report;
 
 import javafx.scene.layout.BorderPane;
 
+import com.vero.ui.editor.DockContainer;
+import com.vero.ui.editor.DockedEditorPane;
 import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryPane;
 
@@ -15,13 +17,19 @@ import com.vero.ui.report.querypane.QueryPane;
  *
  * @author Tai Hu
  */
-public class ReportPane extends BorderPane {
+public class ReportPane extends BorderPane implements DockContainer {
+    
     public ReportPane() {
         buildUI();
     }
     
     private void buildUI() {
-        setLeft(new DropZonePane());
+        setLeft(new DropZonePane(this));
         setCenter(new QueryPane());
+    }
+
+    @Override
+    public void showDockedPane(DockedEditorPane dockedEditorPane) {
+        setBottom(dockedEditorPane);
     }
 }
