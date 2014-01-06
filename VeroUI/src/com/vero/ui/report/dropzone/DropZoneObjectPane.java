@@ -21,8 +21,8 @@ import com.vero.ui.model.UIData;
  *
  */
 public abstract class DropZoneObjectPane<T extends UIData> extends LabelPane implements EventHandler<MouseEvent> {
-    private DockHandler dockHandler = null;
-    private T data = null;
+    DockHandler dockHandler = null;
+    T data = null;
     
     public DropZoneObjectPane(T data) {
         this.data = data;

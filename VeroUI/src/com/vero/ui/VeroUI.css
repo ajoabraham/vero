@@ -395,6 +395,12 @@
     -fx-background-position: left top;
 }
 
+.attribute-icon-label {
+	-fx-background-image: url("images/bg_attribute.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;
+}
+
 /*******************************************************************************
  * All styles below this line are customized based on standard caspian.css     *
  ******************************************************************************/

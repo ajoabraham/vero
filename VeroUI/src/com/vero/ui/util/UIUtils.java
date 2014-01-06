@@ -96,6 +96,9 @@ public final class UIUtils {
         String styleClass = "unknown";
         
         switch (type) {
+            case ATTRIBUTE:
+                styleClass = CLASS_ATTRIBUTE_ICON_LABEL;
+                break;
             case METRIC:
                 styleClass = CLASS_METRIC_ICON_LABEL;
                 break;

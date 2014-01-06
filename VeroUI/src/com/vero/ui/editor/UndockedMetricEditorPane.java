@@ -10,7 +10,12 @@ import com.vero.ui.model.MetricObjectData;
  *
  */
 public class UndockedMetricEditorPane extends UndockedEditorPane<MetricObjectData> {
-    public UndockedMetricEditorPane(Stage stage, MetricObjectData data) {
-        super(stage, data);
+    public UndockedMetricEditorPane(Stage stage, MetricObjectData data, DockHandler dockHandler) {
+        super(stage, data, dockHandler);
+        buildUI();
+    }
+    
+    private void buildUI() {
+        
     }
 }

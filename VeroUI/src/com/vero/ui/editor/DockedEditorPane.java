@@ -6,6 +6,7 @@ import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.DOCKED_EDITOR_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_WIDTH;
+import static com.vero.ui.constants.DockEventType.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -15,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+import com.vero.ui.common.DockEvent;
+import com.vero.ui.common.DockEventBuilder;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
@@ -28,8 +31,11 @@ public abstract class DockedEditorPane<T extends UIData> extends EditorPane<T> i
     Button okButton = null;
     Button cancelButton = null;
     
-    public DockedEditorPane(T data) {
+    DockHandler dockHandler = null;
+    
+    public DockedEditorPane(T data, DockHandler dockHandler) {
         super(data);
+        this.dockHandler = dockHandler;
         getStyleClass().add(CLASS_DOCKED_EDITOR_PANE);
         setPrefHeight(DOCKED_EDITOR_PANE_HEIGHT);
         setMaxHeight(DOCKED_EDITOR_PANE_HEIGHT);
@@ -44,7 +50,7 @@ public abstract class DockedEditorPane<T extends UIData> extends EditorPane<T> i
         iconLabel.getStyleClass().add(UIUtils.getEditorPaneIconStyleClass(getType()));
         toolbar.getChildren().add(iconLabel);
         
-        Label titleLabel = new Label("New Metric");
+        Label titleLabel = new Label(data.getType().toString());
         titleLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         toolbar.getChildren().add(titleLabel);
         
@@ -77,10 +83,16 @@ public abstract class DockedEditorPane<T extends UIData> extends EditorPane<T> i
     }    
     
     protected void handleCancelEvent() {
-        
+        if (dockHandler != null) {
+            DockEvent dockEvent = DockEventBuilder.create().type(CANCEL).build();
+            dockHandler.handle(dockEvent);
+        }
     }
     
     protected void handleUndockEvent() {
-        
+        if (dockHandler != null) {
+            DockEvent dockEvent = DockEventBuilder.create().type(UNDOCK).data(getData()).build();
+            dockHandler.handle(dockEvent);
+        }
     }
 }

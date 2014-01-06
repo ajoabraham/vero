@@ -16,7 +16,6 @@ import com.vero.ui.util.UIUtils;
  *
  */
 public class TableDropZoneObjectPane extends DropZoneObjectPane<TableObjectData> {
-    private TableObjectData data = null;
     
     public TableDropZoneObjectPane(TableObjectData data) {
         super(data);

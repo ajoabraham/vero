@@ -23,8 +23,6 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  */
 public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObjectData> {
-    private TableJoinObjectData data = null;
-
     private ImageView tableJoinImageView = null;
     
     public TableJoinDropZoneObjectPane(TableJoinObjectData data) {

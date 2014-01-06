@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javafx.stage.Stage;
 
+import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
 
@@ -30,13 +31,14 @@ public final class EditorPaneFactory {
         return INSTANCE;
     }
 
-    public DockedEditorPane<? extends UIData> createDockedEditorPane(UIData data) {
+    public DockedEditorPane<? extends UIData> createDockedEditorPane(UIData data, DockHandler dockHandler) {
         DockedEditorPane<? extends UIData> dockedEditorPane = null;
         switch (data.getType()) {
             case ATTRIBUTE:
+                dockedEditorPane = new DockedAttributeEditorPane((AttributeObjectData) data, dockHandler);
                 break;
             case METRIC:
-                dockedEditorPane = new DockedMetricEditorPane((MetricObjectData) data);
+                dockedEditorPane = new DockedMetricEditorPane((MetricObjectData) data, dockHandler);
                 break;
             case TABLE_JOIN:
                 break;
@@ -47,13 +49,14 @@ public final class EditorPaneFactory {
         return dockedEditorPane;
     }
     
-    public UndockedEditorPane<? extends UIData> createUndockedEditorPane(Stage stage, UIData data) {
+    public UndockedEditorPane<? extends UIData> createUndockedEditorPane(Stage stage, UIData data, DockHandler dockHandler) {
         UndockedEditorPane<? extends UIData> undockedEditorPane = null;
         switch (data.getType()) {
             case ATTRIBUTE:
+                undockedEditorPane = new UndockedAttributeEditorPane(stage, (AttributeObjectData) data, dockHandler);
                 break;
             case METRIC:
-                undockedEditorPane = new UndockedMetricEditorPane(stage, (MetricObjectData) data);
+                undockedEditorPane = new UndockedMetricEditorPane(stage, (MetricObjectData) data, dockHandler);
                 break;
             case TABLE_JOIN:
                 break;

@@ -75,6 +75,7 @@ public interface CSSConstants {
     public static final String CLASS_UNDOCKED_EDITOR_PANE = "undocked-editor-pane";
     public static final String CLASS_EDITOR_PANE_TOOL_BAR = "editor-pane-tool-bar";
     public static final String CLASS_METRIC_ICON_LABEL = "metric-icon-label";
+    public static final String CLASS_ATTRIBUTE_ICON_LABEL = "attribute-icon-label";
     // Style class for all content panes and should be styled as .docked-editor-pane .content-pane
     public static final String CLASS_CONTENT_PANE = "content-pane";
     // Style class for all object container panes in editor pane (e.x. order by, partition by, etc)

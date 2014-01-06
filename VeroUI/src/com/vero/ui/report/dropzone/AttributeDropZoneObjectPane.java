@@ -13,9 +13,7 @@ import com.vero.ui.util.UIUtils;
  * @author Tai Hu
  *
  */
-public class AttributeDropZoneObjectPane extends DropZoneObjectPane<AttributeObjectData> {
-    private AttributeObjectData data = null;
-    
+public class AttributeDropZoneObjectPane extends DropZoneObjectPane<AttributeObjectData> {    
     public AttributeDropZoneObjectPane(AttributeObjectData data) {
         super(data);
         buildUI();

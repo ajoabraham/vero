@@ -6,13 +6,21 @@
 
 package com.vero.ui.report;
 
+import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.UNDOCKED_EDITOR_PANE_WIDTH;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.scene.layout.BorderPane;
 
 import com.vero.ui.common.DockEvent;
+import com.vero.ui.common.PopupDialog;
+import com.vero.ui.common.UIManager;
 import com.vero.ui.editor.DockHandler;
+import com.vero.ui.editor.DockedEditorPane;
+import com.vero.ui.editor.EditorPaneFactory;
+import com.vero.ui.editor.UndockedEditorPane;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryPane;
@@ -24,7 +32,13 @@ import com.vero.ui.report.querypane.QueryPane;
 public class ReportPane extends BorderPane implements DockHandler {
     private static final Logger logger = Logger.getLogger(ReportPane.class.getName());
     
+    private UIManager uiManager = null;
+    private EditorPaneFactory editorPaneFactory = null;
+    private DockedEditorPane<? extends UIData> dockedEditorPane = null;
+    
     public ReportPane() {
+        uiManager = UIManager.getInstance();
+        editorPaneFactory = EditorPaneFactory.getInstance();
         buildUI();
     }
     
@@ -40,7 +54,7 @@ public class ReportPane extends BorderPane implements DockHandler {
                 handleDockEvent(dockEvent.getData());
                 break;
             case UNDOCK:
-                handleUndockEvent();
+                handleUndockEvent(dockEvent.getData());
                 break;
             case CANCEL:
                 handleCancelEvent();
@@ -51,14 +65,19 @@ public class ReportPane extends BorderPane implements DockHandler {
     }
     
     private void handleDockEvent(UIData data) {
-        
+        dockedEditorPane = editorPaneFactory.createDockedEditorPane(data, this);
+        setBottom(dockedEditorPane);
     }
     
-    private void handleUndockEvent() {
-        
+    private void handleUndockEvent(UIData data) {
+        PopupDialog dialog = new PopupDialog(uiManager.getPrimaryStage());
+        UndockedEditorPane<? extends UIData> unDockedEditorPane = editorPaneFactory.createUndockedEditorPane(dialog, data, this);
+        dialog.createScene(unDockedEditorPane, UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
+        handleCancelEvent();
+        dialog.show();
     }
     
     private void handleCancelEvent() {
-        
+        setBottom(null);
     }
 }

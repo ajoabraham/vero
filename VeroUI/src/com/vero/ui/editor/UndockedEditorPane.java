@@ -37,11 +37,12 @@ public abstract class UndockedEditorPane<T extends UIData> extends EditorPane<T>
     Button okButton = null;
     Button cancelButton = null;
     
-    private DockHandler dockHandler = null;
+    DockHandler dockHandler = null;
     
-    public UndockedEditorPane(Stage stage, T data) {
+    public UndockedEditorPane(Stage stage, T data, DockHandler dockHandler) {
         super(data);
         this.stage = stage;
+        this.dockHandler = dockHandler;
         getStyleClass().add(CLASS_UNDOCKED_EDITOR_PANE);
         setPrefSize(UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
         setMaxSize(UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
@@ -92,9 +93,9 @@ public abstract class UndockedEditorPane<T extends UIData> extends EditorPane<T>
 
     protected void handleDockEvent() {
         stage.close();
-        if (getDockHandler() != null) {
+        if (dockHandler != null) {
             DockEvent dockEvent = DockEventBuilder.create().type(DOCK).data(getData()).build();
-            getDockHandler().handle(dockEvent);
+            dockHandler.handle(dockEvent);
         }
     }
     
@@ -104,19 +105,5 @@ public abstract class UndockedEditorPane<T extends UIData> extends EditorPane<T>
     
     public Stage getStage() {
         return stage;
-    }
-    
-    /**
-     * @return the dockHandler
-     */
-    public DockHandler getDockHandler() {
-        return dockHandler;
-    }
-
-    /**
-     * @param dockHandler the dockHandler to set
-     */
-    public void setDockHandler(DockHandler dockHandler) {
-        this.dockHandler = dockHandler;
     }
 }

@@ -15,6 +15,7 @@ import com.vero.ui.model.UIData;
 public abstract class EditorPane<T extends UIData> extends BorderPane {
     private T data = null;
     public EditorPane(T data) {
+        this.data = data;
         getStyleClass().add(CLASS_EDITOR_PANE);
     }
     

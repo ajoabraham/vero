@@ -14,8 +14,6 @@ import com.vero.ui.util.UIUtils;
  * 
  */
 public class MetricDropZoneObjectPane extends DropZoneObjectPane<MetricObjectData> {
-    private MetricObjectData data = null;
-
     public MetricDropZoneObjectPane(MetricObjectData data) {
         super(data);
         buildUI();
