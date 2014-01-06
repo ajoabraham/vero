@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.jgrapht.alg.KruskalMinimumSpanningTree;
+import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -50,11 +51,19 @@ public class QueryEngine {
                 return this.getSource();
             }
         }
+
+        public Object retrieveSource() {
+            return this.getSource();
+        }
+        
+        public Object retrieveTarget() {
+            return this.getTarget();
+        }
         
         @Override
         public double getWeight() {
             return super.getWeight();
-        }
+        }        
     }
     
     private class JDRemoveUnit {
@@ -216,6 +225,9 @@ public class QueryEngine {
         for (EdgeUnit eu : euSet) {
             System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight());
         }
+        
+        // generate SQL
+        generateSQL(joinGraph, euSet);
     }
     
     private void removeExtraEdges(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
@@ -298,6 +310,33 @@ public class QueryEngine {
             pu.setTableAlias("T"+aliasCount);
             aliasCount++;
         }
+    }
+    
+    private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {                
+        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        UnionFind<ProcessingUnit> unionPU = new UnionFind(graphVertexSet);
+
+        System.out.println("Generate SQL...");
+        
+        // union find on PU
+        for (EdgeUnit eu : euSet) {
+            unionPU.union((ProcessingUnit)eu.retrieveSource(), (ProcessingUnit)eu.retrieveTarget());
+        }
+        
+        // count how many disjoint groups
+        int nGroup = 0;
+        for (ProcessingUnit pu : graphVertexSet) {
+            if (pu == unionPU.find(pu)) {
+                // root element, counting # of groups
+                System.out.println("group count + 1");
+                nGroup++;
+            } else {
+                
+            }            
+        }
+        System.out.println("group count = " + nGroup);
+        
+        // generate SQL
     }
     
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {

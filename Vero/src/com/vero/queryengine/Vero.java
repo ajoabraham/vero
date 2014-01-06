@@ -35,7 +35,6 @@ import org.sql.generation.api.grammar.query.ColumnReferenceByName;
 import org.sql.generation.api.grammar.query.Ordering;
 import org.sql.generation.api.grammar.query.QueryExpression;
 import org.sql.generation.api.grammar.query.QueryExpressionBody;
-import org.jgrapht.alg.*;
 
 /**
  *
@@ -46,7 +45,7 @@ public class Vero {
         // session
         Session userSession;
         TestParser testParser = new TestParser("test1.json");        
-        userSession = testParser.parse();                
+        userSession = testParser.parse();
         
         System.out.println("Dumping sql...");
         // start generating sql
@@ -102,7 +101,7 @@ public class Vero {
             String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {                
                 ArrayList<Table> expTables = exps.get(i).getTables();
-                for (int j =0; j < expTables.size(); j++) {
+                for (int j=0; j < expTables.size(); j++) {
                     if (j==0) colTableRep = expTables.get(j).getObjectName();
                     if (!tableAliases.containsKey(expTables.get(j).getObjectName())) {
                         tableAliases.put(expTables.get(j).getObjectName(), "T"+alias_cnt);
@@ -261,8 +260,9 @@ public class Vero {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // queryEngineOldTest1();
         // queryEngineTest1();
-        // queryEngineTest2();
-        queryEngineTest3();
+        queryEngineTest2();
+        // queryEngineTest3();
     }
 }
