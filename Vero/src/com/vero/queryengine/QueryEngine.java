@@ -69,7 +69,7 @@ public class QueryEngine {
     private class JDRemoveUnit {
         private JoinDefinition joinDef;
         private int usedCount;
-        private ArrayList<ProcessingUnit> linkedPU;
+        private final ArrayList<ProcessingUnit> linkedPU;
         
         public JDRemoveUnit() {
             joinDef = null;

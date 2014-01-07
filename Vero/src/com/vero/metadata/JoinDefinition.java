@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author yulinwen
  */
 public class JoinDefinition {
-    private UUID uuid;
+    private final UUID uuid;
     private String name;
     private String tleft;
     private String cleft;

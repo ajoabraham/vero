@@ -21,8 +21,6 @@ import org.sql.generation.api.grammar.booleans.BooleanExpression;
 import org.sql.generation.api.grammar.builders.query.ColumnsBuilder;
 import org.sql.generation.api.grammar.builders.query.QuerySpecificationBuilder;
 import org.sql.generation.api.grammar.builders.query.TableReferenceBuilder;
-import org.sql.generation.api.grammar.common.SetQuantifier;
-import org.sql.generation.api.vendor.MySQLVendor;
 import org.sql.generation.api.vendor.SQLVendor;
 import org.sql.generation.api.vendor.SQLVendorProvider;
 import org.sql.generation.api.grammar.factories.BooleanFactory;
@@ -32,8 +30,6 @@ import org.sql.generation.api.grammar.factories.QueryFactory;
 import org.sql.generation.api.grammar.factories.TableReferenceFactory;
 import org.sql.generation.api.grammar.query.ColumnReference;
 import org.sql.generation.api.grammar.query.ColumnReferenceByName;
-import org.sql.generation.api.grammar.query.Ordering;
-import org.sql.generation.api.grammar.query.QueryExpression;
 import org.sql.generation.api.grammar.query.QueryExpressionBody;
 
 /**

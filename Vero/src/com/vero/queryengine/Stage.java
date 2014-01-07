@@ -25,10 +25,10 @@ import java.util.UUID;
 public class Stage {
     private class ReferenceUnit1 {
         private int rowCount;
-        private HashMap<String, Attribute> attrHT;
-        private HashMap<String, Metric> metricHT;
-        private HashMap<String, JoinDefinition> joindefHT;
-        private ArrayList<Table> hardhintsAL;
+        private final HashMap<String, Attribute> attrHT;
+        private final HashMap<String, Metric> metricHT;
+        private final HashMap<String, JoinDefinition> joindefHT;
+        private final ArrayList<Table> hardhintsAL;
                         
         public ReferenceUnit1() {
             rowCount = -1;
@@ -39,11 +39,11 @@ public class Stage {
         }
     }
         
-    private HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
+    private final HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
     private HashMap<String, Attribute> attributes;
     private HashMap<String, Metric> metrics;
     private ArrayList<String> hardhints;
-    private HashMap<UUID, ProcessingUnit> processingUnits;
+    private final HashMap<UUID, ProcessingUnit> processingUnits;
     
     public Stage() {
         table2ReferenceUnitHT = new HashMap();
