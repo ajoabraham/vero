@@ -185,12 +185,15 @@ public class TestParser {
                     anAttr.addExpression(anExp);
 
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                    for (int k = 0; k < tableUUIDsArraySize; k++) {
-                        // table name
-                        System.out.println("table's column:" + jsonTableUUIDsArray.getJSONArray(k).getString(0));
-                        System.out.println("table's name:" + jsonTableUUIDsArray.getJSONArray(k).getString(1));
+                    for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                        String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
+                        String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
+                        Table curTab = testDS.getTable(tabName);                                                
+                        
+                        System.out.println("table's column:" + colName);
+                        System.out.println("table's name:" + tabName);
 
-                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getJSONArray(k).getString(1)));
+                        anExp.addTable(testDS.getTable(tabName));
                     }                    
                 }
             }

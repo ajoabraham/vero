@@ -226,6 +226,9 @@ public class QueryEngine {
             System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight());
         }
         
+        // match expression
+        matchExpression(joinGraph, euSet);
+        
         // generate SQL
         generateSQL(joinGraph, euSet);
     }
@@ -312,7 +315,11 @@ public class QueryEngine {
         }
     }
     
-    private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {                
+    private void matchExpression(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+        
+    }
+    
+    private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
         Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
         UnionFind<ProcessingUnit> unionPU = new UnionFind(graphVertexSet);
 
@@ -330,9 +337,7 @@ public class QueryEngine {
                 // root element, counting # of groups
                 System.out.println("group count + 1");
                 nGroup++;
-            } else {
-                
-            }            
+            }
         }
         System.out.println("group count = " + nGroup);
         

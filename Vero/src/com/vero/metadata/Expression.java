@@ -7,17 +7,13 @@ public class Expression implements Filterable {
     UUID uuid;
     String expression;
     ArrayList<Table> tables;
+    ArrayList<Column> columns;
 
     public Expression(String inExp) {
         uuid = UUID.randomUUID();
         expression = inExp;
         tables = new ArrayList();
-    }
-
-    public Expression(String inExp, ArrayList<Table> inTables) {
-        uuid = UUID.randomUUID();
-        expression = inExp;
-        tables = new ArrayList(inTables);
+        columns = new ArrayList();
     }
 
     public void addTable(Table inTab) {
@@ -26,6 +22,12 @@ public class Expression implements Filterable {
         }
     }
 
+    public void addColumn(Column inCol) {
+        if (inCol != null) {
+            columns.add(inCol);
+        }
+    }
+    
     public void addTables(ArrayList<Table> inTables) {        
         tables.addAll(inTables);
     }
