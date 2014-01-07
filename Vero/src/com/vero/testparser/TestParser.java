@@ -118,7 +118,7 @@ public class TestParser {
                 for (int j = 0; j < columnsArraySize; j++) {
                     JSONObject oneJSONColumnObj = jsonColumnsArray.getJSONObject(j);
                     // column
-                    // System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
+                    System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
                     System.out.println("name:" + oneJSONColumnObj.getString("name"));
                     System.out.println("type:" + oneJSONColumnObj.getString("type"));
                     System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
@@ -156,7 +156,9 @@ public class TestParser {
                     } else {
                         aColumn.setKeyType(Column.KeyTypes.NO_KEY_TYPE);
                     }
-                }               
+                    
+                    aTable.addColumn(aColumn);
+                }        
             }
             System.out.println("------------------------------");
             
@@ -193,7 +195,17 @@ public class TestParser {
                         System.out.println("table's column:" + colName);
                         System.out.println("table's name:" + tabName);
 
-                        anExp.addTable(testDS.getTable(tabName));
+                        if (curTab != null) {
+                            Column aCol = curTab.getColumn(colName);
+                            
+                            if (aCol != null) {
+                                anExp.addColumn(aCol);
+                            } else {
+                                System.out.println("can't find column...");
+                            }
+                        } else {
+                            System.out.println("can't find table...");
+                        }                       
                     }                    
                 }
             }
@@ -224,12 +236,25 @@ public class TestParser {
                     aMetric.addExpression(anExp);
                     
                     int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                    for (int k = 0; k < tableUUIDsArraySize; k++) {
-                        // table name                        
-                        System.out.println("table's column:" + jsonTableUUIDsArray.getJSONArray(k).getString(0));
-                        System.out.println("table's name:" + jsonTableUUIDsArray.getJSONArray(k).getString(1));
+                    for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                        String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
+                        String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
+                        Table curTab = testDS.getTable(tabName);                                                
+                        
+                        System.out.println("table's column:" + colName);
+                        System.out.println("table's name:" + tabName);
 
-                        anExp.addTable(testDS.getTable(jsonTableUUIDsArray.getJSONArray(k).getString(1)));
+                        if (curTab != null) {
+                            Column aCol = curTab.getColumn(colName);
+                            
+                            if (aCol != null) {
+                                anExp.addColumn(aCol);
+                            } else {
+                                System.out.println("can't find column...");
+                            }
+                        } else {
+                            System.out.println("can't find table...");
+                        }           
                     }
                 }
             }
