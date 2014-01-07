@@ -48,6 +48,34 @@ public class Metric implements Filterable {
         return expressions;
     }
 
+    public Expression getExpressionByTable(Table inTab) {
+        ArrayList<Expression> expList = this.getExpressions();
+        Boolean found = false;
+        
+        if (expList.size() > 0) {
+            Iterator<Expression> iterExp = expList.iterator();
+            
+            while (iterExp.hasNext()) {
+                Expression curExp = iterExp.next();
+                ArrayList<Table> tabList = curExp.getTables();
+                
+                if (tabList.size() > 0) {
+                    Iterator<Table> iterTab = tabList.iterator();
+                    
+                    while (iterTab.hasNext()) {
+                        Table curTab = iterTab.next();
+                        
+                        if (inTab == curTab) {
+                            return curExp;
+                        }                        
+                    }
+                }                
+            }
+        }
+        
+        return null;
+    }
+    
     public ArrayList<Table> retrieveTables() {        
         ArrayList<Expression> aList = this.getExpressions();
         

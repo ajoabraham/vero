@@ -7,6 +7,7 @@
 package com.vero.queryengine;
 
 import com.vero.metadata.Attribute;
+import com.vero.metadata.Expression;
 import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
 import static com.vero.queryengine.ProcessingUnit.PUType.*;
@@ -25,11 +26,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         PUTYPE_HARDHINT
     }
 
-    private UUID uuid;
+    private final UUID uuid;
     private PUType type;
     private Object content;
+    
+    // update during processing
     private int removeCount;
     private String tableAlias;
+    private Expression usedExp;
     
     public ProcessingUnit() {
         uuid = UUID.randomUUID();
@@ -37,6 +41,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         content = null;
         removeCount = 0;
         tableAlias = null;
+        usedExp = null;
     }
 
     public UUID getUUID() {
@@ -73,6 +78,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
 
     public String getTableAlias() {
         return tableAlias;
+    }
+    
+    public void setUsedExp(Expression inExp) {
+        usedExp = inExp;
+    }
+    
+    public Expression getUsedExp() {
+        return usedExp;
     }
     
     public ArrayList<Table> retrieveTables() {
