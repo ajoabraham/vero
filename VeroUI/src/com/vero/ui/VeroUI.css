@@ -11,8 +11,10 @@
     -fx-hint-text-color: #666666;
     -fx-comment-text-color: #999999;
     -fx-global-filter-border-color: #4D1823;
-    -fx-button-hover-color: #17163A;
-    -fx-button-hover-border-color: #666;
+    -fx-button-hover-color: linear-gradient(to bottom, #4d4d4d, #727272);
+    -fx-button-hover-border-color: #333;
+    -fx-button-hover-border-dark-color: black;
+    -fx-context-menu-hover-color: #324389;
 }
 
 /*******************************************************************************
@@ -77,8 +79,11 @@
 
 #datasources-tool-bar-button:hover {
     -fx-background-color: -fx-button-hover-color;
-    -fx-background-insets: -1;
-    -fx-border-color: -fx-button-hover-border-color;
+    -fx-background-insets: 0 4;
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-button-hover-border-dark-color;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 4;
 }
 
 #datasources-tool-bar-button:pressed {
@@ -98,8 +103,11 @@
 
 #reports-tool-bar-button:hover {
     -fx-background-color: -fx-button-hover-color;
-    -fx-background-insets: -1;
-    -fx-border-color: -fx-button-hover-border-color;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0 4;
+    -fx-border-color: -fx-button-hover-border-dark-color;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 4;
 }
 
 #reports-tool-bar-button:pressed {
@@ -132,7 +140,7 @@
 .subsection-title {
     -fx-font: bold normal 12px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
-    -fx-padding: 0 0 0 10;
+    -fx-padding: 0;
 }
 
 #objects-pane {
@@ -223,13 +231,13 @@
 }
 
 .drop-pane {
-    -fx-spacing: 5;
+    -fx-spacing: 3;
 }
 
 .placeholder-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 1;
-    -fx-border-radius: 5;
+    -fx-border-radius: 3;
 }
 
 .placeholder-pane .label {
@@ -240,13 +248,13 @@
 .drop-hint-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 2;
-    -fx-border-radius: 5;
+    -fx-border-radius: 3;
     -fx-border-style: dashed centered line-cap round;
 }
 
 .editable-pane {
     -fx-background-color: -fx-ds-tbl-background-color;
-    -fx-background-radius: 5;
+    -fx-background-radius: 3;
 }
 
 .editable-pane .label {
@@ -271,8 +279,8 @@
 
 .table-join-object-pane .label {
     -fx-background-color: -fx-ds-tbl-background-color;
-    -fx-background-radius: 5;
-    -fx-font: bold normal 12px "Helvetica";
+    -fx-background-radius: 3;
+    -fx-font: bold normal 14px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
     -fx-alignment: center;
 }
@@ -352,7 +360,7 @@
 }
 
 .docked-editor-pane .content-pane .label {
-	-fx-font: bold normal 12px "Helvetica";
+	-fx-font: bold normal 10px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
 }
 
@@ -472,7 +480,7 @@
 
 .menu-bar {
     /*-fx-skin: "com.sun.javafx.scene.control.skin.MenuBarSkin";*/
-    -fx-padding: 3 8 3 8;
+    -fx-padding: 6 8 3 8;
     -fx-spacing: 0; /* 2 */
     /*-fx-base: derive(#d0d0d0,-70%);*/
     -fx-background-color: -fx-nav-background-color;
@@ -508,9 +516,8 @@
 }*/
 
 .menu-bar .menu-button:hover {
-/*    -fx-background: -fx-accent;
-    -fx-background-color: -fx-selection-bar;*/
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 5;
     -fx-border-color: -fx-button-hover-border-color;
     -fx-border-radius: 5;
     -fx-text-fill: -fx-selection-bar-text;
@@ -524,10 +531,10 @@
 }
 
 .menu-bar .menu-button:showing {
-    -fx-background-color: derive(-fx-nav-background-color, 50%);
-    -fx-background-radius: 5 5 0 0;
+    -fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 5;
     -fx-border-color: -fx-button-hover-border-color;
-    -fx-border-radius: 5 5 0 0;
+    -fx-border-radius: 5;
 }
 
 .menu-bar:show-mnemonics .mnemonic-underline {
@@ -541,10 +548,13 @@
  ******************************************************************************/
 
 .context-menu {
-    -fx-background-color: -fx-nav-background-color;
-    -fx-background-radious: 0 5 5 5;
+    -fx-background-color: -fx-button-hover-color;
+    -fx-background-insets: 2 0 0 0;
+    -fx-background-radious: 2;
     -fx-border-color: -fx-button-hover-border-color;
-    -fx-border-radius: 0 5 5 5;
+    -fx-border-radius: 2;
+    -fx-border-insets: 2 0 0 0;
+/*     -fx-effect: dropshadow(gaussian, red, 5, 0.5, 10, 10); */
 }
 
 .menu-item {
@@ -554,7 +564,7 @@
 }
 
 .menu-item .left-container {
-    -fx-padding: 0.458em 0.791em 0.458em 0.458em;
+    -fx-padding: 0.458em 0.791em 0.458em 0.458em;    
 }
 
 .menu-item .graphic-container {
@@ -575,7 +585,7 @@
 /*     -fx-background: -fx-accent;
      -fx-background-color: -fx-selection-bar;
      -fx-text-fill: -fx-selection-bar-text;*/
-     -fx-background-color: derive(-fx-nav-background-color, 50%);
+     -fx-background-color: -fx-context-menu-hover-color;
 }
 
 /*.menu-item:focused .label {
@@ -759,10 +769,12 @@
 
 /* TODO: scaling the shape seems to make it way too large */
 .tab-close-button {
-    -fx-background-color: -fx-mark-color;
+/*     -fx-background-color: -fx-mark-color;
     -fx-shape: "M 0,0 H1 L 4,3 7,0 H8 V1 L 5,4 8,7 V8 H7 L 4,5 1,8 H0 V7 L 3,4 0,1 Z";
     -fx-scale-shape: false;
-    -fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1);
+    -fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1); */
+    -fx-background-image: url("images/icon_close_tab.png");
+    -fx-background-repeat: no-repeat;
 }
 
 .tab-close-button:hover {

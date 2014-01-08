@@ -43,8 +43,8 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
         runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
         
         addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
-        commentBlockMenuItem = new MenuItem("COMMENT BLOCK");
-        queryBlockMenuItem = new MenuItem("QUERY BLOCK");
+        commentBlockMenuItem = new MenuItem("Comment Block", new ImageView(ImageList.IMAGE_COMMENT));
+        queryBlockMenuItem = new MenuItem("Query Block", new ImageView(ImageList.IMAGE_ACTIVE_CIRCLE));
         addBlockMenu.getItems().addAll(commentBlockMenuItem, queryBlockMenuItem);
         
         deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));

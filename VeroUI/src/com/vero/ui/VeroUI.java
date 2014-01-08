@@ -36,7 +36,7 @@ public class VeroUI extends Application {
         Scene scene = new Scene(rootPane, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
         scene.getStylesheets().add(UIUtils.getVeroCSSStyleSheet());
 
-        primaryStage.setTitle("Vero Analytic");
+        primaryStage.setTitle("Vero Analytics");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
