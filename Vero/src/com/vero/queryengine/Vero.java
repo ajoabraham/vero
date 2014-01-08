@@ -96,7 +96,7 @@ public class Vero {
             ArrayList<Expression> exps = anAttr.getExpressions();
             String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {                
-                ArrayList<Table> expTables = exps.get(i).getTables();
+                ArrayList<Table> expTables = exps.get(i).gatherTables();
                 for (int j=0; j < expTables.size(); j++) {
                     if (j==0) colTableRep = expTables.get(j).getObjectName();
                     if (!tableAliases.containsKey(expTables.get(j).getObjectName())) {
@@ -124,7 +124,7 @@ public class Vero {
             ArrayList<Expression> exps = anMet.getExpressions();
             String colTableRep = "";
             for (int i = 0; i < exps.size(); i++) {
-                ArrayList<Table> expTables = exps.get(i).getTables();
+                ArrayList<Table> expTables = exps.get(i).gatherTables();
                 for (int j =0; j < expTables.size(); j++) {
                     if (j==0) colTableRep = expTables.get(j).getObjectName();
                     if (!tableAliases.containsKey(expTables.get(j).getObjectName())) {
@@ -258,7 +258,7 @@ public class Vero {
     public static void main(String[] args) {
         // queryEngineOldTest1();
         // queryEngineTest1();
-        queryEngineTest2();
-        // queryEngineTest3();
+        // queryEngineTest2();
+        queryEngineTest3();
     }
 }

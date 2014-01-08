@@ -57,7 +57,7 @@ public class Attribute implements Filterable {
             
             while (iterExp.hasNext()) {
                 Expression curExp = iterExp.next();
-                ArrayList<Table> tabList = curExp.getTables();
+                ArrayList<Table> tabList = curExp.gatherTables();
                 
                 if (tabList.size() > 0) {
                     Iterator<Table> iterTab = tabList.iterator();
@@ -84,35 +84,12 @@ public class Attribute implements Filterable {
             Iterator<Expression> iter = aList.iterator();
 
             while (iter.hasNext()) {
-                retList.addAll(iter.next().getTables());
+                retList.addAll(iter.next().gatherTables());
             }
 
             return retList;
         } else {
             return null;
-        }
-    }
-    
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        System.out.println("AttributeMeta starts...");
-
-        Expression exp = new Expression("abcde");
-        exp.addTable(new Table("abc", null));
-
-        Attribute attr = new Attribute("Att1", "haha_description");
-        attr.addExpression(exp);
-        
-        System.out.println("AttributeMeta: " + attr.toString());
-        System.out.println("uuid: " + attr.getUUID().toString());
-        System.out.println("name: " + attr.getName());
-        
-        System.out.println("Loop through expressions...");
-        ArrayList<Expression> exprs = attr.getExpressions();
-        Iterator<Expression> it = exprs.iterator();        
-        while (it.hasNext()) {
-            Expression curexp = it.next();
-            System.out.println("ExpressionMeta: " + curexp.getExpression());
         }
     }
 }
