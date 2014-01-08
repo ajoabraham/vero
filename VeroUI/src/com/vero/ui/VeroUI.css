@@ -548,12 +548,15 @@
  ******************************************************************************/
 
 .context-menu {
+	-fx-skin: "com.vero.ui.common.VeroContextMenuSkin";
     -fx-background-color: -fx-button-hover-color;
     -fx-background-insets: 2 0 0 0;
     -fx-background-radious: 2;
     -fx-border-color: -fx-button-hover-border-color;
     -fx-border-radius: 2;
     -fx-border-insets: 2 0 0 0;
+    /* drop shadow does not work for context menu. Have to manually
+    set it in Skin */
 /*     -fx-effect: dropshadow(gaussian, red, 5, 0.5, 10, 10); */
 }
 
