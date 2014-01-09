@@ -30,7 +30,11 @@ import org.jgrapht.graph.WeightedMultigraph;
  */
 public class QueryEngine {
     private class EdgeUnit extends DefaultWeightedEdge {      
-        private JoinDefinition joinDef;
+        private JoinDefinition joinDef = null;
+        private ProcessingUnit srcPU = null;
+        private ProcessingUnit dstPU = null;
+        private String srcTable = null;
+        private String dstTable = null;
 
         public EdgeUnit() {
             super();
@@ -44,25 +48,64 @@ public class QueryEngine {
             joinDef = inJoinDef;
         }
 
-        public Object retrieveOtherEndPoint(Object thisEndPoint) {
+        public ProcessingUnit retrieveOtherEndPoint(ProcessingUnit thisEndPoint) {
             if (this.getSource() == thisEndPoint) {
-                return this.getTarget();
+                return (ProcessingUnit)this.getTarget();
             } else {
-                return this.getSource();
+                return (ProcessingUnit)this.getSource();
             }
         }
 
-        public Object retrieveSource() {
-            return this.getSource();
+        public ProcessingUnit getSrcPU() {
+            if (srcPU == null) {
+                findSrcDstPU();
+            }
+            
+            return srcPU;
         }
         
-        public Object retrieveTarget() {
-            return this.getTarget();
+        public ProcessingUnit getDstPU() {
+            if (dstPU == null) {
+                findSrcDstPU();
+            }
+            
+            return dstPU;
+        }
+        
+        public String getSrcTable() {
+            return srcTable;
+        }
+        
+        public void setSrcTable(String inTab) {
+            srcTable = inTab;
+        }
+        
+        public String getDstTable() {
+            return dstTable;
+        }
+
+        public void setDstTable(String inTab) {
+            dstTable = inTab;
         }
         
         @Override
         public double getWeight() {
             return super.getWeight();
+        }
+        
+        private void findSrcDstPU() {
+            if (srcPU == null) {
+                ProcessingUnit aPU = (ProcessingUnit)this.getSource();
+                ProcessingUnit bPU = (ProcessingUnit)this.getTarget();
+                
+                if (aPU.getID() < bPU.getID()) {
+                    srcPU = aPU;
+                    dstPU = bPU;
+                } else {
+                    srcPU = bPU;
+                    dstPU = aPU;
+                }
+            }
         }        
     }
     
@@ -129,7 +172,7 @@ public class QueryEngine {
         // for each table, find where it is used and connect vertex and create edges
         for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
             ProcessingUnit pu = entry.getValue();
-            System.out.println("### Current PU content = " + pu.getContent());
+            System.out.println("### PU id = " + pu.getID() + ". Current PU content = " + pu.getContent());
             ArrayList<Table> listTables = pu.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
@@ -164,14 +207,23 @@ public class QueryEngine {
                                         int otherRowCost = inSession.getTable(otherTable).getRowCount();
                                         double weight = (double)rowCost * (double)otherRowCost;
                                         System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost + ", weight = " + weight);
-
+                                                                                
                                         EdgeUnit aEU = new EdgeUnit();
                                         aEU.setJoinDef(curJD);
+                                        
+                                        if (pu.getID() < otherPU.getID()) {
+                                            aEU.setSrcTable(aTab.getPhysicalName());
+                                            aEU.setDstTable(otherTable);
+                                        } else {
+                                            aEU.setSrcTable(otherTable);
+                                            aEU.setDstTable(aTab.getPhysicalName());
+                                        }
+                                        
                                         joinGraph.setEdgeWeight(aEU, weight);
                                         joinGraph.addEdge(pu, otherPU, aEU);
                                     }
                                 }
-                            }                                                
+                            }
 
                             HashMap<String, Metric> otherMetricHT = stage.getMetricHTByTable(otherTable);
                             HashMap<String, Metric> allOtherMetrics = otherMetricHT;
@@ -193,11 +245,20 @@ public class QueryEngine {
 
                                         EdgeUnit aEU = new EdgeUnit();
                                         aEU.setJoinDef(curJD);
+                                        
+                                        if (pu.getID() < otherPU.getID()) {
+                                            aEU.setSrcTable(aTab.getPhysicalName());
+                                            aEU.setDstTable(otherTable);
+                                        } else {
+                                            aEU.setSrcTable(otherTable);
+                                            aEU.setDstTable(aTab.getPhysicalName());
+                                        }                                        
+                                                                                
                                         joinGraph.setEdgeWeight(aEU, weight);
                                         joinGraph.addEdge(pu, otherPU, aEU);
                                     }
-                                }                            
-                            }                       
+                                }
+                            }
                         }
                     }
                 }
@@ -205,19 +266,19 @@ public class QueryEngine {
         }
 
         // dump graph
-        System.out.println("#### Before remove extra edges...");
+        System.out.println("#### Before removing extra edges...");
         dumpGraph(joinGraph);        
         
-        // loop each vertex and remove edges that have same definition until one left        
+        // loop each vertex and remove edges that have same definition until one left
         removeExtraEdges(joinGraph);
-        
+
         // assign table alias
         assignTableAlias(joinGraph);
         
         // dump graph
-        System.out.println("#### After remove extra edges...");
-        dumpGraph(joinGraph);
-        
+        System.out.println("#### After removing extra edges and table aliasing...");
+        dumpGraph(joinGraph);        
+               
         // mst algo
         KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
         System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
@@ -227,7 +288,11 @@ public class QueryEngine {
         }
         
         // match expression
-        matchExpression(joinGraph, euSet);
+        matchExpression(euSet);
+
+        // dump graph
+        System.out.println("#### After mtaching expression...");
+        dumpGraph(joinGraph);
         
         // generate SQL
         generateSQL(joinGraph, euSet);
@@ -315,8 +380,30 @@ public class QueryEngine {
         }
     }
     
-    private void matchExpression(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
-        
+    private void matchExpression(Set<EdgeUnit> euSet) {
+        for (EdgeUnit eu : euSet) {
+            ProcessingUnit srcPU = eu.getSrcPU();
+            if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
+                Attribute srcAttr = (Attribute)srcPU.getContent();
+                srcPU.setUsedExp(srcAttr.getExpressionByTableName(eu.getSrcTable()));
+            } else if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                Metric srcMet = (Metric)srcPU.getContent();
+                srcPU.setUsedExp(srcMet.getExpressionByTableName(eu.getSrcTable()));
+            } else {
+                // ignore hardhint and else
+            }
+            
+            ProcessingUnit dstPU = eu.getDstPU();
+            if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
+                Attribute dstAttr = (Attribute)dstPU.getContent();
+                dstPU.setUsedExp(dstAttr.getExpressionByTableName(eu.getDstTable()));
+            } else if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                Metric dstMet = (Metric)dstPU.getContent();
+                dstPU.setUsedExp(dstMet.getExpressionByTableName(eu.getDstTable()));
+            } else {
+                // ignore hardhint and else
+            }            
+        }
     }
     
     private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
@@ -327,7 +414,7 @@ public class QueryEngine {
         
         // union find on PU
         for (EdgeUnit eu : euSet) {
-            unionPU.union((ProcessingUnit)eu.retrieveSource(), (ProcessingUnit)eu.retrieveTarget());
+            unionPU.union(eu.getSrcPU(), eu.getDstPU());
         }
         
         // count how many disjoint groups
@@ -350,6 +437,10 @@ public class QueryEngine {
         int vertexCount = 0;
         for (ProcessingUnit pu : graphVertexSet) {
             System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
+            if (pu.getUsedExp() != null) {
+                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression());
+            }
+            
             Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
             
             int edgeCount = 0;

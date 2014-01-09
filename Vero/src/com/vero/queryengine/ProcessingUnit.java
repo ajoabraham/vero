@@ -19,6 +19,8 @@ import java.util.UUID;
  * @author yulinwen
  */
 public class ProcessingUnit implements Comparable<ProcessingUnit> {
+    static private int PU_ID = 0;
+    
     public static enum PUType {
         PUTYPE_NONE,
         PUTYPE_ATTRIBUTE,
@@ -27,6 +29,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     }
 
     private final UUID uuid;
+    private final int id;
     private PUType type;
     private Object content;
     
@@ -37,6 +40,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     
     public ProcessingUnit() {
         uuid = UUID.randomUUID();
+        id = PU_ID++;
         type = PUTYPE_NONE;
         content = null;
         removeCount = 0;
@@ -46,6 +50,10 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
 
     public UUID getUUID() {
         return uuid;
+    }
+    
+    public int getID() {
+        return id;
     }
     
     public void setType(PUType inType) {
