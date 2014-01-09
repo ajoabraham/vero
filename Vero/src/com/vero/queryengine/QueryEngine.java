@@ -23,6 +23,14 @@ import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.sql.generation.api.grammar.builders.query.QuerySpecificationBuilder;
+import org.sql.generation.api.grammar.factories.BooleanFactory;
+import org.sql.generation.api.grammar.factories.ColumnsFactory;
+import org.sql.generation.api.grammar.factories.LiteralFactory;
+import org.sql.generation.api.grammar.factories.QueryFactory;
+import org.sql.generation.api.grammar.factories.TableReferenceFactory;
+import org.sql.generation.api.vendor.SQLVendor;
+import org.sql.generation.api.vendor.SQLVendorProvider;
 
 /**
  *
@@ -450,6 +458,23 @@ public class QueryEngine {
         }
         
         // generate SQL
+        // Create or acquire vendor
+        SQLVendor vendor = null;
+        try {
+            vendor = SQLVendorProvider.createVendor(SQLVendor.class);
+        } catch (java.io.IOException e) {
+            System.out.println("Exception: " + e);
+        }
+        
+        QueryFactory q = vendor.getQueryFactory();
+        BooleanFactory b = vendor.getBooleanFactory();
+        TableReferenceFactory t = vendor.getTableReferenceFactory();
+        LiteralFactory l = vendor.getLiteralFactory();
+        ColumnsFactory c = vendor.getColumnsFactory();
+        QuerySpecificationBuilder sqlQuery = q.querySpecificationBuilder();
+        
+        // construct select
+        // get all expressions from all attributes
         
     }
     
