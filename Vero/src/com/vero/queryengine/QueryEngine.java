@@ -417,18 +417,40 @@ public class QueryEngine {
             unionPU.union(eu.getSrcPU(), eu.getDstPU());
         }
         
-        // count how many disjoint groups
+        // build hashmap and count how many disjoint groups
         int nGroup = 0;
+        HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
         for (ProcessingUnit pu : graphVertexSet) {
-            if (pu == unionPU.find(pu)) {
+            ProcessingUnit masterPU = unionPU.find(pu);
+            
+            if (puHM.containsKey(masterPU) == false) {
+                puHM.put(masterPU, new ArrayList());
+            }
+            
+            puHM.get(masterPU).add(pu);
+            
+            if (pu == masterPU) {
                 // root element, counting # of groups
                 System.out.println("group count + 1");
                 nGroup++;
             }
         }
-        System.out.println("group count = " + nGroup);
+        System.out.println("group count = " + nGroup);                
+        
+        // dump puHM
+        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
+            ProcessingUnit masterPU = entry.getKey();
+            ArrayList<ProcessingUnit> puAL = entry.getValue();
+            System.out.println("master pu id = " + masterPU.getID());
+            
+            for (int i=0; i<puAL.size(); i++) {
+                ProcessingUnit curPU = puAL.get(i);
+                System.out.println("  pu id = " + curPU.getID());
+            }
+        }
         
         // generate SQL
+        
     }
     
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {

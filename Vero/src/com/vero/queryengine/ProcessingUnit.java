@@ -37,6 +37,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     private int removeCount;
     private String tableAlias;
     private Expression usedExp;
+    private Boolean processed;
     
     public ProcessingUnit() {
         uuid = UUID.randomUUID();
@@ -46,6 +47,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         removeCount = 0;
         tableAlias = null;
         usedExp = null;
+        processed = false;
     }
 
     public UUID getUUID() {
@@ -94,6 +96,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     
     public Expression getUsedExp() {
         return usedExp;
+    }
+    
+    public void setProcessed(Boolean inProc) {
+        processed = inProc;
+    }
+    
+    public Boolean getProcessed() {
+        return processed;
     }
     
     public ArrayList<Table> retrieveTables() {
