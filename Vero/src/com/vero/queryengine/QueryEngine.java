@@ -7,6 +7,7 @@
 package com.vero.queryengine;
 
 import com.vero.metadata.Attribute;
+import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
@@ -23,12 +24,16 @@ import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.sql.generation.api.grammar.builders.query.ColumnsBuilder;
 import org.sql.generation.api.grammar.builders.query.QuerySpecificationBuilder;
 import org.sql.generation.api.grammar.factories.BooleanFactory;
 import org.sql.generation.api.grammar.factories.ColumnsFactory;
 import org.sql.generation.api.grammar.factories.LiteralFactory;
 import org.sql.generation.api.grammar.factories.QueryFactory;
 import org.sql.generation.api.grammar.factories.TableReferenceFactory;
+import org.sql.generation.api.grammar.query.ColumnReference;
+import org.sql.generation.api.grammar.query.ColumnReferenceByName;
+import org.sql.generation.api.grammar.query.QueryExpressionBody;
 import org.sql.generation.api.vendor.SQLVendor;
 import org.sql.generation.api.vendor.SQLVendorProvider;
 
@@ -296,7 +301,7 @@ public class QueryEngine {
         }
         
         // match expression
-        matchExpression(euSet);
+        matchExpression(joinGraph, euSet);
 
         // dump graph
         System.out.println("#### After mtaching expression...");
@@ -388,7 +393,7 @@ public class QueryEngine {
         }
     }
     
-    private void matchExpression(Set<EdgeUnit> euSet) {
+    private void matchExpression(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
         for (EdgeUnit eu : euSet) {
             ProcessingUnit srcPU = eu.getSrcPU();
             if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
@@ -397,9 +402,8 @@ public class QueryEngine {
             } else if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                 Metric srcMet = (Metric)srcPU.getContent();
                 srcPU.setUsedExp(srcMet.getExpressionByTableName(eu.getSrcTable()));
-            } else {
-                // ignore hardhint and else
             }
+            srcPU.setProcessed(true);
             
             ProcessingUnit dstPU = eu.getDstPU();
             if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
@@ -408,15 +412,40 @@ public class QueryEngine {
             } else if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                 Metric dstMet = (Metric)dstPU.getContent();
                 dstPU.setUsedExp(dstMet.getExpressionByTableName(eu.getDstTable()));
+            }
+            dstPU.setProcessed(true);
+        }
+        
+        // now loop on PU for PUs not yet processed because not linked by joindef
+        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        for (ProcessingUnit pu : graphVertexSet) {
+            if (pu.getProcessed() == false) {
+                if (pu.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
+                    Attribute curAttr = (Attribute)pu.getContent();
+                    ArrayList<Expression> expAL = curAttr.getExpressions();
+                    Collections.sort(expAL);
+                    if (expAL.size() > 0) {
+                        pu.setUsedExp(expAL.get(0));
+                    }
+                } else if (pu.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                    Metric curMet = (Metric)pu.getContent();
+                    ArrayList<Expression> expAL = curMet.getExpressions();
+                    Collections.sort(expAL);
+                    if (expAL.size() > 0) {
+                        pu.setUsedExp(expAL.get(0));
+                    }
+                }
             } else {
-                // ignore hardhint and else
-            }            
+                pu.setProcessed(false);
+            }
         }
     }
     
     private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
         Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
         UnionFind<ProcessingUnit> unionPU = new UnionFind(graphVertexSet);
+        int attrCount = 0;
+        int metCount = 0;
 
         System.out.println("Generate SQL...");
         
@@ -466,6 +495,8 @@ public class QueryEngine {
             System.out.println("Exception: " + e);
         }
         
+        if (vendor == null) return;
+                
         QueryFactory q = vendor.getQueryFactory();
         BooleanFactory b = vendor.getBooleanFactory();
         TableReferenceFactory t = vendor.getTableReferenceFactory();
@@ -474,8 +505,42 @@ public class QueryEngine {
         QuerySpecificationBuilder sqlQuery = q.querySpecificationBuilder();
         
         // construct select
-        // get all expressions from all attributes
+        // get all expressions from all attributes/metrics
+        ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
+        ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
+        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
+            ProcessingUnit masterPU = entry.getKey();
+            ArrayList<ProcessingUnit> puAL = entry.getValue();
+            
+            for (int i=0; i<puAL.size(); i++) {
+                ProcessingUnit curPU = puAL.get(i);
+                if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
+                    System.out.println(curPU.getUsedExp() + "aaa");
+                    
+                    ColumnReferenceByName aColExp = c.colName(curPU.getTableAlias(), curPU.getUsedExp().getExpression());
+                    
+                    if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
+                    if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
+                    
+                    colRefByName.add(aColExp);
+                }
+            }
+        }
+        ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
+        colRef = colRefByName.toArray(colRef);                
+        ColumnsBuilder selectCols = q.columnsBuilder().addUnnamedColumns(colRef);
         
+        // construct groupby
+        if ((attrCount > 0) && (metCount > 0)) {
+            ColumnReference[] colAttrRefAR = new ColumnReference[colAttrRefByName.size()];
+            colAttrRefAR = colAttrRefByName.toArray(colAttrRefAR);                       
+            sqlQuery.getGroupBy().addGroupingElements(q.groupingElement(colAttrRefAR));
+        }
+
+        sqlQuery.setSelect(selectCols);                   
+        QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
+        String sqlString = queryExp.toString();
+        System.out.println("Output sql is: " + sqlString);        
     }
     
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {

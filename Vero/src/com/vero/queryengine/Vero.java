@@ -258,7 +258,7 @@ public class Vero {
     public static void main(String[] args) {
         // queryEngineOldTest1();
         // queryEngineTest1();
-        // queryEngineTest2();
-        queryEngineTest3();
+        queryEngineTest2();
+        // queryEngineTest3();
     }
 }
