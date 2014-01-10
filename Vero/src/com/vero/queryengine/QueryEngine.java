@@ -508,31 +508,52 @@ public class QueryEngine {
                 }
 
                 if (cnt == 0) {
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveAlias(aJoin.getTLeft()))));
+                    ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(matchingPU.getTableAlias())));
+                    matchingPU.setProcessed(true);
                 }
                 
                 BooleanExpression bE;
                 switch (jOper) {
                     case ">":
-                        bE = b.gt(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        bE = b.gt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
                         break;
                     case "=":
-                        bE = b.eq(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
                         break;
                     case "<":
-                        bE = b.lt(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        bE = b.lt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
                         break;
                     default:
-                        bE = b.eq(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
                         break;
                 }
                 
-                allJoins.addQualifiedJoin(
-                    jT,
-                    t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveAlias(aJoin.getTRight()))),
-                    t.jc(b.booleanBuilder(bE).createExpression()));
+                if (cnt == 0) {
+                    allJoins.addQualifiedJoin(
+                        jT,
+                        t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
+                        t.jc(b.booleanBuilder(bE).createExpression()));
+                } else {
+                    ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                    ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
+                    
+                    if (leftPU.getProcessed() == false) {
+                        allJoins.addQualifiedJoin(
+                            jT,
+                            t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTLeft()))),
+                            t.jc(b.booleanBuilder(bE).createExpression()));
+                            leftPU.setProcessed(true);
+                    } else {
+                        allJoins.addQualifiedJoin(
+                            jT,
+                            t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
+                            t.jc(b.booleanBuilder(bE).createExpression()));
+                            rightPU.setProcessed(true);
+                    }
+                }
             } else {
-                
+               
             }
             cnt++;
         }

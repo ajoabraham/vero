@@ -54,7 +54,7 @@ public class EdgeUnit extends DefaultWeightedEdge {
             return (ProcessingUnit)this.getSource();
         }
     }
-
+    
     public ProcessingUnit getSrcPU() {
         if (this.type == EUType.EUTYPE_PHYSICAL) {        
             if (srcPU == null) {
@@ -99,7 +99,19 @@ public class EdgeUnit extends DefaultWeightedEdge {
         dstTable = inTab;
     }
 
-    public String retrieveAlias(String inTab) {
+    public ProcessingUnit retrieveMatchingPU(String inTab) {
+        if ((srcTable != null) && (dstTable != null)) {
+            if (srcTable.equals(inTab)) {
+                return srcPU;
+            } else {
+                return dstPU;
+            }
+        } else {
+            return null;
+        }
+    }
+        
+    public String retrieveMatchingAlias(String inTab) {
         if ((srcTable != null) && (dstTable != null)) {
             if (srcTable.equals(inTab)) {
                 return srcPU.getTableAlias();
