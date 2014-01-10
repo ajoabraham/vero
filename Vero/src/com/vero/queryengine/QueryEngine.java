@@ -22,10 +22,11 @@ import java.util.UUID;
 import org.jgrapht.alg.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.sql.generation.api.grammar.booleans.BooleanExpression;
 import org.sql.generation.api.grammar.builders.query.ColumnsBuilder;
 import org.sql.generation.api.grammar.builders.query.QuerySpecificationBuilder;
+import org.sql.generation.api.grammar.builders.query.TableReferenceBuilder;
 import org.sql.generation.api.grammar.factories.BooleanFactory;
 import org.sql.generation.api.grammar.factories.ColumnsFactory;
 import org.sql.generation.api.grammar.factories.LiteralFactory;
@@ -41,87 +42,7 @@ import org.sql.generation.api.vendor.SQLVendorProvider;
  *
  * @author yulinwen
  */
-public class QueryEngine {
-    private class EdgeUnit extends DefaultWeightedEdge {      
-        private JoinDefinition joinDef = null;
-        private ProcessingUnit srcPU = null;
-        private ProcessingUnit dstPU = null;
-        private String srcTable = null;
-        private String dstTable = null;
-
-        public EdgeUnit() {
-            super();
-        }
-        
-        public JoinDefinition getJoinDef() {
-            return joinDef;
-        }
-        
-        public void setJoinDef(JoinDefinition inJoinDef) {
-            joinDef = inJoinDef;
-        }
-
-        public ProcessingUnit retrieveOtherEndPoint(ProcessingUnit thisEndPoint) {
-            if (this.getSource() == thisEndPoint) {
-                return (ProcessingUnit)this.getTarget();
-            } else {
-                return (ProcessingUnit)this.getSource();
-            }
-        }
-
-        public ProcessingUnit getSrcPU() {
-            if (srcPU == null) {
-                findSrcDstPU();
-            }
-            
-            return srcPU;
-        }
-        
-        public ProcessingUnit getDstPU() {
-            if (dstPU == null) {
-                findSrcDstPU();
-            }
-            
-            return dstPU;
-        }
-        
-        public String getSrcTable() {
-            return srcTable;
-        }
-        
-        public void setSrcTable(String inTab) {
-            srcTable = inTab;
-        }
-        
-        public String getDstTable() {
-            return dstTable;
-        }
-
-        public void setDstTable(String inTab) {
-            dstTable = inTab;
-        }
-        
-        @Override
-        public double getWeight() {
-            return super.getWeight();
-        }
-        
-        private void findSrcDstPU() {
-            if (srcPU == null) {
-                ProcessingUnit aPU = (ProcessingUnit)this.getSource();
-                ProcessingUnit bPU = (ProcessingUnit)this.getTarget();
-                
-                if (aPU.getID() < bPU.getID()) {
-                    srcPU = aPU;
-                    dstPU = bPU;
-                } else {
-                    srcPU = bPU;
-                    dstPU = aPU;
-                }
-            }
-        }        
-    }
-    
+public class QueryEngine {   
     private class JDRemoveUnit {
         private JoinDefinition joinDef;
         private int usedCount;
@@ -222,6 +143,7 @@ public class QueryEngine {
                                         System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost + ", weight = " + weight);
                                                                                 
                                         EdgeUnit aEU = new EdgeUnit();
+                                        aEU.setType(EdgeUnit.EUType.EUTYPE_PHYSICAL);
                                         aEU.setJoinDef(curJD);
                                         
                                         if (pu.getID() < otherPU.getID()) {
@@ -257,6 +179,7 @@ public class QueryEngine {
                                         System.out.println("RowCost = " + rowCost + ", otherRowCost = " + otherRowCost + ", weight = " + weight);
 
                                         EdgeUnit aEU = new EdgeUnit();
+                                        aEU.setType(EdgeUnit.EUType.EUTYPE_PHYSICAL);
                                         aEU.setJoinDef(curJD);
                                         
                                         if (pu.getID() < otherPU.getID()) {
@@ -297,7 +220,7 @@ public class QueryEngine {
         System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
         Set<EdgeUnit> euSet = kmt.getMinimumSpanningTreeEdgeSet();
         for (EdgeUnit eu : euSet) {
-            System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight());
+            System.out.println("Edge joindef name = " + eu.getJoinDef().getName() + ", weight = " + eu.getWeight() + ", tleft = " + eu.getJoinDef().getTLeft() + ", tright = " + eu.getJoinDef().getTRight());
         }
         
         // match expression
@@ -456,21 +379,38 @@ public class QueryEngine {
         
         // build hashmap and count how many disjoint groups
         int nGroup = 0;
+        ProcessingUnit allLinkedPU = null;
         HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
         for (ProcessingUnit pu : graphVertexSet) {
-            ProcessingUnit masterPU = unionPU.find(pu);
+            ProcessingUnit masterPU = unionPU.find(pu);            
+            
+            // for cross join, initiate a PU that should link to all the other groups
+            if (allLinkedPU == null) {
+                allLinkedPU = masterPU;
+            }
             
             if (puHM.containsKey(masterPU) == false) {
                 puHM.put(masterPU, new ArrayList());
-            }
-            
-            puHM.get(masterPU).add(pu);
-            
-            if (pu == masterPU) {
-                // root element, counting # of groups
                 System.out.println("group count + 1");
                 nGroup++;
+                
+                if (allLinkedPU != masterPU) {
+                    EdgeUnit aEU = new EdgeUnit();
+                    aEU.setType(EdgeUnit.EUType.EUTYPE_VIRTUAL);
+                    aEU.setJoinDef(null);
+                    
+                    if (allLinkedPU.getID() < masterPU.getID()) {
+                        aEU.setSrcPU(allLinkedPU);
+                        aEU.setDstPU(masterPU);
+                    } else {
+                        aEU.setSrcPU(masterPU);
+                        aEU.setDstPU(allLinkedPU);
+                    }
+                    euSet.add(aEU);
+                }                
             }
+            
+            puHM.get(masterPU).add(pu);            
         }
         System.out.println("group count = " + nGroup);                
         
@@ -536,8 +476,69 @@ public class QueryEngine {
             colAttrRefAR = colAttrRefByName.toArray(colAttrRefAR);                       
             sqlQuery.getGroupBy().addGroupingElements(q.groupingElement(colAttrRefAR));
         }
+        
+        // construct join
+        TableReferenceBuilder allJoins = null;
+        int cnt = 0;
+        for (EdgeUnit eu : euSet) {                       
+            if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
+                JoinDefinition aJoin = eu.getJoinDef();
+                
+                String jType = aJoin.getType();
+                String jExp = aJoin.getExpression();
+                String jOper = aJoin.getOperator();
+                org.sql.generation.api.grammar.query.joins.JoinType jT;
+                
+                switch (jType) {
+                    case "inner":
+                        jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                        break;
+                    case "outer":
+                        jT = org.sql.generation.api.grammar.query.joins.JoinType.FULL_OUTER;
+                        break;
+                    case "left":
+                        jT = org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER;
+                        break;
+                    case "right":
+                        jT = org.sql.generation.api.grammar.query.joins.JoinType.RIGHT_OUTER;
+                        break;
+                    default:
+                        jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                        break;
+                }
 
-        sqlQuery.setSelect(selectCols);                   
+                if (cnt == 0) {
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveAlias(aJoin.getTLeft()))));
+                }
+                
+                BooleanExpression bE;
+                switch (jOper) {
+                    case ">":
+                        bE = b.gt(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        break;
+                    case "=":
+                        bE = b.eq(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        break;
+                    case "<":
+                        bE = b.lt(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        break;
+                    default:
+                        bE = b.eq(c.colName(eu.retrieveAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveAlias(aJoin.getTRight()), aJoin.getCRight()));
+                        break;
+                }
+                
+                allJoins.addQualifiedJoin(
+                    jT,
+                    t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveAlias(aJoin.getTRight()))),
+                    t.jc(b.booleanBuilder(bE).createExpression()));
+            } else {
+                
+            }
+            cnt++;
+        }
+
+        sqlQuery.setSelect(selectCols);
+        sqlQuery.getFrom().addTableReferences(allJoins);
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
         String sqlString = queryExp.toString();
         System.out.println("Output sql is: " + sqlString);        
@@ -557,7 +558,7 @@ public class QueryEngine {
             
             int edgeCount = 0;
             for (EdgeUnit eu : graphEdgeSet) {
-                System.out.println("    Edge = " + edgeCount + " : " + eu.joinDef.getName());
+                System.out.println("    Edge = " + edgeCount + " : " + eu.getJoinDef().getName());
                 edgeCount++;
             }
             

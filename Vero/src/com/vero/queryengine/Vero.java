@@ -213,6 +213,7 @@ public class Vero {
                 jT,
                 t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(tableAliases.get(aJoin.getTRight()))),
                 t.jc(b.booleanBuilder(bE).createExpression()));
+            cnt++;
         }
         firstInnerQuery.setSelect(innerSelectCols);                              
         firstInnerQuery.getFrom().addTableReferences(allJoins);
@@ -258,7 +259,7 @@ public class Vero {
     public static void main(String[] args) {
         // queryEngineOldTest1();
         // queryEngineTest1();
-        queryEngineTest2();
-        // queryEngineTest3();
+        // queryEngineTest2();
+        queryEngineTest3();
     }
 }
