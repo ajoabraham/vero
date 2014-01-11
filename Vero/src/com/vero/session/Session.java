@@ -10,11 +10,13 @@ import static com.vero.utility.Utility.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Session {    
+public class Session {
     private final HashMap<String, DataSource> dataSources = new HashMap();
-    private final HashMap<String, Table> tables = new HashMap(); // FIXME: restrcted to single DS
-    private final HashMap<String, Attribute> attributes = new HashMap();
-    private final HashMap<String, Metric> metrics = new HashMap();
+    private final HashMap<String, Table> tables = new HashMap(); // FIXME: restricted to single DS
+    //private final HashMap<String, Attribute> attributes = new HashMap();
+    private final ArrayList<Attribute> attributes = new ArrayList();
+    //private final HashMap<String, Metric> metrics = new HashMap();
+    private final ArrayList<Metric> metrics = new ArrayList();
     private final HashMap<String, JoinDefinition> joins = new HashMap();
     private final ArrayList<String> hardhints = new ArrayList();
     
@@ -33,12 +35,21 @@ public class Session {
         tables.put(inTable.getPhysicalName(), inTable);
     }
     
+    /*
     public void addAttributeMeta(Attribute inAttr) {
         attributes.put(inAttr.getName(), inAttr);
     }
 
     public void addMetricMeta(Metric inMetric) {
         metrics.put(inMetric.getName(), inMetric);
+    }
+    */
+    public void addAttributeMeta(Attribute inAttr) {
+        attributes.add(inAttr);
+    }
+
+    public void addMetricMeta(Metric inMetric) {
+        metrics.add(inMetric);
     }
     
     public void addJoinMeta(JoinDefinition inJoin) {
@@ -61,11 +72,21 @@ public class Session {
         return tables.get(inName);
     }
     
+    /*
     public HashMap getAttributes() {
         return attributes;        
     }
     
     public HashMap getMetrics() {
+        return metrics;
+    }
+    */
+    
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
+    }
+    
+    public ArrayList<Metric> getMetrics() {
         return metrics;
     }
     

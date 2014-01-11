@@ -34,8 +34,10 @@ public class Stage {
     }
         
     private final HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
-    private HashMap<String, Attribute> attributes;
-    private HashMap<String, Metric> metrics;
+    //private HashMap<String, Attribute> attributes;
+    //private HashMap<String, Metric> metrics;
+    private ArrayList<Attribute> attributes;
+    private ArrayList<Metric> metrics;
     private ArrayList<String> hardhints;
     private final HashMap<UUID, ProcessingUnit> processingUnits;
     
@@ -97,6 +99,7 @@ public class Stage {
         }
         
         // associate table with attribute
+        /*
         attributes = new HashMap(inSession.getAttributes());
         Map<String, Attribute> attrMap = attributes;
         for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
@@ -116,8 +119,27 @@ public class Stage {
                 }
             }
         }
+        */
+        
+        attributes = new ArrayList(inSession.getAttributes());
+        for (Attribute curAttr : attributes) {
+            ProcessingUnit aPU = new ProcessingUnit();
+            aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
+            aPU.setContent(curAttr);
+            processingUnits.put(aPU.getUUID(), aPU);
+             
+            ArrayList<Table> listTables = curAttr.retrieveTables();
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
+
+                while (iterTable.hasNext()) {
+                    setAttributeByTable(iterTable.next().getPhysicalName(), curAttr);
+                }
+            }
+        }
         
         // associate table with metric
+        /*
         metrics = new HashMap(inSession.getMetrics());
         Map<String, Metric> metricMap = metrics;
         for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
@@ -133,6 +155,23 @@ public class Stage {
 
                 while (iterTable.hasNext()) {
                     setMetricByTable(iterTable.next().getPhysicalName(), met);
+                }
+            }
+        }
+        */
+        metrics = new ArrayList(inSession.getMetrics());
+        for (Metric curMet : metrics) {
+            ProcessingUnit aPU = new ProcessingUnit();
+            aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
+            aPU.setContent(curMet);
+            processingUnits.put(aPU.getUUID(), aPU); 
+            
+            ArrayList<Table> listTables = curMet.retrieveTables();
+            if (listTables.size() > 0) {
+                Iterator<Table> iterTable = listTables.iterator();
+
+                while (iterTable.hasNext()) {
+                    setMetricByTable(iterTable.next().getPhysicalName(), curMet);
                 }
             }
         }
@@ -215,11 +254,21 @@ public class Stage {
         }
     }
     
+    /*
     public HashMap getAttributes() {
         return attributes;
     }
 
     public HashMap getMetrics() {
+        return metrics;
+    }
+    */
+    
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
+    }
+    
+    public ArrayList<Metric> getMetrics() {
         return metrics;
     }
     
