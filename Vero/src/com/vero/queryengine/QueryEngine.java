@@ -44,15 +44,11 @@ import org.sql.generation.api.vendor.SQLVendorProvider;
  */
 public class QueryEngine {   
     private class JDRemoveUnit {
-        private JoinDefinition joinDef;
-        private int usedCount;
-        private final ArrayList<ProcessingUnit> linkedPU;
+        private JoinDefinition joinDef = null;
+        private int usedCount = 0;
+        private final ArrayList<ProcessingUnit> linkedPU = new ArrayList();
         
-        public JDRemoveUnit() {
-            joinDef = null;
-            usedCount = 0;
-            linkedPU = new ArrayList();
-        }
+        public JDRemoveUnit() {}
         
         public void setJoinDef(JoinDefinition inJD) {
             joinDef = inJD;

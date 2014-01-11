@@ -11,23 +11,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Session {    
-    private HashMap<String, DataSource> dataSources;
-    // ArrayList<> 
-    private HashMap<String, Table> tables; // FIXME: restrcted to single DS
-    private HashMap<String, Attribute> attributes;
-    private HashMap<String, Metric> metrics;
-    private HashMap<String, JoinDefinition> joins;
-    private ArrayList<String> hardhints;
-    // ArrayList<JoinDefMera> joindefs;
+    private final HashMap<String, DataSource> dataSources = new HashMap();
+    private final HashMap<String, Table> tables = new HashMap(); // FIXME: restrcted to single DS
+    private final HashMap<String, Attribute> attributes = new HashMap();
+    private final HashMap<String, Metric> metrics = new HashMap();
+    private final HashMap<String, JoinDefinition> joins = new HashMap();
+    private final ArrayList<String> hardhints = new ArrayList();
     
-    public Session() {
-        dataSources = new HashMap();
-        tables = new HashMap();
-        attributes = new HashMap();
-        metrics = new HashMap();
-        joins = new HashMap();
-        hardhints = new ArrayList();
-    }
+    public Session() {}
     
     public void addDataSource(String inType, String inName, String inDescription) {
         if (inType.compareTo("Teradata") == 0) {

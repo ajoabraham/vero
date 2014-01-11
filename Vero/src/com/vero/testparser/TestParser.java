@@ -16,8 +16,6 @@ import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Iterator;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

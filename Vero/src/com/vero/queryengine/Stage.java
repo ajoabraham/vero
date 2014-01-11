@@ -24,19 +24,13 @@ import java.util.UUID;
  */
 public class Stage {
     private class ReferenceUnit1 {
-        private int rowCount;
-        private final HashMap<String, Attribute> attrHT;
-        private final HashMap<String, Metric> metricHT;
-        private final HashMap<String, JoinDefinition> joindefHT;
-        private final ArrayList<Table> hardhintsAL;
+        private int rowCount = -1;
+        private final HashMap<String, Attribute> attrHT = new HashMap();
+        private final HashMap<String, Metric> metricHT = new HashMap();
+        private final HashMap<String, JoinDefinition> joindefHT = new HashMap();
+        private final ArrayList<Table> hardhintsAL = new ArrayList();
                         
-        public ReferenceUnit1() {
-            rowCount = -1;
-            attrHT = new HashMap();
-            metricHT = new HashMap();
-            joindefHT = new HashMap();
-            hardhintsAL = new ArrayList();
-        }
+        public ReferenceUnit1() {}
     }
         
     private final HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;

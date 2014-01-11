@@ -18,7 +18,7 @@ import java.util.Map;
 public class Table {
     private String objectName = "";
     private String physicalName = "";
-    private Map<String,Column> columns = new HashMap();
+    private final Map<String,Column> columns = new HashMap();
     private int rowCount = -1;
     private Timestamp lastStatCollectionDate;
     private DataSource dataSource;

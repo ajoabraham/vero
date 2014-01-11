@@ -13,16 +13,16 @@ import java.util.UUID;
  * @author yulinwen
  */
 public class JoinDefinition {
-    private final UUID uuid;
-    private String name;
-    private String tleft;
-    private String cleft;
-    private String tright;
-    private String cright;
-    private String operator;
-    private String expression;
+    private final UUID uuid = UUID.randomUUID();
+    private String name = null;
+    private String tleft = null;
+    private String cleft = null;
+    private String tright = null;
+    private String cright = null;
+    private String operator = null;
+    private String expression = null;
     // JoinType type;
-    private String type;
+    private String type = null;
     
     public enum JoinType {
         NONE,
@@ -33,7 +33,6 @@ public class JoinDefinition {
     }
         
     public JoinDefinition(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
-        uuid = UUID.randomUUID();
         name = inName;
         tleft = inTL;
         cleft = inCL;

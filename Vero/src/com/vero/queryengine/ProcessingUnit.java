@@ -28,27 +28,18 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         PUTYPE_HARDHINT
     }
 
-    private final UUID uuid;
-    private final int id;
-    private PUType type;
-    private Object content;
+    private final UUID uuid = UUID.randomUUID();
+    private final int id = PU_ID++;
+    private PUType type = PUTYPE_NONE;
+    private Object content = null;
     
     // update during processing
-    private int removeCount;
-    private String tableAlias;
-    private Expression usedExp;
-    private Boolean processed;
+    private int removeCount = 0;
+    private String tableAlias = null;
+    private Expression usedExp = null;
+    private Boolean processed = false;
     
-    public ProcessingUnit() {
-        uuid = UUID.randomUUID();
-        id = PU_ID++;
-        type = PUTYPE_NONE;
-        content = null;
-        removeCount = 0;
-        tableAlias = null;
-        usedExp = null;
-        processed = false;
-    }
+    public ProcessingUnit() {}
 
     public UUID getUUID() {
         return uuid;

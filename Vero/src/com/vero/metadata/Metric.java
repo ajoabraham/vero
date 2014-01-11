@@ -5,23 +5,19 @@ import java.util.UUID;
 import java.util.Iterator;
 
 public class Metric implements Filterable {
-    UUID uuid;
-    String name;
-    String description;
-    ArrayList<Expression> expressions;
+    UUID uuid = UUID.randomUUID();
+    String name = null;
+    String description = null;
+    ArrayList<Expression> expressions = new ArrayList();
     
     public Metric(String inName, String inDescription) {
-        uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
-        expressions = new ArrayList();
     }
 
     public Metric(String inName, String inDescription, ArrayList<Expression> inExpressions) {
-        uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
-        expressions = new ArrayList(inExpressions);
     }
 
     public void addExpression(Expression inExpression) {
