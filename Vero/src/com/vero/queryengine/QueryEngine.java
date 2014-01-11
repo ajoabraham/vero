@@ -549,7 +549,26 @@ public class QueryEngine {
                     }
                 }
             } else {
-               
+                ProcessingUnit srcPU = eu.getSrcPU();
+                ProcessingUnit dstPU = eu.getDstPU();
+
+                System.out.println("srcPU UsedExp: " + srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName());
+                System.out.println("srcPU alias: " + srcPU.getTableAlias());
+                
+                if (cnt == 0) {
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.getTableAlias())));
+                    srcPU.setProcessed(true);
+                    allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.getTableAlias())));
+                    dstPU.setProcessed(true);
+                } else {
+                    if (srcPU.getProcessed() == false) {
+                        allJoins.addCrossJoin(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.getTableAlias())));
+                        srcPU.setProcessed(true);
+                    } else {
+                        allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.getTableAlias())));
+                        dstPU.setProcessed(true);
+                    }
+                }
             }
             cnt++;
         }
