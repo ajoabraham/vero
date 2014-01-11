@@ -23,38 +23,29 @@ import java.util.UUID;
  * @author yulinwen
  */
 public class Stage {
-    private class ReferenceUnit1 {
+    private class ReferenceUnit {
         private int rowCount = -1;
         private final HashMap<String, Attribute> attrHT = new HashMap();
         private final HashMap<String, Metric> metricHT = new HashMap();
         private final HashMap<String, JoinDefinition> joindefHT = new HashMap();
         private final ArrayList<Table> hardhintsAL = new ArrayList();
                         
-        public ReferenceUnit1() {}
+        public ReferenceUnit() {}
     }
         
-    private final HashMap<String, ReferenceUnit1> table2ReferenceUnitHT;
-    //private HashMap<String, Attribute> attributes;
-    //private HashMap<String, Metric> metrics;
-    private ArrayList<Attribute> attributes;
-    private ArrayList<Metric> metrics;
-    private ArrayList<String> hardhints;
-    private final HashMap<UUID, ProcessingUnit> processingUnits;
+    private final HashMap<String, ReferenceUnit> table2ReferenceUnitHT = new HashMap();
+    private final ArrayList<Attribute> attributes = new ArrayList();
+    private final ArrayList<Metric> metrics = new ArrayList();
+    private final ArrayList<String> hardhints = new ArrayList();
+    private final HashMap<UUID, ProcessingUnit> processingUnits = new HashMap();
     
-    public Stage() {
-        table2ReferenceUnitHT = new HashMap();
-        attributes = null;
-        metrics = null;
-        hardhints = null;
-        processingUnits = new HashMap();
-    }
+    public Stage() {}
     
     public void preprocess(Session inSession) {                
         // associate table with hardhint
-        hardhints = new ArrayList(inSession.getHardhints());
-        List<String> hardhintaAL = hardhints;
-        for (int i = 0; i < hardhintaAL.size(); i++) {
-            String tableName = hardhintaAL.get(i);
+        hardhints.addAll(inSession.getHardhints());
+        for (int i = 0; i < hardhints.size(); i++) {
+            String tableName = hardhints.get(i);
             Table curTable = inSession.getTable(tableName);
             
             ProcessingUnit aPU = new ProcessingUnit();
@@ -63,12 +54,12 @@ public class Stage {
             processingUnits.put(aPU.getUUID(), aPU);
             
             if (!table2ReferenceUnitHT.containsKey(tableName)) {
-                ReferenceUnit1 rU = new ReferenceUnit1(); 
+                ReferenceUnit rU = new ReferenceUnit(); 
                 rU.rowCount = inSession.getTable(tableName).getRowCount();
                 table2ReferenceUnitHT.put(tableName, rU);
                 rU.hardhintsAL.add(curTable);
             } else {
-                ReferenceUnit1 rU = table2ReferenceUnitHT.get(tableName);
+                ReferenceUnit rU = table2ReferenceUnitHT.get(tableName);
                 // FIXME: may intriduce duplicate
                 rU.hardhintsAL.add(curTable);
             }
@@ -85,12 +76,12 @@ public class Stage {
             
             for (String tableName: elements) {
                 if (!table2ReferenceUnitHT.containsKey(tableName)) {
-                    ReferenceUnit1 rU = new ReferenceUnit1(); 
+                    ReferenceUnit rU = new ReferenceUnit(); 
                     rU.rowCount = inSession.getTable(tableName).getRowCount();
                     table2ReferenceUnitHT.put(tableName, rU);
                     rU.joindefHT.put(joinDef.getName(), joinDef);
                 } else {
-                    ReferenceUnit1 rU = table2ReferenceUnitHT.get(tableName);
+                    ReferenceUnit rU = table2ReferenceUnitHT.get(tableName);
                     if (!rU.joindefHT.containsKey(joinDef.getName())) {
                         rU.joindefHT.put(joinDef.getName(), joinDef);
                     }
@@ -98,30 +89,8 @@ public class Stage {
             }
         }
         
-        // associate table with attribute
-        /*
-        attributes = new HashMap(inSession.getAttributes());
-        Map<String, Attribute> attrMap = attributes;
-        for (Map.Entry<String, Attribute> entry : attrMap.entrySet()) {
-            Attribute attr = entry.getValue();
-            
-            ProcessingUnit aPU = new ProcessingUnit();
-            aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
-            aPU.setContent(attr);
-            processingUnits.put(aPU.getUUID(), aPU);
-             
-            ArrayList<Table> listTables = attr.retrieveTables();
-            if (listTables.size() > 0) {
-                Iterator<Table> iterTable = listTables.iterator();
-
-                while (iterTable.hasNext()) {
-                    setAttributeByTable(iterTable.next().getPhysicalName(), attr);
-                }
-            }
-        }
-        */
-        
-        attributes = new ArrayList(inSession.getAttributes());
+        // associate table with attribute        
+        attributes.addAll(inSession.getAttributes());
         for (Attribute curAttr : attributes) {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
@@ -139,27 +108,7 @@ public class Stage {
         }
         
         // associate table with metric
-        /*
-        metrics = new HashMap(inSession.getMetrics());
-        Map<String, Metric> metricMap = metrics;
-        for (Map.Entry<String, Metric> entry : metricMap.entrySet()) {
-            Metric met = entry.getValue();
-            ProcessingUnit aPU = new ProcessingUnit();
-            aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
-            aPU.setContent(met);
-            processingUnits.put(aPU.getUUID(), aPU); 
-            
-            ArrayList<Table> listTables = met.retrieveTables();
-            if (listTables.size() > 0) {
-                Iterator<Table> iterTable = listTables.iterator();
-
-                while (iterTable.hasNext()) {
-                    setMetricByTable(iterTable.next().getPhysicalName(), met);
-                }
-            }
-        }
-        */
-        metrics = new ArrayList(inSession.getMetrics());
+        metrics.addAll(inSession.getMetrics());
         for (Metric curMet : metrics) {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
@@ -176,15 +125,13 @@ public class Stage {
             }
         }
         
-        // create pu2ReferenceUnitHT
-        
         // dump table2ReferenceUnitHT
         System.out.println("dumping table2ReferenceUnitHT");
         System.out.println("------------------------------");
-        Map<String, ReferenceUnit1> dumpTMap = table2ReferenceUnitHT;
-        for (Map.Entry<String, ReferenceUnit1> entry1 : dumpTMap.entrySet()) {
+        Map<String, ReferenceUnit> dumpTMap = table2ReferenceUnitHT;
+        for (Map.Entry<String, ReferenceUnit> entry1 : dumpTMap.entrySet()) {
             System.out.println("dumpT Key = " + entry1.getKey() + ", Value = " + entry1.getValue());
-            ReferenceUnit1 rU = entry1.getValue();
+            ReferenceUnit rU = entry1.getValue();
             System.out.println("rowCount = " + rU.rowCount);
             Map<String, JoinDefinition> dumpJMap = rU.joindefHT;
             for (Map.Entry<String, JoinDefinition> entry2 : dumpJMap.entrySet()) {
@@ -253,16 +200,6 @@ public class Stage {
             return -1;
         }
     }
-    
-    /*
-    public HashMap getAttributes() {
-        return attributes;
-    }
-
-    public HashMap getMetrics() {
-        return metrics;
-    }
-    */
     
     public ArrayList<Attribute> getAttributes() {
         return attributes;

@@ -1,14 +1,16 @@
 package com.vero.metadata;
 
+import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
 
 public class Metric implements Filterable {
-    UUID uuid = UUID.randomUUID();
-    String name = null;
-    String description = null;
-    ArrayList<Expression> expressions = new ArrayList();
+    private final int objID = Session.sessionObjID++;
+    private final UUID uuid = UUID.randomUUID();
+    private String name = null;
+    private String description = null;
+    private final ArrayList<Expression> expressions = new ArrayList();
     
     public Metric(String inName, String inDescription) {
         name = inName;
@@ -35,7 +37,11 @@ public class Metric implements Filterable {
     public String getDescription() {
         return description;
     }
-        
+
+    public int getObjID() {
+        return objID;
+    }
+    
     public UUID getUUID() {
         return uuid;
     }

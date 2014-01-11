@@ -1,24 +1,24 @@
 package com.vero.metadata;
 
+import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
 
 public class Attribute implements Filterable {
-    UUID uuid;
-    String name;
-    String description;
-    ArrayList<Expression> expressions;
+    private final int objID = Session.sessionObjID++;
+    private final UUID uuid = UUID.randomUUID();
+    private String name = null;
+    private String description = null;
+    private ArrayList<Expression> expressions = null;
     
     public Attribute(String inName, String inDescription) {
-        uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
         expressions = new ArrayList();
     }
 
     public Attribute(String inName, String inDescription, ArrayList<Expression> inExpressions) {
-        uuid = UUID.randomUUID();
         name = inName;
         description = inDescription;
         expressions = new ArrayList(inExpressions);
@@ -39,7 +39,11 @@ public class Attribute implements Filterable {
     public String getDescription() {
         return description;
     }
-        
+
+    public int getObjID() {
+        return objID;
+    }
+    
     public UUID getUUID() {
         return uuid;
     }

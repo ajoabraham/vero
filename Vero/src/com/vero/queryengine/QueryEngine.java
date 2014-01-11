@@ -75,35 +75,30 @@ public class QueryEngine {
         }        
     }
     
-    private final Stage stage;
-    private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph;
+    private final Stage stage = new Stage();
+    private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
+            new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
     
-    public QueryEngine() {
-        stage = new Stage();
-        joinGraph = new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));                
-    }
+    public QueryEngine() {}
             
     public void preprocess(Session inSession) {
         stage.preprocess(inSession);
-
-        //expirimentOnGraph();
         
-        // create all verteces (PU)
+        // create all verteces (PUs)
         HashMap<UUID, ProcessingUnit> allPUs = stage.getPUs();
-        Map<UUID, ProcessingUnit> puMap = allPUs;
-        for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
-            ProcessingUnit pu = entry.getValue();
+        for (Map.Entry<UUID, ProcessingUnit> entry : allPUs.entrySet()) {
+            ProcessingUnit curPU = entry.getValue();
             
-            System.out.println("Adding vertex: " + pu + ", type: " + pu.getType());
-            joinGraph.addVertex(pu);
+            System.out.println("Adding vertex: " + curPU + ", type: " + curPU.getType());
+            joinGraph.addVertex(curPU);
         }
         
         // loop on PUs
         // for each table, find where it is used and connect vertex and create edges
-        for (Map.Entry<UUID, ProcessingUnit> entry : puMap.entrySet()) {
-            ProcessingUnit pu = entry.getValue();
-            System.out.println("### PU id = " + pu.getID() + ". Current PU content = " + pu.getContent());
-            ArrayList<Table> listTables = pu.retrieveTables();
+        for (Map.Entry<UUID, ProcessingUnit> entry : allPUs.entrySet()) {
+            ProcessingUnit curPU = entry.getValue();
+            System.out.println("### PU id = " + curPU.getID() + ". Current PU content = " + curPU.getContent());
+            ArrayList<Table> listTables = curPU.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 
@@ -114,16 +109,13 @@ public class QueryEngine {
 
                     if (tabJD != null) {                    
                         HashMap<String, JoinDefinition> allTabJDs = tabJD;
-                        Map<String, JoinDefinition> allJDMap = allTabJDs;
-                        for (Map.Entry<String, JoinDefinition> jdEntry : allJDMap.entrySet()) {
+                        for (Map.Entry<String, JoinDefinition> jdEntry : allTabJDs.entrySet()) {
                             JoinDefinition curJD = jdEntry.getValue();
                             String otherTable = curJD.getOtherTable(aTab.getPhysicalName());
                             System.out.println("curJD = " + curJD.getName() + ", other table = " + otherTable);                                                
 
-                            HashMap<String, Attribute> otherAttrHT = stage.getAttributeHTByTable(otherTable);
-                            HashMap<String, Attribute> allOtherAttrs = otherAttrHT;
-                            Map<String, Attribute> allOtherAttrsMap = allOtherAttrs;
-                            for (Map.Entry<String, Attribute> allOtherAttrsEntry : allOtherAttrsMap.entrySet()) {
+                            HashMap<String, Attribute> allOtherAttrs = stage.getAttributeHTByTable(otherTable);
+                            for (Map.Entry<String, Attribute> allOtherAttrsEntry : allOtherAttrs.entrySet()) {
                                 Attribute otherAttr = allOtherAttrsEntry.getValue();
 
                                 System.out.println("Other Attr: " + otherAttr.getName());
@@ -142,7 +134,7 @@ public class QueryEngine {
                                         aEU.setType(EdgeUnit.EUType.EUTYPE_PHYSICAL);
                                         aEU.setJoinDef(curJD);
                                         
-                                        if (pu.getID() < otherPU.getID()) {
+                                        if (curPU.getID() < otherPU.getID()) {
                                             aEU.setSrcTable(aTab.getPhysicalName());
                                             aEU.setDstTable(otherTable);
                                         } else {
@@ -151,15 +143,13 @@ public class QueryEngine {
                                         }
                                         
                                         joinGraph.setEdgeWeight(aEU, weight);
-                                        joinGraph.addEdge(pu, otherPU, aEU);
+                                        joinGraph.addEdge(curPU, otherPU, aEU);
                                     }
                                 }
                             }
 
-                            HashMap<String, Metric> otherMetricHT = stage.getMetricHTByTable(otherTable);
-                            HashMap<String, Metric> allOtherMetrics = otherMetricHT;
-                            Map<String, Metric> allOtherMetricsMap = allOtherMetrics;
-                            for (Map.Entry<String, Metric> allOtherMetricsEntry : allOtherMetricsMap.entrySet()) {
+                            HashMap<String, Metric> allOtherMetrics = stage.getMetricHTByTable(otherTable);
+                            for (Map.Entry<String, Metric> allOtherMetricsEntry : allOtherMetrics.entrySet()) {
                                 Metric otherMetric = allOtherMetricsEntry.getValue();
 
                                 System.out.println("Other Metric: " + otherMetric.getName());
@@ -178,7 +168,7 @@ public class QueryEngine {
                                         aEU.setType(EdgeUnit.EUType.EUTYPE_PHYSICAL);
                                         aEU.setJoinDef(curJD);
                                         
-                                        if (pu.getID() < otherPU.getID()) {
+                                        if (curPU.getID() < otherPU.getID()) {
                                             aEU.setSrcTable(aTab.getPhysicalName());
                                             aEU.setDstTable(otherTable);
                                         } else {
@@ -187,7 +177,7 @@ public class QueryEngine {
                                         }                                        
                                                                                 
                                         joinGraph.setEdgeWeight(aEU, weight);
-                                        joinGraph.addEdge(pu, otherPU, aEU);
+                                        joinGraph.addEdge(curPU, otherPU, aEU);
                                     }
                                 }
                             }
@@ -273,7 +263,7 @@ public class QueryEngine {
             // find and remove edge
             int sizeJDRemoveAL = jdRemoveAL.size();
             System.out.println("### JDRemoveAL: " + pu.getContent() + ", size = " + sizeJDRemoveAL);
-            for (int i = 0; i <sizeJDRemoveAL; i++) {
+            for (int i = 0; i<sizeJDRemoveAL; i++) {
                 JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
                 System.out.println("JoinDef: " + curJDRemoveUnit.getJoinDef().getName() + ", usedCount = " + curJDRemoveUnit.getUsedCount());
                 ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();                

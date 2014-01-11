@@ -70,7 +70,7 @@ public class Vero {
      */
     public static void main(String[] args) {
         // queryEngineTest1();
-        queryEngineTest2();
-        // queryEngineTest3();
+        // queryEngineTest2();
+        queryEngineTest3();
     }
 }
