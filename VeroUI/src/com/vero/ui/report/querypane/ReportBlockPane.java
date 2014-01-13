@@ -4,6 +4,7 @@ import static com.vero.ui.constants.BlockType.REPORT_BLOCK;
 import static com.vero.ui.constants.CSSConstants.CLASS_REPORT_BLOCK_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.REPORT_BLOCK_PANE_HEIGHT;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,7 @@ public class ReportBlockPane extends BlockPane {
         setMinHeight(REPORT_BLOCK_PANE_HEIGHT);
         
         HBox headerPane = new HBox();
+        headerPane.setAlignment(Pos.CENTER_LEFT);
         headerPane.getChildren().add(new ImageView(ImageList.IMAGE_ACTIVE_CIRCLE));
         Label headerLabel = new Label("REPORT BLOCK");
         headerLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);

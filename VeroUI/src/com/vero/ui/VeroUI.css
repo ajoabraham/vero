@@ -395,6 +395,7 @@
 .editor-pane-tool-bar {
 	-fx-padding: 5;
 	-fx-spacing: 5;
+	-fx-alignment: center-left;
 }
 
 .editor-pane-tool-bar .button {
