@@ -6,6 +6,8 @@
 package com.vero.ui.menu;
 
 import com.vero.ui.common.UIManager;
+import com.vero.ui.util.UIUtils;
+
 import static com.vero.ui.constants.UIConstants.DATASOURCES_TOOL_BAR_BTN_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DATASOURCES_TOOL_BAR_BTN_WIDTH;
 import static com.vero.ui.constants.UIConstants.REPORTS_TOOL_BAR_BTN_HEIGHT;
@@ -34,6 +36,7 @@ public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
 
         datasourcesToolBarButton = new Button();
         datasourcesToolBarButton.setId(ID_DATASOURCES_TOOL_BAR_BUTTON);
+        UIUtils.enableSelectedButtonStyle(datasourcesToolBarButton);
         datasourcesToolBarButton.setMaxWidth(Double.MAX_VALUE);
         datasourcesToolBarButton.setPrefSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
         datasourcesToolBarButton.setMinSize(DATASOURCES_TOOL_BAR_BTN_WIDTH, DATASOURCES_TOOL_BAR_BTN_HEIGHT);
@@ -54,9 +57,13 @@ public class VeroToolBar extends VBox implements EventHandler<ActionEvent> {
     public void handle(ActionEvent e) {
         if (e.getSource() == datasourcesToolBarButton) {
             UIManager.getInstance().showDatasourceNavigationPane();
+            UIUtils.disableSelectedButtonStyle(reportsToolBarButton);
+            UIUtils.enableSelectedButtonStyle(datasourcesToolBarButton);
         }
         else if (e.getSource() == reportsToolBarButton) {
             UIManager.getInstance().showReportNavigationPane();
+            UIUtils.disableSelectedButtonStyle(datasourcesToolBarButton);
+            UIUtils.enableSelectedButtonStyle(reportsToolBarButton);
         }
     }
 }

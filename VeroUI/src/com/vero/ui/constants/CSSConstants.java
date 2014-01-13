@@ -19,11 +19,17 @@ public interface CSSConstants {
     public static final String ID_ROOT_PANE = "root-pane";
     
     /**
+     * ID for menu bar
+     */
+    public static final String CLASS_PARENT_MENU_BUTTON = "parent-menu-button";
+    
+    /**
      * ID for VERO tool bar
      */
     public static final String ID_VERO_TOOL_BAR = "vero-tool-bar";
     public static final String ID_DATASOURCES_TOOL_BAR_BUTTON = "datasources-tool-bar-button";
     public static final String ID_REPORTS_TOOL_BAR_BUTTON = "reports-tool-bar-button";
+    public static final String CLASS_SELECTED_TOOL_BAR_BUTTON = "selected-tool-bar-button";
     
     /**
      * ID for navigation pane

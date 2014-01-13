@@ -19,6 +19,7 @@ import com.vero.ui.constants.TableJoinType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBoxBuilder;
 
@@ -111,5 +112,19 @@ public final class UIUtils {
     
     public static String getVeroCSSStyleSheet() {
         return VeroUI.class.getResource(VERO_CSS_FILE).toExternalForm();
+    }
+    
+    public static void enableSelectedButtonStyle(Button button) {
+	if (!button.getStyleClass().contains(CLASS_SELECTED_TOOL_BAR_BUTTON)) {
+	    button.getStyleClass().add(CLASS_SELECTED_TOOL_BAR_BUTTON);
+	    button.setStyle("-fx-background-color: -fx-button-hover-color;-fx-background-radius: 5;-fx-background-insets: 0 4;");
+	}
+    }
+    
+    public static void disableSelectedButtonStyle(Button button) {
+	if (button.getStyleClass().contains(CLASS_SELECTED_TOOL_BAR_BUTTON)) {
+	    button.getStyleClass().remove(CLASS_SELECTED_TOOL_BAR_BUTTON);
+	    button.setStyle("");
+	}
     }
 }

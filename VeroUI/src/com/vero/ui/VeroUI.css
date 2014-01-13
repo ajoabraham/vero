@@ -88,8 +88,11 @@
 
 #datasources-tool-bar-button:pressed {
     -fx-background-color: -fx-button-hover-color;
-    -fx-background-insets: 1;
+    -fx-background-insets: 0 4;
+    -fx-background-radius: 5;
     -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 4;
 }
 
 #reports-tool-bar-button {
@@ -112,8 +115,24 @@
 
 #reports-tool-bar-button:pressed {
     -fx-background-color: -fx-button-hover-color;
-    -fx-background-insets: 1;
-    -fx-border-color: -fx-button-hover-border-color;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0 4;
+    -fx-border-color: -fx-button-hover-border-dark-color;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 4;
+}
+
+.selected-tool-bar-button {
+/*  TH 01/12/2013, Those 3 styles have to be set in the Java code,
+    otherwise, they are override by style applied
+    by ID (e.x #reports-tool-bar-button)	
+	-fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0 4;
+*/    
+    -fx-border-color: -fx-button-hover-border-dark-color;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 4;
 }
 
 /*******************************************************************************
@@ -490,6 +509,7 @@
 
 /* Show nothing for background of normal menu button in a menu bar */
 .menu-bar .menu-button {
+	-fx-skin: "com.vero.ui.common.VeroMenuButtonSkin";
     -fx-background-radius: 0;
     -fx-background-color: transparent;
     -fx-background-insets: 0; 
@@ -539,6 +559,20 @@
 
 .menu-bar:show-mnemonics .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
+}
+
+.menu-bar .parent-menu-button .arrow {
+    -fx-padding: 5 2 5 10;
+    -fx-background-color: -fx-mark-color;
+    -fx-shape: "M0,-4 L4,0 L0,4 Z";
+    -fx-scale-shape: false;
+}
+
+.menu-bar .parent-menu-button:showing .arrow {
+    -fx-background-color: white;
+    -fx-padding: 5 2 5 10;
+    -fx-shape: "M0, -2 L8, -2 L4 2 Z";
+    -fx-scale-shape: false;
 }
 
 /*******************************************************************************
@@ -673,8 +707,9 @@
 .tab .tab-label {
     -fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
     -fx-background-color: transparent;    
-    -fx-alignment: CENTER;
+    -fx-alignment: center;
     -fx-text-fill: -fx-default-text-color;
+    -fx-padding: 0 8 0 0;
 }
 /*
 .tab *.tab-label Text {
