@@ -20,6 +20,7 @@ import java.util.UUID;
  */
 public class ProcessingUnit implements Comparable<ProcessingUnit> {
     static private int PU_ID = 0;
+    static private int ALIAS_ID = 0;
     
     public static enum PUType {
         PUTYPE_NONE,
@@ -77,9 +78,18 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         tableAlias = inAlias;
     }
 
-    public String getTableAlias() {
+    public String assignTableAlias() {
+        if (tableAlias == null) {
+            setTableAlias("T" + ALIAS_ID);
+            ALIAS_ID++;
+        }
+        
         return tableAlias;
     }
+
+     public String getTableAlias() {        
+        return tableAlias;
+    }   
     
     public void setUsedExp(Expression inExp) {
         usedExp = inExp;
@@ -113,9 +123,9 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     
     @Override
     public int compareTo(ProcessingUnit inPU) {
-        if (this.removeCount < inPU.getRemoveCount()) {
+        if (this.id < inPU.id) {
             return -1;
-        } else if (this.removeCount > inPU.getRemoveCount()) {
+        } else if (this.id > inPU.id) {
             return 1;
         } else {
             return 0;

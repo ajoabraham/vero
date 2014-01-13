@@ -14,8 +14,10 @@ import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -193,9 +195,6 @@ public class QueryEngine {
         
         // loop each vertex and remove edges that have same definition until one left
         removeExtraEdges(joinGraph);
-
-        // assign table alias
-        assignTableAlias(joinGraph);
         
         // dump graph
         System.out.println("#### After removing extra edges and table aliasing...");
@@ -272,15 +271,31 @@ public class QueryEngine {
                 if (sizeCurJDRemoveUnitLinkedPUAL > 1) {
                     int difference = curJDRemoveUnit.getUsedCount() - 1;
                     
-                    Collections.sort(curJDRemoveUnitLinkedPUAL);
+                    Collections.sort(curJDRemoveUnitLinkedPUAL, new Comparator<ProcessingUnit>(){
+                        @Override
+                        public int compare(ProcessingUnit pu1, ProcessingUnit pu2) {
+                            if (pu1.getRemoveCount() < pu2.getRemoveCount()) {
+                                return -1;
+                            } else if (pu1.getRemoveCount() > pu2.getRemoveCount()) {
+                                return 1;
+                            } else {
+                                if (pu1.getID() < pu2.getID()) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            }
+                        }
+                    });
+                    
+                    
                     
                     // dump
                     for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
                         ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
                         System.out.println("  LinkedPU: " + curPU.getContent() + ", removeCount = " + curPU.getRemoveCount());
                     }
-                    
-                    // try to remove from the head of ArrayList because it is sorted
+                                        
                     for (int j = 0; j<difference; j++) {
                         ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
                         int removeCount = curPU.getRemoveCount();
@@ -289,16 +304,6 @@ public class QueryEngine {
                     }
                 }
             }            
-        }
-    }
-    
-    private void assignTableAlias(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
-        int aliasCount = 0;
-        
-        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
-        for (ProcessingUnit pu : graphVertexSet) {
-            pu.setTableAlias("T"+aliasCount);
-            aliasCount++;
         }
     }
     
@@ -351,10 +356,13 @@ public class QueryEngine {
     }
     
     private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
-        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
-        UnionFind<ProcessingUnit> unionPU = new UnionFind(graphVertexSet);
+        Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
+        UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
+        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
+        Collections.sort(sortedVertex);
         int attrCount = 0;
         int metCount = 0;
+        int aliasCount = 0;
 
         System.out.println("Generate SQL...");
         
@@ -367,7 +375,7 @@ public class QueryEngine {
         int nGroup = 0;
         ProcessingUnit allLinkedPU = null;
         HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
-        for (ProcessingUnit pu : graphVertexSet) {
+        for (ProcessingUnit pu : sortedVertex) {
             ProcessingUnit masterPU = unionPU.find(pu);            
             
             // for cross join, initiate a PU that should link to all the other groups
@@ -412,6 +420,16 @@ public class QueryEngine {
             }
         }
         
+        // sort eu set
+        ArrayList<EdgeUnit> sortedEUs = new ArrayList(euSet);
+        Collections.sort(sortedEUs);
+        
+        // dump sortedEUs
+        System.out.println("########## Dump sortedEUs...");
+        for (EdgeUnit eu : sortedEUs) {
+            System.out.println("eu id: " + eu.getID() + " : " + eu);
+        }
+        
         // generate SQL
         // Create or acquire vendor
         SQLVendor vendor = null;
@@ -434,24 +452,17 @@ public class QueryEngine {
         // get all expressions from all attributes/metrics
         ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
         ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
-        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
-            ProcessingUnit masterPU = entry.getKey();
-            ArrayList<ProcessingUnit> puAL = entry.getValue();
-            
-            for (int i=0; i<puAL.size(); i++) {
-                ProcessingUnit curPU = puAL.get(i);
-                if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
-                    System.out.println(curPU.getUsedExp() + "aaa");
-                    
-                    ColumnReferenceByName aColExp = c.colName(curPU.getTableAlias(), curPU.getUsedExp().getExpression());
-                    
-                    if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
-                    if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
-                    
-                    colRefByName.add(aColExp);
-                }
+        for (ProcessingUnit curPU : sortedVertex) {            
+            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
+                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getExpression());
+
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
+
+                colRefByName.add(aColExp);
             }
         }
+        
         ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
         colRef = colRefByName.toArray(colRef);                
         ColumnsBuilder selectCols = q.columnsBuilder().addUnnamedColumns(colRef);
@@ -466,7 +477,7 @@ public class QueryEngine {
         // construct join
         TableReferenceBuilder allJoins = null;
         int cnt = 0;
-        for (EdgeUnit eu : euSet) {                       
+        for (EdgeUnit eu : sortedEUs) {
             if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
                 JoinDefinition aJoin = eu.getJoinDef();
                 
@@ -495,7 +506,7 @@ public class QueryEngine {
 
                 if (cnt == 0) {
                     ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(matchingPU.getTableAlias())));
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(matchingPU.assignTableAlias())));
                     matchingPU.setProcessed(true);
                 }
                 
@@ -546,16 +557,16 @@ public class QueryEngine {
                 System.out.println("srcPU alias: " + srcPU.getTableAlias());
                 
                 if (cnt == 0) {
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.getTableAlias())));
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.assignTableAlias())));
                     srcPU.setProcessed(true);
-                    allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.getTableAlias())));
+                    allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.assignTableAlias())));
                     dstPU.setProcessed(true);
                 } else {
                     if (srcPU.getProcessed() == false) {
-                        allJoins.addCrossJoin(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.getTableAlias())));
+                        allJoins.addCrossJoin(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.assignTableAlias())));
                         srcPU.setProcessed(true);
                     } else {
-                        allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.getTableAlias())));
+                        allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.assignTableAlias())));
                         dstPU.setProcessed(true);
                     }
                 }

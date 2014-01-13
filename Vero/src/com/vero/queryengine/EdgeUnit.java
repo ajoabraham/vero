@@ -13,13 +13,16 @@ import org.jgrapht.graph.DefaultWeightedEdge;
  *
  * @author yulinwen
  */
-public class EdgeUnit extends DefaultWeightedEdge {        
+public class EdgeUnit extends DefaultWeightedEdge implements Comparable<EdgeUnit> {
+    static private int EU_ID = 0;
+    
     public static enum EUType {
         EUTYPE_NONE,
         EUTYPE_PHYSICAL,
         EUTYPE_VIRTUAL
     }
 
+    private final int id = EU_ID++;
     private EUType type = EUType.EUTYPE_NONE;
     private JoinDefinition joinDef = null;
     private ProcessingUnit srcPU = null;
@@ -31,6 +34,10 @@ public class EdgeUnit extends DefaultWeightedEdge {
         super();
     }
 
+    public int getID() {
+        return id;
+    }
+    
     public EUType getType() {
         return type;
     }
@@ -114,9 +121,9 @@ public class EdgeUnit extends DefaultWeightedEdge {
     public String retrieveMatchingAlias(String inTab) {
         if ((srcTable != null) && (dstTable != null)) {
             if (srcTable.equals(inTab)) {
-                return srcPU.getTableAlias();
+                return srcPU.assignTableAlias();
             } else if (dstTable.equals(inTab)) {
-                return dstPU.getTableAlias();
+                return dstPU.assignTableAlias();
             } else {
                 System.out.println("@@@ EdgeUnit.retrieveAlias(): not equal to both src and dst table!...");
                 return null;
@@ -144,5 +151,16 @@ public class EdgeUnit extends DefaultWeightedEdge {
                 dstPU = aPU;
             }
         }
-    }        
+    }
+    
+    @Override
+    public int compareTo(EdgeUnit inEU) {
+        if (this.id < inEU.id) {
+            return -1;
+        } else if (this.id > inEU.id) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
