@@ -1,0 +1,197 @@
+{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query.",
+    "expectedOutput":"select t3.name,t5.name,count(*) from LessonsFact t1 join Professors t2 on t1.prof_id = t2.id join Students t3 on t1.std_id = t3.id join departments t4 on t4.id=t2.dept_id join Departments t5 on t5.id=t3.dept_id",
+    "datasources": [
+        {
+            "name": "Teradata - Prod",
+            "database": {"vendor": "Teradata"}
+        }
+    ],
+    "tables": [
+        {
+            "name": "LessonsFact",
+            "rowCount": 100000,
+            "tableType": "fact",
+            "columns": [
+                {
+                    "name": "prof_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "std_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "course_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "date",
+                    "type": "date",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Departments",
+            "rowCount": 100,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "school_name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Professors",
+            "rowCount": 90,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Students",
+            "rowCount": 600000,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }           
+            ],
+            "datasource": "Teradata - Prod"
+        }
+    ],
+    "attributes": [
+        {
+            "name": "Professor Department Name",
+            "expressions": [
+                {
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Student Department Name",
+            "expressions": [
+                {
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"]
+                    ]
+                }
+            ]
+        }
+    ],
+    "metrics": [
+        {
+            "name": "# of Lessons",
+            "expressions": [
+                {
+                    "definition": "count(distinct course_id)",
+                    "columns": [
+                        ["course_id", "LessonsFact"]
+                    ]
+                }
+            ]
+        }
+    ],
+    "joindefs": [
+        {
+            "name": "on equal professor id",
+            "tleft": "LessonsFact",
+            "cleft": "prof_id",
+            "operator": "=",
+            "tright": "Professors",
+            "cright": "id",
+            "expression": "tleft.prof_id=tright.id",
+            "jointype": "inner"
+        },
+        {
+            "name": "on equal department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",
+            "tright": "Students",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        },
+        {
+            "name": "on equal professor/department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",           
+            "tright": "Professors",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        }
+    ],
+    "hardhints":["Students","Professors"]
+}

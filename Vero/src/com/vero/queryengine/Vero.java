@@ -41,6 +41,15 @@ public class Vero {
         QueryEngine queryEngine = new QueryEngine();
         queryEngine.preprocess(userSession);
     }
+ 
+    public static void queryEngineTest4() {
+        // session
+        TestParser testParser = new TestParser("test4.json");
+        Session userSession = testParser.parse();
+                
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+    }
     
     /**
      * @param args the command line arguments
@@ -48,6 +57,7 @@ public class Vero {
     public static void main(String[] args) {
         // queryEngineTest1();
         // queryEngineTest2();
-        queryEngineTest3();
+        // queryEngineTest3();
+        queryEngineTest4();
     }
 }

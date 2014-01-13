@@ -316,6 +316,9 @@ public class QueryEngine {
             } else if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                 Metric srcMet = (Metric)srcPU.getContent();
                 srcPU.setUsedExp(srcMet.getExpressionByTableName(eu.getSrcTable()));
+            } else {
+                // PUTYPE_HARDHINT
+                
             }
             srcPU.setProcessed(true);
             
@@ -553,20 +556,35 @@ public class QueryEngine {
                 ProcessingUnit srcPU = eu.getSrcPU();
                 ProcessingUnit dstPU = eu.getDstPU();
 
-                System.out.println("srcPU UsedExp: " + srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName());
-                System.out.println("srcPU alias: " + srcPU.getTableAlias());
+                System.out.println("XXX: " + srcPU.getUsedExp() + ", YYY: " + dstPU);
+                System.out.println("ZZZ: " + srcPU.getType() + ", AAA: " + dstPU.getType());
+                
+                String srcTableName = null;
+                String dstTableName = null;
+                
+                if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                    srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
+                } else {
+                    srcTableName = srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                }
+                
+                if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                    dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
+                } else {
+                    dstTableName = dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                }
                 
                 if (cnt == 0) {
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.assignTableAlias())));
+                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
                     srcPU.setProcessed(true);
-                    allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.assignTableAlias())));
+                    allJoins.addCrossJoin(t.table(t.tableName(null, dstTableName), t.tableAlias(dstPU.assignTableAlias())));
                     dstPU.setProcessed(true);
                 } else {
                     if (srcPU.getProcessed() == false) {
-                        allJoins.addCrossJoin(t.table(t.tableName(null, srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(srcPU.assignTableAlias())));
+                        allJoins.addCrossJoin(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
                         srcPU.setProcessed(true);
                     } else {
-                        allJoins.addCrossJoin(t.table(t.tableName(null, dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName()), t.tableAlias(dstPU.assignTableAlias())));
+                        allJoins.addCrossJoin(t.table(t.tableName(null, dstTableName), t.tableAlias(dstPU.assignTableAlias())));
                         dstPU.setProcessed(true);
                     }
                 }
