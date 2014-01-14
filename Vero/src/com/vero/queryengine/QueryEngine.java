@@ -80,9 +80,14 @@ public class QueryEngine {
     private final Stage stage = new Stage();
     private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
             new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
+    private String resultSQL = null;
     
     public QueryEngine() {}
-            
+    
+    public String getResultSQL () {
+        return resultSQL;
+    }
+    
     public void preprocess(Session inSession) {
         stage.preprocess(inSession);
         
@@ -355,7 +360,6 @@ public class QueryEngine {
         Collections.sort(sortedVertex);
         int attrCount = 0;
         int metCount = 0;
-        int aliasCount = 0;
 
         System.out.println("Generate SQL...");
         
@@ -519,9 +523,6 @@ public class QueryEngine {
             } else {
                 ProcessingUnit srcPU = eu.getSrcPU();
                 ProcessingUnit dstPU = eu.getDstPU();
-
-                System.out.println("XXX: " + srcPU.getUsedExp() + ", YYY: " + dstPU);
-                System.out.println("ZZZ: " + srcPU.getType() + ", AAA: " + dstPU.getType());
                 
                 String srcTableName = null;
                 String dstTableName = null;
@@ -585,8 +586,8 @@ public class QueryEngine {
         sqlQuery.setSelect(selectCols);
         sqlQuery.getFrom().addTableReferences(allJoins);
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
-        String sqlString = queryExp.toString();
-        System.out.println("Output sql is: " + sqlString);        
+        resultSQL = queryExp.toString();
+        System.out.println("Output sql is: " + resultSQL);        
     }
     
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
