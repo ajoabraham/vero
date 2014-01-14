@@ -35,7 +35,7 @@ public class QueryEngineTest {
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
-        assertEquals(expectedSQL, resultSQL);
+        assertEquals("test1", expectedSQL, resultSQL);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class QueryEngineTest {
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
-        assertEquals(expectedSQL, resultSQL);
+        assertEquals("test2", expectedSQL, resultSQL);
     }
     
     @Test
@@ -83,7 +83,7 @@ public class QueryEngineTest {
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
-        assertEquals(expectedSQL, resultSQL);
+        assertEquals("test3", expectedSQL, resultSQL);
     }
     
     @Test
@@ -108,6 +108,6 @@ public class QueryEngineTest {
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
-        assertEquals(expectedSQL, resultSQL);
+        assertEquals("test4", expectedSQL, resultSQL);
     }    
 }
