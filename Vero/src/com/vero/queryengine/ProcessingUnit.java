@@ -50,6 +50,11 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         return id;
     }
     
+    public static void resetID() {
+        PU_ID = 0;
+        ALIAS_ID = 0;
+    }
+    
     public void setType(PUType inType) {
         type = inType;
     }

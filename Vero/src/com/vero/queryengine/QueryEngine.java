@@ -83,13 +83,15 @@ public class QueryEngine {
     private String resultSQL = null;
     
     public QueryEngine() {}
-    
+        
     public String getResultSQL () {
         return resultSQL;
     }
     
     public void preprocess(Session inSession) {
         stage.preprocess(inSession);
+        EdgeUnit.resetID();
+        ProcessingUnit.resetID();
         
         // create all verteces (PUs)
         List<ProcessingUnit> allSortedPUs = new ArrayList(stage.getPUs().values());

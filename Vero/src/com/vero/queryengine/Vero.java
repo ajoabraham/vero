@@ -13,40 +13,11 @@ import com.vero.testparser.TestParser;
  *
  * @author yulinwen
  */
-public class Vero {
-    public static void queryEngineTest1() {
-        // session
-        TestParser testParser = new TestParser("test1.json");
-        Session userSession = testParser.parse();
-                
-        QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);
-    }
-    
-    
-    public static void queryEngineTest2() {
-        // session
-        TestParser testParser = new TestParser("test2.json");
-        Session userSession = testParser.parse();
-                
-        QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);
-    } 
-    public static void queryEngineTest4() {
-        // session
-        TestParser testParser = new TestParser("test4.json");
-        Session userSession = testParser.parse();
-                
-        QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);
-    }
-    
+public class Vero {    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        queryEngineTest1();
-        queryEngineTest2();
-        queryEngineTest4();
+
     }
 }

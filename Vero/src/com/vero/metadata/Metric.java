@@ -6,7 +6,6 @@ import java.util.UUID;
 import java.util.Iterator;
 
 public class Metric implements Filterable {
-    private final int objID = Session.sessionObjID++;
     private final UUID uuid = UUID.randomUUID();
     private String name = null;
     private String description = null;
@@ -36,10 +35,6 @@ public class Metric implements Filterable {
 
     public String getDescription() {
         return description;
-    }
-
-    public int getObjID() {
-        return objID;
     }
     
     public UUID getUUID() {

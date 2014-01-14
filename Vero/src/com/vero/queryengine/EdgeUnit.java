@@ -37,6 +37,10 @@ public class EdgeUnit extends DefaultWeightedEdge implements Comparable<EdgeUnit
     public int getID() {
         return id;
     }
+
+    public static void resetID() {
+        EU_ID = 0;
+    }
     
     public EUType getType() {
         return type;
