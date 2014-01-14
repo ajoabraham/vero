@@ -84,4 +84,8 @@ public final class UIManager {
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+    
+    public void setPrimaryStageTitle(String title) {
+	primaryStage.setTitle("Vero Analytics - " + title);
+    }
 }
