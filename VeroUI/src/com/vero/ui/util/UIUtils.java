@@ -117,14 +117,14 @@ public final class UIUtils {
     public static void enableSelectedButtonStyle(Button button) {
 	if (!button.getStyleClass().contains(CLASS_SELECTED_TOOL_BAR_BUTTON)) {
 	    button.getStyleClass().add(CLASS_SELECTED_TOOL_BAR_BUTTON);
-	    button.setStyle("-fx-background-color: -fx-button-hover-color;-fx-background-radius: 5;-fx-background-insets: 0 4;");
+//	    button.setStyle("-fx-background-color: -fx-button-hover-color;-fx-background-radius: 5;-fx-background-insets: 0 4;");
 	}
     }
     
     public static void disableSelectedButtonStyle(Button button) {
 	if (button.getStyleClass().contains(CLASS_SELECTED_TOOL_BAR_BUTTON)) {
 	    button.getStyleClass().remove(CLASS_SELECTED_TOOL_BAR_BUTTON);
-	    button.setStyle("");
+//	    button.setStyle("");
 	}
     }
 }
