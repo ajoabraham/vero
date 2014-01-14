@@ -545,7 +545,7 @@
 
 .menu-bar .menu-button:hover {
     -fx-background-color: -fx-button-hover-color;
-    -fx-background-radius: 5;
+    -fx-background-radius: 3;
 /*     -fx-border-color: -fx-button-hover-border-color;
     -fx-border-radius: 5; */
     -fx-text-fill: -fx-selection-bar-text;
@@ -553,7 +553,7 @@
 
 .menu-bar .menu-button:pressed {
     -fx-background-color: derive(-fx-button-hover-color, 50%);
-    -fx-background-radius: 5;
+    -fx-background-radius: 3;
 /*     -fx-border-color: -fx-button-hover-border-color;
     -fx-border-radius: 5; */
 }
