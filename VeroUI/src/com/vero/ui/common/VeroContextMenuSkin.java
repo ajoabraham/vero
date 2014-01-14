@@ -24,10 +24,11 @@ public class VeroContextMenuSkin extends ContextMenuSkin {
     
         DropShadow dropShadow = new DropShadow();
         dropShadow.setBlurType(THREE_PASS_BOX);
-        dropShadow.setColor(Color.GREY);
-        dropShadow.setSpread(0.5);
-        dropShadow.setOffsetX(5);
-        dropShadow.setOffsetY(5);
+        dropShadow.setColor(Color.BLACK);
+        dropShadow.setSpread(0.2);
+        dropShadow.setOffsetX(3);
+        dropShadow.setOffsetY(3);
+        dropShadow.setRadius(2);
         
         getNode().setEffect(dropShadow);
     }
