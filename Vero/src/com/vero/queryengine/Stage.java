@@ -36,6 +36,7 @@ public class Stage {
     private final ArrayList<Attribute> attributes = new ArrayList();
     private final ArrayList<Metric> metrics = new ArrayList();
     private final ArrayList<String> hardhints = new ArrayList();
+    private final ArrayList<JoinDefinition> joindefs = new ArrayList();
     private final HashMap<UUID, ProcessingUnit> processingUnits = new HashMap();
     
     public Stage() {}
@@ -59,30 +60,26 @@ public class Stage {
                 rU.hardhintsAL.add(curTable);
             } else {
                 ReferenceUnit rU = table2ReferenceUnitHT.get(tableName);
-                // FIXME: may intriduce duplicate
+                // FIXME: may introduce duplicate
                 rU.hardhintsAL.add(curTable);
             }
         }
         
         // associate table with joindefs
-        HashMap inJoindef = new HashMap(inSession.getJoins());
-        Map<String, JoinDefinition> jdMap = inJoindef;
-        for (Map.Entry<String, JoinDefinition> entry : jdMap.entrySet()) {
-            System.out.println("JD Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            JoinDefinition joinDef = entry.getValue();
-
-            String[] elements = {joinDef.getTLeft(), joinDef.getTRight()};
+        joindefs.addAll(inSession.getJoins());
+        for (JoinDefinition curJoindef : joindefs) {
+            String[] elements = {curJoindef.getTLeft(), curJoindef.getTRight()};
             
             for (String tableName: elements) {
                 if (!table2ReferenceUnitHT.containsKey(tableName)) {
                     ReferenceUnit rU = new ReferenceUnit(); 
                     rU.rowCount = inSession.getTable(tableName).getRowCount();
                     table2ReferenceUnitHT.put(tableName, rU);
-                    rU.joindefHT.put(joinDef.getName(), joinDef);
+                    rU.joindefHT.put(curJoindef.getName(), curJoindef);
                 } else {
                     ReferenceUnit rU = table2ReferenceUnitHT.get(tableName);
-                    if (!rU.joindefHT.containsKey(joinDef.getName())) {
-                        rU.joindefHT.put(joinDef.getName(), joinDef);
+                    if (!rU.joindefHT.containsKey(curJoindef.getName())) {
+                        rU.joindefHT.put(curJoindef.getName(), curJoindef);
                     }
                 }
             }

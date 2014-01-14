@@ -16,7 +16,7 @@ public class Session {
     private final HashMap<String, Table> tables = new HashMap(); // FIXME: restricted to single DS
     private final ArrayList<Attribute> attributes = new ArrayList();
     private final ArrayList<Metric> metrics = new ArrayList();
-    private final HashMap<String, JoinDefinition> joins = new HashMap();
+    private final ArrayList<JoinDefinition> joins = new ArrayList();
     private final ArrayList<String> hardhints = new ArrayList();
     
     public Session() {}
@@ -43,7 +43,7 @@ public class Session {
     }
     
     public void addJoinMeta(JoinDefinition inJoin) {
-        joins.put(inJoin.getName(), inJoin);
+        joins.add(inJoin);
     }
 
     public void addHardhintMeta(String inHardhint) {
@@ -70,7 +70,7 @@ public class Session {
         return metrics;
     }
     
-    public HashMap getJoins() {
+    public ArrayList<JoinDefinition> getJoins() {
         return joins;
     }
     

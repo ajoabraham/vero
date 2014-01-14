@@ -87,18 +87,16 @@ public class QueryEngine {
         stage.preprocess(inSession);
         
         // create all verteces (PUs)
-        HashMap<UUID, ProcessingUnit> allPUs = stage.getPUs();
-        for (Map.Entry<UUID, ProcessingUnit> entry : allPUs.entrySet()) {
-            ProcessingUnit curPU = entry.getValue();
-            
+        List<ProcessingUnit> allSortedPUs = new ArrayList(stage.getPUs().values());
+        Collections.sort(allSortedPUs);
+        for (ProcessingUnit curPU : allSortedPUs) {
             System.out.println("Adding vertex: " + curPU + ", type: " + curPU.getType());
             joinGraph.addVertex(curPU);
         }
         
         // loop on PUs
         // for each table, find where it is used and connect vertex and create edges
-        for (Map.Entry<UUID, ProcessingUnit> entry : allPUs.entrySet()) {
-            ProcessingUnit curPU = entry.getValue();
+        for (ProcessingUnit curPU : allSortedPUs) {
             System.out.println("### PU id = " + curPU.getID() + ". Current PU content = " + curPU.getContent());
             ArrayList<Table> listTables = curPU.retrieveTables();
             if (listTables.size() > 0) {
@@ -121,10 +119,7 @@ public class QueryEngine {
                                 Attribute otherAttr = allOtherAttrsEntry.getValue();
 
                                 System.out.println("Other Attr: " + otherAttr.getName());
-                                Map<UUID, ProcessingUnit> OtherPUMap = allPUs;
-                                for (Map.Entry<UUID, ProcessingUnit> otherPUEntry : OtherPUMap.entrySet()) {
-                                    ProcessingUnit otherPU = otherPUEntry.getValue();
-
+                                for (ProcessingUnit otherPU : allSortedPUs) {
                                     if (otherPU.getContent() == otherAttr) {
                                         System.out.println("Found PU == otherAttr");
                                         int rowCost = aTab.getRowCount();
@@ -155,10 +150,7 @@ public class QueryEngine {
                                 Metric otherMetric = allOtherMetricsEntry.getValue();
 
                                 System.out.println("Other Metric: " + otherMetric.getName());
-                                Map<UUID, ProcessingUnit> OtherPUMap = allPUs;
-                                for (Map.Entry<UUID, ProcessingUnit> otherPUEntry : OtherPUMap.entrySet()) {
-                                    ProcessingUnit otherPU = otherPUEntry.getValue();
-
+                                for (ProcessingUnit otherPU : allSortedPUs) {
                                     if (otherPU.getContent() == otherMetric) {
                                         System.out.println("Found PU == otherMetric");
                                         int rowCost = aTab.getRowCount();
@@ -287,9 +279,7 @@ public class QueryEngine {
                             }
                         }
                     });
-                    
-                    
-                    
+                        
                     // dump
                     for (int j = 0; j<sizeCurJDRemoveUnitLinkedPUAL; j++) {
                         ProcessingUnit curPU = curJDRemoveUnitLinkedPUAL.get(j);
@@ -450,33 +440,7 @@ public class QueryEngine {
         LiteralFactory l = vendor.getLiteralFactory();
         ColumnsFactory c = vendor.getColumnsFactory();
         QuerySpecificationBuilder sqlQuery = q.querySpecificationBuilder();
-        
-        // construct select
-        // get all expressions from all attributes/metrics
-        ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
-        ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
-        for (ProcessingUnit curPU : sortedVertex) {            
-            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
-                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getExpression());
-
-                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
-                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
-
-                colRefByName.add(aColExp);
-            }
-        }
-        
-        ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
-        colRef = colRefByName.toArray(colRef);                
-        ColumnsBuilder selectCols = q.columnsBuilder().addUnnamedColumns(colRef);
-        
-        // construct groupby
-        if ((attrCount > 0) && (metCount > 0)) {
-            ColumnReference[] colAttrRefAR = new ColumnReference[colAttrRefByName.size()];
-            colAttrRefAR = colAttrRefByName.toArray(colAttrRefAR);                       
-            sqlQuery.getGroupBy().addGroupingElements(q.groupingElement(colAttrRefAR));
-        }
-        
+                
         // construct join
         TableReferenceBuilder allJoins = null;
         int cnt = 0;
@@ -592,6 +556,32 @@ public class QueryEngine {
             cnt++;
         }
 
+        // construct select
+        // get all expressions from all attributes/metrics
+        ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
+        ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
+        for (ProcessingUnit curPU : sortedVertex) {            
+            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
+                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getExpression());
+
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
+
+                colRefByName.add(aColExp);
+            }
+        }
+        
+        ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
+        colRef = colRefByName.toArray(colRef);                
+        ColumnsBuilder selectCols = q.columnsBuilder().addUnnamedColumns(colRef);
+        
+        // construct groupby
+        if ((attrCount > 0) && (metCount > 0)) {
+            ColumnReference[] colAttrRefAR = new ColumnReference[colAttrRefByName.size()];
+            colAttrRefAR = colAttrRefByName.toArray(colAttrRefAR);                       
+            sqlQuery.getGroupBy().addGroupingElements(q.groupingElement(colAttrRefAR));
+        }
+        
         sqlQuery.setSelect(selectCols);
         sqlQuery.getFrom().addTableReferences(allJoins);
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
