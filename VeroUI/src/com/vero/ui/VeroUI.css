@@ -18,6 +18,35 @@
     -fx-context-menu-hover-color: #4A4A4A;
 }
 
+.default-button {
+	-fx-background-color: transparent;
+    -fx-background-radius: 3;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 3;
+    -fx-text-fill: -fx-default-text-color;
+    -fx-font: bold italic 12px "Helvetica";
+}
+
+.default-button:hover {
+    -fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 3; 
+    -fx-border-color: -fx-button-hover-border-dark-color;
+    -fx-border-radius: 3;    
+}
+
+.default-button:pressed {
+    -fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 3;
+    -fx-border-color: -fx-button-hover-border-color;
+    -fx-border-radius: 3;
+}
+
+.default-button-pane {
+	-fx-padding: 5;
+	-fx-spacing: 5;
+	-fx-alignment: center-right;
+}
+
 /*******************************************************************************
  * Style for all scroll bar in the application.
  ******************************************************************************/
@@ -48,6 +77,14 @@
 .scroll-bar:horizontal{
     -fx-background-insets: 0, 1 0 0 0;
     -fx-padding: 0.0 0.0 0.0 0.0;
+}
+
+/*******************************************************************************
+ * Style confirmation window
+ ******************************************************************************/
+.confirmation-pane {
+	-fx-background-color: -fx-main-background-color;
+	-fx-border-color: -fx-light-grey-color;
 }
 
 /*******************************************************************************
@@ -440,6 +477,11 @@
  * Wizard                                                                      *
  ******************************************************************************/
 .wizard-pane {
+	-fx-background-color: -fx-main-background-color;
+	-fx-border-color: -fx-light-grey-color;
+}
+
+.wizard-page-pane {
 	
 }
 

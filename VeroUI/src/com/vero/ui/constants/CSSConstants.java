@@ -19,6 +19,19 @@ public interface CSSConstants {
     public static final String ID_ROOT_PANE = "root-pane";
     
     /**
+     * ID for common style
+     */
+    public static final String CLASS_DEFAULT_BUTTON = "default-button";
+    public static final String CLASS_DEFAULT_BUTTON_PANE = "default-button-pane";
+    public static final String CLASS_SECTION_TITLE = "section-title";
+    public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
+    
+    /**
+     * ID for confirmation
+     */
+    public static final String CLASS_CONFIRMATION_PANE = "confirmation-pane";
+    
+    /**
      * ID for menu bar
      */
     public static final String CLASS_PARENT_MENU_BUTTON = "parent-menu-button";
@@ -37,7 +50,6 @@ public interface CSSConstants {
     public static final String ID_DATASOURCE_NAVIGATION_PANE = "datasource-navigation-pane";
     public static final String ID_REPORT_NAVIGATION_PANE = "report-navigation-pane";
     public static final String ID_OBJECT_TREE_VIEW = "object-tree-view";
-    public static final String CLASS_SECTION_TITLE = "section-title";
     public static final String ID_OBJECTS_PANE = "objects-pane";
     public static final String ID_OBJECT_SEARCH_TEXT_FIELD = "object-search-text-field";
     public static final String CLASS_LABEL_PANE = "label-pane";
@@ -57,7 +69,6 @@ public interface CSSConstants {
     public static final String CLASS_DROP_ZONE_PANE = "drop-zone-pane";
     // style class for actual content pane inside of drop zone pane.
     public static final String CLASS_DROP_ZONE_CONTENT_PANE = "drop-zone-content-pane";
-    public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
     public static final String CLASS_DROP_PANE = "drop-pane";
     public static final String CLASS_PLACEHOLDER_PANE = "placeholder-pane";
     public static final String CLASS_DROP_HINT_PANE = "drop-hint-pane";
@@ -91,4 +102,5 @@ public interface CSSConstants {
      * ID for wizard
      */
     public static final String CLASS_WIZARD_PANE = "wizard-pane";
+    public static final String CLASS_WIZARD_PAGE_PANE = "wizard-page-pane";
 }

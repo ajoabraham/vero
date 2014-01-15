@@ -3,6 +3,7 @@
  */
 package com.vero.ui.wizard;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_WIZARD_PAGE_PANE;
 import javafx.scene.layout.Pane;
 
 /**
@@ -14,6 +15,7 @@ public abstract class WizardPagePane<T extends WizardData> extends Pane {
     
     public WizardPagePane(T wizardData) {
 	this.wizardData = wizardData;
+	getStyleClass().add(CLASS_WIZARD_PAGE_PANE);
     }
     
     public T getWizardData() {

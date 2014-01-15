@@ -9,6 +9,9 @@ import com.vero.ui.wizard.datasource.DatasourceWizardData;
 import com.vero.ui.wizard.datasource.SelectDBTypeWizardPagePane;
 import com.vero.ui.wizard.datasource.SelectTablesWizardPagePane;
 
+import static com.vero.ui.constants.UIConstants.*;
+import static com.vero.ui.constants.WizardPageIds.*;
+
 /**
  * @author Tai Hu
  *
@@ -32,6 +35,9 @@ public final class WizardFactory {
                             .wizardPage(new SelectDBTypeWizardPagePane(wizardData))
                             .wizardPage(new DBParamsWizardPagePane(wizardData))
                             .wizardPage(new SelectTablesWizardPagePane(wizardData))
+                            .firstPage(ID_SELECT_DB_TYPE)
+                            .width(DATASOURCE_WIZARD_WIDTH)
+                            .height(DATASOURCE_WIZARD_HEIGHT)
                             .create();
     }
 }

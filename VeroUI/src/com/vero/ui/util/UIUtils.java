@@ -9,6 +9,8 @@ package com.vero.ui.util;
 import com.vero.ui.VeroUI;
 import com.vero.ui.constants.ObjectType;
 
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 import static com.vero.ui.constants.CSSConstants.*;
@@ -22,6 +24,8 @@ import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBoxBuilder;
+import static com.vero.ui.constants.UIConstants.*;
+
 
 /**
  *
@@ -126,5 +130,24 @@ public final class UIUtils {
 	    button.getStyleClass().remove(CLASS_SELECTED_TOOL_BAR_BUTTON);
 //	    button.setStyle("");
 	}
+    }
+    
+    public static Button createDefaultButton(String text, Node graphic) {
+	Button button = (graphic == null ? new Button(text) : new Button(text, graphic));
+	button.setPrefSize(DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+	button.getStyleClass().add(CLASS_DEFAULT_BUTTON);
+	
+	return button;
+    }
+    
+    public static Button createDefaultButton(String text) {
+	return createDefaultButton(text, null);
+    }
+    
+    public static HBox createDefaultButtonPane() {
+	HBox buttonPane = new HBox();
+	buttonPane.getStyleClass().add(CLASS_DEFAULT_BUTTON_PANE);
+	
+	return buttonPane;
     }
 }
