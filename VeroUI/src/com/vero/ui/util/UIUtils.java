@@ -7,16 +7,10 @@
 package com.vero.ui.util;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_ATTRIBUTE_ICON_LABEL;
-import static com.vero.ui.constants.CSSConstants.CLASS_ATTRIBUTE_OBJECT_PANE;
-import static com.vero.ui.constants.CSSConstants.CLASS_COLUMN_OBJECT_PANE;
-import static com.vero.ui.constants.CSSConstants.CLASS_DATASOURCE_OBJECT_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON;
 import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_ICON_LABEL;
-import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_OBJECT_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SELECTED_TOOL_BAR_BUTTON;
-import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_JOIN_OBJECT_PANE;
-import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_OBJECT_PANE;
 import static com.vero.ui.constants.CSSConstants.VERO_CSS_FILE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_WIDTH;
@@ -26,16 +20,13 @@ import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBoxBuilder;
 
 import com.vero.ui.VeroUI;
-import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
-import com.vero.ui.constants.TableJoinType;
 
 
 /**
@@ -52,62 +43,7 @@ public final class UIUtils {
     public static Pane createHorizontalSpaceFiller(double width) {
         return VBoxBuilder.create().prefWidth(width).build();
     }
-    
-    public static String getObjectSytleClass(ObjectType type) {
-        String styleClass = "unknown";
         
-        switch (type) {
-            case DATASOURCE:
-                styleClass = CLASS_DATASOURCE_OBJECT_PANE;
-                break;
-            case TABLE:
-                styleClass = CLASS_TABLE_OBJECT_PANE;
-                break;
-            case COLUMN:
-                styleClass = CLASS_COLUMN_OBJECT_PANE;
-                break;
-            case ATTRIBUTE:
-                styleClass = CLASS_ATTRIBUTE_OBJECT_PANE;
-                break;
-            case METRIC:
-                styleClass = CLASS_METRIC_OBJECT_PANE;
-                break;
-            case TABLE_JOIN:
-                styleClass = CLASS_TABLE_JOIN_OBJECT_PANE;
-                break;
-            default:
-                logger.log(Level.SEVERE, "Invalid object type - {0}", type);
-        }
-        
-        return styleClass;
-    }
-    
-    public static Image getTableJoinImage(TableJoinType type) {
-        Image image = null;
-        
-        switch (type) {
-            case FULL_OUTER_JOIN:
-                image = ImageList.IMAGE_FULL_OUTER_JOIN;
-                break;
-            case CROSS_JOIN:
-                image = ImageList.IMAGE_CROSS_JOIN;
-                break;
-            case INNER_JOIN:
-                image = ImageList.IMAGE_INNER_JOIN;
-                break;
-            case LEFT_JOIN:
-                image = ImageList.IMAGE_LEFT_JOIN;
-                break;
-            case RIGHT_JOIN:
-                image = ImageList.IMAGE_RIGHT_JOIN;
-                break;
-            default:
-                logger.log(Level.SEVERE, "Invalid table join type - {0}", type);
-        }
-        
-        return image;
-    }
-    
     public static String getEditorPaneIconStyleClass(ObjectType type) {
         String styleClass = "unknown";
         

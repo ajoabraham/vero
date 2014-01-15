@@ -7,14 +7,14 @@
 package com.vero.ui.navigation;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_LABEL;
-import com.vero.ui.constants.ObjectType;
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
-import com.vero.ui.model.AttributeObjectData;
-import com.vero.ui.model.UIData;
-import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+
+import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.model.UIData;
 
 /**
  *
@@ -29,7 +29,7 @@ public class AttributeObjectPane extends ObjectPane {
     }
     
     private void buildUI() {
-        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(getType().getStyleClass());
 
         Label label = new Label(data.getName());
         HBox.setHgrow(label, Priority.ALWAYS);

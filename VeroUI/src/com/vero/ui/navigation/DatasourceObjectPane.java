@@ -6,16 +6,16 @@
 
 package com.vero.ui.navigation;
 
-import com.vero.ui.constants.ObjectType;
+import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_LABEL;
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
-import static com.vero.ui.constants.CSSConstants.*;
-import com.vero.ui.constants.ImageList;
-import com.vero.ui.model.DatasourceObjectData;
-import com.vero.ui.util.UIUtils;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+
+import com.vero.ui.constants.ImageList;
+import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.DatasourceObjectData;
 
 /**
  *
@@ -31,7 +31,7 @@ public class DatasourceObjectPane extends ObjectPane {
     }
     
     private void buildUI() {
-        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(getType().getStyleClass());
 
         ImageView datasourceImageView = new ImageView(ImageList.IMAGE_DATASOURCE_OBJECT);
         getChildren().add(datasourceImageView);

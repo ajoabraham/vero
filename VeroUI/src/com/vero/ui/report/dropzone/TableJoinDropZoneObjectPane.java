@@ -16,7 +16,6 @@ import javafx.scene.layout.Priority;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.TableJoinObjectData;
-import com.vero.ui.util.UIUtils;
 
 /**
  *
@@ -31,7 +30,7 @@ public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObj
     }
     
     private void buildUI() {
-        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(getType().getStyleClass());
         // Table join pane should not have a border.
         getStyleClass().remove(CLASS_OBJECT_PANE);
         
@@ -54,7 +53,7 @@ public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObj
     public void handle(MouseEvent event) {
         if (event.getClickCount() == 1) {
             TableJoinType nextType = data.getTableJoinType().next();
-            tableJoinImageView.setImage(UIUtils.getTableJoinImage(nextType));
+            tableJoinImageView.setImage(nextType.getImage());
             data.setTableJoinType(nextType);
         }
     }

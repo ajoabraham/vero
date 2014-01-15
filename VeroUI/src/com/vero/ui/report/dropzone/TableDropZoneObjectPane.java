@@ -8,7 +8,6 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.TableObjectData;
-import com.vero.ui.util.UIUtils;
 
 /**
  * 
@@ -23,7 +22,7 @@ public class TableDropZoneObjectPane extends DropZoneObjectPane<TableObjectData>
     }
     
     private void buildUI() {
-        getStyleClass().add(UIUtils.getObjectSytleClass(getType()));
+        getStyleClass().add(getType().getStyleClass());
         
         ImageView tableImageView = new ImageView(ImageList.IMAGE_UNKNOWN_TABLE);
         getChildren().add(tableImageView);
