@@ -86,4 +86,9 @@ public interface CSSConstants {
     public static final String CLASS_CONTENT_PANE = "content-pane";
     // Style class for all object container panes in editor pane (e.x. order by, partition by, etc)
     public static final String CLASS_OBJECT_CONTAINER_PANE = "object-container-pane";
+    
+    /**
+     * ID for wizard
+     */
+    public static final String CLASS_WIZARD_PANE = "wizard-pane";
 }

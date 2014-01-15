@@ -12,8 +12,8 @@ import javafx.scene.layout.Pane;
 public abstract class WizardPagePane<T extends WizardData> extends Pane {
     T wizardData = null;
     
-    public WizardPagePane() {
-	
+    public WizardPagePane(T wizardData) {
+	this.wizardData = wizardData;
     }
     
     public T getWizardData() {
@@ -21,10 +21,9 @@ public abstract class WizardPagePane<T extends WizardData> extends Pane {
     }
     
     public abstract String getWizardId();
-    public abstract void init(T wizardData);
-    public abstract String next();
-    public abstract String back();
-    public abstract void finish();
+    public abstract String next() throws WizardException;
+    public abstract String back() throws WizardException;
+    public abstract void finish() throws WizardException;
     public abstract void cancel();
     public abstract boolean isFirst();
     public abstract boolean canFinish();
