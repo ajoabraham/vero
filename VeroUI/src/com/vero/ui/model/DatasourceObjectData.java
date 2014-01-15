@@ -6,18 +6,18 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.constants.DatasourceStatus;
-
+import static com.vero.ui.constants.DBType.POSTGRE_SQL;
 import static com.vero.ui.constants.DatasourceStatus.INACTIVE;
-
-import com.vero.ui.constants.ObjectType;
-
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
 
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import com.vero.ui.constants.DBType;
+import com.vero.ui.constants.DatasourceStatus;
+import com.vero.ui.constants.ObjectType;
 
 /**
  *
@@ -31,6 +31,7 @@ public class DatasourceObjectData extends UIData {
     private StringProperty password = new SimpleStringProperty();
     private StringProperty hostname = new SimpleStringProperty();
     private StringProperty databaseName = new SimpleStringProperty();
+    private DBType databaseType = POSTGRE_SQL;
     
     private List<TableObjectData> tableObjectDataList = null;
     private DatasourceStatus status = INACTIVE;
@@ -119,4 +120,12 @@ public class DatasourceObjectData extends UIData {
     public StringProperty databaseNameProperty() {
         return databaseName;
     }
+
+    public DBType getDatabaseType() {
+        return databaseType;
+    }
+
+    public void setDatabaseType(DBType databaseType) {
+        this.databaseType = databaseType;
+    }   
 }

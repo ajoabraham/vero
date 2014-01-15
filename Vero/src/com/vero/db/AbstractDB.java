@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  *
  * @author ajoabraham
  */
-abstract class AbstractDB implements Serializable {
+public abstract class AbstractDB implements Serializable {
     // ---- RUNTIME MACROS FOR DB QUERIES ---- //
     public static final String REPORT_NAME = "REPORT_NAME";
     public static final String USERNAME = "USERNAME";
@@ -58,8 +58,8 @@ abstract class AbstractDB implements Serializable {
     public AbstractDB(){}
     
     // ---- ABSTRACT METHODS ---- //
-    abstract Connection connect();
-    abstract boolean testConnection();
+    public abstract Connection connect();
+    public abstract boolean testConnection();
    
     // ---- CORE METHODS ---- //
     

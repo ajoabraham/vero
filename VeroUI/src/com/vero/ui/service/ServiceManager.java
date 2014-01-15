@@ -10,6 +10,12 @@ package com.vero.ui.service;
  *
  * @author Tai Hu
  */
-public class ServiceManager {
+public final class ServiceManager {
+    public static DatasourceImportService getDatasourceImportService() {
+        return null;
+    }
     
+    public static MetadataPersistentService getMetadataPersistentService() {
+        return null;
+    }
 }
