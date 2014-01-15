@@ -25,6 +25,9 @@ public interface CSSConstants {
     public static final String CLASS_DEFAULT_BUTTON_PANE = "default-button-pane";
     public static final String CLASS_SECTION_TITLE = "section-title";
     public static final String CLASS_SUBSECTION_TITLE = "subsection-title";
+    public static final String CLASS_INSTRUCTION_TEXT = "instruction-text";
+    public static final String CLASS_FORM_LABEL = "form-label";
+    public static final String CLASS_FORM_TEXT_FIELD = "form-text-field";
     
     /**
      * ID for confirmation
@@ -104,4 +107,6 @@ public interface CSSConstants {
     public static final String CLASS_WIZARD_PANE = "wizard-pane";
     public static final String CLASS_WIZARD_PAGE_PANE = "wizard-page-pane";
     public static final String CLASS_DB_TYPE_LABEL_PANE = "db-type-label-pane";
+    public static final String CLASS_DB_TYPE_CONTENT_PANE = "db-type-content-pane";
+    public static final String CLASS_DB_PARAM_CONTENT_PANE = "db-param-content-pane";
 }

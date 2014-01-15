@@ -3,6 +3,7 @@
  */
 package com.vero.ui.wizard.datasource;
 
+import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.wizard.WizardData;
 
 /**
@@ -10,12 +11,17 @@ import com.vero.ui.wizard.WizardData;
  *
  */
 public class DatasourceWizardData extends WizardData {
-
-    /**
-     * 
-     */
+    private DatasourceObjectData data = null;
+    
     public DatasourceWizardData() {
-        // TODO Auto-generated constructor stub
+        data = new DatasourceObjectData();
     }
 
+    public DatasourceObjectData getData() {
+        return data;
+    }
+
+    public void setData(DatasourceObjectData data) {
+        this.data = data;
+    }   
 }

@@ -121,7 +121,6 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	try {
 	    String wizardId = currentPage.next();
 	    WizardPagePane<T> nextPage = wizardPages.get(wizardId);
-	    confirmationFactory.createErrorConfirmation(ownerStage, "Test Error Message").show();
 	    showPage(nextPage);
 	}
 	catch (WizardException e) {

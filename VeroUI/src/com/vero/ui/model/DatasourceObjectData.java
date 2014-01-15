@@ -7,10 +7,17 @@
 package com.vero.ui.model;
 
 import com.vero.ui.constants.DatasourceStatus;
+
 import static com.vero.ui.constants.DatasourceStatus.INACTIVE;
+
 import com.vero.ui.constants.ObjectType;
+
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
+
 import java.util.List;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -19,7 +26,12 @@ import java.util.List;
 public class DatasourceObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
-    private String name = null;
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty userName = new SimpleStringProperty();
+    private StringProperty password = new SimpleStringProperty();
+    private StringProperty hostname = new SimpleStringProperty();
+    private StringProperty databaseName = new SimpleStringProperty();
+    
     private List<TableObjectData> tableObjectDataList = null;
     private DatasourceStatus status = INACTIVE;
     
@@ -33,11 +45,15 @@ public class DatasourceObjectData extends UIData {
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
+    }
+    
+    public StringProperty nameProperty() {
+        return name;
     }
 
     public List<TableObjectData> getTableObjectDataList() {
@@ -54,5 +70,53 @@ public class DatasourceObjectData extends UIData {
 
     public void setStatus(DatasourceStatus status) {
         this.status = status;
+    }
+
+    public String getUserName() {
+        return userName.get();
+    }
+
+    public void setUserName(String userName) {
+        this.userName.set(userName);
+    }
+    
+    public StringProperty userNameProperty() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password.get();
+    }
+
+    public void setPassword(String password) {
+        this.password.set(password);
+    }
+
+    public StringProperty passwordProperty() {
+        return password;
+    }
+    
+    public String getHostname() {
+        return hostname.get();
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname.set(hostname);
+    }
+
+    public StringProperty hostnameProperty() {
+        return hostname;
+    }
+    
+    public String getDatabaseName() {
+        return databaseName.get();
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName.set(databaseName);
+    }
+    
+    public StringProperty databaseNameProperty() {
+        return databaseName;
     }
 }

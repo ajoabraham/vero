@@ -11,7 +11,7 @@ import javafx.scene.layout.BorderPane;
  *
  */
 public abstract class WizardPagePane<T extends WizardData> extends BorderPane {
-    T wizardData = null;
+    protected T wizardData = null;
     
     public WizardPagePane(T wizardData) {
 	this.wizardData = wizardData;

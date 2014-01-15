@@ -3,7 +3,7 @@
  */
 package com.vero.ui.wizard.datasource;
 
-import static com.vero.ui.constants.UIConstants.DB_TYPE_LABEL_PANE_WIDTH;
+import static com.vero.ui.constants.UIConstants.*;
 import static com.vero.ui.constants.CSSConstants.*;
 
 import javafx.scene.control.Label;
@@ -26,7 +26,7 @@ public class DBTypeLabelPane extends LabelPane {
     
     private void buildUI() {
 	getStyleClass().add(CLASS_DB_TYPE_LABEL_PANE);
-	setPrefWidth(DB_TYPE_LABEL_PANE_WIDTH);
+	setPrefSize(DB_TYPE_LABEL_PANE_WIDTH, DB_TYPE_LABEL_PANE_HEIGHT);
 	
 	Label label = new Label(dbType.getName());
 	label.getStyleClass().add(CLASS_SECTION_TITLE);

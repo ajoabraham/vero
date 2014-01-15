@@ -43,10 +43,14 @@ public interface UIConstants {
     
     // Datasource wizard
     public static final double DATASOURCE_WIZARD_WIDTH = 600;
-    public static final double DATASOURCE_WIZARD_HEIGHT = 700;
+    public static final double DATASOURCE_WIZARD_HEIGHT = 450;
     public static final double DEFAULT_BUTTON_WIDTH = 81;
     public static final double DEFAULT_BUTTON_HEIGHT = 27;
     public static final double DEFAULT_CONFIRMATION_WIDTH = 345;
     public static final double DEFAULT_CONFIRMATION_HEIGHT = 120;
-    public static final double DB_TYPE_LABEL_PANE_WIDTH = 300;
+    public static final double DB_TYPE_LABEL_PANE_WIDTH = 350;
+    public static final double DB_TYPE_LABEL_PANE_HEIGHT = 50;
+    public static final double DEFAULT_FORM_LABEL_WIDTH = 135;
+    public static final double DEFAULT_FORM_INPUT_WIDTH = 350;
+    public static final double DEFAULT_FORM_INPUT_HEIGHT = 35;
 }

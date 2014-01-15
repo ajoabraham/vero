@@ -3,9 +3,14 @@
  */
 package com.vero.ui.wizard.datasource;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_INSTRUCTION_TEXT;
 import static com.vero.ui.constants.WizardPageIds.*;
 
 /**
@@ -16,6 +21,16 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 
     public SelectTablesWizardPagePane(DatasourceWizardData wizardData) {
         super(wizardData);
+        buildUI();
+    }
+    
+    private void buildUI() {
+     // Instruction
+        Label instructionLabel = new Label("Select import tables");
+        BorderPane.setAlignment(instructionLabel, Pos.CENTER);
+        instructionLabel.setPrefHeight(100);
+        instructionLabel.getStyleClass().add(CLASS_INSTRUCTION_TEXT);
+        setTop(instructionLabel);
     }
 
     @Override

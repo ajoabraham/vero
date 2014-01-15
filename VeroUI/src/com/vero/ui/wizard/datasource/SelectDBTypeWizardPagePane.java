@@ -3,7 +3,7 @@
  */
 package com.vero.ui.wizard.datasource;
 
-import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
+import static com.vero.ui.constants.CSSConstants.*;
 import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 import javafx.geometry.Pos;
@@ -30,20 +30,21 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
     
     private void buildUI() {	
 	// Instruction
-	Label instructionLabel = new Label("Please select a database type");
+	Label instructionLabel = new Label("Select a database type");
 	BorderPane.setAlignment(instructionLabel, Pos.CENTER);
-	instructionLabel.setPrefHeight(300);
-	instructionLabel.getStyleClass().add(CLASS_SECTION_TITLE);
+	instructionLabel.setPrefHeight(100);
+	instructionLabel.getStyleClass().add(CLASS_INSTRUCTION_TEXT);
 	setTop(instructionLabel);
 	
-	VBox dbTypesPane = new VBox();
+	VBox contentPane = new VBox();
+	contentPane.getStyleClass().add(CLASS_DB_TYPE_CONTENT_PANE);
 	
 	for (DBType dbType : DBType.values()) {
 	    LabelPane labelPane = LabelPaneFactory.getInstance().createDBTypeLabelPane(dbType);
-	    dbTypesPane.getChildren().add(labelPane);
+	    contentPane.getChildren().add(labelPane);
 	}
 	
-	setCenter(dbTypesPane);
+	setCenter(contentPane);
     }
 
     @Override

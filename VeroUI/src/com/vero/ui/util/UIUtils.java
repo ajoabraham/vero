@@ -9,17 +9,24 @@ package com.vero.ui.util;
 import static com.vero.ui.constants.CSSConstants.CLASS_ATTRIBUTE_ICON_LABEL;
 import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON;
 import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_FORM_LABEL;
+import static com.vero.ui.constants.CSSConstants.CLASS_FORM_TEXT_FIELD;
 import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_ICON_LABEL;
 import static com.vero.ui.constants.CSSConstants.CLASS_SELECTED_TOOL_BAR_BUTTON;
 import static com.vero.ui.constants.CSSConstants.VERO_CSS_FILE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_WIDTH;
+import static com.vero.ui.constants.UIConstants.DEFAULT_FORM_INPUT_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_FORM_INPUT_WIDTH;
+import static com.vero.ui.constants.UIConstants.DEFAULT_FORM_LABEL_WIDTH;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
@@ -96,5 +103,30 @@ public final class UIUtils {
 	buttonPane.getStyleClass().add(CLASS_DEFAULT_BUTTON_PANE);
 	
 	return buttonPane;
+    }
+    
+    public static Label createDefaultFormLabel(String text) {
+        return createDefaultFormLabel(text, DEFAULT_FORM_LABEL_WIDTH);
+    }
+    
+    public static Label createDefaultFormLabel(String text, double width) {
+        Label label = new Label(text);
+        
+        label.getStyleClass().add(CLASS_FORM_LABEL);
+        label.setPrefWidth(width);
+        
+        return label;
+    }
+    
+    public static TextField createDefaultFormTextField() {
+        return createDefaultFormTextField(DEFAULT_FORM_INPUT_WIDTH, DEFAULT_FORM_INPUT_HEIGHT);
+    }
+    
+    public static TextField createDefaultFormTextField(double width, double height) {
+        TextField textField = new TextField();
+        textField.setPrefSize(width, height);
+        textField.getStyleClass().add(CLASS_FORM_TEXT_FIELD);
+        
+        return textField;
     }
 }

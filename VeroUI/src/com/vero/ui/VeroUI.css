@@ -47,6 +47,22 @@
 	-fx-alignment: center-right;
 }
 
+.instruction-text {
+	-fx-alignment: center;
+	-fx-text-fill: -fx-default-text-color;
+    -fx-font: bold italic 20px "Helvetica";
+}
+
+.form-label {
+	-fx-text-fill: -fx-default-text-color;
+    -fx-font: bold italic 16px "Helvetica";
+    -fx-alignment: center-right;
+}
+
+.form-text-field {
+	-fx-border-radius: 3;
+}
+
 /*******************************************************************************
  * Style for all scroll bar in the application.
  ******************************************************************************/
@@ -482,16 +498,31 @@
 }
 
 .wizard-page-pane {
-	
+	-fx-background-color: -fx-main-background-color;
+}
+
+/*  content pane which holds all db type label panes */
+.db-type-content-pane {
+    -fx-fill-width: false;
+    -fx-alignment: top-center;
+    -fx-spacing: 15;	
 }
 
 .db-type-label-pane {
 	-fx-border-color: -fx-light-grey-color;
+	-fx-alignment: center;
 	-fx-border-radius: 3;
 }
 
 .db-type-label-pane .label {
     -fx-alignment: center;
+}
+
+.db-param-content-pane {
+	-fx-hgap: 10;
+	-fx-vgap: 15;
+	-fx-alignment: top-center;
+	-fx-grid-lines-visible: false;
 }
 
 /*******************************************************************************
