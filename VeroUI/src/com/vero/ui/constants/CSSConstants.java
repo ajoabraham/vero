@@ -103,4 +103,5 @@ public interface CSSConstants {
      */
     public static final String CLASS_WIZARD_PANE = "wizard-pane";
     public static final String CLASS_WIZARD_PAGE_PANE = "wizard-page-pane";
+    public static final String CLASS_DB_TYPE_LABEL_PANE = "db-type-label-pane";
 }

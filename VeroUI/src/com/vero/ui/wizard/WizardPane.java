@@ -46,6 +46,7 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	confirmationFactory = ConfirmationFactory.getInstance();
 	
 	buildUI();
+	showPage(firstPage);
     }
 
     private void buildUI() {

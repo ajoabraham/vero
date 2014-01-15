@@ -6,25 +6,36 @@
 
 package com.vero.ui.util;
 
-import com.vero.ui.VeroUI;
-import com.vero.ui.constants.ObjectType;
-
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.Pane;
-import static com.vero.ui.constants.CSSConstants.*;
-
-import com.vero.ui.constants.ImageList;
-import com.vero.ui.constants.TableJoinType;
+import static com.vero.ui.constants.CSSConstants.CLASS_ATTRIBUTE_ICON_LABEL;
+import static com.vero.ui.constants.CSSConstants.CLASS_ATTRIBUTE_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_COLUMN_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_DATASOURCE_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON;
+import static com.vero.ui.constants.CSSConstants.CLASS_DEFAULT_BUTTON_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_ICON_LABEL;
+import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_SELECTED_TOOL_BAR_BUTTON;
+import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_JOIN_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_OBJECT_PANE;
+import static com.vero.ui.constants.CSSConstants.VERO_CSS_FILE;
+import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_WIDTH;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBoxBuilder;
-import static com.vero.ui.constants.UIConstants.*;
+
+import com.vero.ui.VeroUI;
+import com.vero.ui.constants.ImageList;
+import com.vero.ui.constants.ObjectType;
+import com.vero.ui.constants.TableJoinType;
 
 
 /**

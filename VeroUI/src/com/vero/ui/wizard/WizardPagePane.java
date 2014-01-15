@@ -4,13 +4,13 @@
 package com.vero.ui.wizard;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_WIZARD_PAGE_PANE;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 
 /**
  * @author Tai Hu
  *
  */
-public abstract class WizardPagePane<T extends WizardData> extends Pane {
+public abstract class WizardPagePane<T extends WizardData> extends BorderPane {
     T wizardData = null;
     
     public WizardPagePane(T wizardData) {

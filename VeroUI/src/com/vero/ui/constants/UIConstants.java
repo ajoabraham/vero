@@ -48,4 +48,5 @@ public interface UIConstants {
     public static final double DEFAULT_BUTTON_HEIGHT = 27;
     public static final double DEFAULT_CONFIRMATION_WIDTH = 345;
     public static final double DEFAULT_CONFIRMATION_HEIGHT = 120;
+    public static final double DB_TYPE_LABEL_PANE_WIDTH = 300;
 }

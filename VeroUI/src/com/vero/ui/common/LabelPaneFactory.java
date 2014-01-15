@@ -6,6 +6,7 @@
 
 package com.vero.ui.common;
 
+import com.vero.ui.constants.DBType;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.AttributeObjectData;
@@ -29,6 +30,7 @@ import com.vero.ui.report.dropzone.PlaceholderPane;
 import com.vero.ui.report.dropzone.ReportNameEditablePane;
 import com.vero.ui.report.dropzone.TableDropZoneObjectPane;
 import com.vero.ui.report.dropzone.TableJoinDropZoneObjectPane;
+import com.vero.ui.wizard.datasource.DBTypeLabelPane;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,5 +123,9 @@ public final class LabelPaneFactory {
     
     public LabelPane createTableJoinPane(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
         return new TableJoinDropZoneObjectPane(new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
+    }
+    
+    public LabelPane createDBTypeLabelPane(DBType dbType) {
+	return new DBTypeLabelPane(dbType);
     }
 }

@@ -3,10 +3,19 @@
  */
 package com.vero.ui.wizard.datasource;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
+import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
+import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+
+import com.vero.ui.common.LabelPane;
+import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.constants.DBType;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
-
-import static com.vero.ui.constants.WizardPageIds.*;
 
 /**
  * @author Tai Hu
@@ -16,6 +25,25 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
 
     public SelectDBTypeWizardPagePane(DatasourceWizardData wizardData) {
         super(wizardData);
+        buildUI();
+    }
+    
+    private void buildUI() {	
+	// Instruction
+	Label instructionLabel = new Label("Please select a database type");
+	BorderPane.setAlignment(instructionLabel, Pos.CENTER);
+	instructionLabel.setPrefHeight(300);
+	instructionLabel.getStyleClass().add(CLASS_SECTION_TITLE);
+	setTop(instructionLabel);
+	
+	VBox dbTypesPane = new VBox();
+	
+	for (DBType dbType : DBType.values()) {
+	    LabelPane labelPane = LabelPaneFactory.getInstance().createDBTypeLabelPane(dbType);
+	    dbTypesPane.getChildren().add(labelPane);
+	}
+	
+	setCenter(dbTypesPane);
     }
 
     @Override

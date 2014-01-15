@@ -485,6 +485,15 @@
 	
 }
 
+.db-type-label-pane {
+	-fx-border-color: -fx-light-grey-color;
+	-fx-border-radius: 3;
+}
+
+.db-type-label-pane .label {
+    -fx-alignment: center;
+}
+
 /*******************************************************************************
  * All styles below this line are customized based on standard caspian.css     *
  ******************************************************************************/
