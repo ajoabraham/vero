@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="lib/jgrapht-core-0.8.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/JSON-java.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.27-bin.jar"/>
+	<classpathentry kind="lib" path="lib/org.api-typeable-pojos.api-0.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/org.api-typeable-pojos.spi-0.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/org.java-sql-generator.api-0.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/org.java-sql-generator.implementation-0.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc41.jar"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/tdgssconfig.jar"/>
+	<classpathentry kind="lib" path="lib/terajdbc4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
