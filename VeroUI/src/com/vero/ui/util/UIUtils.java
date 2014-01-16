@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
@@ -128,5 +129,17 @@ public final class UIUtils {
         textField.getStyleClass().add(CLASS_FORM_TEXT_FIELD);
         
         return textField;
+    }
+    
+    public static PasswordField createDefaultFormPasswordField() {
+        return createDefaultFormPasswordField(DEFAULT_FORM_INPUT_WIDTH, DEFAULT_FORM_INPUT_HEIGHT);
+    }
+    
+    public static PasswordField createDefaultFormPasswordField(double width, double height) {
+	PasswordField passwordField = new PasswordField();
+        passwordField.setPrefSize(width, height);
+        passwordField.getStyleClass().add(CLASS_FORM_TEXT_FIELD);
+        
+        return passwordField;
     }
 }

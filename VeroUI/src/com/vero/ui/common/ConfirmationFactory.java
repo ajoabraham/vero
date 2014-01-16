@@ -39,4 +39,17 @@ public final class ConfirmationFactory {
 		                  .build();
 		                  
     }
+    
+    public PopupDialog createInfoConfirmation(Stage ownerStage, String infoMessage) {
+	return ConfirmationBuilder.create()
+		                  .ownerStage(ownerStage)
+		                  .title("Info")
+		                  .message(infoMessage)
+		                  .confirmationType(OK)
+		                  .confirmationHandler(new ConfirmationHandlerAdapter())
+		                  .width(DEFAULT_CONFIRMATION_WIDTH)
+		                  .height(DEFAULT_CONFIRMATION_HEIGHT)
+		                  .build();
+		                  
+    }
 }

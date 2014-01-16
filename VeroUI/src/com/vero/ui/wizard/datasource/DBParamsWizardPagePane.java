@@ -9,7 +9,8 @@ import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
 import static com.vero.ui.constants.UIConstants.*;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,6 +20,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
+import com.vero.ui.common.ConfirmationFactory;
+import com.vero.ui.service.DatasourceImportService;
+import com.vero.ui.service.ServiceException;
+import com.vero.ui.service.ServiceManager;
 import com.vero.ui.util.UIUtils;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
@@ -27,11 +32,16 @@ import com.vero.ui.wizard.WizardPagePane;
  * @author Tai Hu
  * 
  */
-public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData> {
-
+public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData> implements EventHandler<ActionEvent> {
+    private Button getDatabaseNamesButton = null;
+    private Button testConnectionButton = null;
+    
+    private ConfirmationFactory confirmationFactory = null;
+    
     public DBParamsWizardPagePane(DatasourceWizardData wizardData) {
         super(wizardData);
 
+        confirmationFactory = ConfirmationFactory.getInstance();
         buildUI();
     }
 
@@ -64,7 +74,7 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         // Password
         Label passwordLabel = UIUtils.createDefaultFormLabel("Password:");
         contentPane.add(passwordLabel, 0, rowIndex);
-        TextField passwordTextField = UIUtils.createDefaultFormTextField();
+        TextField passwordTextField = UIUtils.createDefaultFormPasswordField();
         contentPane.add(passwordTextField, 1, rowIndex++, 2, 1);
         passwordTextField.textProperty().bindBidirectional(wizardData.getData().passwordProperty());
 
@@ -80,16 +90,18 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         contentPane.add(databaseNameLabel, 0, rowIndex);
         ComboBox<String> databaseNameComboBox = new ComboBox<String>();
         databaseNameComboBox.setPrefSize(225, DEFAULT_FORM_INPUT_HEIGHT);
-        Button getDatabaseNamesButton = UIUtils.createDefaultButton("GET DB NAMES");
+        getDatabaseNamesButton = UIUtils.createDefaultButton("GET DB NAMES");
         getDatabaseNamesButton.setPrefSize(120, DEFAULT_FORM_INPUT_HEIGHT);
         contentPane.add(databaseNameComboBox, 1, rowIndex);
         contentPane.add(getDatabaseNamesButton, 2, rowIndex++);
+        getDatabaseNamesButton.setOnAction(this);
 
         // Test connection
-        Button testConnectionButton = UIUtils.createDefaultButton("TEST CONNECTION");
+        testConnectionButton = UIUtils.createDefaultButton("TEST CONNECTION");
         testConnectionButton.setPrefSize(150, 35);
         GridPane.setHalignment(testConnectionButton, HPos.RIGHT);
         contentPane.add(testConnectionButton, 1, rowIndex++);
+        testConnectionButton.setOnAction(this);
 
         setCenter(contentPane);
     }
@@ -125,5 +137,34 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     @Override
     public boolean canFinish() {
         return false;
+    }
+
+    @Override
+    public void handle(ActionEvent e) {
+	if (e.getSource() == getDatabaseNamesButton) {
+	    handleGetDatabaseNamesEvent();
+	}
+	else if (e.getSource() == testConnectionButton) {
+	    handleTestConnectionEvent();
+	}
+    }
+
+    private void handleTestConnectionEvent() {
+	DatasourceImportService service = ServiceManager.getDatasourceImportService();
+
+	try {
+	    if (service.testConnection(wizardData.getData())) {
+		confirmationFactory.createInfoConfirmation(null, "Successfully Connected").show();
+	    }
+	    else {
+		confirmationFactory.createErrorConfirmation(null, "Failed to connect").show();
+	    }
+	}
+	catch (ServiceException e) {
+	    confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
+	}
+    }
+    
+    private void handleGetDatabaseNamesEvent() {	
     }
 }

@@ -29,7 +29,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
             dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname());
             return dbConnection.getDatabases();
         }
-        catch (SQLException e) {
+        catch (Exception e) {
             throw new ServiceException(e.getMessage(), e);
         }
         finally {
@@ -50,10 +50,27 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
     }
 
     @Override
-    public boolean testConnection(DatasourceObjectData data) {
-        AbstractDB dbConnection = data.getDatabaseType().getDBConnection();        
-        dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname());
+    public boolean testConnection(DatasourceObjectData data) throws ServiceException {
+        AbstractDB dbConnection = null;
         
-        return dbConnection.testConnection();
+        try {
+            dbConnection = data.getDatabaseType().getDBConnection();        
+            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName("northwind");
+            
+            return dbConnection.testConnection();
+        }
+        catch (Exception e) {
+            throw new ServiceException("Failed to connect", e);
+        }
+        finally {
+            if (dbConnection != null) {
+        	try {
+	            dbConnection.close();
+                }
+                catch (SQLException e) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }
     }
 }
