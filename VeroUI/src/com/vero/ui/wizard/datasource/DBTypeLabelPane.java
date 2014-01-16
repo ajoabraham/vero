@@ -32,4 +32,8 @@ public class DBTypeLabelPane extends LabelPane {
 	label.getStyleClass().add(CLASS_SECTION_TITLE);
 	getChildren().add(label);
     }
+    
+    public DBType getType() {
+	return dbType;
+    }
 }

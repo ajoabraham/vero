@@ -6,7 +6,6 @@
 
 package com.vero.ui.model;
 
-import static com.vero.ui.constants.DBType.POSTGRE_SQL;
 import static com.vero.ui.constants.DatasourceStatus.INACTIVE;
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
 
@@ -31,7 +30,7 @@ public class DatasourceObjectData extends UIData {
     private StringProperty password = new SimpleStringProperty();
     private StringProperty hostname = new SimpleStringProperty();
     private StringProperty databaseName = new SimpleStringProperty();
-    private DBType databaseType = POSTGRE_SQL;
+    private DBType databaseType = null;
     
     private List<TableObjectData> tableObjectDataList = null;
     private DatasourceStatus status = INACTIVE;
