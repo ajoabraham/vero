@@ -17,21 +17,10 @@ import com.vero.ui.model.UIData;
 public final class EditorPaneFactory {
     private static final Logger logger = Logger.getLogger(EditorPaneFactory.class.getName());
     
-    private static EditorPaneFactory INSTANCE = null;
-
-    private EditorPaneFactory() {
-
+    private EditorPaneFactory() {        
     }
-
-    public static EditorPaneFactory getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new EditorPaneFactory();
-        }
-
-        return INSTANCE;
-    }
-
-    public DockedEditorPane<? extends UIData> createDockedEditorPane(UIData data, DockHandler dockHandler) {
+    
+    public static DockedEditorPane<? extends UIData> createDockedEditorPane(UIData data, DockHandler dockHandler) {
         DockedEditorPane<? extends UIData> dockedEditorPane = null;
         switch (data.getType()) {
             case ATTRIBUTE:
@@ -49,7 +38,7 @@ public final class EditorPaneFactory {
         return dockedEditorPane;
     }
     
-    public UndockedEditorPane<? extends UIData> createUndockedEditorPane(Stage stage, UIData data, DockHandler dockHandler) {
+    public static UndockedEditorPane<? extends UIData> createUndockedEditorPane(Stage stage, UIData data, DockHandler dockHandler) {
         UndockedEditorPane<? extends UIData> undockedEditorPane = null;
         switch (data.getType()) {
             case ATTRIBUTE:

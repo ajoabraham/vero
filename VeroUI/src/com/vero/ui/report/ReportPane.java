@@ -33,12 +33,10 @@ public class ReportPane extends BorderPane implements DockHandler {
     private static final Logger logger = Logger.getLogger(ReportPane.class.getName());
     
     private UIManager uiManager = null;
-    private EditorPaneFactory editorPaneFactory = null;
     private DockedEditorPane<? extends UIData> dockedEditorPane = null;
     
     public ReportPane() {
         uiManager = UIManager.getInstance();
-        editorPaneFactory = EditorPaneFactory.getInstance();
         buildUI();
     }
     
@@ -65,13 +63,13 @@ public class ReportPane extends BorderPane implements DockHandler {
     }
     
     private void handleDockEvent(UIData data) {
-        dockedEditorPane = editorPaneFactory.createDockedEditorPane(data, this);
+        dockedEditorPane = EditorPaneFactory.createDockedEditorPane(data, this);
         setBottom(dockedEditorPane);
     }
     
     private void handleUndockEvent(UIData data) {
         PopupDialog dialog = new PopupDialog(uiManager.getPrimaryStage());
-        UndockedEditorPane<? extends UIData> unDockedEditorPane = editorPaneFactory.createUndockedEditorPane(dialog, data, this);
+        UndockedEditorPane<? extends UIData> unDockedEditorPane = EditorPaneFactory.createUndockedEditorPane(dialog, data, this);
         dialog.createScene(unDockedEditorPane, UNDOCKED_EDITOR_PANE_WIDTH, UNDOCKED_EDITOR_PANE_HEIGHT);
         handleCancelEvent();
         dialog.show();

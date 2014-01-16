@@ -48,9 +48,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
     public ObservableList<TreeItem<ObjectPane>> getChildren() {
         if (isFirstTimeChildren) {
             isFirstTimeChildren = false;
-            
-            LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
-            
+                        
             switch(objectData.getType()) {
                 case ROOT:
                     List<DatasourceObjectData> datasourceObjectDataList = ((RootObjectData) objectData).getDatasourceObjectDataList();
@@ -58,7 +56,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (DatasourceObjectData datasourceObjectData : datasourceObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<DatasourceObjectData>(datasourceObjectData, 
-                                labelPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData, false));
+                                LabelPaneFactory.createObjectPane(DATASOURCE, datasourceObjectData, false));
                         datasourceObjectTreeItemList.add(treeItem);
                     }
                     
@@ -71,7 +69,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (TableObjectData tableObjectData : tableObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<TableObjectData>(tableObjectData, 
-                                labelPaneFactory.createObjectPane(TABLE, tableObjectData, true));
+                                LabelPaneFactory.createObjectPane(TABLE, tableObjectData, true));
                         tableObjectTreeItemList.add(treeItem);
                     }
                     
@@ -83,7 +81,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<AttributeObjectData>(attributeObjectData, 
-                                labelPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData, true));
+                                LabelPaneFactory.createObjectPane(ATTRIBUTE, attributeObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -91,7 +89,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (MetricObjectData metricObjectData : metricObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<MetricObjectData>(metricObjectData, 
-                                labelPaneFactory.createObjectPane(METRIC, metricObjectData, true));
+                                LabelPaneFactory.createObjectPane(METRIC, metricObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     
@@ -99,7 +97,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     
                     for (ColumnObjectData columnObjectData : columnObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<ColumnObjectData>(columnObjectData, 
-                                labelPaneFactory.createObjectPane(COLUMN, columnObjectData, true));
+                                LabelPaneFactory.createObjectPane(COLUMN, columnObjectData, true));
                         treeItemList.add(treeItem);
                     }
                     

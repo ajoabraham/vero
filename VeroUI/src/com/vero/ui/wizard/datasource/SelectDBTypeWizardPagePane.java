@@ -56,7 +56,7 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
 	contentPane.getStyleClass().add(CLASS_DB_TYPE_CONTENT_PANE);
 
 	for (DBType dbType : DBType.values()) {
-	    LabelPane labelPane = LabelPaneFactory.getInstance().createDBTypeLabelPane(dbType);
+	    LabelPane labelPane = LabelPaneFactory.createDBTypeLabelPane(dbType);
 	    labelPane.setOnMouseClicked(this);
 	    labelPane.setOnMouseEntered(this);
 	    labelPane.setOnMouseExited(this);
@@ -148,5 +148,9 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
 	}
 
 	selectedDBTypeLabelPane = source;
+    }
+
+    @Override
+    public void init() throws WizardException {        
     }
 }

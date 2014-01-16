@@ -11,7 +11,7 @@ import com.vero.ui.constants.ConfirmationType;
  * @author Tai Hu
  *
  */
-public final class ConfirmationBuilder {
+public final class ConfirmationDialogBuilder {
     private Stage ownerStage = null;
     private String title = null;
     private String message = null;
@@ -20,45 +20,45 @@ public final class ConfirmationBuilder {
     private double width;
     private double height;
     
-    private ConfirmationBuilder() {
+    private ConfirmationDialogBuilder() {
 	
     }
     
-    public static ConfirmationBuilder create() {
-	return new ConfirmationBuilder();
+    public static ConfirmationDialogBuilder create() {
+	return new ConfirmationDialogBuilder();
     }
     
-    public ConfirmationBuilder title(String title) {
+    public ConfirmationDialogBuilder title(String title) {
 	this.title = title;
 	return this;
     }
     
-    public ConfirmationBuilder message(String message) {
+    public ConfirmationDialogBuilder message(String message) {
 	this.message = message;
 	return this;
     }
     
-    public ConfirmationBuilder confirmationType(ConfirmationType confirmationType) {
+    public ConfirmationDialogBuilder confirmationType(ConfirmationType confirmationType) {
 	this.confirmationType = confirmationType;
 	return this;
     }
     
-    public ConfirmationBuilder confirmationHandler(ConfirmationHandler confirmationHandler) {
+    public ConfirmationDialogBuilder confirmationHandler(ConfirmationHandler confirmationHandler) {
 	this.confirmationHandler = confirmationHandler;
 	return this;
     }
     
-    public ConfirmationBuilder ownerStage(Stage ownerStage) {
+    public ConfirmationDialogBuilder ownerStage(Stage ownerStage) {
 	this.ownerStage = ownerStage;
 	return this;
     }
     
-    public ConfirmationBuilder width(double width) {
+    public ConfirmationDialogBuilder width(double width) {
 	this.width = width;
 	return this;
     }
     
-    public ConfirmationBuilder height(double height) {
+    public ConfirmationDialogBuilder height(double height) {
 	this.height = height;
 	return this;
     }

@@ -39,24 +39,14 @@ import java.util.logging.Logger;
  *
  * @author Tai Hu
  */
-public final class LabelPaneFactory {
+public final class LabelPaneFactory { 
     private static final Logger logger = Logger.getLogger(LabelPaneFactory.class.getName());
-    
-    private static LabelPaneFactory INSTANCE = null;
     
     private LabelPaneFactory() {
         
     }
-    
-    public static LabelPaneFactory getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new LabelPaneFactory();       
-        }
-        
-        return INSTANCE;
-    }
-    
-    public ObjectPane createObjectPane(ObjectType type, UIData data, boolean isDraggable) {
+   
+    public static ObjectPane createObjectPane(ObjectType type, UIData data, boolean isDraggable) {
         ObjectPane objectPane = null;
         
         switch (type) {
@@ -86,7 +76,7 @@ public final class LabelPaneFactory {
         return objectPane;
     }
     
-    public DropZoneObjectPane<? extends UIData> createDropZoneObjectPane(UIData data) {
+    public static DropZoneObjectPane<? extends UIData> createDropZoneObjectPane(UIData data) {
        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = null;
         
         switch (data.getType()) {
@@ -109,23 +99,23 @@ public final class LabelPaneFactory {
         return dropZoneObjectPane;
     }
     
-    public LabelPane createPlaceholderPane(String text) {
+    public static LabelPane createPlaceholderPane(String text) {
         return new PlaceholderPane(text);
     }
     
-    public LabelPane createDropHintPane() {
+    public static LabelPane createDropHintPane() {
         return new DropHintPane();
     }
     
-    public LabelPane createReportNameEditablePane(String text) {
+    public static LabelPane createReportNameEditablePane(String text) {
         return new ReportNameEditablePane(text);
     }
     
-    public LabelPane createTableJoinPane(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
+    public static LabelPane createTableJoinPane(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
         return new TableJoinDropZoneObjectPane(new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
     }
     
-    public LabelPane createDBTypeLabelPane(DBType dbType) {
+    public static LabelPane createDBTypeLabelPane(DBType dbType) {
 	return new DBTypeLabelPane(dbType);
     }
 }

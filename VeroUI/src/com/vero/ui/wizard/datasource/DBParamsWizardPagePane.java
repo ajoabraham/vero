@@ -9,6 +9,7 @@ import static com.vero.ui.constants.UIConstants.DEFAULT_FORM_INPUT_HEIGHT;
 import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
+import static com.vero.ui.constants.DBType.*;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,8 @@ import javafx.scene.layout.GridPane;
 
 import javax.validation.ConstraintViolation;
 
-import com.vero.ui.common.ConfirmationFactory;
+import com.vero.ui.common.ConfirmationDialogs;
+import com.vero.ui.constants.DBType;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.service.DatasourceImportService;
 import com.vero.ui.service.ServiceException;
@@ -46,13 +48,18 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     
     private ComboBox<String> databaseNameComboBox = null;
     
-    private ConfirmationFactory confirmationFactory = null;
+    private DBType currentDBType = null;
     
     public DBParamsWizardPagePane(DatasourceWizardData wizardData) {
         super(wizardData);
-
-        confirmationFactory = ConfirmationFactory.getInstance();
-        buildUI();
+    }
+    
+    @Override
+    public void init() throws WizardException {
+        if (currentDBType != wizardData.getData().getDatabaseType()) {
+            getChildren().clear();
+            buildUI();
+        }       
     }
 
     private void buildUI() {
@@ -98,13 +105,21 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         // Database name
         Label databaseNameLabel = UIUtils.createDefaultFormLabel("Database Name:");
         contentPane.add(databaseNameLabel, 0, rowIndex);
-        databaseNameComboBox = new ComboBox<String>();
-        databaseNameComboBox.setPrefSize(225, DEFAULT_FORM_INPUT_HEIGHT);
-        getDatabaseNamesButton = UIUtils.createDefaultButton("GET DB NAMES");
-        getDatabaseNamesButton.setPrefSize(120, DEFAULT_FORM_INPUT_HEIGHT);
-        contentPane.add(databaseNameComboBox, 1, rowIndex);
-        contentPane.add(getDatabaseNamesButton, 2, rowIndex++);
-        getDatabaseNamesButton.setOnAction(this);
+       
+        if (wizardData.getData().getDatabaseType() == POSTGRE_SQL) {
+            TextField databaseNameTextField = UIUtils.createDefaultFormTextField();
+            contentPane.add(databaseNameTextField, 1, rowIndex++, 2, 1);
+            databaseNameTextField.textProperty().bindBidirectional(wizardData.getData().databaseNameProperty());
+        }
+        else {
+            databaseNameComboBox = new ComboBox<String>();
+            databaseNameComboBox.setPrefSize(225, DEFAULT_FORM_INPUT_HEIGHT);
+            getDatabaseNamesButton = UIUtils.createDefaultButton("GET DB NAMES");
+            getDatabaseNamesButton.setPrefSize(120, DEFAULT_FORM_INPUT_HEIGHT);
+            contentPane.add(databaseNameComboBox, 1, rowIndex);
+            contentPane.add(getDatabaseNamesButton, 2, rowIndex++);
+            getDatabaseNamesButton.setOnAction(this);
+        }
 
         // Test connection
         testConnectionButton = UIUtils.createDefaultButton("TEST CONNECTION");
@@ -169,18 +184,18 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 
             try {
                 if (service.testConnection(wizardData.getData())) {
-                    confirmationFactory.createInfoConfirmation(null, "Successfully Connected").show();
+                    ConfirmationDialogs.createInfoConfirmation(null, "Successfully Connected").show();
                 }
                 else {
-                    confirmationFactory.createErrorConfirmation(null, "Failed to connect").show();
+                    ConfirmationDialogs.createErrorConfirmation(null, "Failed to connect").show();
                 }
             }
             catch (ServiceException e) {
-                confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
+                ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
             }
         }
         else {
-            confirmationFactory.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
+            ConfirmationDialogs.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
         }
     }
     
@@ -191,16 +206,15 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
             DatasourceImportService service = ServiceManager.getDatasourceImportService();
             
             try {
-                List<String> databaseNames = service.getDatabaseNames(wizardData.getData());
-System.err.println("########### list size = " + databaseNames.size());                
+                List<String> databaseNames = service.getDatabaseNames(wizardData.getData());                
                 databaseNameComboBox.getItems().setAll(databaseNames);
             }
             catch (ServiceException e) {
-                confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
+                ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
             }
         }
         else {
-            confirmationFactory.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
+            ConfirmationDialogs.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
         }
     }
 }

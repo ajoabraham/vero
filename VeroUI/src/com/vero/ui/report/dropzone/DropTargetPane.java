@@ -35,15 +35,12 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     private static final String METRIC_PLACEHOLDER_HINT = "drag metrics or columns here...";
     private static final String TABLE_PLACEHOLDER_HINT = "drag tables here as query hints...";
     private static final String TABLE_JOIN_PLACEHOLDER_HINT = "This is not a drop zone...";
-        
-    private LabelPaneFactory labelPaneFactory = null;
-    
+            
     private int currentDropIndex = -1;
     private boolean isEmpty = false;
     private DockHandler dockHandler = null;
     
     public DropTargetPane() {
-        labelPaneFactory = LabelPaneFactory.getInstance();
         getStyleClass().add(CLASS_DROP_PANE);
         setPrefHeight(DEFAULT_DROP_PANE_HEIGHT);
         setMaxHeight(Double.MAX_VALUE);
@@ -73,11 +70,11 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
                 if (currentDropIndex == -1) {
                     double newHeight = computePrefHeight(children.size() + 1);
                     setPrefHeight(newHeight);
-                    children.add(index, labelPaneFactory.createDropHintPane());
+                    children.add(index, LabelPaneFactory.createDropHintPane());
                     currentDropIndex = index;
                 }
                 else if (index != currentDropIndex && index != currentDropIndex + 1 ){
-                    children.add(index, labelPaneFactory.createDropHintPane());
+                    children.add(index, LabelPaneFactory.createDropHintPane());
                     children.remove(index < currentDropIndex ? currentDropIndex + 1 : currentDropIndex);
                     
                     currentDropIndex = index > currentDropIndex ? index - 1 : index;
@@ -92,7 +89,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         
         // Empty drop pane
         if (children.get(0) instanceof PlaceholderPane) {
-            children.set(0, labelPaneFactory.createDropHintPane());
+            children.set(0, LabelPaneFactory.createDropHintPane());
             isEmpty = true;
         }
     }
@@ -103,13 +100,13 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         
         // Empty drop pane
         if (isEmpty) {
-            children.set(0, labelPaneFactory.createPlaceholderPane(getPlaceholderText()));
+            children.set(0, LabelPaneFactory.createPlaceholderPane(getPlaceholderText()));
         }
     }
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
-        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = LabelPaneFactory.getInstance().createDropZoneObjectPane(transferData);
+        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
         dropZoneObjectPane.setDockHandler(dockHandler);
         
         if (isEmpty) {

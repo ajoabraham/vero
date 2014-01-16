@@ -26,7 +26,8 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         AbstractDB dbConnection = null;
         try {
             dbConnection = data.getDatabaseType().getDBConnection();
-            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName("northwind");
+            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname());
+            
             return dbConnection.getDatabases();
         }
         catch (Exception e) {
@@ -55,7 +56,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         
         try {
             dbConnection = data.getDatabaseType().getDBConnection();        
-            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName("northwind");
+            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName(data.getDatabaseName());
             
             return dbConnection.testConnection();
         }

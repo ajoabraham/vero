@@ -30,7 +30,7 @@ public final class WizardFactory {
         return INSTANCE;
     }
     
-    public PopupDialog createDatasourceWizard(DatasourceWizardData wizardData) {
+    public PopupDialog createDatasourceWizard(DatasourceWizardData wizardData) throws WizardException {
         return WizardBuilder.create(DatasourceWizardData.class)
                             .wizardPage(new SelectDBTypeWizardPagePane(wizardData))
                             .wizardPage(new DBParamsWizardPagePane(wizardData))

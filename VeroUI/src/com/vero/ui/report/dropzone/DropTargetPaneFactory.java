@@ -18,21 +18,11 @@ import java.util.logging.Logger;
 public final class DropTargetPaneFactory {
     private static final Logger logger = Logger.getLogger(DropTargetPaneFactory.class.getName());
     
-    private static DropTargetPaneFactory INSTANCE = null;
-    
     private DropTargetPaneFactory() {
         
     }
     
-    public static DropTargetPaneFactory getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new DropTargetPaneFactory();
-        }
-        
-        return INSTANCE;
-    }
-    
-    public DropTargetPane createDropPane(ObjectType type, boolean isDroppable) {
+    public static DropTargetPane createDropPane(ObjectType type, boolean isDroppable) {
         DropTargetPane dropPane = null;
         
         switch (type) {

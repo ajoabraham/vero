@@ -23,6 +23,7 @@ public abstract class WizardPagePane<T extends WizardData> extends BorderPane {
     }
     
     public abstract String getWizardId();
+    public abstract void init() throws WizardException;
     public abstract String next() throws WizardException;
     public abstract String back() throws WizardException;
     public abstract void finish() throws WizardException;

@@ -5,10 +5,13 @@
  */
 package com.vero.ui.menu;
 
+import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.PopupDialog;
+import com.vero.ui.common.UIManager;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.ReportData;
 import com.vero.ui.report.ReportTabManager;
+import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardFactory;
 import com.vero.ui.wizard.datasource.DatasourceWizardData;
 
@@ -74,9 +77,14 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
     }
     
     private void handleNewDatasourceAction() {
-	DatasourceWizardData wizardData = new DatasourceWizardData();
-	PopupDialog popupDialog = WizardFactory.getInstance().createDatasourceWizard(wizardData);
-	popupDialog.show();
+        try {
+            DatasourceWizardData wizardData = new DatasourceWizardData();
+            PopupDialog popupDialog = WizardFactory.getInstance().createDatasourceWizard(wizardData);
+            popupDialog.show();
+        }
+        catch (WizardException e) {
+            ConfirmationDialogs.createErrorConfirmation(UIManager.getInstance().getPrimaryStage(), e.getMessage()).show();
+        }
     }
     
     private void handleNewReportAction() {

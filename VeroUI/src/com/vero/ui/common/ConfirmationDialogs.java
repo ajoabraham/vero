@@ -12,23 +12,13 @@ import javafx.stage.Stage;
  * @author Tai Hu
  *
  */
-public final class ConfirmationFactory {
-    private static ConfirmationFactory INSTANCE = null;
-    
-    private ConfirmationFactory() {
+public final class ConfirmationDialogs {
+    private ConfirmationDialogs() {
 	
     }
     
-    public static ConfirmationFactory getInstance() {
-	if (INSTANCE == null) {
-	    INSTANCE = new ConfirmationFactory();
-	}
-	
-	return INSTANCE;
-    }
-    
-    public PopupDialog createErrorConfirmation(Stage ownerStage, String errorMessage) {
-	return ConfirmationBuilder.create()
+    public static PopupDialog createErrorConfirmation(Stage ownerStage, String errorMessage) {
+	return ConfirmationDialogBuilder.create()
 		                  .ownerStage(ownerStage)
 		                  .title("Error")
 		                  .message(errorMessage)
@@ -40,8 +30,8 @@ public final class ConfirmationFactory {
 		                  
     }
     
-    public PopupDialog createInfoConfirmation(Stage ownerStage, String infoMessage) {
-	return ConfirmationBuilder.create()
+    public static PopupDialog createInfoConfirmation(Stage ownerStage, String infoMessage) {
+	return ConfirmationDialogBuilder.create()
 		                  .ownerStage(ownerStage)
 		                  .title("Info")
 		                  .message(infoMessage)

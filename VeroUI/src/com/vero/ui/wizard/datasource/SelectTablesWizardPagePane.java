@@ -65,4 +65,13 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
     public boolean canFinish() {
         return true;
     }
+
+    /* (non-Javadoc)
+     * @see com.vero.ui.wizard.WizardPagePane#init()
+     */
+    @Override
+    public void init() throws WizardException {
+        // TODO Auto-generated method stub
+        
+    }
 }

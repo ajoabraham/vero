@@ -47,7 +47,7 @@ public final class WizardBuilder<T extends WizardData> {
         return this;
     }
     
-    public PopupDialog create() {
+    public PopupDialog create() throws WizardException {
         PopupDialog popupDialog = new PopupDialog(UIManager.getInstance().getPrimaryStage());
         
         WizardPane<T> wizardPane = new WizardPane<T>(popupDialog, wizardPages, firstPage);

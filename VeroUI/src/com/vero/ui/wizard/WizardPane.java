@@ -16,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import com.vero.ui.common.ConfirmationFactory;
+import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.util.UIUtils;
 
 /**
@@ -34,16 +34,13 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
     private Map<String, WizardPagePane<T>> wizardPages = null;
     private WizardPagePane<T> firstPage = null;
     private WizardPagePane<T> currentPage = null;
-
-    private ConfirmationFactory confirmationFactory = null;
     
-    public WizardPane(Stage ownerStage, Map<String, WizardPagePane<T>> wizardPages, String firstPageId) {
+    public WizardPane(Stage ownerStage, Map<String, WizardPagePane<T>> wizardPages, String firstPageId) throws WizardException {
 	this.ownerStage = ownerStage;
 	getStyleClass().add(CLASS_WIZARD_PANE);
 	this.wizardPages = wizardPages;
 	firstPage = wizardPages.get(firstPageId);
 	currentPage = firstPage;
-	confirmationFactory = ConfirmationFactory.getInstance();
 	
 	buildUI();
 	showPage(firstPage);
@@ -81,8 +78,10 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	return buttonPane;
     }
 
-    private void showPage(WizardPagePane<T> wizardPage) {
-	backButton.setDisable(wizardPage.isFirst());
+    private void showPage(WizardPagePane<T> wizardPage) throws WizardException {
+        wizardPage.init();
+        
+        backButton.setDisable(wizardPage.isFirst());
 	nextButton.setDisable(wizardPage.canFinish());
 	finishButton.setDisable(!wizardPage.canFinish());
 
@@ -113,7 +112,7 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	    showPage(previousPage);
 	}
 	catch (WizardException e) {
-	    confirmationFactory.createErrorConfirmation(ownerStage, e.getMessage()).show();
+	    ConfirmationDialogs.createErrorConfirmation(ownerStage, e.getMessage()).show();
 	}
     }
 
@@ -124,7 +123,7 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	    showPage(nextPage);
 	}
 	catch (WizardException e) {
-	    confirmationFactory.createErrorConfirmation(ownerStage, e.getMessage()).show();
+	    ConfirmationDialogs.createErrorConfirmation(ownerStage, e.getMessage()).show();
 	}
     }
 
@@ -134,7 +133,7 @@ public class WizardPane<T extends WizardData> extends BorderPane implements Even
 	    ownerStage.close();
 	}
 	catch (WizardException e) {
-	    confirmationFactory.createErrorConfirmation(ownerStage, e.getMessage()).show();
+	    ConfirmationDialogs.createErrorConfirmation(ownerStage, e.getMessage()).show();
 	}
     }
 

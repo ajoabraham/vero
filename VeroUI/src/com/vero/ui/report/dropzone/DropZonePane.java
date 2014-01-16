@@ -43,21 +43,18 @@ public class DropZonePane extends ScrollPane {
         VBox contentPane = new VBox();
         contentPane.getStyleClass().add(CLASS_DROP_ZONE_CONTENT_PANE);
         setContent(contentPane);
-
-        DropTargetPaneFactory dropPaneFactory = DropTargetPaneFactory.getInstance();
-        LabelPaneFactory labelPaneFactory = LabelPaneFactory.getInstance();
         
-        contentPane.getChildren().add(labelPaneFactory.createReportNameEditablePane("REPORT BLOCK"));
+        contentPane.getChildren().add(LabelPaneFactory.createReportNameEditablePane("REPORT BLOCK"));
 
         Label attributesLabel = new Label("ATTRIBUTES");
         attributesLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(attributesLabel);
         
-        DropTargetPane attributeDropPane = dropPaneFactory.createDropPane(ATTRIBUTE, true);
+        DropTargetPane attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, true);
         attributeDropPane.setDockHandler(reportPane);
         attributeDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
+                LabelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         contentPane.getChildren().add(attributeDropPane);
 
         Label metricsLabel = new Label("METRICS");
@@ -65,10 +62,10 @@ public class DropZonePane extends ScrollPane {
         metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(metricsLabel);
 
-        DropTargetPane metricDropPane = dropPaneFactory.createDropPane(METRIC, true);
+        DropTargetPane metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, true);
         metricDropPane.setDockHandler(reportPane);
         metricDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
+                LabelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         contentPane.getChildren().add(metricDropPane);
 
         Label tablesLabel = new Label("TABLES");
@@ -76,10 +73,10 @@ public class DropZonePane extends ScrollPane {
         tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tablesLabel);
 
-        DropTargetPane tableDropPane = dropPaneFactory.createDropPane(TABLE, true);
+        DropTargetPane tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, true);
         tableDropPane.setDockHandler(reportPane);
         tableDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
+                LabelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
         contentPane.getChildren().add(tableDropPane);
 
         Label tableJoinsLabel = new Label("TABLE JOINS");
@@ -87,11 +84,11 @@ public class DropZonePane extends ScrollPane {
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tableJoinsLabel);
         
-        DropTargetPane tableJoinDropPane = dropPaneFactory.createDropPane(TABLE_JOIN, false);
+        DropTargetPane tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
-                labelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
+                LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
         tableJoinDropPane.getChildren().add(
-                labelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
+                LabelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
         contentPane.getChildren().add(tableJoinDropPane);
     }
 }
