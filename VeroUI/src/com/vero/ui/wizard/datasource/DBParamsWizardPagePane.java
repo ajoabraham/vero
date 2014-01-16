@@ -5,10 +5,14 @@ package com.vero.ui.wizard.datasource;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_DB_PARAM_CONTENT_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_INSTRUCTION_TEXT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_FORM_INPUT_HEIGHT;
 import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
-import static com.vero.ui.constants.UIConstants.*;
+
+import java.util.List;
+import java.util.Set;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -20,11 +24,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
+import javax.validation.ConstraintViolation;
+
 import com.vero.ui.common.ConfirmationFactory;
+import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.service.DatasourceImportService;
 import com.vero.ui.service.ServiceException;
 import com.vero.ui.service.ServiceManager;
 import com.vero.ui.util.UIUtils;
+import com.vero.ui.util.ValidationUtils;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
 
@@ -35,6 +43,8 @@ import com.vero.ui.wizard.WizardPagePane;
 public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData> implements EventHandler<ActionEvent> {
     private Button getDatabaseNamesButton = null;
     private Button testConnectionButton = null;
+    
+    private ComboBox<String> databaseNameComboBox = null;
     
     private ConfirmationFactory confirmationFactory = null;
     
@@ -88,7 +98,7 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         // Database name
         Label databaseNameLabel = UIUtils.createDefaultFormLabel("Database Name:");
         contentPane.add(databaseNameLabel, 0, rowIndex);
-        ComboBox<String> databaseNameComboBox = new ComboBox<String>();
+        databaseNameComboBox = new ComboBox<String>();
         databaseNameComboBox.setPrefSize(225, DEFAULT_FORM_INPUT_HEIGHT);
         getDatabaseNamesButton = UIUtils.createDefaultButton("GET DB NAMES");
         getDatabaseNamesButton.setPrefSize(120, DEFAULT_FORM_INPUT_HEIGHT);
@@ -150,21 +160,47 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     }
 
     private void handleTestConnectionEvent() {
-	DatasourceImportService service = ServiceManager.getDatasourceImportService();
+        // Validate
+        Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "userName", "password", "hostname",
+                "databaseName");
 
-	try {
-	    if (service.testConnection(wizardData.getData())) {
-		confirmationFactory.createInfoConfirmation(null, "Successfully Connected").show();
-	    }
-	    else {
-		confirmationFactory.createErrorConfirmation(null, "Failed to connect").show();
-	    }
-	}
-	catch (ServiceException e) {
-	    confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
-	}
+        if (violations.isEmpty()) {
+            DatasourceImportService service = ServiceManager.getDatasourceImportService();
+
+            try {
+                if (service.testConnection(wizardData.getData())) {
+                    confirmationFactory.createInfoConfirmation(null, "Successfully Connected").show();
+                }
+                else {
+                    confirmationFactory.createErrorConfirmation(null, "Failed to connect").show();
+                }
+            }
+            catch (ServiceException e) {
+                confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
+            }
+        }
+        else {
+            confirmationFactory.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
+        }
     }
     
-    private void handleGetDatabaseNamesEvent() {	
+    private void handleGetDatabaseNamesEvent() {
+        Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "userName", "password", "hostname");
+        
+        if (violations.isEmpty()) {
+            DatasourceImportService service = ServiceManager.getDatasourceImportService();
+            
+            try {
+                List<String> databaseNames = service.getDatabaseNames(wizardData.getData());
+System.err.println("########### list size = " + databaseNames.size());                
+                databaseNameComboBox.getItems().setAll(databaseNames);
+            }
+            catch (ServiceException e) {
+                confirmationFactory.createErrorConfirmation(null, e.getMessage()).show();
+            }
+        }
+        else {
+            confirmationFactory.createErrorConfirmation(null, violations.iterator().next().getMessage()).show();
+        }
     }
 }

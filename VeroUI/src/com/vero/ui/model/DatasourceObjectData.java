@@ -11,6 +11,10 @@ import static com.vero.ui.constants.ObjectType.DATASOURCE;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -44,6 +48,7 @@ public class DatasourceObjectData extends UIData {
         return DATASOURCE;
     }
 
+    @NotBlank(message = "Name cannot be blank.")
     public String getName() {
         return name.get();
     }
@@ -72,6 +77,7 @@ public class DatasourceObjectData extends UIData {
         this.status = status;
     }
 
+    @NotBlank(message = "User name cannot be blank.")
     public String getUserName() {
         return userName.get();
     }
@@ -84,6 +90,7 @@ public class DatasourceObjectData extends UIData {
         return userName;
     }
 
+    @NotBlank(message = "Password cannot be blank.")
     public String getPassword() {
         return password.get();
     }
@@ -96,6 +103,7 @@ public class DatasourceObjectData extends UIData {
         return password;
     }
     
+    @NotBlank(message = "Hostname cannot be blank.")
     public String getHostname() {
         return hostname.get();
     }
@@ -108,6 +116,7 @@ public class DatasourceObjectData extends UIData {
         return hostname;
     }
     
+    @NotBlank(message = "Database name cannot be blank.")
     public String getDatabaseName() {
         return databaseName.get();
     }
@@ -120,6 +129,7 @@ public class DatasourceObjectData extends UIData {
         return databaseName;
     }
 
+    @NotNull(message = "Please select a database type.")
     public DBType getDatabaseType() {
         return databaseType;
     }
