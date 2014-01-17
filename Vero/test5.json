@@ -1,0 +1,146 @@
+{   "scenario": "One attribute with 2 expressions. Should pick the second expression because the row count is less.",
+    "expectedOutput":"SELECT ALL T0.name-2",
+    "datasources": [
+        {
+            "name": "Teradata - Prod",
+            "database": {"vendor": "Teradata"}
+        }
+    ],
+    "tables": [
+        {
+            "name": "LessonsFact",
+            "rowCount": 100000,
+            "tableType": "fact",
+            "columns": [
+                {
+                    "name": "prof_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "std_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "course_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "date",
+                    "type": "date",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Departments",
+            "rowCount": 100,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "school_name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Professors",
+            "rowCount": 90,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Students",
+            "rowCount": 600000,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }           
+            ],
+            "datasource": "Teradata - Prod"
+        }
+    ],
+    "attributes": [
+        {
+            "name": "Student Department Name",
+            "expressions": [
+                {
+                    "definition": "name-1",
+                    "columns": [
+                        ["name", "Students"]
+                    ]
+                },
+                {
+                    "definition": "name-2",
+                    "columns": [
+                        ["name", "Departments"]
+                    ]
+                }                
+            ]
+        }
+    ]
+}

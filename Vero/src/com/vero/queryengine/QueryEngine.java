@@ -586,7 +586,11 @@ public class QueryEngine {
         }
         
         sqlQuery.setSelect(selectCols);
-        sqlQuery.getFrom().addTableReferences(allJoins);
+        
+        if (allJoins != null) {
+            sqlQuery.getFrom().addTableReferences(allJoins);
+        }
+        
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
         resultSQL = queryExp.toString();
         System.out.println("Output sql is: " + resultSQL);        
