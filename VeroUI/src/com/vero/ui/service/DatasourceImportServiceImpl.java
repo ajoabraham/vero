@@ -4,11 +4,14 @@
 package com.vero.ui.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.vero.db.AbstractDB;
+import com.vero.metadata.Table;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.TableObjectData;
 
@@ -19,15 +22,14 @@ import com.vero.ui.model.TableObjectData;
 public class DatasourceImportServiceImpl implements DatasourceImportService {
     private static final Logger logger = Logger.getLogger(DatasourceImportServiceImpl.class.getName());
     
-    public DatasourceImportServiceImpl() {
+    protected DatasourceImportServiceImpl() {
     }
 
     @Override
     public List<String> getDatabaseNames(DatasourceObjectData data) throws ServiceException {
         AbstractDB dbConnection = null;
         try {
-            dbConnection = data.getDatabaseType().getDBConnection();
-            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname());
+            dbConnection = createDBConnection(data);
             
             return dbConnection.getDatabases();
         }
@@ -48,7 +50,28 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
 
     @Override
     public List<TableObjectData> getDatabaseTables(DatasourceObjectData data) throws ServiceException {
-        return null;
+	AbstractDB dbConnection = null;
+	List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+	
+        try {
+            dbConnection = createDBConnection(data);
+            Map<String, Table> allTables = dbConnection.getDBTables();
+System.err.println("Size = " + allTables.size());            
+        }
+        catch (Exception e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        finally {
+            if (dbConnection != null) {
+                try {
+                    dbConnection.close();
+                }
+                catch (SQLException e) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }
+        return tableObjectDataList;
     }
 
     @Override
@@ -56,8 +79,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         AbstractDB dbConnection = null;
         
         try {
-            dbConnection = data.getDatabaseType().getDBConnection();        
-            dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName(data.getDatabaseName());
+            dbConnection = createDBConnection(data);
             
             return dbConnection.testConnection();
         }
@@ -74,5 +96,11 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
                 }
             }
         }
+    }
+    
+    private AbstractDB createDBConnection(DatasourceObjectData data) {
+	AbstractDB dbConnection = data.getDatabaseType().getDBConnection();
+	dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName(data.getDatabaseName());
+	return dbConnection;
     }
 }
