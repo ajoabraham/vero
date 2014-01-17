@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import com.vero.db.AbstractDB;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.TableObjectData;
 
 /**
  * @author Tai Hu
@@ -46,7 +47,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
     }
 
     @Override
-    public DatasourceObjectData getDatasource(DatasourceObjectData data) throws ServiceException {
+    public List<TableObjectData> getDatabaseTables(DatasourceObjectData data) throws ServiceException {
         return null;
     }
 

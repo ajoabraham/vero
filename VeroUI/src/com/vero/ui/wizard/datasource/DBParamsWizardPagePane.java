@@ -13,6 +13,8 @@ import static com.vero.ui.constants.DBType.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +32,7 @@ import javax.validation.ConstraintViolation;
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.constants.DBType;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.TableObjectData;
 import com.vero.ui.service.DatasourceImportService;
 import com.vero.ui.service.ServiceException;
 import com.vero.ui.service.ServiceManager;
@@ -43,6 +46,8 @@ import com.vero.ui.wizard.WizardPagePane;
  * 
  */
 public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData> implements EventHandler<ActionEvent> {
+    private static final Logger logger = Logger.getLogger(DBParamsWizardPagePane.class.getName());
+    
     private Button getDatabaseNamesButton = null;
     private Button testConnectionButton = null;
     
@@ -59,6 +64,8 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         if (currentDBType != wizardData.getData().getDatabaseType()) {
             getChildren().clear();
             buildUI();
+            
+            currentDBType = wizardData.getData().getDatabaseType();
         }       
     }
 
@@ -138,7 +145,25 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 
     @Override
     public String next() throws WizardException {
-        return ID_SELECT_TABLES;
+	// Validate all data fields
+	Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData());
+	
+	if (!violations.isEmpty()) {
+	    throw new WizardException(violations.iterator().next().getMessage());
+	}
+		
+	try {
+	    // Load all tables
+	    DatasourceImportService service = ServiceManager.getDatasourceImportService();
+	    List<TableObjectData> databaseTables = service.getDatabaseTables(wizardData.getData());
+	    wizardData.getData().setTableObjectDataList(databaseTables);
+	    
+	    return ID_SELECT_TABLES;
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new WizardException(e.getMessage());
+        }
     }
 
     @Override
