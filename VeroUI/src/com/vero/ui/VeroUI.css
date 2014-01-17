@@ -525,6 +525,18 @@
 	-fx-grid-lines-visible: false;
 }
 
+.table-list-scroll-pane {
+	-fx-background-color: transparent;
+	-fx-fit-to-width: true;
+}
+
+.table-list-scroll-pane .content-pane {
+	-fx-hgap: 8;
+	-fx-vgap: 8;
+	-fx-alignment: top-center;
+	-fx-grid-lines-visible: false;
+}
+
 /*******************************************************************************
  * All styles below this line are customized based on standard caspian.css     *
  ******************************************************************************/

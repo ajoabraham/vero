@@ -109,4 +109,5 @@ public interface CSSConstants {
     public static final String CLASS_DB_TYPE_LABEL_PANE = "db-type-label-pane";
     public static final String CLASS_DB_TYPE_CONTENT_PANE = "db-type-content-pane";
     public static final String CLASS_DB_PARAM_CONTENT_PANE = "db-param-content-pane";
+    public static final String CLASS_TABLE_LIST_SCROLL_PANE = "table-list-scroll-pane";
 }

@@ -31,6 +31,7 @@ import com.vero.ui.report.dropzone.ReportNameEditablePane;
 import com.vero.ui.report.dropzone.TableDropZoneObjectPane;
 import com.vero.ui.report.dropzone.TableJoinDropZoneObjectPane;
 import com.vero.ui.wizard.datasource.DBTypeLabelPane;
+import com.vero.ui.wizard.datasource.ListedTableLabelPane;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -117,5 +118,9 @@ public final class LabelPaneFactory {
     
     public static LabelPane createDBTypeLabelPane(DBType dbType) {
 	return new DBTypeLabelPane(dbType);
+    }
+    
+    public static ListedTableLabelPane createListedTableLabelPane(TableObjectData tableData) {
+        return new ListedTableLabelPane(tableData);
     }
 }

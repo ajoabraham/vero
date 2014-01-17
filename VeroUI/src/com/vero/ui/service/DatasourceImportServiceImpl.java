@@ -56,7 +56,13 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         try {
             dbConnection = createDBConnection(data);
             Map<String, Table> allTables = dbConnection.getDBTables();
-System.err.println("Size = " + allTables.size());            
+
+            for (Table table : allTables.values()) {
+                TableObjectData tableObjectData = new TableObjectData();
+                tableObjectData.setName(table.getObjectName());
+                
+                tableObjectDataList.add(tableObjectData);
+            }
         }
         catch (Exception e) {
             throw new ServiceException(e.getMessage(), e);

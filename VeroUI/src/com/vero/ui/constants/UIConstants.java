@@ -21,6 +21,7 @@ public interface UIConstants {
     
     public static final double NAVIGATION_PANE_WIDTH = 250;
     public static final double DROP_ZONE_PANE_WIDTH = 250;
+    public static final double DEFAULT_LABEL_PANE_WIDTH = 250;
     // Object pane should fill navigation pane width
     public static final double DEFAULT_LABEL_PANE_HEIGHT = 31;
     
