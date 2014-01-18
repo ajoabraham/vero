@@ -22,8 +22,7 @@ public final class DataUtils {
 	target.setName(source.getObjectName());
 	target.setPhysicalName(target.getPhysicalName());
 	target.setRowCount(source.getRowCount());
-	target.setTableType(TableType.valueOf(source.getTableLogicalType().toString()));
-	
+	target.setTableType(TableType.valueOf(source.getTableLogicalType().toString()));	
 	
 	for (Column column : source.getColumns().values()) {
 	    ColumnObjectData columnObjectData = new ColumnObjectData();

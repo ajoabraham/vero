@@ -531,6 +531,7 @@
 }
 
 .table-list-scroll-pane .content-pane {
+	-fx-padding: 10;
 	-fx-hgap: 8;
 	-fx-vgap: 8;
 	-fx-alignment: top-center;

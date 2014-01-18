@@ -59,6 +59,8 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
             Map<String, Table> allTables = dbConnection.getDBTables();
 
             for (Table table : allTables.values()) {
+                // Load primary and foreign key information
+                dbConnection.identifyKeys(table);
                 TableObjectData tableObjectData = new TableObjectData();
                 DataUtils.copy(table, tableObjectData);
                 
