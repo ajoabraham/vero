@@ -23,7 +23,7 @@ public final class TestDataGenerator {
     public static DatasourceObjectData generateDatasource(String name) {
         DatasourceObjectData datasourceObjectData = new DatasourceObjectData();
         
-        datasourceObjectData.setId(++ID_SEQ);
+        datasourceObjectData.setId("" + ++ID_SEQ);
         datasourceObjectData.setName(name);
         
         List<TableObjectData> tableObjectDataList = new ArrayList<>();
@@ -31,7 +31,7 @@ public final class TestDataGenerator {
         
         for (int i = 0; i < 5; i++) {
             TableObjectData tableObjectData = new TableObjectData();
-            tableObjectData.setId(++ID_SEQ);
+            tableObjectData.setId("" + ++ID_SEQ);
             tableObjectData.setName("Table-" + i);
             
             List<ColumnObjectData> columnObjectDataList = new ArrayList<>();
@@ -39,7 +39,7 @@ public final class TestDataGenerator {
             
             for (int j = 0; j < 5; j++) {
                 ColumnObjectData columnObjectData = new ColumnObjectData();
-                columnObjectData.setId(++ID_SEQ);
+                columnObjectData.setId("" + ++ID_SEQ);
                 columnObjectData.setName("Column-" + j);
                 columnObjectDataList.add(columnObjectData);
             }
@@ -48,7 +48,7 @@ public final class TestDataGenerator {
             tableObjectData.setAttributeObjectDataList(attributeObjectDataList);
             for (int j = 0; j < 2; j++) {
                 AttributeObjectData attributeObjectData = new AttributeObjectData();
-                attributeObjectData.setId(++ID_SEQ);
+                attributeObjectData.setId("" + ++ID_SEQ);
                 attributeObjectData.setName("Attribute-" + j);
                 attributeObjectDataList.add(attributeObjectData);             
             }
@@ -57,7 +57,7 @@ public final class TestDataGenerator {
             tableObjectData.setMetricObjectDataList(metricObjectDataList);
             for (int j = 0; j < 2; j++) {
                 MetricObjectData metricObjectData = new MetricObjectData();
-                metricObjectData.setId(++ID_SEQ);
+                metricObjectData.setId("" + ++ID_SEQ);
                 metricObjectData.setName("Metric-" + j);
                 metricObjectDataList.add(metricObjectData);
             }

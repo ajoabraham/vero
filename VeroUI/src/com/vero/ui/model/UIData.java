@@ -16,17 +16,17 @@ import java.io.Serializable;
 public abstract class UIData implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private long Id = 0L;
+    private String Id = null;
     
     public UIData() {
         
     }
 
-    public long getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(long Id) {
+    public void setId(String Id) {
         this.Id = Id;
     }
     

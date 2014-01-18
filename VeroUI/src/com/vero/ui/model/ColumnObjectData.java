@@ -6,7 +6,14 @@
 
 package com.vero.ui.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import com.vero.ui.constants.DBKeyType;
 import com.vero.ui.constants.ObjectType;
+
 import static com.vero.ui.constants.ObjectType.COLUMN;
 
 /**
@@ -16,10 +23,12 @@ import static com.vero.ui.constants.ObjectType.COLUMN;
 public class ColumnObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
-    private String name = null;
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty dataType = new SimpleStringProperty();
+    private IntegerProperty dataTypeSize = new SimpleIntegerProperty();
+    private DBKeyType keyType = DBKeyType.NO_KEY_TYPE;
     
-    public ColumnObjectData() {
-        
+    public ColumnObjectData() {        
     }
     
     @Override
@@ -28,10 +37,46 @@ public class ColumnObjectData extends UIData {
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
+    }
+    
+    public StringProperty nameProperty() {
+	return name;
+    }
+
+    public String getDataType() {
+        return dataType.get();
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType.set(dataType);
+    }
+    
+    public StringProperty dataTypeProperty() {
+	return dataType;
+    }
+
+    public int getDataTypeSize() {
+        return dataTypeSize.get();
+    }
+
+    public void setDataTypeSize(int dataTypeSize) {
+        this.dataTypeSize.set(dataTypeSize);
+    }
+    
+    public IntegerProperty dataTypeSizeProperty() {
+	return dataTypeSize;
+    }
+
+    public DBKeyType getKeyType() {
+        return keyType;
+    }
+
+    public void setKeyType(DBKeyType keyType) {
+        this.keyType = keyType;
     }
 }

@@ -14,6 +14,7 @@ import com.vero.db.AbstractDB;
 import com.vero.metadata.Table;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.TableObjectData;
+import com.vero.ui.util.DataUtils;
 
 /**
  * @author Tai Hu
@@ -59,7 +60,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
 
             for (Table table : allTables.values()) {
                 TableObjectData tableObjectData = new TableObjectData();
-                tableObjectData.setName(table.getObjectName());
+                DataUtils.copy(table, tableObjectData);
                 
                 tableObjectDataList.add(tableObjectData);
             }
