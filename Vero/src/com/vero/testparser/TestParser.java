@@ -54,12 +54,11 @@ public class TestParser {
 
             for (int i = 0; i < DSsArraySize; i++) {
                 JSONObject oneJSONDSObj = jsonDSsArray.getJSONObject(i);
-                System.out.println("json DS object " + i + ": ");
+                //System.out.println("json DS object " + i + ": ");
                 // DS
-                System.out.println("name:" + oneJSONDSObj.getString("name"));
-                System.out.println("vendor:" + oneJSONDSObj.getJSONObject("database").getString("vendor"));
+                //System.out.println("name:" + oneJSONDSObj.getString("name"));
+                //System.out.println("vendor:" + oneJSONDSObj.getJSONObject("database").getString("vendor"));
                 
-                //System.out.println("database:" + oneJSONDSObj.getString("database"));
                 // add DS
                 testSession.addDataSource(
                     oneJSONDSObj.getJSONObject("database").getString("vendor"), 
@@ -67,7 +66,6 @@ public class TestParser {
                     oneJSONDSObj.getString("name"));
                 testDS = testSession.getDataSource(oneJSONDSObj.getString("name"));
             }
-            System.out.println("------------------------------");
             
             // parsing tables
             JSONArray jsonTablesArray = root.getJSONArray("tables");
@@ -75,12 +73,12 @@ public class TestParser {
 
             for (int i = 0; i < tablesArraySize; i++) {
                 JSONObject oneJSONTableObj = jsonTablesArray.getJSONObject(i);
-                System.out.println("json table object " + i + ": ");
+                //System.out.println("json table object " + i + ": ");
                 // table
-                System.out.println("name:" + oneJSONTableObj.getString("name"));
-                System.out.println("rowCount:" + oneJSONTableObj.getInt("rowCount"));
-                System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
-                System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
+                //System.out.println("name:" + oneJSONTableObj.getString("name"));
+                //System.out.println("rowCount:" + oneJSONTableObj.getInt("rowCount"));
+                //System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
+                //System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
                 // add table
                 DataSource specificDS = testSession.getDataSource(oneJSONTableObj.getString("datasource"));
@@ -116,11 +114,11 @@ public class TestParser {
                 for (int j = 0; j < columnsArraySize; j++) {
                     JSONObject oneJSONColumnObj = jsonColumnsArray.getJSONObject(j);
                     // column
-                    System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
-                    System.out.println("name:" + oneJSONColumnObj.getString("name"));
-                    System.out.println("type:" + oneJSONColumnObj.getString("type"));
-                    System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
-                    System.out.println("foreignKey:" + oneJSONColumnObj.getBoolean("foreignKey"));
+                    //System.out.println("json column object " + j + ": " + oneJSONColumnObj.toString());
+                    //System.out.println("name:" + oneJSONColumnObj.getString("name"));
+                    //System.out.println("type:" + oneJSONColumnObj.getString("type"));
+                    //System.out.println("primaryKey:" + oneJSONColumnObj.getBoolean("primaryKey"));
+                    //System.out.println("foreignKey:" + oneJSONColumnObj.getBoolean("foreignKey"));
                     
                     // add column
                     Column aColumn;
@@ -158,149 +156,157 @@ public class TestParser {
                     aTable.addColumn(aColumn);
                 }        
             }
-            System.out.println("------------------------------");
+            //System.out.println("------------------------------");
             
             // parsing attributes
-            JSONArray jsonAttrsArray = root.getJSONArray("attributes");
-            int attrsArraySize = jsonAttrsArray.length();
+            if (root.isNull("attributes") == false) {
+                JSONArray jsonAttrsArray = root.getJSONArray("attributes");
+                int attrsArraySize = jsonAttrsArray.length();
 
-            for (int i = 0; i < attrsArraySize; i++) {
-                JSONObject oneJSONAttrObj = jsonAttrsArray.getJSONObject(i);
-                System.out.println("json attribute object " + i + ": ");
-                // attribute
-                System.out.println("name:" + oneJSONAttrObj.getString("name"));
-                JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
-                // add attribute
-                Attribute anAttr = new Attribute(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
-                testSession.addAttributeMeta(anAttr);
-                
-                int expressionsArraySize = jsonExpressionsArray.length();
-                for (int j = 0; j < expressionsArraySize; j++) {
-                    JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
-                    // expression
-                    System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
-                    // add expression
-                    Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
-                    anAttr.addExpression(anExp);
+                for (int i = 0; i < attrsArraySize; i++) {
+                    JSONObject oneJSONAttrObj = jsonAttrsArray.getJSONObject(i);
+                    System.out.println("json attribute object " + i + ": ");
+                    // attribute
+                    System.out.println("name:" + oneJSONAttrObj.getString("name"));
+                    JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
+                    // add attribute
+                    Attribute anAttr = new Attribute(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
+                    testSession.addAttributeMeta(anAttr);
 
-                    int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                    for (int k = 0; k < tableUUIDsArraySize; k++) {                        
-                        String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
-                        String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                        Table curTab = testDS.getTable(tabName);                                                
-                        
-                        System.out.println("table's column:" + colName);
-                        System.out.println("table's name:" + tabName);
+                    int expressionsArraySize = jsonExpressionsArray.length();
+                    for (int j = 0; j < expressionsArraySize; j++) {
+                        JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
+                        // expression
+                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
+                        // add expression
+                        Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
+                        anAttr.addExpression(anExp);
 
-                        if (curTab != null) {
-                            Column aCol = curTab.getColumn(colName);
-                            
-                            if (aCol != null) {
-                                anExp.addColumn(aCol);
+                        int tableUUIDsArraySize = jsonTableUUIDsArray.length();
+                        for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                            String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
+                            String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
+                            Table curTab = testDS.getTable(tabName);                                                
+
+                            System.out.println("table's column:" + colName);
+                            System.out.println("table's name:" + tabName);
+
+                            if (curTab != null) {
+                                Column aCol = curTab.getColumn(colName);
+
+                                if (aCol != null) {
+                                    anExp.addColumn(aCol);
+                                } else {
+                                    System.out.println("can't find column...");
+                                }
                             } else {
-                                System.out.println("can't find column...");
-                            }
-                        } else {
-                            System.out.println("can't find table...");
-                        }                       
-                    }                    
-                }
-            }
-            System.out.println("------------------------------");
-
-            // parsing metrics
-            JSONArray jsonMetricsArray = root.getJSONArray("metrics");
-            int metricsArraySize = jsonMetricsArray.length();
-
-            for (int i = 0; i < metricsArraySize; i++) {
-                JSONObject oneJSONMetricObj = jsonMetricsArray.getJSONObject(i);
-                System.out.println("json metric object " + i + ": ");
-                // metric
-                System.out.println("name:" + oneJSONMetricObj.getString("name"));
-                JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
-                // add metric
-                Metric aMetric = new Metric(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
-                testSession.addMetricMeta(aMetric);
-                
-                int expressionsArraySize = jsonExpressionsArray.length();
-                for (int j = 0; j < expressionsArraySize; j++) {
-                    JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
-                    // expression
-                    System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                    JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
-                    // add expression
-                    Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
-                    aMetric.addExpression(anExp);
-                    
-                    int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                    for (int k = 0; k < tableUUIDsArraySize; k++) {                        
-                        String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
-                        String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                        Table curTab = testDS.getTable(tabName);                                                
-                        
-                        System.out.println("table's column:" + colName);
-                        System.out.println("table's name:" + tabName);
-
-                        if (curTab != null) {
-                            Column aCol = curTab.getColumn(colName);
-                            
-                            if (aCol != null) {
-                                anExp.addColumn(aCol);
-                            } else {
-                                System.out.println("can't find column...");
-                            }
-                        } else {
-                            System.out.println("can't find table...");
-                        }           
+                                System.out.println("can't find table...");
+                            }                       
+                        }                    
                     }
                 }
+                System.out.println("------------------------------");
             }
-            System.out.println("------------------------------");
-            
-            // parsing joindefs
-            JSONArray jsonJDsArray = root.getJSONArray("joindefs");
-            int JDsArraySize = jsonJDsArray.length();
 
-            for (int i = 0; i < JDsArraySize; i++) {
-                JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
-                System.out.println("json JD object " + i + ": ");
-                // DS
-                System.out.println("name:" + oneJSONJDObj.getString("name"));
-                System.out.println("tleft table name:" + oneJSONJDObj.getString("tleft"));
-                System.out.println("cleft column name:" + oneJSONJDObj.getString("cleft"));
-                System.out.println("operator:" + oneJSONJDObj.getString("operator"));
-                System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
-                System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
-                System.out.println("expression:" + oneJSONJDObj.getString("expression"));
-                System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
-                // add DS                
-                JoinDefinition aJoin = new JoinDefinition(
-                    oneJSONJDObj.getString("name"),
-                    oneJSONJDObj.getString("tleft"),
-                    oneJSONJDObj.getString("cleft"),
-                    oneJSONJDObj.getString("operator"),
-                    oneJSONJDObj.getString("tright"),
-                    oneJSONJDObj.getString("cright"),
-                    oneJSONJDObj.getString("expression"),
-                    oneJSONJDObj.getString("jointype")
-                );
-                testSession.addJoinMeta(aJoin);
+            // parsing metrics
+            if (root.isNull("metrics") == false) {
+                JSONArray jsonMetricsArray = root.getJSONArray("metrics");
+                int metricsArraySize = jsonMetricsArray.length();
+
+                for (int i = 0; i < metricsArraySize; i++) {
+                    JSONObject oneJSONMetricObj = jsonMetricsArray.getJSONObject(i);
+                    System.out.println("json metric object " + i + ": ");
+                    // metric
+                    System.out.println("name:" + oneJSONMetricObj.getString("name"));
+                    JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
+                    // add metric
+                    Metric aMetric = new Metric(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
+                    testSession.addMetricMeta(aMetric);
+
+                    int expressionsArraySize = jsonExpressionsArray.length();
+                    for (int j = 0; j < expressionsArraySize; j++) {
+                        JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
+                        // expression
+                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
+                        // add expression
+                        Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
+                        aMetric.addExpression(anExp);
+
+                        int tableUUIDsArraySize = jsonTableUUIDsArray.length();
+                        for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                            String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
+                            String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
+                            Table curTab = testDS.getTable(tabName);                                                
+
+                            System.out.println("table's column:" + colName);
+                            System.out.println("table's name:" + tabName);
+
+                            if (curTab != null) {
+                                Column aCol = curTab.getColumn(colName);
+
+                                if (aCol != null) {
+                                    anExp.addColumn(aCol);
+                                } else {
+                                    System.out.println("can't find column...");
+                                }
+                            } else {
+                                System.out.println("can't find table...");
+                            }           
+                        }
+                    }
+                }
+                System.out.println("------------------------------");
             }
-            System.out.println("------------------------------");
+                        
+            // parsing joindefs
+            if (root.isNull("joindefs") == false) {
+                JSONArray jsonJDsArray = root.getJSONArray("joindefs");
+                int JDsArraySize = jsonJDsArray.length();
+
+                for (int i = 0; i < JDsArraySize; i++) {
+                    JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
+                    System.out.println("json JD object " + i + ": ");
+                    // DS
+                    System.out.println("name:" + oneJSONJDObj.getString("name"));
+                    System.out.println("tleft table name:" + oneJSONJDObj.getString("tleft"));
+                    System.out.println("cleft column name:" + oneJSONJDObj.getString("cleft"));
+                    System.out.println("operator:" + oneJSONJDObj.getString("operator"));
+                    System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
+                    System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
+                    System.out.println("expression:" + oneJSONJDObj.getString("expression"));
+                    System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+                    // add DS                
+                    JoinDefinition aJoin = new JoinDefinition(
+                        oneJSONJDObj.getString("name"),
+                        oneJSONJDObj.getString("tleft"),
+                        oneJSONJDObj.getString("cleft"),
+                        oneJSONJDObj.getString("operator"),
+                        oneJSONJDObj.getString("tright"),
+                        oneJSONJDObj.getString("cright"),
+                        oneJSONJDObj.getString("expression"),
+                        oneJSONJDObj.getString("jointype")
+                    );
+                    testSession.addJoinMeta(aJoin);
+                }
+                System.out.println("------------------------------");
+            }
             
             // parsing hardhints
-            JSONArray jsonHHsArray = root.getJSONArray("hardhints");
-            int HHsArraySize = jsonHHsArray.length();
+            if (root.isNull("hardhints") == false) {
+                JSONArray jsonHHsArray = root.getJSONArray("hardhints");
+                int HHsArraySize = jsonHHsArray.length();
 
-            for (int i = 0; i < HHsArraySize; i++) {
-                String hhName = jsonHHsArray.getString(i);
-                System.out.println("json hh object " + i + ": " + hhName);
-                // HH
-                testSession.addHardhintMeta(hhName);
+                for (int i = 0; i < HHsArraySize; i++) {
+                    String hhName = jsonHHsArray.getString(i);
+                    System.out.println("json hh object " + i + ": " + hhName);
+                    // HH
+                    testSession.addHardhintMeta(hhName);
+                }
+
+                System.out.println("------------------------------");
             }
-            
-            System.out.println("------------------------------");
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
         }
