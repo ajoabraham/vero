@@ -3,25 +3,34 @@
  */
 package com.vero.ui.wizard.datasource;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_CONTENT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_INSTRUCTION_TEXT;
+import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_LIST_SCROLL_PANE;
+import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
+import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.constants.TableType;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
-
-import static com.vero.ui.constants.CSSConstants.*;
-import static com.vero.ui.constants.WizardPageIds.*;
 
 /**
  * @author Tai Hu
@@ -113,7 +122,12 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
                 && e.getButton() == MouseButton.PRIMARY
                 && e.getClickCount() == 1) {
             handleMouseClickedEvent((ListedTableLabelPane) e.getSource());
-        }        
+        }  
+        else if (e.getEventType() == MouseEvent.MOUSE_CLICKED
+                && e.getButton() == MouseButton.SECONDARY
+                && e.getClickCount() == 1) {
+            handleContextMenuEvent((ListedTableLabelPane) e.getSource());
+        }
         else if (!selectedTablePanes.contains(e.getSource())) {
             if (e.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 handleMouseEnteredEvent((ListedTableLabelPane) e.getSource());
@@ -150,5 +164,22 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
             source.setStyle(SELECTED_STYLE);
             selectedTablePanes.add(source);
         }
+    }
+    
+    private void handleContextMenuEvent(ListedTableLabelPane source) {
+        ContextMenu contextMenu = new ContextMenu();
+        
+        ToggleGroup toggleGroup = new ToggleGroup();
+        for (TableType tableType : TableType.values()) {
+            RadioMenuItem menuItem = new RadioMenuItem(tableType.getName(), 
+                    new ImageView(tableType.getImage()));
+            menuItem.setUserData(tableType);
+            menuItem.setSelected(source.getTableType() == tableType);
+            menuItem.setToggleGroup(toggleGroup);
+            menuItem.setOnAction(source);
+            contextMenu.getItems().add(menuItem);
+        }
+        
+        contextMenu.show(source, Side.BOTTOM, 0, 0);
     }
 }
