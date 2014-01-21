@@ -601,6 +601,9 @@
  * MenuBar                                                                     *
  *                                                                             *
  ******************************************************************************/
+#system-menu-bar {
+	-fx-border-color: -fx-button-hover-border-color;
+}
 
 /* Corresponding hex values for the color derivations used below are: *
  * derive(-fx-base,-30%); #929292                                     *

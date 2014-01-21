@@ -3,6 +3,8 @@
  */
 package com.vero.ui.menu;
 
+import static com.vero.ui.constants.CSSConstants.ID_SYSTEM_MENU_BAR;
+
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.PopupDialog;
 import com.vero.ui.common.UIManager;
@@ -31,6 +33,8 @@ public class SystemMenuBar extends MenuBar implements EventHandler<ActionEvent> 
     }
     
     private void buildUI() {
+        setId(ID_SYSTEM_MENU_BAR);
+        
 	fileMenu = new Menu("File");
 	newDatasourceMenuItem = new MenuItem("New Datasource", new ImageView(ImageList.IMAGE_DATASOURCE_OBJECT));
 	newDatasourceMenuItem.setOnAction(this);

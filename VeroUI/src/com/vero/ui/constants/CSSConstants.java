@@ -38,6 +38,7 @@ public interface CSSConstants {
      * ID for menu bar
      */
     public static final String CLASS_PARENT_MENU_BUTTON = "parent-menu-button";
+    public static final String ID_SYSTEM_MENU_BAR = "system-menu-bar";
     
     /**
      * ID for VERO tool bar
