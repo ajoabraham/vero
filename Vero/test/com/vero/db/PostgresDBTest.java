@@ -70,6 +70,12 @@ public class PostgresDBTest {
     }
     
     @Test
+    public void testInvalidTableTypesIgnored(){
+        Map<String, Table> d = db.getDBTables();
+        assertFalse("pk_orders should not be in the collection",d.containsKey("pk_orders"));
+    }
+    
+    @Test
     public void testExpectedColumnsArePresent() throws SQLException{
         Map<String, Table> d = db.getDBTables();
         String[] expectedColumns = {"ShipVia","ShipCity","ShipRegion","Freight",

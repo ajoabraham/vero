@@ -146,6 +146,17 @@ public abstract class AbstractDB implements Serializable {
           _catalog.clear();  
         }
         
+        // load list of valid tables. this list will
+        // be used to filter the tables from the columns processor below
+        ArrayList validTables = new ArrayList<String>();
+        ResultSet rst = 
+        connect().getMetaData().getTables(getOrderedArgs().get("database"), 
+                  getOrderedArgs().get("schema"), null, new String[]{"TABLE", "VIEW"});
+        while(rst.next()){
+            validTables.add(rst.getString("TABLE_NAME"));
+        }
+        
+        // now process all columns and tables in one go
         ResultSet rs = 
         connect().getMetaData().getColumns(getOrderedArgs().get("database"), 
                             getOrderedArgs().get("schema"), null, null);
@@ -155,6 +166,9 @@ public abstract class AbstractDB implements Serializable {
         
         while(rs.next()){
             tableName = rs.getString("TABLE_NAME");
+            // skip table and column if it isnt valid type
+            if(!validTables.contains(tableName))
+                continue;
             
             if(!tableName.equals(prevTableName)){
                 if(!prevTableName.isEmpty()){
