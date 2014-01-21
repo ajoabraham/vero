@@ -4,24 +4,20 @@
  */
 package com.vero.ui;
 
-import com.vero.ui.menu.SystemMenuBar;
-import com.vero.ui.menu.VeroMenuBar;
-import com.vero.ui.menu.VeroToolBar;
-import com.vero.ui.common.UIManager;
-
-import javafx.scene.control.MenuBar;
+import static com.vero.ui.constants.CSSConstants.ID_ROOT_PANE;
+import static com.vero.ui.constants.UIConstants.NAVIGATION_PANE_WIDTH;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import static com.vero.ui.constants.UIConstants.*;
-import static com.vero.ui.constants.CSSConstants.*;
+import javafx.scene.layout.StackPane;
 
+import com.vero.ui.common.UIManager;
+import com.vero.ui.menu.VeroMenuBar;
+import com.vero.ui.menu.VeroToolBar;
 import com.vero.ui.model.ReportData;
 import com.vero.ui.report.ReportTabManager;
-
-import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -41,10 +37,11 @@ public class VeroMainWindow extends BorderPane {
     
     private void buildUI() {
         setId(ID_ROOT_PANE);
-        
-        MenuBar systemMenuBar = new SystemMenuBar();
-        systemMenuBar.setUseSystemMenuBar(true);
-        setTop(systemMenuBar);
+  
+        // TH 01/21/2014, Revisit after alpha
+//        MenuBar systemMenuBar = new SystemMenuBar();
+//        systemMenuBar.setUseSystemMenuBar(true);
+//        setTop(systemMenuBar);
         setLeft(getLeftPane());
         setCenter(getCenterPane());
     }

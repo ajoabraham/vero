@@ -20,7 +20,7 @@ public class PopupDialog extends Stage {
     public PopupDialog(Stage owner) {
         initOwner(owner);
         initModality(Modality.APPLICATION_MODAL);
-        initStyle(StageStyle.UNDECORATED);
+        initStyle(StageStyle.UTILITY);
     }
     
     public void createScene(Pane rootPane, double width, double height) {

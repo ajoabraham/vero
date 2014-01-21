@@ -205,6 +205,31 @@
     -fx-background-color: -fx-main-background-color;
 }
 
+#add-datasource-button-pane {
+	-fx-alignment: center-left;
+	-fx-spacing: 15;
+}
+
+#add-datasource-button-pane .button {
+	-fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-background-image: url("images/icon_add_datasource.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+#add-datasource-button-pane .button:pressed {
+	-fx-background-color: derived(-fx-button-hover-color, 50%);
+    -fx-background-radius: 3; 
+}
+
+#add-datasource-button-pane .button:hover {
+	-fx-background-color: -fx-button-hover-color;
+    -fx-background-radius: 3;
+    -fx-background-insets: 0 -5 -5 0;
+}
+
 #object-tree-view {
     -fx-padding: 0;
     -fx-spacing: 0;

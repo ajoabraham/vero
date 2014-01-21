@@ -65,6 +65,8 @@ public interface CSSConstants {
     public static final String CLASS_COLUMN_OBJECT_PANE = "column-object-pane";
     public static final String CLASS_ATTRIBUTE_OBJECT_PANE = "attribute-object-pane";
     public static final String CLASS_METRIC_OBJECT_PANE = "metric-object-pane";
+    // HBox contains both "DATASOURCES" label and add datasource button
+    public static final String ID_ADD_DATASOURCE_BUTTON_PANE = "add-datasource-button-pane";
     
     /**
      * ID for drop zone pane

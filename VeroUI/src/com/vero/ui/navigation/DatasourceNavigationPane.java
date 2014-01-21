@@ -5,22 +5,39 @@
  */
 package com.vero.ui.navigation;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
+import static com.vero.ui.constants.CSSConstants.ID_ADD_DATASOURCE_BUTTON_PANE;
+import static com.vero.ui.constants.CSSConstants.ID_DATASOURCE_NAVIGATION_PANE;
+import static com.vero.ui.constants.CSSConstants.ID_OBJECTS_PANE;
+import static com.vero.ui.constants.CSSConstants.ID_OBJECT_SEARCH_TEXT_FIELD;
 import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
-import static com.vero.ui.constants.CSSConstants.*;
-import com.vero.ui.util.UIUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import com.vero.ui.common.ConfirmationDialogs;
+import com.vero.ui.common.PopupDialog;
+import com.vero.ui.common.UIManager;
+import com.vero.ui.util.UIUtils;
+import com.vero.ui.wizard.WizardException;
+import com.vero.ui.wizard.WizardFactory;
+import com.vero.ui.wizard.datasource.DatasourceWizardData;
 
 /**
  *
  * @author Tai Hu
  */
-public class DatasourceNavigationPane extends BorderPane {
-
+public class DatasourceNavigationPane extends BorderPane implements EventHandler<ActionEvent> {
+    private Button addDatasourceButton = null;
+    
     public DatasourceNavigationPane() {
         buildUI();
     }
@@ -28,9 +45,17 @@ public class DatasourceNavigationPane extends BorderPane {
     private void buildUI() {
         setId(ID_DATASOURCE_NAVIGATION_PANE);
 
+        HBox addDatasourceButtonPane = new HBox();
+        addDatasourceButtonPane.setId(ID_ADD_DATASOURCE_BUTTON_PANE);
+                
         Label datasourcesLabel = new Label("DATASOURCES");
         datasourcesLabel.getStyleClass().add(CLASS_SECTION_TITLE);
-        setTop(datasourcesLabel);
+        addDatasourceButton = new Button();
+        addDatasourceButton.setOnAction(this);
+        addDatasourceButton.setTooltip(new Tooltip("New Datasource"));
+        addDatasourceButtonPane.getChildren().addAll(datasourcesLabel, addDatasourceButton);
+        
+        setTop(addDatasourceButtonPane);
 
         VBox objectsPane = new VBox();
         objectsPane.setFillWidth(true);
@@ -50,5 +75,24 @@ public class DatasourceNavigationPane extends BorderPane {
         objectsPane.getChildren().add(treeView);
 
         setCenter(objectsPane);
+    }
+
+    @Override
+    public void handle(ActionEvent e) {
+	if (e.getSource() == addDatasourceButton) {
+	    handleNewDatasourceAction();
+	}
+    }
+    
+    private void handleNewDatasourceAction() {
+	try {
+	    DatasourceWizardData wizardData = new DatasourceWizardData();
+	    PopupDialog popupDialog = WizardFactory.getInstance().createDatasourceWizard(wizardData);
+	    popupDialog.show();
+	}
+	catch (WizardException e) {
+	    ConfirmationDialogs.createErrorConfirmation(UIManager.getInstance().getPrimaryStage(), e.getMessage())
+		    .show();
+	}
     }
 }
