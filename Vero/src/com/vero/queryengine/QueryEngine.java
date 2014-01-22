@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import org.jgrapht.alg.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
@@ -211,7 +210,7 @@ public class QueryEngine {
         matchExpression(joinGraph, euSet);
 
         // dump graph
-        System.out.println("#### After mtaching expression...");
+        System.out.println("#### After matching expression...");
         dumpGraph(joinGraph);
         
         // generate SQL

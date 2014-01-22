@@ -41,8 +41,11 @@ public class Stage {
     
     public Stage() {}
     
-    public void preprocess(Session inSession) {                
-        // associate table with hardhint
+    public void preprocess(Session inSession) {
+        // retrieve all balck hardhints
+        ArrayList<String> blackHardhints = new ArrayList(inSession.getBlackHardhints());
+        
+        // associate table with hardhints
         hardhints.addAll(inSession.getWhiteHardhints());
         for (int i = 0; i < hardhints.size(); i++) {
             String tableName = hardhints.get(i);
@@ -85,14 +88,19 @@ public class Stage {
             }
         }
         
-        // associate table with attribute        
+        // associate table with attributes
         attributes.addAll(inSession.getAttributes());
         for (Attribute curAttr : attributes) {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
             aPU.setContent(curAttr);
             processingUnits.put(aPU.getUUID(), aPU);
-             
+            
+            // filter out black hardhint tables
+            for (String curTable : blackHardhints) {
+                curAttr.removeTable(curTable);
+            }            
+            
             ArrayList<Table> listTables = curAttr.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
@@ -103,13 +111,18 @@ public class Stage {
             }
         }
         
-        // associate table with metric
+        // associate table with metrics
         metrics.addAll(inSession.getMetrics());
         for (Metric curMet : metrics) {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
             aPU.setContent(curMet);
             processingUnits.put(aPU.getUUID(), aPU); 
+            
+            // filter out black hardhint tables
+            for (String curTable : blackHardhints) {
+                curMet.removeTable(curTable);
+            }
             
             ArrayList<Table> listTables = curMet.retrieveTables();
             if (listTables.size() > 0) {

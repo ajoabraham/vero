@@ -39,6 +39,15 @@ public class Expression implements Comparable<Expression> {
         return formula;
     }
     
+    public void removeTable(String inTable) {
+        for (int i = 0; i < columns.size(); i++) {
+            Column curCol = columns.get(i);
+            if (inTable.equals(curCol.getTable().getPhysicalName())) {
+                columns.remove(i);
+            }
+        }
+    }
+    
     public ArrayList gatherTables() {
         ArrayList<Table> aTabList = new ArrayList();
         

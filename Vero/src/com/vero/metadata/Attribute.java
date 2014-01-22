@@ -103,6 +103,18 @@ public class Attribute implements Filterable {
         return null;
     }
     
+    public void removeTable(String inTable) {
+        ArrayList<Expression> aList = this.getExpressions();
+        
+        if (aList.size() > 0) {
+            Iterator<Expression> iter = aList.iterator();
+
+            while (iter.hasNext()) {
+                iter.next().removeTable(inTable);
+            }
+        }        
+    }    
+    
     public ArrayList<Table> retrieveTables() {        
         ArrayList<Expression> aList = this.getExpressions();
         
