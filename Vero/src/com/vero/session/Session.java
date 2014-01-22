@@ -17,7 +17,8 @@ public class Session {
     private final ArrayList<Attribute> attributes = new ArrayList();
     private final ArrayList<Metric> metrics = new ArrayList();
     private final ArrayList<JoinDefinition> joins = new ArrayList();
-    private final ArrayList<String> hardhints = new ArrayList();
+    private final ArrayList<String> whiteHardhints = new ArrayList();
+    private final ArrayList<String> blackHardhints = new ArrayList();
     
     public Session() {}
     
@@ -46,8 +47,12 @@ public class Session {
         joins.add(inJoin);
     }
 
-    public void addHardhintMeta(String inHardhint) {
-        hardhints.add(inHardhint);
+    public void addWhiteHardhintMeta(String inHardhint) {
+        whiteHardhints.add(inHardhint);
+    }
+
+    public void addBlackHardhintMeta(String inHardhint) {
+        blackHardhints.add(inHardhint);
     }
     
     public HashMap getAllDataSources() {
@@ -74,8 +79,12 @@ public class Session {
         return joins;
     }
     
-    public ArrayList getHardhints() {
-        return hardhints;
+    public ArrayList getWhiteHardhints() {
+        return whiteHardhints;
+    }
+
+    public ArrayList getBlackHardhints() {
+        return blackHardhints;
     }
     
     public void dump() {

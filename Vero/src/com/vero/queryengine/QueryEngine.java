@@ -565,7 +565,7 @@ public class QueryEngine {
         ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
         for (ProcessingUnit curPU : sortedVertex) {            
             if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
-                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getExpression());
+                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getFormula());
 
                 if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
                 if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
@@ -603,7 +603,7 @@ public class QueryEngine {
         for (ProcessingUnit pu : graphVertexSet) {
             System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
             if (pu.getUsedExp() != null) {
-                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression());
+                System.out.println("    UsedExp = " + pu.getUsedExp().getFormula());
             }
             
             Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);

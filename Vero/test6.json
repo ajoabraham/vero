@@ -1,5 +1,5 @@
-{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query. However a joindef is removed on purpose to demostrate a cross join between Departments and Students tables.",
-    "expectedOutput":"SELECT ALL T0.name, T1.name, T2.count(distinct course_id) FROM Departments AS T1 INNER JOIN Students AS T3 ON T1.id = T3.dept_id INNER JOIN LessonsFact AS T2 ON T2.prof_id = T4.id INNER JOIN Departments AS T0 ON T0.id = T4.dept_id CROSS JOIN Students AS T3 GROUP BY T0.name, T1.name",
+{   "scenario": "One attribute with 2 expressions. Should pick the second expression because the row count is less.",
+    "expectedOutput":"SELECT ALL T0.name-2",
     "datasources": [
         {
             "name": "Teradata - Prod",
@@ -126,72 +126,28 @@
     ],
     "attributes": [
         {
-            "name": "Professor Department Name",
+            "name": "Attr-1",
             "expressions": [
                 {
-                    "definition": "name",
+                    "definition": "a1-name-1",
+                    "columns": [
+                        ["name", "Students"]
+                    ]
+                },
+                {
+                    "definition": "a1-name-2",
                     "columns": [
                         ["name", "Departments"]
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Student Department Name",
-            "expressions": [
+                },
                 {
-                    "definition": "name",
+                    "definition": "a1-name-3",
                     "columns": [
-                        ["name", "Departments"]
+                        ["name", "Professors"]
                     ]
                 }
             ]
         }
     ],
-    "metrics": [
-        {
-            "name": "# of Lessons",
-            "expressions": [
-                {
-                    "definition": "count(distinct course_id)",
-                    "columns": [
-                        ["course_id", "LessonsFact"]
-                    ]
-                }
-            ]
-        }
-    ],
-    "joindefs": [
-        {
-            "name": "on equal professor id",
-            "tleft": "LessonsFact",
-            "cleft": "prof_id",
-            "operator": "=",
-            "tright": "Professors",
-            "cright": "id",
-            "expression": "tleft.prof_id=tright.id",
-            "jointype": "inner"
-        },
-        {
-            "name": "on equal department id",
-            "tleft": "Departments",
-            "cleft": "id",
-            "operator": "=",
-            "tright": "Students",
-            "cright": "dept_id",
-            "expression": "tleft.id=tright.dept_id",
-            "jointype": "inner"
-        },
-        {
-            "name": "on equal professor/department id",
-            "tleft": "Departments",
-            "cleft": "id",
-            "operator": "=",           
-            "tright": "Professors",
-            "cright": "dept_id",
-            "expression": "tleft.id=tright.dept_id",
-            "jointype": "inner"
-        }
-    ],
-    "hardhints_white":["Students","Professors"]
+    "hardhints_black":["Students", "Professors"]
 }

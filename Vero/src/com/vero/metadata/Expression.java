@@ -5,13 +5,13 @@ import java.util.UUID;
 
 public class Expression implements Comparable<Expression> {
     private final UUID uuid;
-    private final String expression;
+    private final String formula;
     private final ArrayList<Column> columns;
     private Column smallestColumn = null;
 
-    public Expression(String inExp) {
+    public Expression(String formula) {
         uuid = UUID.randomUUID();
-        expression = inExp;
+        this.formula = formula;
         columns = new ArrayList();
         smallestColumn = null;
     }
@@ -35,8 +35,8 @@ public class Expression implements Comparable<Expression> {
         return smallestColumn;
     }
     
-    public String getExpression() {
-        return expression;
+    public String getFormula() {
+        return formula;
     }
     
     public ArrayList gatherTables() {

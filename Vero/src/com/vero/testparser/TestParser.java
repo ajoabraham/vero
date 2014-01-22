@@ -293,20 +293,35 @@ public class TestParser {
                 System.out.println("------------------------------");
             }
             
-            // parsing hardhints
-            if (root.isNull("hardhints") == false) {
-                JSONArray jsonHHsArray = root.getJSONArray("hardhints");
+            // parsing hardhints_white
+            if (root.isNull("hardhints_white") == false) {
+                JSONArray jsonHHsArray = root.getJSONArray("hardhints_white");
                 int HHsArraySize = jsonHHsArray.length();
 
                 for (int i = 0; i < HHsArraySize; i++) {
                     String hhName = jsonHHsArray.getString(i);
-                    System.out.println("json hh object " + i + ": " + hhName);
+                    System.out.println("json whh object " + i + ": " + hhName);
                     // HH
-                    testSession.addHardhintMeta(hhName);
+                    testSession.addWhiteHardhintMeta(hhName);
                 }
 
                 System.out.println("------------------------------");
             }
+            
+            // parsing hardhints_black
+            if (root.isNull("hardhints_black") == false) {
+                JSONArray jsonHHsArray = root.getJSONArray("hardhints_black");
+                int HHsArraySize = jsonHHsArray.length();
+
+                for (int i = 0; i < HHsArraySize; i++) {
+                    String hhName = jsonHHsArray.getString(i);
+                    System.out.println("json bhh object " + i + ": " + hhName);
+                    // HH
+                    testSession.addBlackHardhintMeta(hhName);
+                }
+
+                System.out.println("------------------------------");
+            }            
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
         }

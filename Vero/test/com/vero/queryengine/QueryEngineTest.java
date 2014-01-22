@@ -109,5 +109,24 @@ public class QueryEngineTest {
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
         assertEquals("test4", expectedSQL, resultSQL);
+    }
+    
+    @Test
+    public void testTest5() {
+        TestParser testParser = new TestParser("test5.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT ALL T0.name-2";
+        
+        String resultSQL = queryEngine.getResultSQL();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("test5", expectedSQL, resultSQL);
     }    
 }

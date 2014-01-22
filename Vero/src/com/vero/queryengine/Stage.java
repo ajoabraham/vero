@@ -43,7 +43,7 @@ public class Stage {
     
     public void preprocess(Session inSession) {                
         // associate table with hardhint
-        hardhints.addAll(inSession.getHardhints());
+        hardhints.addAll(inSession.getWhiteHardhints());
         for (int i = 0; i < hardhints.size(); i++) {
             String tableName = hardhints.get(i);
             Table curTable = inSession.getTable(tableName);

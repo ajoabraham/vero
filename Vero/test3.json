@@ -203,5 +203,5 @@
             "jointype": "inner"
         }
     ],
-    "hardhints":["Students","Professors"]
+    "hardhints_white":["Students","Professors"]
 }
