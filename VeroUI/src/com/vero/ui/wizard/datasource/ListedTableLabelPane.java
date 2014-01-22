@@ -26,12 +26,20 @@ import com.vero.ui.model.TableObjectData;
  * @author Tai Hu
  *
  */
-public class ListedTableLabelPane extends LabelPane implements EventHandler<ActionEvent> {    
+public class ListedTableLabelPane extends LabelPane implements EventHandler<ActionEvent> {  
+    private static final String HIGHLIGHTED_STYLE = "-fx-border-color: -fx-button-hover-border-dark-color;"
+            + "-fx-border-radius: 3;";
+    private static final String SELECTED_STYLE = "-fx-border-color: -fx-button-hover-border-dark-color;"
+            + "-fx-border-radius: 3;" + "-fx-border-size: 3";
+    
     private TableObjectData tableData = null;
     private ImageView tableTypeImageView = null;
+    private boolean isSelected = true;
+    private boolean showStats = false;
     
-    public ListedTableLabelPane(TableObjectData tableData) {
+    public ListedTableLabelPane(TableObjectData tableData, boolean showStats) {
         this.tableData = tableData;
+        this.showStats = showStats;
         buildUI();
     }
     
@@ -42,7 +50,7 @@ public class ListedTableLabelPane extends LabelPane implements EventHandler<Acti
         tableTypeImageView = new ImageView(tableData.getTableType().getImage());
         getChildren().add(tableTypeImageView);
 
-        Label label = new Label(tableData.getName());
+        Label label = new Label(tableData.getName() + (showStats ? " (" + tableData.getRowCount() + ")" : ""));
         HBox.setHgrow(label, Priority.ALWAYS);
         label.setMaxWidth(Double.MAX_VALUE);
         label.getStyleClass().add(CLASS_OBJECT_LABEL);
@@ -61,5 +69,22 @@ public class ListedTableLabelPane extends LabelPane implements EventHandler<Acti
             tableTypeImageView.setImage(selectedTableType.getImage());
             tableData.setTableType(selectedTableType);
         }
+    }
+    
+    public void enableHighlight(boolean enable) {
+	setStyle(enable ? HIGHLIGHTED_STYLE : null);
+    }
+    
+    public void setSelected(boolean isSelected) {
+	setStyle(isSelected ? SELECTED_STYLE : null);
+	this.isSelected = isSelected;
+    }
+    
+    public boolean isSelected() {
+	return isSelected;
+    }
+    
+    public TableObjectData getTableData() {
+	return tableData;
     }
 }

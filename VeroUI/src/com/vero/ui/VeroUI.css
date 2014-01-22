@@ -207,7 +207,7 @@
 
 #add-datasource-button-pane {
 	-fx-alignment: center-left;
-	-fx-spacing: 15;
+	-fx-spacing: 10;
 }
 
 #add-datasource-button-pane .button {

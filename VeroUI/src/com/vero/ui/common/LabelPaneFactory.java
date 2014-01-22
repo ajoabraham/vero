@@ -120,7 +120,7 @@ public final class LabelPaneFactory {
 	return new DBTypeLabelPane(dbType);
     }
     
-    public static ListedTableLabelPane createListedTableLabelPane(TableObjectData tableData) {
-        return new ListedTableLabelPane(tableData);
+    public static ListedTableLabelPane createListedTableLabelPane(TableObjectData tableData, boolean showStats) {
+        return new ListedTableLabelPane(tableData, showStats);
     }
 }

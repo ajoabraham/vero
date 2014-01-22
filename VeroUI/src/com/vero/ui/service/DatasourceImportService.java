@@ -17,4 +17,6 @@ public interface DatasourceImportService {
     public List<String> getDatabaseNames(DatasourceObjectData data) throws ServiceException;
     public boolean testConnection(DatasourceObjectData data) throws ServiceException;
     public List<TableObjectData> getDatabaseTables(DatasourceObjectData data) throws ServiceException;
+    // Get all tables primary keys, foreign keys, and row count information
+    public void updateTableStats(DatasourceObjectData datasourceObjectData, List<TableObjectData> tableObjectDataList) throws ServiceException;
 }

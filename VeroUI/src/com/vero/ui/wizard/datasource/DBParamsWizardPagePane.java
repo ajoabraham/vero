@@ -156,7 +156,7 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 	    // Load all tables
 	    DatasourceImportService service = ServiceManager.getDatasourceImportService();
 	    List<TableObjectData> databaseTables = service.getDatabaseTables(wizardData.getData());
-	    wizardData.getData().setTableObjectDataList(databaseTables);
+	    wizardData.setAllTableObjectData(databaseTables);
 	    
 	    return ID_SELECT_TABLES;
         }

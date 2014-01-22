@@ -215,4 +215,20 @@ public class Table {
         }
         return col;
     }
+
+    public Timestamp getLastStatCollectionDate() {
+        return lastStatCollectionDate;
+    }
+
+    public void setLastStatCollectionDate(Timestamp lastStatCollectionDate) {
+        this.lastStatCollectionDate = lastStatCollectionDate;
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+
+    public void setPhysicalName(String physicalName) {
+        this.physicalName = physicalName;
+    }
 }
