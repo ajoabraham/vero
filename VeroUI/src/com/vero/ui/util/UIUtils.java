@@ -87,12 +87,16 @@ public final class UIUtils {
 	}
     }
     
-    public static Button createDefaultButton(String text, Node graphic) {
+    public static Button createDefaultButton(String text, Node graphic, double width) {
 	Button button = (graphic == null ? new Button(text) : new Button(text, graphic));
-	button.setPrefSize(DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+	button.setPrefSize(width, DEFAULT_BUTTON_HEIGHT);
 	button.getStyleClass().add(CLASS_DEFAULT_BUTTON);
 	
 	return button;
+    }
+    
+    public static Button createDefaultButton(String text, Node graphic) {
+	return createDefaultButton(text, graphic, DEFAULT_BUTTON_WIDTH);
     }
     
     public static Button createDefaultButton(String text) {

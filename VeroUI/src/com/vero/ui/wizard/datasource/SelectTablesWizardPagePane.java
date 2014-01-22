@@ -66,6 +66,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 
 	for (TableObjectData tableData : wizardData.getAllTableObjectData()) {
 	    ListedTableLabelPane tableLabelPane = LabelPaneFactory.createListedTableLabelPane(tableData, false);
+	    
 	    tableLabelPane.setOnMouseClicked(this);
 	    tableLabelPane.setOnMouseEntered(this);
 	    tableLabelPane.setOnMouseExited(this);
@@ -73,6 +74,11 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 	    columnIndex = ++columnIndex == 2 ? 0 : columnIndex;
 
 	    allTablePanes.add(tableLabelPane);
+	    
+	    if (wizardData.getData().getTableObjectDataList().contains(tableData)) {
+		tableLabelPane.setSelected(true);
+		selectedTablePanes.add(tableLabelPane);
+	    }
 	}
     }
 
@@ -91,7 +97,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 	setCenter(scrollPane);
 
 	HBox buttonPane = UIUtils.createDefaultButtonPane();
-	selectAllButton = UIUtils.createDefaultButton("Select All");
+	selectAllButton = UIUtils.createDefaultButton("Select All", null, 100);
 	selectAllButton.setOnAction(new EventHandler<ActionEvent>() {
 	    @Override
             public void handle(ActionEvent event) {
@@ -103,7 +109,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 	        }
             }	    
 	});
-	deselectAllButton = UIUtils.createDefaultButton("Deselect All");
+	deselectAllButton = UIUtils.createDefaultButton("Deselect All", null, 100);
 	deselectAllButton.setOnAction(new EventHandler<ActionEvent>() {
 	    @Override
             public void handle(ActionEvent event) {
@@ -131,6 +137,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 	    throw new WizardException("Please select at least one table.");
 	}
 	
+	wizardData.getData().getTableObjectDataList().clear();
 	for (ListedTableLabelPane tablePane : selectedTablePanes) {
 	    wizardData.getData().addTableObjectData(tablePane.getTableData());
 	}

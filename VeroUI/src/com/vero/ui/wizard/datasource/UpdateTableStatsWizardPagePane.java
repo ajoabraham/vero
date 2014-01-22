@@ -84,6 +84,10 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
 
     @Override
     public String back() throws WizardException {
+	for (TableObjectData tableData : wizardData.getData().getTableObjectDataList()) {
+	    tableData.setTableType(TableType.UNKNOWN);
+	}
+	
         return ID_SELECT_TABLES;
     }
 
