@@ -60,7 +60,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
 
             for (Table table : allTables.values()) {
                 // Load primary and foreign key information
-                dbConnection.identifyKeys(table);
+//                dbConnection.identifyKeys(table);
                 TableObjectData tableObjectData = new TableObjectData();
                 DataUtils.copy(table, tableObjectData);
                 
@@ -105,6 +105,36 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
                 }
             }
         }
+    }
+    
+    @Override
+    public void updateTableStats(DatasourceObjectData datasourceObjectData, List<TableObjectData> tableObjectDataList) throws ServiceException {
+	AbstractDB dbConnection = null;
+	
+        try {
+            dbConnection = createDBConnection(datasourceObjectData);
+            
+            for (TableObjectData tableObjectData : tableObjectDataList) {
+        	Table table = new Table();
+        	DataUtils.copy(tableObjectData, table);
+                dbConnection.identifyKeys(table);
+                dbConnection.collectStats(table);
+                DataUtils.copy(table, tableObjectData);
+            }
+        }
+        catch (Exception e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        finally {
+            if (dbConnection != null) {
+                try {
+                    dbConnection.close();
+                }
+                catch (SQLException e) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }	
     }
     
     private AbstractDB createDBConnection(DatasourceObjectData data) {

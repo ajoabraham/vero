@@ -20,7 +20,7 @@ public final class DataUtils {
     
     public static void copy(Table source, TableObjectData target) {
 	target.setName(source.getObjectName());
-	target.setPhysicalName(target.getPhysicalName());
+	target.setPhysicalName(source.getPhysicalName());
 	target.setRowCount(source.getRowCount());
 	target.setTableType(TableType.valueOf(source.getTableLogicalType().toString()));	
 	
@@ -34,6 +34,25 @@ public final class DataUtils {
     public static void copy(Column source, ColumnObjectData target) {
 	target.setName(source.getObjectName());
 	target.setKeyType(DBKeyType.valueOf(source.getKeyType().toString()));
+	target.setDataType(source.getDataType());
+	target.setDataTypeSize(source.getDataTypeSize());
+    }
+    
+    public static void copy(TableObjectData source, Table target) {
+	target.setObjectName(source.getName());
+	target.setPhysicalName(source.getPhysicalName());
+	target.setRowCount(source.getRowCount());
+	
+	for (ColumnObjectData columnObjectData : source.getColumnObjectDataList()) {
+	    Column column = new Column();
+	    copy(columnObjectData, column);
+	    target.addColumn(column);
+	}
+    }
+    
+    public static void copy(ColumnObjectData source, Column target) {
+	target.setObjectName(source.getName());
+	target.setKeyType(Column.KeyTypes.valueOf(source.getKeyType().toString()));
 	target.setDataType(source.getDataType());
 	target.setDataTypeSize(source.getDataTypeSize());
     }

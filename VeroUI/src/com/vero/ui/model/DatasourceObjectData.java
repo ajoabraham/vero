@@ -9,6 +9,7 @@ package com.vero.ui.model;
 import static com.vero.ui.constants.DatasourceStatus.INACTIVE;
 import static com.vero.ui.constants.ObjectType.DATASOURCE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -36,7 +37,7 @@ public class DatasourceObjectData extends UIData {
     private StringProperty databaseName = new SimpleStringProperty();
     private DBType databaseType = null;
     
-    private List<TableObjectData> tableObjectDataList = null;
+    private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
     private DatasourceStatus status = INACTIVE;
     
     public DatasourceObjectData() {
@@ -67,6 +68,14 @@ public class DatasourceObjectData extends UIData {
 
     public void setTableObjectDataList(List<TableObjectData> tableObjectDataList) {
         this.tableObjectDataList = tableObjectDataList;
+    }
+    
+    public void addTableObjectData(TableObjectData tableObjectData) {
+	tableObjectDataList.add(tableObjectData);
+    }
+    
+    public boolean removeTableObjectData(TableObjectData tableObjectData) {
+	return tableObjectDataList.remove(tableObjectData);
     }
 
     public DatasourceStatus getStatus() {
