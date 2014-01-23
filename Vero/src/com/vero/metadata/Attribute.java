@@ -110,9 +110,13 @@ public class Attribute implements Filterable {
             Iterator<Expression> iter = aList.iterator();
 
             while (iter.hasNext()) {
-                iter.next().removeTable(inTable);
+                Expression curExp = iter.next();                
+                curExp.removeTable(inTable);
+                if (curExp.getColumns().isEmpty()) {
+                    iter.remove();
+                }
             }
-        }        
+        }
     }    
     
     public ArrayList<Table> retrieveTables() {        
