@@ -45,7 +45,7 @@ public class Stage {
         // retrieve all balck hardhints
         ArrayList<String> blackHardhints = new ArrayList(inSession.getBlackHardhints());
         
-        // associate table with hardhints
+        // associate table with white hardhints
         hardhints.addAll(inSession.getWhiteHardhints());
         for (int i = 0; i < hardhints.size(); i++) {
             String tableName = hardhints.get(i);
