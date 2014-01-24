@@ -1,5 +1,12 @@
 package com.vero.report;
 
-public class Report {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Report {
+    private final List<Block> blocks = new ArrayList();
+    
+    public Report() {
+        
+    }
 }

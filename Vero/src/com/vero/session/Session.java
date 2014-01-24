@@ -9,16 +9,17 @@ import com.vero.metadata.Table;
 import static com.vero.utility.Utility.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Session {
     public static int sessionObjID = 0;
     private final HashMap<String, DataSource> dataSources = new HashMap();
     private final HashMap<String, Table> tables = new HashMap(); // FIXME: restricted to single DS
-    private final ArrayList<Attribute> attributes = new ArrayList();
-    private final ArrayList<Metric> metrics = new ArrayList();
-    private final ArrayList<JoinDefinition> joins = new ArrayList();
-    private final ArrayList<String> whiteHardhints = new ArrayList();
-    private final ArrayList<String> blackHardhints = new ArrayList();
+    private final List<Attribute> attributes = new ArrayList();
+    private final List<Metric> metrics = new ArrayList();
+    private final List<JoinDefinition> joins = new ArrayList();
+    private final List<String> whiteHardhints = new ArrayList();
+    private final List<String> blackHardhints = new ArrayList();
     
     public Session() {}
     
@@ -67,23 +68,23 @@ public class Session {
         return tables.get(inName);
     }
     
-    public ArrayList<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
     
-    public ArrayList<Metric> getMetrics() {
+    public List<Metric> getMetrics() {
         return metrics;
     }
     
-    public ArrayList<JoinDefinition> getJoins() {
+    public List<JoinDefinition> getJoins() {
         return joins;
     }
     
-    public ArrayList getWhiteHardhints() {
+    public List getWhiteHardhints() {
         return whiteHardhints;
     }
 
-    public ArrayList getBlackHardhints() {
+    public List getBlackHardhints() {
         return blackHardhints;
     }
     

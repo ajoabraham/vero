@@ -47,7 +47,7 @@ public class QueryEngine {
     private class JDRemoveUnit {
         private JoinDefinition joinDef = null;
         private int usedCount = 0;
-        private final ArrayList<ProcessingUnit> linkedPU = new ArrayList();
+        private final List<ProcessingUnit> linkedPU = new ArrayList();
         
         public JDRemoveUnit() {}
         
@@ -71,7 +71,7 @@ public class QueryEngine {
             linkedPU.add(inPU);
         }
         
-        public ArrayList<ProcessingUnit> getLinkedPU() {
+        public List<ProcessingUnit> getLinkedPU() {
             return linkedPU;
         }        
     }
@@ -263,7 +263,7 @@ public class QueryEngine {
             for (int i = 0; i<sizeJDRemoveAL; i++) {
                 JDRemoveUnit curJDRemoveUnit = jdRemoveAL.get(i);
                 System.out.println("JoinDef: " + curJDRemoveUnit.getJoinDef().getName() + ", usedCount = " + curJDRemoveUnit.getUsedCount());
-                ArrayList<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();                
+                List<ProcessingUnit> curJDRemoveUnitLinkedPUAL = curJDRemoveUnit.getLinkedPU();                
                 int sizeCurJDRemoveUnitLinkedPUAL = curJDRemoveUnitLinkedPUAL.size();
                 
                 if (sizeCurJDRemoveUnitLinkedPUAL > 1) {
