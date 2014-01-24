@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_METRIC")
 @NamedQuery(name="SchemaMetric.findAll", query="SELECT s FROM SchemaMetric s")
-public class SchemaMetric implements Serializable {
+public class SchemaMetric extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

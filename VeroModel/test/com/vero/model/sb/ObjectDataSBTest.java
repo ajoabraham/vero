@@ -4,8 +4,8 @@
 package com.vero.model.sb;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.After;
@@ -46,7 +46,7 @@ public class ObjectDataSBTest {
     public void setUp() throws Exception {
         objectDataSB = new ObjectDataSBImpl();
         
-        SchemaDatasource datasource = new SchemaDatasource();
+        datasource = new SchemaDatasource();
         datasource.setId(UUID.randomUUID().toString());
         datasource.setName("Test");
         datasource.setHostAddress("db.vero.com");
@@ -55,13 +55,14 @@ public class ObjectDataSBTest {
         datasource.setPassword("password");
         datasource.setPort(3306);
         
+        datasource.setSchemaTables(new ArrayList<SchemaTable>());
+        
         for (int i = 0; i < 10; i++) {
             SchemaTable table = new SchemaTable();
             table.setId(UUID.randomUUID().toString());
             table.setName("Table" + i);
             table.setPhysicalName("PhysicalTable" + i);
             table.setRowCount(100);
-            table.setSchemaDatasource(datasource);
             table.setTableType(2);
             
             datasource.addSchemaTable(table);
@@ -79,9 +80,10 @@ public class ObjectDataSBTest {
 
     /**
      * Test method for {@link com.vero.model.sb.ObjectDataSB#persist(java.lang.Object)}.
+     * @throws PersistentException 
      */
     @Test
-    public void testPersist() {
+    public void testPersist() throws PersistentException {
         objectDataSB.persist(datasource);
         
         SchemaDatasource data = objectDataSB.find(SchemaDatasource.class, datasource.getId());
@@ -91,19 +93,17 @@ public class ObjectDataSBTest {
     }
 
     /**
-     * Test method for {@link com.vero.model.sb.ObjectDataSB#find(java.lang.Class, java.lang.String)}.
-     */
-    @Test
-    public void testFind() {
-        fail("Not yet implemented");
-    }
-
-    /**
      * Test method for {@link com.vero.model.sb.ObjectDataSB#update(java.lang.Object)}.
+     * @throws PersistentException 
      */
     @Test
-    public void testUpdate() {
-        fail("Not yet implemented");
+    public void testUpdate() throws PersistentException {
+	objectDataSB.persist(datasource);
+	
+	datasource.setPort(100);
+	SchemaDatasource data = objectDataSB.update(datasource);
+	
+	assertEquals(data.getId(), datasource.getId());
+	assertEquals(data.getPort(), 100);
     }
-
 }

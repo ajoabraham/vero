@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_TABLE")
 @NamedQuery(name="SchemaTable.findAll", query="SELECT s FROM SchemaTable s")
-public class SchemaTable implements Serializable {
+public class SchemaTable extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,7 +45,7 @@ public class SchemaTable implements Serializable {
 	private int tableType;
 
 	//bi-directional many-to-one association to SchemaColumn
-	@OneToMany(mappedBy="schemaTable")
+	@OneToMany(mappedBy="schemaTable", cascade={CascadeType.PERSIST})
 	private List<SchemaColumn> schemaColumns;
 
 	//bi-directional many-to-one association to SchemaDatasource

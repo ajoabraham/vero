@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_COLUMN")
 @NamedQuery(name="SchemaColumn.findAll", query="SELECT s FROM SchemaColumn s")
-public class SchemaColumn implements Serializable {
+public class SchemaColumn extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -38,14 +38,14 @@ public class SchemaColumn implements Serializable {
 	@Column(name="PRIMARY_KEY")
 	private Boolean primaryKey;
 
-	//bi-directional many-to-many association to SchemaExpression
-	@ManyToMany(mappedBy="schemaColumns")
-	private List<SchemaExpression> schemaExpressions;
-
 	//bi-directional many-to-one association to SchemaTable
 	@ManyToOne
 	@JoinColumn(name="TABLE_ID", nullable=false)
 	private SchemaTable schemaTable;
+
+	//bi-directional many-to-many association to SchemaExpression
+	@ManyToMany(mappedBy="schemaColumns")
+	private List<SchemaExpression> schemaExpressions;
 
 	public SchemaColumn() {
 	}
@@ -106,20 +106,20 @@ public class SchemaColumn implements Serializable {
 		this.primaryKey = primaryKey;
 	}
 
-	public List<SchemaExpression> getSchemaExpressions() {
-		return this.schemaExpressions;
-	}
-
-	public void setSchemaExpressions(List<SchemaExpression> schemaExpressions) {
-		this.schemaExpressions = schemaExpressions;
-	}
-
 	public SchemaTable getSchemaTable() {
 		return this.schemaTable;
 	}
 
 	public void setSchemaTable(SchemaTable schemaTable) {
 		this.schemaTable = schemaTable;
+	}
+
+	public List<SchemaExpression> getSchemaExpressions() {
+		return this.schemaExpressions;
+	}
+
+	public void setSchemaExpressions(List<SchemaExpression> schemaExpressions) {
+		this.schemaExpressions = schemaExpressions;
 	}
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_ATTRIBUTE")
 @NamedQuery(name="SchemaAttribute.findAll", query="SELECT s FROM SchemaAttribute s")
-public class SchemaAttribute implements Serializable {
+public class SchemaAttribute extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

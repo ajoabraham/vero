@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="SCHEMA_FINAL_BLOCK")
 @NamedQuery(name="SchemaFinalBlock.findAll", query="SELECT s FROM SchemaFinalBlock s")
-public class SchemaFinalBlock implements Serializable {
+public class SchemaFinalBlock extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

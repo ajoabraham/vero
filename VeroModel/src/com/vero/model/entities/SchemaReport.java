@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_REPORT")
 @NamedQuery(name="SchemaReport.findAll", query="SELECT s FROM SchemaReport s")
-public class SchemaReport implements Serializable {
+public class SchemaReport extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

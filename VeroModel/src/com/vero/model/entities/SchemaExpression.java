@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_EXPRESSION")
 @NamedQuery(name="SchemaExpression.findAll", query="SELECT s FROM SchemaExpression s")
-public class SchemaExpression implements Serializable {
+public class SchemaExpression extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -29,6 +29,11 @@ public class SchemaExpression implements Serializable {
 	@Column(name="LAST_MOD_TS")
 	private Timestamp lastModTs;
 
+	//bi-directional many-to-one association to SchemaAttribute
+	@ManyToOne
+	@JoinColumn(name="ATTRIBUTE_ID")
+	private SchemaAttribute schemaAttribute;
+
 	//bi-directional many-to-many association to SchemaColumn
 	@ManyToMany
 	@JoinTable(
@@ -41,11 +46,6 @@ public class SchemaExpression implements Serializable {
 			}
 		)
 	private List<SchemaColumn> schemaColumns;
-
-	//bi-directional many-to-one association to SchemaAttribute
-	@ManyToOne
-	@JoinColumn(name="ATTRIBUTE_ID")
-	private SchemaAttribute schemaAttribute;
 
 	//bi-directional many-to-one association to SchemaMetric
 	@ManyToOne
@@ -87,20 +87,20 @@ public class SchemaExpression implements Serializable {
 		this.lastModTs = lastModTs;
 	}
 
-	public List<SchemaColumn> getSchemaColumns() {
-		return this.schemaColumns;
-	}
-
-	public void setSchemaColumns(List<SchemaColumn> schemaColumns) {
-		this.schemaColumns = schemaColumns;
-	}
-
 	public SchemaAttribute getSchemaAttribute() {
 		return this.schemaAttribute;
 	}
 
 	public void setSchemaAttribute(SchemaAttribute schemaAttribute) {
 		this.schemaAttribute = schemaAttribute;
+	}
+
+	public List<SchemaColumn> getSchemaColumns() {
+		return this.schemaColumns;
+	}
+
+	public void setSchemaColumns(List<SchemaColumn> schemaColumns) {
+		this.schemaColumns = schemaColumns;
 	}
 
 	public SchemaMetric getSchemaMetric() {

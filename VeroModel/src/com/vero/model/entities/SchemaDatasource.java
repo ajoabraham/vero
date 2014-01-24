@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name="SCHEMA_DATASOURCE")
 @NamedQuery(name="SchemaDatasource.findAll", query="SELECT s FROM SchemaDatasource s")
-public class SchemaDatasource implements Serializable {
+public class SchemaDatasource extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -66,8 +65,8 @@ public class SchemaDatasource implements Serializable {
 	private List<SchemaReport> schemaReports;
 
 	//bi-directional many-to-one association to SchemaTable
-	@OneToMany(mappedBy="schemaDatasource")
-	private List<SchemaTable> schemaTables = new ArrayList<SchemaTable>();
+	@OneToMany(mappedBy="schemaDatasource", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<SchemaTable> schemaTables;
 
 	public SchemaDatasource() {
 	}

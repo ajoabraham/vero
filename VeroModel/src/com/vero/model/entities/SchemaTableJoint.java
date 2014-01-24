@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="SCHEMA_TABLE_JOINT")
 @NamedQuery(name="SchemaTableJoint.findAll", query="SELECT s FROM SchemaTableJoint s")
-public class SchemaTableJoint implements Serializable {
+public class SchemaTableJoint extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

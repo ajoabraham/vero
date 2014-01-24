@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="SCHEMA_COMMENT_BLOCK")
 @NamedQuery(name="SchemaCommentBlock.findAll", query="SELECT s FROM SchemaCommentBlock s")
-public class SchemaCommentBlock implements Serializable {
+public class SchemaCommentBlock extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
