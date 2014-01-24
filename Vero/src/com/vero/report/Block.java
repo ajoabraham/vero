@@ -30,7 +30,7 @@ public class Block {
     private final Map<UUID, UUID> metricMap = new HashMap();
     private final List<UUID> joindefList = new ArrayList();
     
-    private Block() {
+    public Block() {
 
     }
     
@@ -40,5 +40,13 @@ public class Block {
     
     public void setBlockType(BlockType inBlockType) {
         this.blockType = inBlockType;
+    }
+    
+    public String getSqlString() {
+        return this.sqlString;
+    }
+    
+    public void setSqlString(String inSqlString) {
+        this.sqlString = inSqlString;
     }
 }
