@@ -36,7 +36,7 @@ public class SchemaColumn implements Serializable {
 	private String name;
 
 	@Column(name="PRIMARY_KEY")
-	private Object primaryKey;
+	private Boolean primaryKey;
 
 	//bi-directional many-to-many association to SchemaExpression
 	@ManyToMany(mappedBy="schemaColumns")
@@ -98,11 +98,11 @@ public class SchemaColumn implements Serializable {
 		this.name = name;
 	}
 
-	public Object getPrimaryKey() {
+	public Boolean getPrimaryKey() {
 		return this.primaryKey;
 	}
 
-	public void setPrimaryKey(Object primaryKey) {
+	public void setPrimaryKey(Boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 

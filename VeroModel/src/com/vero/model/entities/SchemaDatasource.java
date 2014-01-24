@@ -1,8 +1,11 @@
 package com.vero.model.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -64,7 +67,7 @@ public class SchemaDatasource implements Serializable {
 
 	//bi-directional many-to-one association to SchemaTable
 	@OneToMany(mappedBy="schemaDatasource")
-	private List<SchemaTable> schemaTables;
+	private List<SchemaTable> schemaTables = new ArrayList<SchemaTable>();
 
 	public SchemaDatasource() {
 	}
