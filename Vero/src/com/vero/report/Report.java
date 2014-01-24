@@ -9,4 +9,12 @@ public class Report {
     public Report() {
         
     }
+    
+    public List<Block> getBlocks() {
+        return this.blocks;
+    }
+    
+    public void addBlock(Block inBlock) {
+        this.blocks.add(inBlock);
+    }
 }

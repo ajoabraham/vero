@@ -6,7 +6,6 @@
 
 package com.vero.report;
 
-import com.vero.metadata.JoinDefinition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,5 +32,13 @@ public class Block {
     
     private Block() {
 
+    }
+    
+    public BlockType getBlockType() {
+        return this.blockType;
+    }
+    
+    public void setBlockType(BlockType inBlockType) {
+        this.blockType = inBlockType;
     }
 }
