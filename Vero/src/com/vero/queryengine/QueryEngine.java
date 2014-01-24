@@ -11,6 +11,8 @@ import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
+import com.vero.report.Block;
+import com.vero.report.Report;
 import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,6 +93,7 @@ public class QueryEngine {
         stage.preprocess(inSession);
         EdgeUnit.resetID();
         ProcessingUnit.resetID();
+        Report aReport = null;
         
         // create all verteces (PUs)
         List<ProcessingUnit> allSortedPUs = new ArrayList(stage.getPUs().values());
@@ -213,8 +216,8 @@ public class QueryEngine {
         System.out.println("#### After matching expression...");
         dumpGraph(joinGraph);
         
-        // generate SQL
-        generateSQL(joinGraph, euSet);
+        // generate report
+        aReport = generateReport(joinGraph, euSet);
     }
     
     private void removeExtraEdges(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
@@ -354,13 +357,16 @@ public class QueryEngine {
         }
     }
     
-    private void generateSQL(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
         Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
         UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
         List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
         Collections.sort(sortedVertex);
         int attrCount = 0;
         int metCount = 0;
+        Report aReport = new Report();
+        Block aBlock = new Block();
+        aReport.addBlock(aBlock);
 
         System.out.println("Generate SQL...");
         
@@ -437,7 +443,7 @@ public class QueryEngine {
             System.out.println("Exception: " + e);
         }
         
-        if (vendor == null) return;
+        if (vendor == null) return null;
                 
         QueryFactory q = vendor.getQueryFactory();
         BooleanFactory b = vendor.getBooleanFactory();
@@ -592,7 +598,11 @@ public class QueryEngine {
         
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
         resultSQL = queryExp.toString();
-        System.out.println("Output sql is: " + resultSQL);        
+        System.out.println("Output sql is: " + resultSQL); 
+        aBlock.setSqlString(resultSQL);
+        aBlock.setBlockType(Block.BlockType.QUERY_BLOCK);
+        
+        return aReport;
     }
     
     private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
