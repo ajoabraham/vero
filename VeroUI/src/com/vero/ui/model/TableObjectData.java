@@ -94,6 +94,14 @@ public class TableObjectData extends UIData {
     public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
         this.columnObjectDataList = columnObjectDataList;
     }
+    
+    public void addColumnObjectData(ColumnObjectData data) {
+        columnObjectDataList.add(data);
+    }
+    
+    public boolean removeColumnObjectData(ColumnObjectData data) {
+        return columnObjectDataList.remove(data);
+    }
 
     public List<AttributeObjectData> getAttributeObjectDataList() {
         return attributeObjectDataList;

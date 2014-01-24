@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.vero.model.dao.MetadataDao;
+import com.vero.model.dao.MetadataDaoImpl;
+import com.vero.model.dao.PersistentException;
 import com.vero.model.entities.SchemaDatasource;
 import com.vero.model.entities.SchemaTable;
 
@@ -22,7 +25,7 @@ import com.vero.model.entities.SchemaTable;
  *
  */
 public class ObjectDataSBTest {
-    private ObjectDataSB objectDataSB = null;
+    private MetadataDao objectDataSB = null;
     private SchemaDatasource datasource = null;
     
     /**
@@ -44,7 +47,7 @@ public class ObjectDataSBTest {
      */
     @Before
     public void setUp() throws Exception {
-        objectDataSB = new ObjectDataSBImpl();
+        objectDataSB = new MetadataDaoImpl();
         
         datasource = new SchemaDatasource();
         datasource.setId(UUID.randomUUID().toString());
@@ -79,7 +82,7 @@ public class ObjectDataSBTest {
     }
 
     /**
-     * Test method for {@link com.vero.model.sb.ObjectDataSB#persist(java.lang.Object)}.
+     * Test method for {@link com.vero.model.dao.MetadataDao#persist(java.lang.Object)}.
      * @throws PersistentException 
      */
     @Test
@@ -93,7 +96,7 @@ public class ObjectDataSBTest {
     }
 
     /**
-     * Test method for {@link com.vero.model.sb.ObjectDataSB#update(java.lang.Object)}.
+     * Test method for {@link com.vero.model.dao.MetadataDao#update(java.lang.Object)}.
      * @throws PersistentException 
      */
     @Test

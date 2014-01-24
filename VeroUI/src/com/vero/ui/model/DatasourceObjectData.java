@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -35,6 +37,7 @@ public class DatasourceObjectData extends UIData {
     private StringProperty password = new SimpleStringProperty();
     private StringProperty hostname = new SimpleStringProperty();
     private StringProperty databaseName = new SimpleStringProperty();
+    private IntegerProperty port = new SimpleIntegerProperty();
     private DBType databaseType = null;
     
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
@@ -146,4 +149,16 @@ public class DatasourceObjectData extends UIData {
     public void setDatabaseType(DBType databaseType) {
         this.databaseType = databaseType;
     }   
+    
+    public int getPort() {
+        return port.get();
+    }
+    
+    public void setPort(int port) {
+        this.port.set(port);
+    }
+    
+    public IntegerProperty portProperty() {
+        return port;
+    }
 }

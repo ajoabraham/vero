@@ -18,6 +18,6 @@ public final class ServiceManager {
     }
     
     public static MetadataPersistentService getMetadataPersistentService() {
-        return null;
+        return new MetadataPersistentServiceImpl();
     }
 }

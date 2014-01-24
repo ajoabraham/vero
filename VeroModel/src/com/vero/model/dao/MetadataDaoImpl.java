@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.vero.model.sb;
+package com.vero.model.dao;
 
 import javax.persistence.EntityManager;
 
@@ -12,8 +12,8 @@ import com.vero.model.util.PersistentUtils;
  * @author Tai Hu
  *
  */
-public class ObjectDataSBImpl implements ObjectDataSB {    
-    public ObjectDataSBImpl() {    
+public class MetadataDaoImpl implements MetadataDao {    
+    public MetadataDaoImpl() {    
     }
 
     @Override

@@ -1,0 +1,3 @@
+1. In SchemaColumn, update PrimaryKey to Boolean type.
+2. In SchemaDatasource, set cascade type to PERSIST for SchemaTable
+3. In SchemaTable, set cascade type to PERSIST for SchemaColumn

@@ -1,4 +1,4 @@
-package com.vero.model.sb;
+package com.vero.model.dao;
 
 public class PersistentException extends Exception {
 

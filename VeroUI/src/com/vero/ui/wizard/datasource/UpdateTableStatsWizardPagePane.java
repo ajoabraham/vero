@@ -93,6 +93,7 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
 
     @Override
     public void finish() throws WizardException {        
+        
     }
 
     @Override
