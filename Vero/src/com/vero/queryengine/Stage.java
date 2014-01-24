@@ -14,6 +14,7 @@ import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,16 +28,16 @@ public class Stage {
         private final HashMap<String, Attribute> attrHT = new HashMap();
         private final HashMap<String, Metric> metricHT = new HashMap();
         private final HashMap<String, JoinDefinition> joindefHT = new HashMap();
-        private final ArrayList<Table> hardhintsAL = new ArrayList();
+        private final List<Table> hardhintsAL = new ArrayList();
                         
         public ReferenceUnit() {}
     }
         
     private final HashMap<String, ReferenceUnit> table2ReferenceUnitHT = new HashMap();
-    private final ArrayList<Attribute> attributes = new ArrayList();
-    private final ArrayList<Metric> metrics = new ArrayList();
-    private final ArrayList<String> hardhints = new ArrayList();
-    private final ArrayList<JoinDefinition> joindefs = new ArrayList();
+    private final List<Attribute> attributes = new ArrayList();
+    private final List<Metric> metrics = new ArrayList();
+    private final List<String> hardhints = new ArrayList();
+    private final List<JoinDefinition> joindefs = new ArrayList();
     private final HashMap<UUID, ProcessingUnit> processingUnits = new HashMap();
     
     public Stage() {}
@@ -194,7 +195,7 @@ public class Stage {
         }
     }
 
-    public ArrayList<Table> getHardhintALByTable(String inTable) {
+    public List<Table> getHardhintALByTable(String inTable) {
         if (table2ReferenceUnitHT.containsKey(inTable)) {
             return table2ReferenceUnitHT.get(inTable).hardhintsAL;
         } else {
@@ -210,11 +211,11 @@ public class Stage {
         }
     }
     
-    public ArrayList<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
     
-    public ArrayList<Metric> getMetrics() {
+    public List<Metric> getMetrics() {
         return metrics;
     }
     
