@@ -18,10 +18,6 @@ import java.util.List;
 public class SchemaDatasource extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(unique=true, nullable=false, length=36)
-	private String id;
-
 	@Column(name="AUTH_MODE", length=100)
 	private String authMode;
 
@@ -65,18 +61,10 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 	private List<SchemaReport> schemaReports;
 
 	//bi-directional many-to-one association to SchemaTable
-	@OneToMany(mappedBy="schemaDatasource", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToMany(mappedBy="schemaDatasource", cascade={CascadeType.PERSIST})
 	private List<SchemaTable> schemaTables;
 
 	public SchemaDatasource() {
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getAuthMode() {

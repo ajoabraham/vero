@@ -50,7 +50,7 @@ public class ObjectDataSBTest {
         objectDataSB = new MetadataDaoImpl();
         
         datasource = new SchemaDatasource();
-        datasource.setId(UUID.randomUUID().toString());
+//        datasource.setId(UUID.randomUUID().toString());
         datasource.setName("Test");
         datasource.setHostAddress("db.vero.com");
         datasource.setDatabaseName("verometadata");
@@ -62,8 +62,8 @@ public class ObjectDataSBTest {
         
         for (int i = 0; i < 10; i++) {
             SchemaTable table = new SchemaTable();
-            table.setId(UUID.randomUUID().toString());
-            table.setName("Table" + i);
+//            table.setId(UUID.randomUUID().toString());
+            table.setName("Table" + UUID.randomUUID().toString());
             table.setPhysicalName("PhysicalTable" + i);
             table.setRowCount(100);
             table.setTableType(2);
@@ -77,7 +77,6 @@ public class ObjectDataSBTest {
      */
     @After
     public void tearDown() throws Exception {
-        objectDataSB.remove(datasource);
         objectDataSB = null;
     }
 

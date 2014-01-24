@@ -15,6 +15,7 @@
 		<class>com.vero.model.entities.SchemaReportBlock</class>
 		<class>com.vero.model.entities.SchemaTable</class>
 		<class>com.vero.model.entities.SchemaTableJoint</class>
+		<class>com.vero.model.entities.SchemaData</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />

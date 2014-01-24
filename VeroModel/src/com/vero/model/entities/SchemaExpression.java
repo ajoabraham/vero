@@ -16,10 +16,6 @@ import java.util.List;
 public class SchemaExpression extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(unique=true, nullable=false, length=36)
-	private String id;
-
 	@Column(name="CREATION_TS")
 	private Timestamp creationTs;
 
@@ -53,14 +49,6 @@ public class SchemaExpression extends SchemaData implements Serializable {
 	private SchemaMetric schemaMetric;
 
 	public SchemaExpression() {
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public Timestamp getCreationTs() {

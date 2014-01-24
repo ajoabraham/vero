@@ -15,10 +15,6 @@ import java.sql.Timestamp;
 public class SchemaCommentBlock extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(unique=true, nullable=false, length=36)
-	private String id;
-
 	@Column(length=1)
 	private String comment;
 
@@ -37,14 +33,6 @@ public class SchemaCommentBlock extends SchemaData implements Serializable {
 	private SchemaReport schemaReport;
 
 	public SchemaCommentBlock() {
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getComment() {

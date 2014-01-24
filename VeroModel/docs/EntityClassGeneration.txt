@@ -1,3 +1,5 @@
 1. In SchemaColumn, update PrimaryKey to Boolean type.
 2. In SchemaDatasource, set cascade type to PERSIST for SchemaTable
 3. In SchemaTable, set cascade type to PERSIST for SchemaColumn
+4. Put SchemaData class as superclass for all entity classes.
+5. In the last screen of entity generator wizard, deselect id field from all entity classes.
