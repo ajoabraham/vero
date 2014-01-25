@@ -1,12 +1,13 @@
 /**
  * 
  */
-package com.vero.model.sb;
+package com.vero.model.dao;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,8 +25,8 @@ import com.vero.model.entities.SchemaTable;
  * @author Tai Hu
  *
  */
-public class ObjectDataSBTest {
-    private MetadataDao objectDataSB = null;
+public class ObjectDataDaoTest {
+    private MetadataDao objectDataDao = null;
     private SchemaDatasource datasource = null;
     
     /**
@@ -47,11 +48,11 @@ public class ObjectDataSBTest {
      */
     @Before
     public void setUp() throws Exception {
-        objectDataSB = new MetadataDaoImpl();
+        objectDataDao = new MetadataDaoImpl();
         
         datasource = new SchemaDatasource();
 //        datasource.setId(UUID.randomUUID().toString());
-        datasource.setName("Test");
+        datasource.setName("Test" + UUID.randomUUID().toString());
         datasource.setHostAddress("db.vero.com");
         datasource.setDatabaseName("verometadata");
         datasource.setUserName("dbuser");
@@ -77,7 +78,7 @@ public class ObjectDataSBTest {
      */
     @After
     public void tearDown() throws Exception {
-        objectDataSB = null;
+        objectDataDao = null;
     }
 
     /**
@@ -85,10 +86,10 @@ public class ObjectDataSBTest {
      * @throws PersistentException 
      */
     @Test
-    public void testPersist() throws PersistentException {
-        objectDataSB.persist(datasource);
+    public void testPersist() throws PersistentException {        
+        objectDataDao.persist(datasource);
         
-        SchemaDatasource data = objectDataSB.find(SchemaDatasource.class, datasource.getId());
+        SchemaDatasource data = objectDataDao.find(SchemaDatasource.class, datasource.getId());
         
         assertEquals(data.getId(), datasource.getId());
         assertEquals(data.getSchemaTables().size(), 10);
@@ -99,13 +100,20 @@ public class ObjectDataSBTest {
      * @throws PersistentException 
      */
     @Test
-    public void testUpdate() throws PersistentException {
-	objectDataSB.persist(datasource);
+    public void testUpdate() throws PersistentException {        
+	objectDataDao.persist(datasource);
 	
 	datasource.setPort(100);
-	SchemaDatasource data = objectDataSB.update(datasource);
+	SchemaDatasource data = objectDataDao.update(datasource);
 	
 	assertEquals(data.getId(), datasource.getId());
 	assertEquals(data.getPort(), 100);
+    }
+    
+    @Test
+    public void testIsUniqueName() throws PersistentException {
+        boolean isUnique = objectDataDao.isUniqueDatasourceName(UUID.randomUUID().toString());
+        
+        assertTrue(isUnique);
     }
 }

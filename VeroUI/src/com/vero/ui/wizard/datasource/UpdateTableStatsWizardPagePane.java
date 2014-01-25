@@ -8,6 +8,10 @@ import static com.vero.ui.constants.CSSConstants.CLASS_INSTRUCTION_TEXT;
 import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_LIST_SCROLL_PANE;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
 import static com.vero.ui.constants.WizardPageIds.ID_UPDATE_TABLE_STATS;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -22,9 +26,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
+import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.TableType;
 import com.vero.ui.model.TableObjectData;
+import com.vero.ui.service.MetadataPersistentService;
+import com.vero.ui.service.ServiceException;
+import com.vero.ui.service.ServiceManager;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
 
@@ -33,6 +41,8 @@ import com.vero.ui.wizard.WizardPagePane;
  *
  */
 public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWizardData> implements EventHandler<MouseEvent> {    
+    private static final Logger logger = Logger.getLogger(UpdateTableStatsWizardPagePane.class.getName());
+    
     private GridPane contentPane = null;
             
     public UpdateTableStatsWizardPagePane(DatasourceWizardData wizardData) {
@@ -93,7 +103,15 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
 
     @Override
     public void finish() throws WizardException {        
-        
+        try {
+            MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
+            service.persistDatasource(wizardData.getData());
+            ConfirmationDialogs.createInfoConfirmation(null, "Successfully imported datasource.").show();
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new WizardException(e.getMessage());
+        }
     }
 
     @Override

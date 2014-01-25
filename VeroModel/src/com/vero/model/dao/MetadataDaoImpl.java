@@ -103,4 +103,25 @@ public class MetadataDaoImpl implements MetadataDao {
             }
         }
     }
+
+    @Override
+    public boolean isUniqueDatasourceName(String name) throws PersistentException {
+        EntityManager em = null;
+        
+        try {
+            em = PersistentUtils.createEntityManager();
+            
+            return (Long)em.createNamedQuery("SchemaDatasource.isUniqueName")
+                           .setParameter("name", name)
+                           .getSingleResult() == 0;
+        }
+        catch (Exception e) {
+            throw new PersistentException(e);
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

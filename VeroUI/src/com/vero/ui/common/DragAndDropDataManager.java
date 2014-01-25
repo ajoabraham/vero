@@ -6,10 +6,11 @@
 
 package com.vero.ui.common;
 
-import com.vero.ui.model.UIData;
-import com.vero.ui.util.CommonUtils;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import com.vero.ui.model.UIData;
 
 /**
  *
@@ -33,7 +34,7 @@ public final class DragAndDropDataManager {
     }
     
     public String putData(UIData data) {
-        String id = CommonUtils.generateId();
+        String id = UUID.randomUUID().toString();
         uiDataMap.put(id, data);
         return id;
     }

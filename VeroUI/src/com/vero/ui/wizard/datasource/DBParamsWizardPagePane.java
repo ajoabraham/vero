@@ -10,6 +10,7 @@ import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_TABLES;
 import static com.vero.ui.constants.DBType.*;
+import static com.vero.ui.constants.ObjectType.*;
 
 import java.util.List;
 import java.util.Set;
@@ -150,6 +151,10 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 	
 	if (!violations.isEmpty()) {
 	    throw new WizardException(violations.iterator().next().getMessage());
+	}
+	
+	if (!ValidationUtils.isUniqueName(DATASOURCE, wizardData.getData().getName())) {
+	    throw new WizardException("Datasource name is not unique.");
 	}
 		
 	try {

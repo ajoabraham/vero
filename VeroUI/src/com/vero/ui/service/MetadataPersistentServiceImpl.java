@@ -41,13 +41,20 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.vero.ui.service.MetadataPersistentService#findAllDatasources()
-     */
     @Override
     public List<DatasourceObjectData> findAllDatasources() throws ServiceException {
-        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public boolean isUniqueDatasourceName(String name) throws ServiceException { 
+        try {
+            return new MetadataDaoImpl().isUniqueDatasourceName(name);
+        }
+        catch (PersistentException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new ServiceException(e);
+        }
     }
 
 }
