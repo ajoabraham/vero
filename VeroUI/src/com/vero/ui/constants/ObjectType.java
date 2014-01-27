@@ -18,6 +18,12 @@ import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_OBJECT_PANE;
  * @author Tai Hu
  */
 public enum ObjectType {  
+    PROJECT {
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
+    },
     DATASOURCE {
         @Override
         public String getStyleClass() {
@@ -58,14 +64,6 @@ public enum ObjectType {
         @Override
         public String getStyleClass() {
             return CLASS_TABLE_JOIN_OBJECT_PANE;
-        }
-    },
-    // This is a special type used to represent tree root
-    // which is not displayed in UI.
-    ROOT {
-        @Override
-        public String getStyleClass() {
-            return null;
         }
     },
     REPORT {

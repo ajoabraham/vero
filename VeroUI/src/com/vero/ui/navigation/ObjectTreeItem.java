@@ -16,7 +16,7 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
-import com.vero.ui.model.RootObjectData;
+import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import java.util.ArrayList;
@@ -50,8 +50,8 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
             isFirstTimeChildren = false;
                         
             switch(objectData.getType()) {
-                case ROOT:
-                    List<DatasourceObjectData> datasourceObjectDataList = ((RootObjectData) objectData).getDatasourceObjectDataList();
+                case PROJECT:
+                    List<DatasourceObjectData> datasourceObjectDataList = ((ProjectObjectData) objectData).getDatasourceObjectDataList();
                     List<TreeItem<ObjectPane>> datasourceObjectTreeItemList = new ArrayList<>();
                     
                     for (DatasourceObjectData datasourceObjectData : datasourceObjectDataList) {
