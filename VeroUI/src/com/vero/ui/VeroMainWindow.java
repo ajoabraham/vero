@@ -16,7 +16,7 @@ import javafx.scene.layout.StackPane;
 import com.vero.ui.common.UIManager;
 import com.vero.ui.menu.VeroMenuBar;
 import com.vero.ui.menu.VeroToolBar;
-import com.vero.ui.model.ReportData;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportTabManager;
 
 /**
@@ -78,9 +78,9 @@ public class VeroMainWindow extends BorderPane {
         centerPane.setTop(new VeroMenuBar());
         centerPane.setCenter(reportTabManager.getReportTabPane());
         // create an empty report
-        ReportData reportData = new ReportData();
-        reportData.setName("New Report");
-        reportTabManager.createReportTab(reportData);
+        ReportObjectData reportObjectData = new ReportObjectData();
+        reportObjectData.setName("New Report");
+        reportTabManager.createReportTab(reportObjectData);
         
         return centerPane;
     }

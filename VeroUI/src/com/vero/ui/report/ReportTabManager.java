@@ -7,7 +7,7 @@
 package com.vero.ui.report;
 
 import com.vero.ui.common.UIManager;
-import com.vero.ui.model.ReportData;
+import com.vero.ui.model.ReportObjectData;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,8 +51,8 @@ public final class ReportTabManager {
         return reportTabPane;
     }
     
-    public Tab createReportTab(ReportData reportData) {
-        Tab reportTab = new Tab(reportData.getName());
+    public Tab createReportTab(ReportObjectData reportObjectData) {
+        Tab reportTab = new Tab(reportObjectData.getName());
         
         reportTab.setContent(new ReportPane());
         reportTabPane.getTabs().add(reportTab);

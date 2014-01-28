@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import com.vero.db.AbstractDB;
 import com.vero.metadata.Table;
+import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.util.DataUtils;
@@ -138,8 +139,9 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
     }
     
     private AbstractDB createDBConnection(DatasourceObjectData data) {
-	AbstractDB dbConnection = data.getDatabaseType().getDBConnection();
-	dbConnection.setUsername(data.getUserName()).setPassword(data.getPassword()).setHostName(data.getHostname()).setDatabaseName(data.getDatabaseName());
+	DatabaseObjectData databaseObjectData = data.getDatabaseObjectData();
+	AbstractDB dbConnection = databaseObjectData.getDatabaseType().getDBConnection();
+	dbConnection.setUsername(databaseObjectData.getUserName()).setPassword(databaseObjectData.getPassword()).setHostName(databaseObjectData.getHostname()).setDatabaseName(databaseObjectData.getDatabaseName());
 	return dbConnection;
     }
 }

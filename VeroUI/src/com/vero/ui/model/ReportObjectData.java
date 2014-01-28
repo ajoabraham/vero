@@ -13,12 +13,12 @@ import static com.vero.ui.constants.ObjectType.REPORT;
  *
  * @author Tai Hu
  */
-public class ReportData extends UIData {
+public class ReportObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
     private String name = null;
     
-    public ReportData() {
+    public ReportObjectData() {
         
     }
     

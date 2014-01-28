@@ -73,7 +73,7 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
 
     @Override
     public String next() throws WizardException {	
-	wizardData.getData().setDatabaseType(selectedDBTypeLabelPane == null ? null : selectedDBTypeLabelPane.getType());
+	wizardData.getData().getDatabaseObjectData().setDatabaseType(selectedDBTypeLabelPane == null ? null : selectedDBTypeLabelPane.getType());
 	Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "databaseType");
 	
 	if (violations.size() > 0) {	    

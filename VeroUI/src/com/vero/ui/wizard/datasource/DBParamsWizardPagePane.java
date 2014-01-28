@@ -62,11 +62,11 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     
     @Override
     public void init() throws WizardException {
-        if (currentDBType != wizardData.getData().getDatabaseType()) {
+        if (currentDBType != wizardData.getData().getDatabaseObjectData().getDatabaseType()) {
             getChildren().clear();
             buildUI();
             
-            currentDBType = wizardData.getData().getDatabaseType();
+            currentDBType = wizardData.getData().getDatabaseObjectData().getDatabaseType();
         }       
     }
 
@@ -94,30 +94,30 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         contentPane.add(userNameLabel, 0, rowIndex);
         TextField userNameTextField = UIUtils.createDefaultFormTextField();
         contentPane.add(userNameTextField, 1, rowIndex++, 2, 1);
-        userNameTextField.textProperty().bindBidirectional(wizardData.getData().userNameProperty());
+        userNameTextField.textProperty().bindBidirectional(wizardData.getData().getDatabaseObjectData().userNameProperty());
 
         // Password
         Label passwordLabel = UIUtils.createDefaultFormLabel("Password:");
         contentPane.add(passwordLabel, 0, rowIndex);
         TextField passwordTextField = UIUtils.createDefaultFormPasswordField();
         contentPane.add(passwordTextField, 1, rowIndex++, 2, 1);
-        passwordTextField.textProperty().bindBidirectional(wizardData.getData().passwordProperty());
+        passwordTextField.textProperty().bindBidirectional(wizardData.getData().getDatabaseObjectData().passwordProperty());
 
         // Hostname
         Label hostnameLabel = UIUtils.createDefaultFormLabel("Hostname:");
         contentPane.add(hostnameLabel, 0, rowIndex);
         TextField hostnameTextField = UIUtils.createDefaultFormTextField();
         contentPane.add(hostnameTextField, 1, rowIndex++, 2, 1);
-        hostnameTextField.textProperty().bindBidirectional(wizardData.getData().hostnameProperty());
+        hostnameTextField.textProperty().bindBidirectional(wizardData.getData().getDatabaseObjectData().hostnameProperty());
 
         // Database name
         Label databaseNameLabel = UIUtils.createDefaultFormLabel("Database Name:");
         contentPane.add(databaseNameLabel, 0, rowIndex);
        
-        if (wizardData.getData().getDatabaseType() == POSTGRE_SQL) {
+        if (wizardData.getData().getDatabaseObjectData().getDatabaseType() == POSTGRE_SQL) {
             TextField databaseNameTextField = UIUtils.createDefaultFormTextField();
             contentPane.add(databaseNameTextField, 1, rowIndex++, 2, 1);
-            databaseNameTextField.textProperty().bindBidirectional(wizardData.getData().databaseNameProperty());
+            databaseNameTextField.textProperty().bindBidirectional(wizardData.getData().getDatabaseObjectData().databaseNameProperty());
         }
         else {
             databaseNameComboBox = new ComboBox<String>();

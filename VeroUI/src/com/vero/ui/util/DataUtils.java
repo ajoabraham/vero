@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
 import com.vero.model.entities.SchemaColumn;
+import com.vero.model.entities.SchemaDatabase;
 import com.vero.model.entities.SchemaDatasource;
 import com.vero.model.entities.SchemaTable;
 import com.vero.ui.constants.DBKeyType;
 import com.vero.ui.constants.TableType;
 import com.vero.ui.model.ColumnObjectData;
+import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.TableObjectData;
 
@@ -64,12 +66,10 @@ public final class DataUtils {
     }
      
     public static void copy(DatasourceObjectData source, SchemaDatasource target) {
-        target.setDatabaseName(source.getDatabaseName());
-        target.setHostAddress(source.getHostname());
-        target.setPort(source.getPort());
         target.setName(source.getName());
-        target.setUserName(source.getUserName());
-        target.setPassword(source.getPassword());
+        SchemaDatabase schemaDatabase = new SchemaDatabase();
+        copy(source.getDatabaseObjectData(), schemaDatabase);
+        target.setSchemaDatabase(schemaDatabase);
 
         target.setSchemaTables(new ArrayList<SchemaTable>());
         
@@ -78,6 +78,14 @@ public final class DataUtils {
             copy(tableObjectData, schemaTable);
             target.addSchemaTable(schemaTable);
         }
+    }
+    
+    public static void copy(DatabaseObjectData source, SchemaDatabase target) {
+        target.setDatabaseName(source.getDatabaseName());
+        target.setHostAddress(source.getHostname());
+        target.setPort(source.getPort());
+        target.setUserName(source.getUserName());
+        target.setPassword(source.getPassword());
     }
     
     public static void copy(TableObjectData source, SchemaTable target) {
@@ -98,22 +106,26 @@ public final class DataUtils {
     public static void copy(ColumnObjectData source, SchemaColumn target) {
         target.setDataType(source.getDataType());
         target.setName(source.getName());
-        target.setPrimaryKey(source.getKeyType() == DBKeyType.PRIMARY_KEY);
+        target.setKeyType(source.getKeyType().ordinal());
     }
     
-    public static void copy(SchemaDatasource source, DatasourceObjectData target) {
-        target.setDatabaseName(source.getDatabaseName());
-        target.setHostname(source.getHostAddress());
-        target.setPort(source.getPort());
+    public static void copy(SchemaDatasource source, DatasourceObjectData target) {        
         target.setName(source.getName());
-        target.setUserName(source.getUserName());
-        target.setPassword(source.getPassword());
+        copy(source.getSchemaDatabase(), target.getDatabaseObjectData());
         
         for (SchemaTable schemaTable : source.getSchemaTables()) {
             TableObjectData tableObjectData = new TableObjectData();
             copy(schemaTable, tableObjectData);
             target.addTableObjectData(tableObjectData);
         }
+    }
+    
+    public static void copy(SchemaDatabase source, DatabaseObjectData target) {
+	target.setDatabaseName(source.getDatabaseName());
+        target.setHostname(source.getHostAddress());
+        target.setPort(source.getPort());
+        target.setUserName(source.getUserName());
+        target.setPassword(source.getPassword());
     }
     
     public static void copy(SchemaTable source, TableObjectData target) {
@@ -132,6 +144,6 @@ public final class DataUtils {
     public static void copy(SchemaColumn source, ColumnObjectData target) {
         target.setDataType(source.getDataType());
         target.setName(source.getName());
-        target.setKeyType(source.getPrimaryKey() ? DBKeyType.PRIMARY_KEY : DBKeyType.NO_KEY_TYPE);
+        target.setKeyType(DBKeyType.values()[source.getKeyType()]);
     }
 }

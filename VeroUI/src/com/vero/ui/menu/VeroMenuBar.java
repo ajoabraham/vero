@@ -13,7 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 
 import com.vero.ui.constants.ImageList;
-import com.vero.ui.model.ReportData;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportTabManager;
 
 /**
@@ -61,8 +61,8 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
     }
         
     private void handleNewReportAction() {
-        ReportData reportData = new ReportData();
-        reportData.setName("New Report");
-        ReportTabManager.getInstance().createReportTab(reportData);
+        ReportObjectData reportObjectData = new ReportObjectData();
+        reportObjectData.setName("New Report");
+        ReportTabManager.getInstance().createReportTab(reportObjectData);
     }
 }
