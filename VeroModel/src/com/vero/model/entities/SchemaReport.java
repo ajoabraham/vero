@@ -39,7 +39,7 @@ public class SchemaReport extends SchemaData implements Serializable {
 
 	//bi-directional many-to-one association to SchemaDatasource
 	@ManyToOne
-	@JoinColumn(name="DATASOURCE_ID", nullable=false)
+	@JoinColumn(name="SCHEMA_DATASOURCE_ID", nullable=false)
 	private SchemaDatasource schemaDatasource;
 
 	//bi-directional many-to-one association to SchemaReportBlock

@@ -30,6 +30,14 @@ public enum ObjectType {
             return CLASS_DATASOURCE_OBJECT_PANE;
         }
     }, 
+    DATABASE {
+
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
+        
+    },
     TABLE {
         @Override
         public String getStyleClass() {

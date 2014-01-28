@@ -17,6 +17,8 @@
 		<class>com.vero.model.entities.SchemaTableJoint</class>
 		<class>com.vero.model.entities.SchemaData</class>
 		<class>com.vero.model.entities.AllNamedQueries</class>
+		<class>com.vero.model.entities.SchemaDatabase</class>
+		<class>com.vero.model.entities.SchemaProject</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />

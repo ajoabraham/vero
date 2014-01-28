@@ -19,7 +19,7 @@ public class SchemaTable extends SchemaData implements Serializable {
 	@Column(name="CREATION_TS")
 	private Timestamp creationTs;
 
-	@Column(length=500)
+	@Column(length=250)
 	private String description;
 
 	@Column(name="LAST_MOD_TS")
@@ -34,9 +34,6 @@ public class SchemaTable extends SchemaData implements Serializable {
 	@Column(name="ROW_COUNT")
 	private int rowCount;
 
-	@Column(name="TABLE_PREFIX", length=25)
-	private String tablePrefix;
-
 	@Column(name="TABLE_TYPE")
 	private int tableType;
 
@@ -46,7 +43,7 @@ public class SchemaTable extends SchemaData implements Serializable {
 
 	//bi-directional many-to-one association to SchemaDatasource
 	@ManyToOne
-	@JoinColumn(name="DATASOURCE_ID", nullable=false)
+	@JoinColumn(name="SCHEMA_DATASOURCE_ID", nullable=false)
 	private SchemaDatasource schemaDatasource;
 
 	public SchemaTable() {
@@ -98,14 +95,6 @@ public class SchemaTable extends SchemaData implements Serializable {
 
 	public void setRowCount(int rowCount) {
 		this.rowCount = rowCount;
-	}
-
-	public String getTablePrefix() {
-		return this.tablePrefix;
-	}
-
-	public void setTablePrefix(String tablePrefix) {
-		this.tablePrefix = tablePrefix;
 	}
 
 	public int getTableType() {

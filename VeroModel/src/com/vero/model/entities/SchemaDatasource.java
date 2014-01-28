@@ -1,9 +1,7 @@
 package com.vero.model.entities;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,23 +16,11 @@ import java.util.List;
 public class SchemaDatasource extends SchemaData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="AUTH_MODE", length=100)
-	private String authMode;
-
 	@Column(name="CREATION_TS")
 	private Timestamp creationTs;
 
-	@Column(name="DATABASE_NAME", length=100)
-	private String databaseName;
-
-	@Column(name="DATABASE_VENDOR", length=100)
-	private String databaseVendor;
-
-	@Column(name="DATABASE_VERSION", length=50)
-	private String databaseVersion;
-
-	@Column(name="HOST_ADDRESS", length=100)
-	private String hostAddress;
+	@Column(length=250)
+	private String description;
 
 	@Column(name="LAST_MOD_TS")
 	private Timestamp lastModTs;
@@ -42,19 +28,15 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 	@Column(nullable=false, length=100)
 	private String name;
 
-	@Column(length=100)
-	private String password;
+	//uni-directional one-to-one association to SchemaDatabase
+	@OneToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="SCHEMA_DATABASE_ID", nullable=false)
+	private SchemaDatabase schemaDatabase;
 
-	private int port;
-
-	@Column(name="POST_EXEC_COMMANDS", length=500)
-	private String postExecCommands;
-
-	@Column(name="PRE_EXEC_COMMANDS", length=500)
-	private String preExecCommands;
-
-	@Column(name="USER_NAME", length=100)
-	private String userName;
+	//bi-directional many-to-one association to SchemaProject
+	@ManyToOne
+	@JoinColumn(name="SCHEMA_PROJECT_ID", nullable=false)
+	private SchemaProject schemaProject;
 
 	//bi-directional many-to-one association to SchemaReport
 	@OneToMany(mappedBy="schemaDatasource")
@@ -67,14 +49,6 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 	public SchemaDatasource() {
 	}
 
-	public String getAuthMode() {
-		return this.authMode;
-	}
-
-	public void setAuthMode(String authMode) {
-		this.authMode = authMode;
-	}
-
 	public Timestamp getCreationTs() {
 		return this.creationTs;
 	}
@@ -83,36 +57,12 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 		this.creationTs = creationTs;
 	}
 
-	public String getDatabaseName() {
-		return this.databaseName;
+	public String getDescription() {
+		return this.description;
 	}
 
-	public void setDatabaseName(String databaseName) {
-		this.databaseName = databaseName;
-	}
-
-	public String getDatabaseVendor() {
-		return this.databaseVendor;
-	}
-
-	public void setDatabaseVendor(String databaseVendor) {
-		this.databaseVendor = databaseVendor;
-	}
-
-	public String getDatabaseVersion() {
-		return this.databaseVersion;
-	}
-
-	public void setDatabaseVersion(String databaseVersion) {
-		this.databaseVersion = databaseVersion;
-	}
-
-	public String getHostAddress() {
-		return this.hostAddress;
-	}
-
-	public void setHostAddress(String hostAddress) {
-		this.hostAddress = hostAddress;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Timestamp getLastModTs() {
@@ -131,44 +81,20 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return this.password;
+	public SchemaDatabase getSchemaDatabase() {
+		return this.schemaDatabase;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setSchemaDatabase(SchemaDatabase schemaDatabase) {
+		this.schemaDatabase = schemaDatabase;
 	}
 
-	public int getPort() {
-		return this.port;
+	public SchemaProject getSchemaProject() {
+		return this.schemaProject;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getPostExecCommands() {
-		return this.postExecCommands;
-	}
-
-	public void setPostExecCommands(String postExecCommands) {
-		this.postExecCommands = postExecCommands;
-	}
-
-	public String getPreExecCommands() {
-		return this.preExecCommands;
-	}
-
-	public void setPreExecCommands(String preExecCommands) {
-		this.preExecCommands = preExecCommands;
-	}
-
-	public String getUserName() {
-		return this.userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setSchemaProject(SchemaProject schemaProject) {
+		this.schemaProject = schemaProject;
 	}
 
 	public List<SchemaReport> getSchemaReports() {

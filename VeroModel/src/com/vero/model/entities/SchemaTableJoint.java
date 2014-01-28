@@ -21,8 +21,8 @@ public class SchemaTableJoint extends SchemaData implements Serializable {
 	@Column(name="JOIN_EXPRESSION", length=500)
 	private String joinExpression;
 
-	@Column(name="JOIN_TYPE", length=100)
-	private String joinType;
+	@Column(name="JOIN_TYPE")
+	private int joinType;
 
 	@Column(name="LAST_MOD_TS")
 	private Timestamp lastModTs;
@@ -52,11 +52,11 @@ public class SchemaTableJoint extends SchemaData implements Serializable {
 		this.joinExpression = joinExpression;
 	}
 
-	public String getJoinType() {
+	public int getJoinType() {
 		return this.joinType;
 	}
 
-	public void setJoinType(String joinType) {
+	public void setJoinType(int joinType) {
 		this.joinType = joinType;
 	}
 

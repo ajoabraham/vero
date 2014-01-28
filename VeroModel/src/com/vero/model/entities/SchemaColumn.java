@@ -25,18 +25,18 @@ public class SchemaColumn extends SchemaData implements Serializable {
 	@Column(name="DERIVED_DATA_TYPE", length=100)
 	private String derivedDataType;
 
+	@Column(name="KEY_TYPE")
+	private int keyType;
+
 	@Column(name="LAST_MOD_TS")
 	private Timestamp lastModTs;
 
 	@Column(length=100)
 	private String name;
 
-	@Column(name="PRIMARY_KEY")
-	private Boolean primaryKey;
-
 	//bi-directional many-to-one association to SchemaTable
 	@ManyToOne
-	@JoinColumn(name="TABLE_ID", nullable=false)
+	@JoinColumn(name="SCHEMA_TABLE_ID", nullable=false)
 	private SchemaTable schemaTable;
 
 	//bi-directional many-to-many association to SchemaExpression
@@ -70,6 +70,14 @@ public class SchemaColumn extends SchemaData implements Serializable {
 		this.derivedDataType = derivedDataType;
 	}
 
+	public int getKeyType() {
+		return this.keyType;
+	}
+
+	public void setKeyType(int keyType) {
+		this.keyType = keyType;
+	}
+
 	public Timestamp getLastModTs() {
 		return this.lastModTs;
 	}
@@ -84,14 +92,6 @@ public class SchemaColumn extends SchemaData implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Boolean getPrimaryKey() {
-		return this.primaryKey;
-	}
-
-	public void setPrimaryKey(Boolean primaryKey) {
-		this.primaryKey = primaryKey;
 	}
 
 	public SchemaTable getSchemaTable() {

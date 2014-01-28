@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,7 +17,9 @@ import org.junit.Test;
 import com.vero.model.dao.MetadataDao;
 import com.vero.model.dao.MetadataDaoImpl;
 import com.vero.model.dao.PersistentException;
+import com.vero.model.entities.SchemaDatabase;
 import com.vero.model.entities.SchemaDatasource;
+import com.vero.model.entities.SchemaProject;
 import com.vero.model.entities.SchemaTable;
 
 /**
@@ -50,14 +51,22 @@ public class ObjectDataDaoTest {
     public void setUp() throws Exception {
         objectDataDao = new MetadataDaoImpl();
         
+        SchemaProject project = new SchemaProject();
+        project.setId("5536101a-e477-453a-9b68-3d4bd63ec329");
+        project.setName("DEFAULT PROJECT");
+        project.setSchemaDatasources(new ArrayList<SchemaDatasource>());
+        
         datasource = new SchemaDatasource();
+        project.addSchemaDatasource(datasource);
 //        datasource.setId(UUID.randomUUID().toString());
         datasource.setName("Test" + UUID.randomUUID().toString());
-        datasource.setHostAddress("db.vero.com");
-        datasource.setDatabaseName("verometadata");
-        datasource.setUserName("dbuser");
-        datasource.setPassword("password");
-        datasource.setPort(3306);
+        SchemaDatabase database = new SchemaDatabase();
+        database.setHostAddress("db.vero.com");
+        database.setDatabaseName("verometadata");
+        database.setUserName("dbuser");
+        database.setPassword("password");
+        database.setPort(3306);
+        datasource.setSchemaDatabase(database);
         
         datasource.setSchemaTables(new ArrayList<SchemaTable>());
         
@@ -103,11 +112,11 @@ public class ObjectDataDaoTest {
     public void testUpdate() throws PersistentException {        
 	objectDataDao.persist(datasource);
 	
-	datasource.setPort(100);
+	datasource.getSchemaDatabase().setPort(100);
 	SchemaDatasource data = objectDataDao.update(datasource);
 	
 	assertEquals(data.getId(), datasource.getId());
-	assertEquals(data.getPort(), 100);
+	assertEquals(data.getSchemaDatabase().getPort(), 100);
     }
     
     @Test

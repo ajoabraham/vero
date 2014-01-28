@@ -27,7 +27,7 @@ public class SchemaExpression extends SchemaData implements Serializable {
 
 	//bi-directional many-to-one association to SchemaAttribute
 	@ManyToOne
-	@JoinColumn(name="ATTRIBUTE_ID")
+	@JoinColumn(name="SCHEMA_ATTRIBUTE_ID")
 	private SchemaAttribute schemaAttribute;
 
 	//bi-directional many-to-many association to SchemaColumn
@@ -35,17 +35,17 @@ public class SchemaExpression extends SchemaData implements Serializable {
 	@JoinTable(
 		name="COLUMNS_EXPRESSIONS"
 		, joinColumns={
-			@JoinColumn(name="EXPRESSION_ID", nullable=false)
+			@JoinColumn(name="SCHEMA_EXPRESSION_ID", nullable=false)
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="COLUMN_ID", nullable=false)
+			@JoinColumn(name="SCHEMA_COLUMN_ID", nullable=false)
 			}
 		)
 	private List<SchemaColumn> schemaColumns;
 
 	//bi-directional many-to-one association to SchemaMetric
 	@ManyToOne
-	@JoinColumn(name="METRIC_ID")
+	@JoinColumn(name="SCHEMA_METRIC_ID")
 	private SchemaMetric schemaMetric;
 
 	public SchemaExpression() {

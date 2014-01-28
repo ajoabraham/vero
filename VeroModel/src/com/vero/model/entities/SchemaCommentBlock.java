@@ -29,7 +29,7 @@ public class SchemaCommentBlock extends SchemaData implements Serializable {
 
 	//bi-directional many-to-one association to SchemaReport
 	@ManyToOne
-	@JoinColumn(name="REPORT_ID", nullable=false)
+	@JoinColumn(name="SCHEMA_REPORT_ID", nullable=false)
 	private SchemaReport schemaReport;
 
 	public SchemaCommentBlock() {
