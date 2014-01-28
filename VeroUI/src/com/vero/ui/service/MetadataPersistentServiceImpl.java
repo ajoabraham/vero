@@ -3,7 +3,6 @@
  */
 package com.vero.ui.service;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,9 @@ import com.vero.model.dao.MetadataDao;
 import com.vero.model.dao.MetadataDaoImpl;
 import com.vero.model.dao.PersistentException;
 import com.vero.model.entities.SchemaDatasource;
+import com.vero.model.entities.SchemaProject;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.util.DataUtils;
 
 /**
@@ -23,7 +24,7 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
     
     private MetadataDao metadataDao = null;
 
-    public MetadataPersistentServiceImpl() {
+    protected MetadataPersistentServiceImpl() {
         metadataDao = new MetadataDaoImpl();
     }
 
@@ -42,14 +43,23 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
     }
 
     @Override
-    public List<DatasourceObjectData> findAllDatasources() throws ServiceException {
-        return null;
+    public boolean isUniqueDatasourceName(String projectId, String name) throws ServiceException { 
+        try {
+            return metadataDao.isUniqueDatasourceName(projectId, name);
+        }
+        catch (PersistentException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public boolean isUniqueDatasourceName(String name) throws ServiceException { 
+    public ProjectObjectData getProjectDataObject(String projectId) throws ServiceException {
         try {
-            return new MetadataDaoImpl().isUniqueDatasourceName(name);
+            ProjectObjectData projectObjectData = new ProjectObjectData();
+            SchemaProject schemaProject = metadataDao.find(SchemaProject.class, projectId);
+            DataUtils.copy(projectObjectData, schemaProject);
+            return projectObjectData;
         }
         catch (PersistentException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);

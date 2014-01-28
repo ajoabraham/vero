@@ -12,11 +12,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.vero.ui.common.UIDataManager;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.UIData;
-import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceException;
-import com.vero.ui.service.ServiceManager;
 
 /**
  * @author Tai Hu
@@ -53,14 +52,13 @@ public final class ValidationUtils {
         return validator.validate(data);
     }
     
-    public static boolean isUniqueName(ObjectType type, String name) {
-        MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
+    public static boolean isUniqueName(ObjectType type, String name) {        
         boolean isUnique = true;
         
         try {
             switch (type) {
                 case DATASOURCE:
-                    isUnique = service.isUniqueDatasourceName(name);
+                    isUnique = UIDataManager.getInstance().isUniqueDatasourceName(name);
                     break;
                 default:
                     logger.log(Level.WARNING, "Invalid object type - {0}", type);

@@ -5,6 +5,7 @@ package com.vero.ui.model;
 
 import static com.vero.ui.constants.ObjectType.PROJECT;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -22,7 +23,7 @@ public class ProjectObjectData extends UIData {
     private StringProperty name = new SimpleStringProperty();
     private StringProperty description = new SimpleStringProperty();
     
-    private List<DatasourceObjectData> datasourceObjectDataList = null;
+    private List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
     
     public ProjectObjectData() {
         
@@ -58,6 +59,14 @@ public class ProjectObjectData extends UIData {
 
     public void setDatasourceObjectDataList(List<DatasourceObjectData> datasourceObjectDataList) {
         this.datasourceObjectDataList = datasourceObjectDataList;
+    }
+    
+    public void addDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        datasourceObjectDataList.add(datasourceObjectData);
+    }
+    
+    public boolean removeDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        return datasourceObjectDataList.remove(datasourceObjectData);
     }
     
     @Override

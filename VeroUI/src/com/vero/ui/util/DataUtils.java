@@ -10,12 +10,14 @@ import com.vero.metadata.Table;
 import com.vero.model.entities.SchemaColumn;
 import com.vero.model.entities.SchemaDatabase;
 import com.vero.model.entities.SchemaDatasource;
+import com.vero.model.entities.SchemaProject;
 import com.vero.model.entities.SchemaTable;
 import com.vero.ui.constants.DBKeyType;
 import com.vero.ui.constants.TableType;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.model.TableObjectData;
 
 /**
@@ -24,6 +26,28 @@ import com.vero.ui.model.TableObjectData;
  */
 public final class DataUtils {
     private DataUtils() {	
+    }
+    
+    public static void copy(ProjectObjectData source, SchemaProject target) {
+        target.setName(source.getName());
+        
+        target.setSchemaDatasources(new ArrayList<SchemaDatasource>());
+        
+        for (DatasourceObjectData datasourceObjectData : source.getDatasourceObjectDataList()) {
+            SchemaDatasource schemaDatasource = new SchemaDatasource();
+            copy(datasourceObjectData, schemaDatasource);
+            target.addSchemaDatasource(schemaDatasource);
+        }
+    }
+    
+    public static void copy(SchemaProject source, ProjectObjectData target) {
+        target.setName(source.getName());
+                
+        for (SchemaDatasource schemaDatasource : source.getSchemaDatasources()) {
+            DatasourceObjectData datasourceObjectData = new DatasourceObjectData();
+            copy(schemaDatasource, datasourceObjectData);
+            target.addDatasourceObjectData(datasourceObjectData);
+        }
     }
     
     public static void copy(Table source, TableObjectData target) {

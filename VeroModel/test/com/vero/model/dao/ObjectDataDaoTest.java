@@ -121,7 +121,7 @@ public class ObjectDataDaoTest {
     
     @Test
     public void testIsUniqueName() throws PersistentException {
-        boolean isUnique = objectDataDao.isUniqueDatasourceName(UUID.randomUUID().toString());
+        boolean isUnique = objectDataDao.isUniqueDatasourceName("5536101a-e477-453a-9b68-3d4bd63ec329", UUID.randomUUID().toString());
         
         assertTrue(isUnique);
     }
