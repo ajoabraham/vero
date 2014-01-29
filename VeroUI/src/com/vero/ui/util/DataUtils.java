@@ -29,6 +29,7 @@ public final class DataUtils {
     }
     
     public static void copy(ProjectObjectData source, SchemaProject target) {
+        target.setId(source.getId());
         target.setName(source.getName());
         
         target.setSchemaDatasources(new ArrayList<SchemaDatasource>());
@@ -41,6 +42,7 @@ public final class DataUtils {
     }
     
     public static void copy(SchemaProject source, ProjectObjectData target) {
+        target.setId(source.getId());
         target.setName(source.getName());
                 
         for (SchemaDatasource schemaDatasource : source.getSchemaDatasources()) {
@@ -90,6 +92,7 @@ public final class DataUtils {
     }
      
     public static void copy(DatasourceObjectData source, SchemaDatasource target) {
+        target.setId(source.getId());
         target.setName(source.getName());
         SchemaDatabase schemaDatabase = new SchemaDatabase();
         copy(source.getDatabaseObjectData(), schemaDatabase);
@@ -105,6 +108,7 @@ public final class DataUtils {
     }
     
     public static void copy(DatabaseObjectData source, SchemaDatabase target) {
+        target.setId(source.getId());
         target.setDatabaseName(source.getDatabaseName());
         target.setHostAddress(source.getHostname());
         target.setPort(source.getPort());
@@ -113,6 +117,7 @@ public final class DataUtils {
     }
     
     public static void copy(TableObjectData source, SchemaTable target) {
+        target.setId(source.getId());
         target.setName(source.getName());
         target.setPhysicalName(source.getPhysicalName());
         target.setRowCount(source.getRowCount());
@@ -128,12 +133,14 @@ public final class DataUtils {
     }
     
     public static void copy(ColumnObjectData source, SchemaColumn target) {
+        target.setId(source.getId());
         target.setDataType(source.getDataType());
         target.setName(source.getName());
         target.setKeyType(source.getKeyType().ordinal());
     }
     
-    public static void copy(SchemaDatasource source, DatasourceObjectData target) {        
+    public static void copy(SchemaDatasource source, DatasourceObjectData target) {
+        target.setId(source.getId());
         target.setName(source.getName());
         copy(source.getSchemaDatabase(), target.getDatabaseObjectData());
         
@@ -145,6 +152,7 @@ public final class DataUtils {
     }
     
     public static void copy(SchemaDatabase source, DatabaseObjectData target) {
+        target.setId(source.getId());
 	target.setDatabaseName(source.getDatabaseName());
         target.setHostname(source.getHostAddress());
         target.setPort(source.getPort());
@@ -153,6 +161,7 @@ public final class DataUtils {
     }
     
     public static void copy(SchemaTable source, TableObjectData target) {
+        target.setId(source.getId());
         target.setName(source.getName());
         target.setPhysicalName(source.getPhysicalName());
         target.setRowCount(source.getRowCount());
@@ -166,6 +175,7 @@ public final class DataUtils {
     }
     
     public static void copy(SchemaColumn source, ColumnObjectData target) {
+        target.setId(source.getId());
         target.setDataType(source.getDataType());
         target.setName(source.getName());
         target.setKeyType(DBKeyType.values()[source.getKeyType()]);
