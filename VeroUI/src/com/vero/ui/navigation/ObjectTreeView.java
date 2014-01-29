@@ -11,14 +11,13 @@ import static com.vero.ui.constants.CSSConstants.ID_OBJECT_TREE_VIEW;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.vero.ui.common.UIDataManager;
-import com.vero.ui.model.ProjectObjectData;
-import com.vero.ui.service.ServiceException;
-import com.vero.ui.test.TestDataGenerator;
-
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+
+import com.vero.ui.common.UIDataManager;
+import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.service.ServiceException;
 
 /**
  *
@@ -45,7 +44,7 @@ public class ObjectTreeView extends TreeView<ObjectPane> {
         
 //        ProjectObjectData rootData = new ProjectObjectData();
 //        rootData.setDatasourceObjectDataList(TestDataGenerator.generateDatasourceList("DS"));
-        ProjectObjectData projectObjectData = UIDataManager.getInstance().getProjectObjectData();
+        ProjectObjectData projectObjectData = UIDataManager.getInstance().getProjectObjectData();        
         TreeItem<ObjectPane> root = new ObjectTreeItem<>(projectObjectData, null);
         setShowRoot(false);
         setRoot(root);
