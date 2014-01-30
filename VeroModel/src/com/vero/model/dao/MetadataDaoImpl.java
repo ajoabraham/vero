@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaData;
 import com.vero.model.entities.SchemaMetric;
+import com.vero.model.entities.SchemaProject;
 import com.vero.model.util.PersistentUtils;
 
 /**
@@ -29,6 +30,11 @@ public class MetadataDaoImpl implements MetadataDao {
             em.getTransaction().begin();
             em.persist(objectData);
             em.getTransaction().commit();
+            
+            em.close();
+            em = PersistentUtils.createEntityManager();
+            SchemaProject project = em.find(SchemaProject.class, "5536101a-e477-453a-9b68-3d4bd63ec329");
+System.err.println("Find again..." + project.getSchemaDatasources().size());            
         }
         catch (Exception e) {
             if (em.getTransaction().isActive())

@@ -63,7 +63,7 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
     public ProjectObjectData getProjectDataObject(String projectId) throws ServiceException {
         try {
             ProjectObjectData projectObjectData = new ProjectObjectData();
-            SchemaProject schemaProject = metadataDao.find(SchemaProject.class, projectId);            
+            SchemaProject schemaProject = metadataDao.find(SchemaProject.class, projectId);               
             DataUtils.copy(schemaProject, projectObjectData);
             return projectObjectData;
         }

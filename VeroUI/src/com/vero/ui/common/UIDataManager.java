@@ -6,6 +6,8 @@ package com.vero.ui.common;
 import java.util.List;
 import java.util.Observable;
 
+import com.vero.ui.event.DatasourceEvent;
+import com.vero.ui.event.EventFactory;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
@@ -59,5 +61,11 @@ public final class UIDataManager extends Observable {
 	service.persistDatasource(datasourceObjectData);
 	
 	// Notify all listeners
+	fireDatasourceEvent(EventFactory.createDatasourceEvent(DatasourceEvent.DATASOURCE_ADDED, datasourceObjectData));
+    }
+    
+    public void fireDatasourceEvent(DatasourceEvent datasourceEvent) {
+        setChanged();
+        notifyObservers(datasourceEvent);
     }
 }

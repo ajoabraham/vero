@@ -8,6 +8,8 @@ package com.vero.ui.navigation;
 
 import static com.vero.ui.constants.CSSConstants.ID_OBJECT_TREE_VIEW;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ import com.vero.ui.service.ServiceException;
  *
  * @author Tai Hu
  */
-public class ObjectTreeView extends TreeView<ObjectPane> {
+public class ObjectTreeView extends TreeView<ObjectPane> implements Observer {
     private static final Logger logger = Logger.getLogger(ObjectTreeView.class.getName());
     
     public ObjectTreeView() {        
@@ -44,10 +46,26 @@ public class ObjectTreeView extends TreeView<ObjectPane> {
         
 //        ProjectObjectData rootData = new ProjectObjectData();
 //        rootData.setDatasourceObjectDataList(TestDataGenerator.generateDatasourceList("DS"));
+        buildTree();
+    }
+
+    private void buildTree() throws ServiceException {
         ProjectObjectData projectObjectData = UIDataManager.getInstance().getProjectObjectData();        
         TreeItem<ObjectPane> root = new ObjectTreeItem<>(projectObjectData, null);
         setShowRoot(false);
         setRoot(root);
         root.setExpanded(true);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {     
+        // FIXME TH 01/30/2014, in beta, a better handling of event is needed instead of
+        // refreshing the whole tree.
+        try {            
+            buildTree();
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
     }
 }

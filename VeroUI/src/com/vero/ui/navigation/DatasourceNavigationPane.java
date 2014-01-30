@@ -11,6 +11,9 @@ import static com.vero.ui.constants.CSSConstants.ID_DATASOURCE_NAVIGATION_PANE;
 import static com.vero.ui.constants.CSSConstants.ID_OBJECTS_PANE;
 import static com.vero.ui.constants.CSSConstants.ID_OBJECT_SEARCH_TEXT_FIELD;
 import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
+
+import java.util.Observer;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -25,6 +28,7 @@ import javafx.scene.layout.VBox;
 
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.PopupDialog;
+import com.vero.ui.common.UIDataManager;
 import com.vero.ui.common.UIManager;
 import com.vero.ui.util.UIUtils;
 import com.vero.ui.wizard.WizardException;
@@ -71,6 +75,7 @@ public class DatasourceNavigationPane extends BorderPane implements EventHandler
         objectsPane.getChildren().add(UIUtils.createVerticalSpaceFiller(10));
 
         TreeView<ObjectPane> treeView = new ObjectTreeView();
+        UIDataManager.getInstance().addObserver((Observer)treeView);
         VBox.setVgrow(treeView, Priority.ALWAYS);
         objectsPane.getChildren().add(treeView);
 
