@@ -26,7 +26,6 @@ public class ProjectObjectData extends UIData {
     private List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
     
     public ProjectObjectData() {
-        
     }
 
     public String getName() {

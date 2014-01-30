@@ -31,8 +31,6 @@ public class TableObjectData extends UIData {
     private IntegerProperty rowCount = new SimpleIntegerProperty();
     private TableType tableType = TableType.UNKNOWN;
     private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
-    private List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
-    private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
     
     public TableObjectData() {
         
@@ -101,21 +99,5 @@ public class TableObjectData extends UIData {
     
     public boolean removeColumnObjectData(ColumnObjectData data) {
         return columnObjectDataList.remove(data);
-    }
-
-    public List<AttributeObjectData> getAttributeObjectDataList() {
-        return attributeObjectDataList;
-    }
-
-    public void setAttributeObjectDataList(List<AttributeObjectData> attributeObjectDataList) {
-        this.attributeObjectDataList = attributeObjectDataList;
-    }
-
-    public List<MetricObjectData> getMetricObjectDataList() {
-        return metricObjectDataList;
-    }
-
-    public void setMetricObjectDataList(List<MetricObjectData> metricObjectDataList) {
-        this.metricObjectDataList = metricObjectDataList;
     }
 }

@@ -3,6 +3,7 @@
  */
 package com.vero.ui.service;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +12,10 @@ import com.vero.model.dao.MetadataDaoImpl;
 import com.vero.model.dao.PersistentException;
 import com.vero.model.entities.SchemaDatasource;
 import com.vero.model.entities.SchemaProject;
+import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.util.DataUtils;
 
@@ -65,6 +69,30 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
             logger.log(Level.SEVERE, e.getMessage(), e);
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public List<AttributeObjectData> findAttributeObjectDataList(String tableId) throws ServiceException {
+        
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.vero.ui.service.MetadataPersistentService#findMetricObjectDataList(java.lang.String)
+     */
+    @Override
+    public List<MetricObjectData> findMetricObjectDataList(String tableId) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.vero.ui.service.MetadataPersistentService#findUnusedColumnObjectDataList(java.lang.String)
+     */
+    @Override
+    public List<ColumnObjectData> findUnusedColumnObjectDataList(String tableId) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

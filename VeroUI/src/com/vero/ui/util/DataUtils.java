@@ -7,16 +7,22 @@ import java.util.ArrayList;
 
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
+import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaColumn;
 import com.vero.model.entities.SchemaDatabase;
 import com.vero.model.entities.SchemaDatasource;
+import com.vero.model.entities.SchemaExpression;
+import com.vero.model.entities.SchemaMetric;
 import com.vero.model.entities.SchemaProject;
 import com.vero.model.entities.SchemaTable;
 import com.vero.ui.constants.DBKeyType;
 import com.vero.ui.constants.TableType;
+import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.ExpressionObjectData;
+import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.model.TableObjectData;
 
@@ -179,5 +185,31 @@ public final class DataUtils {
         target.setDataType(source.getDataType());
         target.setName(source.getName());
         target.setKeyType(DBKeyType.values()[source.getKeyType()]);
+    }
+    
+    public static void copy(SchemaAttribute source, AttributeObjectData target) {
+        target.setId(source.getId());
+        target.setName(source.getName());
+        
+        for (SchemaExpression schemaExpression : source.getSchemaExpressions()) {
+            ExpressionObjectData expressionObjectData = new ExpressionObjectData();
+            DataUtils.copy(schemaExpression, expressionObjectData);
+            target.addExpressionObjectData(expressionObjectData);
+        }
+    }
+    
+    public static void copy(SchemaExpression source, ExpressionObjectData target) {
+        target.setId(source.getId());
+        target.setFormula(source.getExpression());
+        
+        for (SchemaColumn schemaColumn : source.getSchemaColumns()) {
+            ColumnObjectData columnObjectData = new ColumnObjectData();
+            DataUtils.copy(schemaColumn, columnObjectData);
+            target.addColumnObjectData(columnObjectData);
+        }
+    }
+    
+    public static void copy(SchemaMetric source, MetricObjectData target) {
+        
     }
 }

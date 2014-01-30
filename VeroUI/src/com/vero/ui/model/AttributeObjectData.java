@@ -6,7 +6,14 @@
 
 package com.vero.ui.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import com.vero.ui.constants.ObjectType;
+
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 
 /**
@@ -16,7 +23,8 @@ import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 public class AttributeObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
-    private String name = null;
+    private StringProperty name = new SimpleStringProperty();
+    private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
     
     public AttributeObjectData() {
         
@@ -28,10 +36,28 @@ public class AttributeObjectData extends UIData {
     }
     
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
+    }
+
+    public List<ExpressionObjectData> getExpressionObjectDataList() {
+        return expressionObjectDataList;
+    }
+
+    public void setExpressionObjectDataList(List<ExpressionObjectData> expressionObjectDataList) {
+        this.expressionObjectDataList = expressionObjectDataList;
     }    
+    
+    public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
+        expressionObjectDataList.add(expressionObjectData);
+        expressionObjectData.setAttributeObjectData(this);
+    }
+    
+    public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
+        expressionObjectData.setAttributeObjectData(null);
+        return expressionObjectDataList.remove(expressionObjectData);
+    }
 }

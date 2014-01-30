@@ -33,8 +33,7 @@ public class DatasourceObjectData extends UIData {
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
     private DatasourceStatus status = INACTIVE;
     
-    public DatasourceObjectData() {
-        
+    public DatasourceObjectData() {        
     }
     
     @Override

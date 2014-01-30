@@ -6,6 +6,9 @@
 
 package com.vero.ui.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +30,7 @@ public class ColumnObjectData extends UIData {
     private StringProperty dataType = new SimpleStringProperty();
     private IntegerProperty dataTypeSize = new SimpleIntegerProperty();
     private DBKeyType keyType = DBKeyType.NO_KEY_TYPE;
+    private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
     
     public ColumnObjectData() {        
     }
@@ -78,5 +82,23 @@ public class ColumnObjectData extends UIData {
 
     public void setKeyType(DBKeyType keyType) {
         this.keyType = keyType;
+    }
+
+    public List<ExpressionObjectData> getExpressionObjectDataList() {
+        return expressionObjectDataList;
+    }
+
+    public void setExpressionObjectDataList(List<ExpressionObjectData> expressionObjectDataList) {
+        this.expressionObjectDataList = expressionObjectDataList;
+    }
+    
+    public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
+        expressionObjectDataList.add(expressionObjectData);
+        expressionObjectData.addColumnObjectData(this);
+    }
+    
+    public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
+        expressionObjectData.removeColumnObjectData(this);
+        return expressionObjectDataList.remove(expressionObjectData);
     }
 }

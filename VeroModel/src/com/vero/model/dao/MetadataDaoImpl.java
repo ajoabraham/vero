@@ -3,9 +3,14 @@
  */
 package com.vero.model.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
+import com.vero.model.entities.SchemaAttribute;
+import com.vero.model.entities.SchemaColumn;
 import com.vero.model.entities.SchemaData;
+import com.vero.model.entities.SchemaMetric;
 import com.vero.model.util.PersistentUtils;
 
 /**
@@ -111,10 +116,74 @@ public class MetadataDaoImpl implements MetadataDao {
         try {
             em = PersistentUtils.createEntityManager();
             
-            return (Long)em.createNamedQuery("SchemaDatasource.isUniqueName")
-                           .setParameter("projectId", projectId)
-                           .setParameter("name", name)
-                           .getSingleResult() == 0;
+            return em.createNamedQuery("SchemaDatasource.isUniqueName", Long.class)
+                     .setParameter("projectId", projectId)
+                     .setParameter("name", name)
+                     .getSingleResult() == 0;
+        }
+        catch (Exception e) {
+            throw new PersistentException(e);
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public List<SchemaAttribute> findSchemaAttributes(String tableId) throws PersistentException {
+        EntityManager em = null;
+        
+        try {
+            em = PersistentUtils.createEntityManager();
+            
+            return em.createNamedQuery("SchemaTable.findAttributes", SchemaAttribute.class)
+                     .setParameter("tableId", tableId)
+                     .getResultList();
+        }
+        catch (Exception e) {
+            throw new PersistentException(e);
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+
+    @Override
+    public List<SchemaMetric> findSchemaMetrics(String tableId) throws PersistentException {
+        EntityManager em = null;
+        
+        try {
+            em = PersistentUtils.createEntityManager();
+            
+            return em.createNamedQuery("SchemaTable.findMetrics", SchemaMetric.class)
+                     .setParameter("tableId", tableId)
+                     .getResultList();
+        }
+        catch (Exception e) {
+            throw new PersistentException(e);
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public List<SchemaColumn> findUnusedSchemaColumns(String tableId) throws PersistentException {
+        EntityManager em = null;
+        
+        try {
+            em = PersistentUtils.createEntityManager();
+            
+            return em.createNamedQuery("SchemaTable.findUnusedColumns", SchemaColumn.class)
+                     .setParameter("tableId", tableId)
+                     .getResultList();
         }
         catch (Exception e) {
             throw new PersistentException(e);
