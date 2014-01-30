@@ -28,6 +28,7 @@ public class DatabaseObjectData extends UIData {
     private StringProperty databaseName = new SimpleStringProperty();
     private IntegerProperty port = new SimpleIntegerProperty();
     private DBType databaseType = null;
+    private DatasourceObjectData datasourceObjectData = null;
     
     public DatabaseObjectData() {
     }    
@@ -108,5 +109,13 @@ public class DatabaseObjectData extends UIData {
 
     public void setDatabaseType(DBType databaseType) {
         this.databaseType = databaseType;
+    }
+
+    public DatasourceObjectData getDatasourceObjectData() {
+        return datasourceObjectData;
+    }
+
+    public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        this.datasourceObjectData = datasourceObjectData;
     }   
 }

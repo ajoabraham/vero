@@ -50,13 +50,13 @@ public class ExpressionObjectData extends UIData {
         this.columnObjectDataList = columnObjectDataList;
     }
 
-    public void addColumnObjectData(ColumnObjectData columnObjectData) {
-        columnObjectDataList.add(columnObjectData);
-    }
-    
-    public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
-        return columnObjectDataList.remove(columnObjectData);
-    }
+//    public void addColumnObjectData(ColumnObjectData columnObjectData) {
+//        columnObjectDataList.add(columnObjectData);
+//    }
+//    
+//    public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
+//        return columnObjectDataList.remove(columnObjectData);
+//    }
 
     public AttributeObjectData getAttributeObjectData() {
         return attributeObjectData;

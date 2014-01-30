@@ -76,7 +76,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                     super.getChildren().setAll(tableObjectTreeItemList);                    
                     break;
                 case TABLE:
-                    List<AttributeObjectData> attributeObjectDataList = ((TableObjectData) objectData).getAttributeObjectDataList();
+                    List<AttributeObjectData> attributeObjectDataList = ((TableObjectData) objectData).getRelatedAttributeObjectDataList();
                     List<TreeItem<ObjectPane>> treeItemList = new ArrayList<>();
                     
                     for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
@@ -85,7 +85,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                         treeItemList.add(treeItem);
                     }
                     
-                    List<MetricObjectData> metricObjectDataList = ((TableObjectData) objectData).getMetricObjectDataList();
+                    List<MetricObjectData> metricObjectDataList = ((TableObjectData) objectData).getRelatedMetricObjectDataList();
                     
                     for (MetricObjectData metricObjectData : metricObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<MetricObjectData>(metricObjectData, 
@@ -93,7 +93,7 @@ public class ObjectTreeItem<T extends UIData> extends TreeItem<ObjectPane> {
                         treeItemList.add(treeItem);
                     }
                     
-                    List<ColumnObjectData> columnObjectDataList = ((TableObjectData) objectData).getColumnObjectDataList();
+                    List<ColumnObjectData> columnObjectDataList = ((TableObjectData) objectData).getUnusedColumnObjectDataList();
                     
                     for (ColumnObjectData columnObjectData : columnObjectDataList) {
                         TreeItem<ObjectPane> treeItem = new ObjectTreeItem<ColumnObjectData>(columnObjectData, 

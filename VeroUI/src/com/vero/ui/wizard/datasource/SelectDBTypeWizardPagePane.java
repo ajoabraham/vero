@@ -3,13 +3,12 @@
  */
 package com.vero.ui.wizard.datasource;
 
-import static com.vero.ui.constants.CSSConstants.*;
+import static com.vero.ui.constants.CSSConstants.CLASS_DB_TYPE_CONTENT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_INSTRUCTION_TEXT;
 import static com.vero.ui.constants.WizardPageIds.ID_DB_PARAMS;
 import static com.vero.ui.constants.WizardPageIds.ID_SELECT_DB_TYPE;
 
 import java.util.Set;
-
-import javax.validation.ConstraintViolation;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,10 +18,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import javax.validation.ConstraintViolation;
+
 import com.vero.ui.common.LabelPane;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.DBType;
-import com.vero.ui.model.DatasourceObjectData;
+import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.util.ValidationUtils;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
@@ -74,10 +75,10 @@ public class SelectDBTypeWizardPagePane extends WizardPagePane<DatasourceWizardD
     @Override
     public String next() throws WizardException {	
 	wizardData.getData().getDatabaseObjectData().setDatabaseType(selectedDBTypeLabelPane == null ? null : selectedDBTypeLabelPane.getType());
-	Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "databaseType");
+	Set<ConstraintViolation<DatabaseObjectData>> violations = ValidationUtils.validate(wizardData.getData().getDatabaseObjectData(), "databaseType");
 	
 	if (violations.size() > 0) {	    
-	       throw new WizardException(violations.iterator().next().getMessage());
+	    throw new WizardException(violations.iterator().next().getMessage());
 	}
 	
 	return ID_DB_PARAMS;

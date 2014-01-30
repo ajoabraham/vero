@@ -45,7 +45,7 @@ public final class TestDataGenerator {
             }
             
             List<AttributeObjectData> attributeObjectDataList = new ArrayList<>();
-            tableObjectData.setAttributeObjectDataList(attributeObjectDataList);
+//            tableObjectData.setAttributeObjectDataList(attributeObjectDataList);
             for (int j = 0; j < 2; j++) {
                 AttributeObjectData attributeObjectData = new AttributeObjectData();
                 attributeObjectData.setId("" + ++ID_SEQ);
@@ -54,7 +54,7 @@ public final class TestDataGenerator {
             }
             
             List<MetricObjectData> metricObjectDataList = new ArrayList<>();
-            tableObjectData.setMetricObjectDataList(metricObjectDataList);
+//            tableObjectData.setMetricObjectDataList(metricObjectDataList);
             for (int j = 0; j < 2; j++) {
                 MetricObjectData metricObjectData = new MetricObjectData();
                 metricObjectData.setId("" + ++ID_SEQ);

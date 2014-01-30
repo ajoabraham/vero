@@ -32,6 +32,7 @@ import javax.validation.ConstraintViolation;
 
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.constants.DBType;
+import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.service.DatasourceImportService;
@@ -147,10 +148,16 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     @Override
     public String next() throws WizardException {
 	// Validate all data fields
-	Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData());
+	Set<ConstraintViolation<DatabaseObjectData>> databaseViolations = ValidationUtils.validate(wizardData.getData().getDatabaseObjectData());
 	
-	if (!violations.isEmpty()) {
-	    throw new WizardException(violations.iterator().next().getMessage());
+	if (!databaseViolations.isEmpty()) {
+	    throw new WizardException(databaseViolations.iterator().next().getMessage());
+	}
+	
+	Set<ConstraintViolation<DatasourceObjectData>> datasourceViolations = ValidationUtils.validate(wizardData.getData());
+	
+	if (!datasourceViolations.isEmpty()) {
+	    throw new WizardException(datasourceViolations.iterator().next().getMessage());
 	}
 	
 	if (!ValidationUtils.isUniqueName(DATASOURCE, wizardData.getData().getName())) {

@@ -29,9 +29,11 @@ public class DatasourceObjectData extends UIData {
     
     private StringProperty name = new SimpleStringProperty();
     
-    private DatabaseObjectData databaseObjectData = new DatabaseObjectData();
+    private DatabaseObjectData databaseObjectData = null;
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
     private DatasourceStatus status = INACTIVE;
+    
+    private ProjectObjectData projectObjectData = null;
     
     public DatasourceObjectData() {        
     }
@@ -64,9 +66,11 @@ public class DatasourceObjectData extends UIData {
     
     public void addTableObjectData(TableObjectData tableObjectData) {
 	tableObjectDataList.add(tableObjectData);
+	tableObjectData.setDatasourceObjectData(this);
     }
     
     public boolean removeTableObjectData(TableObjectData tableObjectData) {
+	tableObjectData.setDatasourceObjectData(null);
 	return tableObjectDataList.remove(tableObjectData);
     }
 
@@ -79,10 +83,22 @@ public class DatasourceObjectData extends UIData {
     }
 
     public DatabaseObjectData getDatabaseObjectData() {
-        return databaseObjectData;
+        if (databaseObjectData == null) {
+            setDatabaseObjectData(new DatabaseObjectData());
+        }
+	return databaseObjectData;
     }
 
     public void setDatabaseObjectData(DatabaseObjectData databaseObjectData) {
+	databaseObjectData.setDatasourceObjectData(this);
         this.databaseObjectData = databaseObjectData;
+    }
+
+    public ProjectObjectData getProjectObjectData() {
+        return projectObjectData;
+    }
+
+    public void setProjectObjectData(ProjectObjectData projectObjectData) {
+        this.projectObjectData = projectObjectData;
     }
 }

@@ -61,10 +61,12 @@ public class ProjectObjectData extends UIData {
     }
     
     public void addDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+	datasourceObjectData.setProjectObjectData(this);
         datasourceObjectDataList.add(datasourceObjectData);
     }
     
     public boolean removeDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+	datasourceObjectData.setProjectObjectData(null);
         return datasourceObjectDataList.remove(datasourceObjectData);
     }
     

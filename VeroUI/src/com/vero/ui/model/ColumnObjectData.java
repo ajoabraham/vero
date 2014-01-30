@@ -31,6 +31,7 @@ public class ColumnObjectData extends UIData {
     private IntegerProperty dataTypeSize = new SimpleIntegerProperty();
     private DBKeyType keyType = DBKeyType.NO_KEY_TYPE;
     private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+    private TableObjectData tableObjectData = null;
     
     public ColumnObjectData() {        
     }
@@ -92,13 +93,25 @@ public class ColumnObjectData extends UIData {
         this.expressionObjectDataList = expressionObjectDataList;
     }
     
-    public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
-        expressionObjectDataList.add(expressionObjectData);
-        expressionObjectData.addColumnObjectData(this);
+//    public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
+//        expressionObjectDataList.add(expressionObjectData);
+//        expressionObjectData.addColumnObjectData(this);
+//    }
+//    
+//    public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
+//        expressionObjectData.removeColumnObjectData(this);
+//        return expressionObjectDataList.remove(expressionObjectData);
+//    }
+
+    public TableObjectData getTableObjectData() {
+        return tableObjectData;
+    }
+
+    public void setTableObjectData(TableObjectData tableObjectData) {
+        this.tableObjectData = tableObjectData;
     }
     
-    public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
-        expressionObjectData.removeColumnObjectData(this);
-        return expressionObjectDataList.remove(expressionObjectData);
+    public boolean isUsed() {
+	return expressionObjectDataList != null && expressionObjectDataList.size() > 0;
     }
 }

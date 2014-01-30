@@ -8,11 +8,15 @@ package com.vero.ui.model;
 
 import static com.vero.ui.constants.ObjectType.TABLE;
 
+import com.vero.ui.common.UIDataManager;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.constants.TableType;
+import com.vero.ui.service.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -26,11 +30,15 @@ import javafx.beans.property.StringProperty;
 public class TableObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
+    private static final Logger logger = Logger.getLogger(TableObjectData.class.getName());
+    
     private StringProperty name = new SimpleStringProperty();
     private StringProperty physicalName = new SimpleStringProperty();
     private IntegerProperty rowCount = new SimpleIntegerProperty();
     private TableType tableType = TableType.UNKNOWN;
     private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
+    private DatasourceObjectData datasourceObjectData = null;
+    private List<ColumnObjectData> unusedColumnObjectDataList = null;
     
     public TableObjectData() {
         
@@ -94,10 +102,66 @@ public class TableObjectData extends UIData {
     }
     
     public void addColumnObjectData(ColumnObjectData data) {
+	data.setTableObjectData(this);
         columnObjectDataList.add(data);
     }
     
     public boolean removeColumnObjectData(ColumnObjectData data) {
+	data.setTableObjectData(null);
         return columnObjectDataList.remove(data);
+    }
+
+    public DatasourceObjectData getDatasourceObjectData() {
+        return datasourceObjectData;
+    }
+
+    public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        this.datasourceObjectData = datasourceObjectData;
+    }
+    
+    public List<AttributeObjectData> getRelatedAttributeObjectDataList() {
+	List<AttributeObjectData> attributeObjectDataList = null;
+	
+	try {
+	    attributeObjectDataList = UIDataManager.getInstance().getRelatedAttributeObjectDataList(getId());
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            if (attributeObjectDataList == null) {
+        	attributeObjectDataList = new ArrayList<AttributeObjectData>();
+            }
+        }
+	
+	return attributeObjectDataList;
+    }
+    
+    public List<MetricObjectData> getRelatedMetricObjectDataList() {
+	List<MetricObjectData> metricObjectDataList = null;
+	
+	try {
+	    metricObjectDataList = UIDataManager.getInstance().getRelatedMetricObjectDataList(getId());
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            if (metricObjectDataList == null) {
+        	metricObjectDataList = new ArrayList<MetricObjectData>();
+            }
+        }
+	
+	return metricObjectDataList;
+    }
+    
+    public List<ColumnObjectData> getUnusedColumnObjectDataList() {
+	if (unusedColumnObjectDataList == null) {
+	    unusedColumnObjectDataList = new ArrayList<ColumnObjectData>();
+	    
+	    for (ColumnObjectData columnObjectData : columnObjectDataList) {
+		if (!columnObjectData.isUsed()) {
+		    unusedColumnObjectDataList.add(columnObjectData);
+		}
+	    }
+	}
+	
+	return unusedColumnObjectDataList;
     }
 }

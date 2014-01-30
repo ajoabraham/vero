@@ -4,6 +4,7 @@
 package com.vero.ui.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
@@ -34,28 +35,24 @@ public final class DataUtils {
     private DataUtils() {	
     }
     
-    public static void copy(ProjectObjectData source, SchemaProject target) {
-        target.setId(source.getId());
-        target.setName(source.getName());
-        
-        target.setSchemaDatasources(new ArrayList<SchemaDatasource>());
-        
-        for (DatasourceObjectData datasourceObjectData : source.getDatasourceObjectDataList()) {
-            SchemaDatasource schemaDatasource = new SchemaDatasource();
-            copy(datasourceObjectData, schemaDatasource);
-            target.addSchemaDatasource(schemaDatasource);
-        }
+    // Copy between UIData and Metadata
+    public static void copy(TableObjectData source, Table target) {
+	target.setObjectName(source.getName());
+	target.setPhysicalName(source.getPhysicalName());
+	target.setRowCount(source.getRowCount());
+	
+	for (ColumnObjectData columnObjectData : source.getColumnObjectDataList()) {
+	    Column column = new Column();
+	    copy(columnObjectData, column);
+	    target.addColumn(column);
+	}
     }
     
-    public static void copy(SchemaProject source, ProjectObjectData target) {
-        target.setId(source.getId());
-        target.setName(source.getName());
-                
-        for (SchemaDatasource schemaDatasource : source.getSchemaDatasources()) {
-            DatasourceObjectData datasourceObjectData = new DatasourceObjectData();
-            copy(schemaDatasource, datasourceObjectData);
-            target.addDatasourceObjectData(datasourceObjectData);
-        }
+    public static void copy(ColumnObjectData source, Column target) {
+	target.setObjectName(source.getName());
+	target.setKeyType(Column.KeyTypes.valueOf(source.getKeyType().toString()));
+	target.setDataType(source.getDataType());
+	target.setDataTypeSize(source.getDataTypeSize());
     }
     
     public static void copy(Table source, TableObjectData target) {
@@ -78,28 +75,17 @@ public final class DataUtils {
 	target.setDataTypeSize(source.getDataTypeSize());
     }
     
-    public static void copy(TableObjectData source, Table target) {
-	target.setObjectName(source.getName());
-	target.setPhysicalName(source.getPhysicalName());
-	target.setRowCount(source.getRowCount());
-	
-	for (ColumnObjectData columnObjectData : source.getColumnObjectDataList()) {
-	    Column column = new Column();
-	    copy(columnObjectData, column);
-	    target.addColumn(column);
-	}
-    }
-    
-    public static void copy(ColumnObjectData source, Column target) {
-	target.setObjectName(source.getName());
-	target.setKeyType(Column.KeyTypes.valueOf(source.getKeyType().toString()));
-	target.setDataType(source.getDataType());
-	target.setDataTypeSize(source.getDataTypeSize());
-    }
-     
+    // Copy between UIData and persistent data
     public static void copy(DatasourceObjectData source, SchemaDatasource target) {
         target.setId(source.getId());
         target.setName(source.getName());
+        
+        if (source.getProjectObjectData() != null) {
+            SchemaProject schemaProject = new SchemaProject();
+            schemaProject.setId(source.getProjectObjectData().getId());
+            target.setSchemaProject(schemaProject);
+        }
+        
         SchemaDatabase schemaDatabase = new SchemaDatabase();
         copy(source.getDatabaseObjectData(), schemaDatabase);
         target.setSchemaDatabase(schemaDatabase);
@@ -113,7 +99,7 @@ public final class DataUtils {
         }
     }
     
-    public static void copy(DatabaseObjectData source, SchemaDatabase target) {
+    private static void copy(DatabaseObjectData source, SchemaDatabase target) {
         target.setId(source.getId());
         target.setDatabaseName(source.getDatabaseName());
         target.setHostAddress(source.getHostname());
@@ -122,7 +108,7 @@ public final class DataUtils {
         target.setPassword(source.getPassword());
     }
     
-    public static void copy(TableObjectData source, SchemaTable target) {
+    private static void copy(TableObjectData source, SchemaTable target) {
         target.setId(source.getId());
         target.setName(source.getName());
         target.setPhysicalName(source.getPhysicalName());
@@ -138,17 +124,40 @@ public final class DataUtils {
         }
     }
     
-    public static void copy(ColumnObjectData source, SchemaColumn target) {
+    private static void copy(ColumnObjectData source, SchemaColumn target) {
         target.setId(source.getId());
         target.setDataType(source.getDataType());
         target.setName(source.getName());
         target.setKeyType(source.getKeyType().ordinal());
+        
+        List<SchemaExpression> schemaExpressions = new ArrayList<SchemaExpression>();
+        for (ExpressionObjectData expressionObjectData : source.getExpressionObjectDataList()) {
+            SchemaExpression schemaExpression = new SchemaExpression();
+            schemaExpression.setId(expressionObjectData.getId());
+            schemaExpressions.add(schemaExpression);
+        }
+        
+        target.setSchemaExpressions(schemaExpressions);
     }
     
-    public static void copy(SchemaDatasource source, DatasourceObjectData target) {
+    public static void copy(SchemaProject source, ProjectObjectData target) {
         target.setId(source.getId());
         target.setName(source.getName());
-        copy(source.getSchemaDatabase(), target.getDatabaseObjectData());
+                
+        for (SchemaDatasource schemaDatasource : source.getSchemaDatasources()) {
+            DatasourceObjectData datasourceObjectData = new DatasourceObjectData();
+            copy(schemaDatasource, datasourceObjectData);
+            target.addDatasourceObjectData(datasourceObjectData);
+        }
+    }
+    
+    private static void copy(SchemaDatasource source, DatasourceObjectData target) {
+        target.setId(source.getId());
+        target.setName(source.getName());
+        
+        DatabaseObjectData databaseObjectData = new DatabaseObjectData();
+        copy(source.getSchemaDatabase(), databaseObjectData);
+        target.setDatabaseObjectData(databaseObjectData);
         
         for (SchemaTable schemaTable : source.getSchemaTables()) {
             TableObjectData tableObjectData = new TableObjectData();
@@ -157,7 +166,7 @@ public final class DataUtils {
         }
     }
     
-    public static void copy(SchemaDatabase source, DatabaseObjectData target) {
+    private static void copy(SchemaDatabase source, DatabaseObjectData target) {
         target.setId(source.getId());
 	target.setDatabaseName(source.getDatabaseName());
         target.setHostname(source.getHostAddress());
@@ -166,7 +175,7 @@ public final class DataUtils {
         target.setPassword(source.getPassword());
     }
     
-    public static void copy(SchemaTable source, TableObjectData target) {
+    private static void copy(SchemaTable source, TableObjectData target) {
         target.setId(source.getId());
         target.setName(source.getName());
         target.setPhysicalName(source.getPhysicalName());
@@ -180,36 +189,32 @@ public final class DataUtils {
         }
     }
     
-    public static void copy(SchemaColumn source, ColumnObjectData target) {
+    private static void copy(SchemaColumn source, ColumnObjectData target) {
         target.setId(source.getId());
         target.setDataType(source.getDataType());
         target.setName(source.getName());
         target.setKeyType(DBKeyType.values()[source.getKeyType()]);
+        
+        for (SchemaExpression schemaExpression : source.getSchemaExpressions()) {
+            ExpressionObjectData expressionObjectData = new ExpressionObjectData();
+            expressionObjectData.setId(schemaExpression.getId());
+            target.getExpressionObjectDataList().add(expressionObjectData);
+        }
     }
     
     public static void copy(SchemaAttribute source, AttributeObjectData target) {
         target.setId(source.getId());
         target.setName(source.getName());
         
-        for (SchemaExpression schemaExpression : source.getSchemaExpressions()) {
-            ExpressionObjectData expressionObjectData = new ExpressionObjectData();
-            DataUtils.copy(schemaExpression, expressionObjectData);
-            target.addExpressionObjectData(expressionObjectData);
-        }
+//        for (SchemaExpression schemaExpression : source.getSchemaExpressions()) {
+//            ExpressionObjectData expressionObjectData = new ExpressionObjectData();
+//            DataUtils.copy(schemaExpression, expressionObjectData);
+//            target.addExpressionObjectData(expressionObjectData);
+//        }
     }
-    
-    public static void copy(SchemaExpression source, ExpressionObjectData target) {
-        target.setId(source.getId());
-        target.setFormula(source.getExpression());
-        
-        for (SchemaColumn schemaColumn : source.getSchemaColumns()) {
-            ColumnObjectData columnObjectData = new ColumnObjectData();
-            DataUtils.copy(schemaColumn, columnObjectData);
-            target.addColumnObjectData(columnObjectData);
-        }
-    }
-    
+       
     public static void copy(SchemaMetric source, MetricObjectData target) {
-        
+        target.setId(source.getId());
+        target.setName(source.getName());
     }
 }

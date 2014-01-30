@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.vero.model.entities.SchemaAttribute;
-import com.vero.model.entities.SchemaColumn;
 import com.vero.model.entities.SchemaData;
 import com.vero.model.entities.SchemaMetric;
 import com.vero.model.util.PersistentUtils;
@@ -174,24 +173,24 @@ public class MetadataDaoImpl implements MetadataDao {
         }
     }
 
-    @Override
-    public List<SchemaColumn> findUnusedSchemaColumns(String tableId) throws PersistentException {
-        EntityManager em = null;
-        
-        try {
-            em = PersistentUtils.createEntityManager();
-            
-            return em.createNamedQuery("SchemaTable.findUnusedColumns", SchemaColumn.class)
-                     .setParameter("tableId", tableId)
-                     .getResultList();
-        }
-        catch (Exception e) {
-            throw new PersistentException(e);
-        }
-        finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
+//    @Override
+//    public List<SchemaColumn> findUnusedSchemaColumns(String tableId) throws PersistentException {
+//        EntityManager em = null;
+//        
+//        try {
+//            em = PersistentUtils.createEntityManager();
+//            
+//            return em.createNamedQuery("SchemaTable.findUnusedColumns", SchemaColumn.class)
+//                     .setParameter("tableId", tableId)
+//                     .getResultList();
+//        }
+//        catch (Exception e) {
+//            throw new PersistentException(e);
+//        }
+//        finally {
+//            if (em != null) {
+//                em.close();
+//            }
+//        }
+//    }
 }

@@ -28,11 +28,10 @@ import javafx.scene.layout.GridPane;
 
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.common.UIDataManager;
 import com.vero.ui.constants.TableType;
 import com.vero.ui.model.TableObjectData;
-import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceException;
-import com.vero.ui.service.ServiceManager;
 import com.vero.ui.wizard.WizardException;
 import com.vero.ui.wizard.WizardPagePane;
 
@@ -104,8 +103,7 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
     @Override
     public void finish() throws WizardException {        
         try {
-            MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
-            service.persistDatasource(wizardData.getData());
+            UIDataManager.getInstance().persistDatasourceObjectData(wizardData.getData());
             ConfirmationDialogs.createInfoConfirmation(null, "Successfully imported datasource.").show();
         }
         catch (ServiceException e) {
