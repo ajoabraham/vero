@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaData;
 import com.vero.model.entities.SchemaMetric;
-import com.vero.model.entities.SchemaProject;
 import com.vero.model.util.PersistentUtils;
 
 /**
@@ -22,19 +21,14 @@ public class MetadataDaoImpl implements MetadataDao {
     }
 
     @Override
-    public <T extends SchemaData> void persist(T objectData) throws PersistentException {
+    public <T extends SchemaData> void persist(T schemaData) throws PersistentException {
         EntityManager em = null;
         
         try {
             em = PersistentUtils.createEntityManager();
             em.getTransaction().begin();
-            em.persist(objectData);
+            em.persist(schemaData);
             em.getTransaction().commit();
-            
-            em.close();
-            em = PersistentUtils.createEntityManager();
-            SchemaProject project = em.find(SchemaProject.class, "5536101a-e477-453a-9b68-3d4bd63ec329");
-System.err.println("Find again..." + project.getSchemaDatasources().size());            
         }
         catch (Exception e) {
             if (em.getTransaction().isActive())
@@ -54,8 +48,13 @@ System.err.println("Find again..." + project.getSchemaDatasources().size());
         
         try {
             em = PersistentUtils.createEntityManager();
+            // FIXME TH 01/31/2014 When a new datasource persisted into database, reload project
+            // won't bring in the new datasource just created (This should be a caching bug in EclipseLink).
+            // For now manually refresh it again to bring in all data.
+            T schemaData = em.find(dataType, id);
+            em.refresh(schemaData);
             
-            return em.find(dataType, id);
+            return schemaData;
         }
         catch (Exception e) {
             throw new PersistentException(e);
@@ -68,15 +67,15 @@ System.err.println("Find again..." + project.getSchemaDatasources().size());
     }
 
     @Override
-    public <T extends SchemaData> T update(T objectData) throws PersistentException {
+    public <T extends SchemaData> T update(T schemaData) throws PersistentException {
         EntityManager em = null;
         
         try {
             em = PersistentUtils.createEntityManager();
             em.getTransaction().begin();
-            objectData = em.merge(objectData);
+            schemaData = em.merge(schemaData);
             em.getTransaction().commit();
-            return objectData;
+            return schemaData;
         }
         catch (Exception e) {
             if (em.getTransaction().isActive())
@@ -92,14 +91,14 @@ System.err.println("Find again..." + project.getSchemaDatasources().size());
     
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends SchemaData> void remove(T objectData) throws PersistentException {
+    public <T extends SchemaData> void remove(T schemaData) throws PersistentException {
         EntityManager em = null;
         
         try {
             em = PersistentUtils.createEntityManager();
             em.getTransaction().begin();
-            objectData = (T) em.find(objectData.getClass(), objectData.getId());
-            em.remove(objectData);
+            schemaData = (T) em.find(schemaData.getClass(), schemaData.getId());
+            em.remove(schemaData);
             em.getTransaction().commit();
         }
         catch (Exception e) {
