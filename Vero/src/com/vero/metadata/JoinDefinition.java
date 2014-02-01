@@ -10,10 +10,10 @@ import java.util.UUID;
 
 /**
  *
- * @author yulinwen
+ * @author Yulin Wen
  */
 public class JoinDefinition {
-    private final UUID uuid = UUID.randomUUID();
+    private UUID uuid = null;
     private String name = null;
     private String tleft = null;
     private String cleft = null;
@@ -32,15 +32,16 @@ public class JoinDefinition {
         RIGHT
     }
         
-    public JoinDefinition(String inName, String inTL, String inCL, String inOp, String inTR, String inCR, String inExp, String inType) {
-        name = inName;
-        tleft = inTL;
-        cleft = inCL;
-        operator = inOp;
-        tright = inTR;
-        cright = inCR;
-        expression = inExp;
-        type = inType;
+    public JoinDefinition(UUID uuid, String name, String tleft, String cleft, String operator, String tright, String cright, String expression, String type) {
+        this.uuid = uuid;
+        this.name = name;
+        this.tleft = tleft;
+        this.cleft = cleft;
+        this.operator = operator;
+        this.tright = tright;
+        this.cright = cright;
+        this.expression = expression;
+        this.type = type;
     }
     
     public String getName() {

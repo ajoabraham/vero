@@ -181,7 +181,7 @@ public class TestParser {
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
                         JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         // add expression
-                        Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
                         anAttr.addExpression(anExp);
 
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
@@ -232,7 +232,7 @@ public class TestParser {
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
                         JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         // add expression
-                        Expression anExp = new Expression(oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
                         aMetric.addExpression(anExp);
 
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
@@ -280,6 +280,7 @@ public class TestParser {
                     System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
                     // add DS                
                     JoinDefinition aJoin = new JoinDefinition(
+                        UUID.randomUUID(),
                         oneJSONJDObj.getString("name"),
                         oneJSONJDObj.getString("tleft"),
                         oneJSONJDObj.getString("cleft"),
