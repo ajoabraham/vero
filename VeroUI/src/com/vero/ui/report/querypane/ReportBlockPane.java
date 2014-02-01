@@ -13,9 +13,13 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.BlockType;
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.report.dropzone.DropZonePane;
 
 public class ReportBlockPane extends BlockPane {
-    public ReportBlockPane() {
+    private DropZonePane dropZonePane = null;
+    
+    public ReportBlockPane(DropZonePane dropZonePane) {
+	this.dropZonePane = dropZonePane;
 	buildUI();
     }
     

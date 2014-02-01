@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 import com.vero.ui.common.DockEvent;
 import com.vero.ui.common.PopupDialog;
@@ -21,28 +22,36 @@ import com.vero.ui.editor.DockHandler;
 import com.vero.ui.editor.DockedEditorPane;
 import com.vero.ui.editor.EditorPaneFactory;
 import com.vero.ui.editor.UndockedEditorPane;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.model.UIData;
-import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryPane;
 
 /**
  *
  * @author Tai Hu
+ * 
  */
 public class ReportPane extends BorderPane implements DockHandler {
     private static final Logger logger = Logger.getLogger(ReportPane.class.getName());
     
     private UIManager uiManager = null;
     private DockedEditorPane<? extends UIData> dockedEditorPane = null;
+    private ReportObjectData reportObjectData = null;
+    private StackPane dropZonePaneContainer = null; 
+    private QueryPane queryPane = null;
     
-    public ReportPane() {
+    public ReportPane(ReportObjectData reportObjectData) {
+	this.reportObjectData = reportObjectData;
         uiManager = UIManager.getInstance();
         buildUI();
     }
     
     private void buildUI() {
-        setLeft(new DropZonePane(this));
-        setCenter(new QueryPane());
+	dropZonePaneContainer = new StackPane();
+        setLeft(dropZonePaneContainer);
+        
+        queryPane = new QueryPane(this);
+        setCenter(queryPane);
     }
 
     @Override
@@ -77,5 +86,21 @@ public class ReportPane extends BorderPane implements DockHandler {
     
     private void handleCancelEvent() {
         setBottom(null);
+    }
+
+    public ReportObjectData getReportObjectData() {
+        return reportObjectData;
+    }
+
+    public void setReportObjectData(ReportObjectData reportObjectData) {
+        this.reportObjectData = reportObjectData;
+    }
+
+    public StackPane getDropZonePaneContainer() {
+        return dropZonePaneContainer;
+    }
+
+    public void setDropZonePaneContainer(StackPane dropZonePaneContainer) {
+        this.dropZonePaneContainer = dropZonePaneContainer;
     }
 }

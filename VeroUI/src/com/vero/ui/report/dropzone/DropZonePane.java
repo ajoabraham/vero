@@ -5,24 +5,21 @@
  */
 package com.vero.ui.report.dropzone;
 
-import com.vero.ui.common.LabelPaneFactory;
-
+import static com.vero.ui.constants.CSSConstants.CLASS_DROP_ZONE_CONTENT_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_DROP_ZONE_PANE;
+import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 import static com.vero.ui.constants.ObjectType.METRIC;
 import static com.vero.ui.constants.ObjectType.TABLE;
-import static com.vero.ui.constants.UIConstants.DROP_ZONE_PANE_WIDTH;
-import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
-import static com.vero.ui.constants.CSSConstants.*;
 import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
-import static com.vero.ui.constants.TableJoinType.INNER_JOIN;
-
-import com.vero.ui.report.ReportPane;
-import com.vero.ui.report.dropzone.DropTargetPane;
-import com.vero.ui.report.dropzone.DropTargetPaneFactory;
-
+import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DROP_ZONE_PANE_WIDTH;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+
+import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.report.ReportPane;
 
 /**
  *
@@ -87,8 +84,8 @@ public class DropZonePane extends ScrollPane {
         DropTargetPane tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
-        tableJoinDropPane.getChildren().add(
-                LabelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
+//        tableJoinDropPane.getChildren().add(
+//                LabelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
         contentPane.getChildren().add(tableJoinDropPane);
     }
 }

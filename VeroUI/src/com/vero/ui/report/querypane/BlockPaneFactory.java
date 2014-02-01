@@ -1,5 +1,7 @@
 package com.vero.ui.report.querypane;
 
+import com.vero.ui.report.dropzone.DropZonePane;
+
 public final class BlockPaneFactory {
     private static BlockPaneFactory INSTANCE = null;
     
@@ -23,7 +25,7 @@ public final class BlockPaneFactory {
 	return new QueryBlockPane();
     }
     
-    public BlockPane createReportBlockPane() {
-	return new ReportBlockPane();
+    public BlockPane createReportBlockPane(DropZonePane dropZonePane) {
+	return new ReportBlockPane(dropZonePane);
     }
 }

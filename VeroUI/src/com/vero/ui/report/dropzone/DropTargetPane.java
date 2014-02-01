@@ -6,6 +6,7 @@
 
 package com.vero.ui.report.dropzone;
 
+import static com.vero.ui.constants.ObjectType.*;
 import static com.vero.ui.constants.CSSConstants.CLASS_DROP_PANE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
@@ -22,6 +23,10 @@ import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.editor.DockHandler;
+import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.model.ColumnObjectData;
+import com.vero.ui.model.ExpressionObjectData;
+import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
 
 /**
@@ -55,9 +60,16 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 
     @Override
     public boolean acceptDrop(UIData transferData) {
-        return getType() == transferData.getType();
+	boolean acceptDrop = getType() == transferData.getType();
+	
+	if (!acceptDrop) {
+	    if (transferData.getType() == COLUMN && (getType() == ATTRIBUTE || getType() == METRIC)) {
+		acceptDrop = true;
+	    }
+	}
+	
+        return acceptDrop;
     }
-
     
     @Override
     public void handleDragOverEvent(DragEvent event) {
@@ -106,7 +118,36 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 
     @Override
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
-        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
+	DropZoneObjectPane<? extends UIData> dropZoneObjectPane = null;
+	// Drop logic
+	// 1. If drop a column, create a default attribute or metric
+	if (transferData.getType() == COLUMN) {
+	    ColumnObjectData columnObjectData = (ColumnObjectData) transferData;
+	    if (getType() == ATTRIBUTE) {
+		AttributeObjectData attributeObjectData = new AttributeObjectData();
+		attributeObjectData.setName(columnObjectData.getName());
+		ExpressionObjectData expressionObjectData = new ExpressionObjectData();
+		expressionObjectData.setFormula(columnObjectData.getName());
+		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
+		attributeObjectData.addExpressionObjectData(expressionObjectData);
+		
+		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(attributeObjectData);
+	    }
+	    else if (getType() == METRIC) {
+		MetricObjectData metricObjectData = new MetricObjectData();
+		metricObjectData.setName(columnObjectData.getName());
+		ExpressionObjectData expressionObjectData = new ExpressionObjectData();
+		expressionObjectData.setFormula("sum(" + columnObjectData.getName() + ")");
+		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
+		metricObjectData.addExpressionObjectData(expressionObjectData);
+		
+		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(metricObjectData);
+	    }
+	}	
+	else { 
+	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
+	}
+	
         dropZoneObjectPane.setDockHandler(dockHandler);
         
         if (isEmpty) {
@@ -119,7 +160,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         isEmpty = false;
         currentDropIndex = -1;
     }
-    
+        
     public String getPlaceholderText() {
         String text = "";
         switch (getType()) {
