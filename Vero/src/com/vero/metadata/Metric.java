@@ -1,51 +1,73 @@
 package com.vero.metadata;
 
-import com.vero.session.Session;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
 
-public class Metric implements Filterable {
-    private final UUID uuid = UUID.randomUUID();
+/** 
+ * Metrics generally map to aggregate expressions, where aggregate expressions 
+ * operate on multiple rows. 
+ * Metrics primarily drive the Select and Group By Clauses.
+ * 
+ * @author Yulin Wen
+ */
+public class Metric {
+    private UUID uuid = null;
     private String name = null;
-    private String description = null;
-    private final ArrayList<Expression> expressions = new ArrayList();
+    private ArrayList<Expression> expressions = null;
     
-    public Metric(String inName, String inDescription) {
-        name = inName;
-        description = inDescription;
+    public Metric() {
+    }
+    
+    public Metric(UUID uuid, String name) {
+        this.uuid = uuid;
+        this.name = name;
+        this.expressions = new ArrayList();
     }
 
-    public Metric(String inName, String inDescription, ArrayList<Expression> inExpressions) {
-        name = inName;
-        description = inDescription;
+    public Metric(UUID uuid, String name, ArrayList<Expression> expressions) {
+        this.uuid = uuid;
+        this.name = name;
+        this.expressions = new ArrayList(expressions);
     }
 
-    public void addExpression(Expression inExpression) {
-        expressions.add(inExpression);
+    public void addExpression(Expression expression) {
+        this.expressions.add(expression);
     }
 
-    public void addExpressions(ArrayList<Expression> inExpressions) {
-        expressions.addAll(inExpressions);
+    public void addExpressions(ArrayList<Expression> expressions) {
+        this.expressions.addAll(expressions);
     }
 
+    public ArrayList<Expression> getExpressions() {
+        return expressions;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public void setUUID(UUID uuid) {
+        this.uuid = uuid;
     }
     
     public UUID getUUID() {
         return uuid;
     }
-    
-    public ArrayList<Expression> getExpressions() {
-        return expressions;
-    }
 
-    public Expression getExpressionByTable(Table inTab) {
+    /**
+     * Loop through all expressions and all tables within an expression to find
+     * if current table by object is in it. 
+     * 
+     * @param table The table to find.
+     * 
+     * @return an expression or null if not found.
+     */
+    public Expression getExpressionByTable(Table table) {
         ArrayList<Expression> expList = this.getExpressions();
         Boolean found = false;
         
@@ -62,7 +84,7 @@ public class Metric implements Filterable {
                     while (iterTab.hasNext()) {
                         Table curTab = iterTab.next();
                         
-                        if (inTab == curTab) {
+                        if (table == curTab) {
                             return curExp;
                         }                        
                     }
@@ -73,6 +95,12 @@ public class Metric implements Filterable {
         return null;
     }
 
+    /**
+     * Loop through all expressions and all tables within an expression to find
+     * if current table by name is in it. 
+     * 
+     * @return an expression or null if not found.
+     */
     public Expression getExpressionByTableName(String inTab) {
         ArrayList<Expression> expList = this.getExpressions();
         Boolean found = false;
@@ -101,7 +129,14 @@ public class Metric implements Filterable {
         return null;
     }
 
-    public void removeTable(String inTable) {
+    /**
+     * Loop through all expressions and all tables within an expression to 
+     * remove a given table by name. If, after the table is removed, the 
+     * expression becomes empty, the expression is removed too. 
+     * 
+     * @param table The table to remove.
+     */
+    public void removeTable(String table) {
         ArrayList<Expression> aList = this.getExpressions();
         
         if (aList.size() > 0) {
@@ -109,7 +144,7 @@ public class Metric implements Filterable {
 
             while (iter.hasNext()) {
                 Expression curExp = iter.next();                
-                curExp.removeTable(inTable);
+                curExp.removeTable(table);
                 if (curExp.getColumns().isEmpty()) {
                     iter.remove();
                 }
@@ -117,6 +152,11 @@ public class Metric implements Filterable {
         }
     } 
     
+     /**
+     * Loop through all expressions and return all tables within an expression.
+     * 
+     * @return all tables in a list or null if there is no expression.
+     */
     public ArrayList<Table> retrieveTables() {        
         ArrayList<Expression> aList = this.getExpressions();
         

@@ -16,6 +16,7 @@ import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.io.File;
 import java.io.FileReader;
+import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,19 +125,19 @@ public class TestParser {
                     Column aColumn;
                     switch (oneJSONColumnObj.getString("type")) {
                         case "string":
-                            aColumn = new Column(oneJSONColumnObj.getString("name"),"String", 10,
+                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"String", 10,
                                 aTable);
                             break;
                         case "integer":
-                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Int", 10,
+                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Int", 10,
                                 aTable);
                             break;
                         case "date":
-                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Date", 10,
+                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Date", 10,
                                 aTable);
                             break;
                         case "boolean":
-                            aColumn = new Column(oneJSONColumnObj.getString("name"),"Bool", 10,
+                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Bool", 10,
                                 aTable);
                             break;
                         default:
@@ -170,7 +171,7 @@ public class TestParser {
                     System.out.println("name:" + oneJSONAttrObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
                     // add attribute
-                    Attribute anAttr = new Attribute(oneJSONAttrObj.getString("name"), oneJSONAttrObj.getString("name"));
+                    Attribute anAttr = new Attribute(UUID.randomUUID(), oneJSONAttrObj.getString("name"));
                     testSession.addAttributeMeta(anAttr);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
@@ -221,7 +222,7 @@ public class TestParser {
                     System.out.println("name:" + oneJSONMetricObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
                     // add metric
-                    Metric aMetric = new Metric(oneJSONMetricObj.getString("name"), oneJSONMetricObj.getString("name"));
+                    Metric aMetric = new Metric(UUID.randomUUID(), oneJSONMetricObj.getString("name"));
                     testSession.addMetricMeta(aMetric);
 
                     int expressionsArraySize = jsonExpressionsArray.length();

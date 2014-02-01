@@ -1,5 +1,7 @@
 package com.vero.metadata;
 
+import java.util.UUID;
+
 /**
  * Columns are the most fundamental of all objects. A table
  * has many columns and a column belongs to a table.
@@ -7,6 +9,7 @@ package com.vero.metadata;
  * @author ajoabraham
  */
 public class Column {
+    private UUID uuid;
     private String objectName;
     private String dataType;
     private int dataTypeSize;
@@ -42,6 +45,7 @@ public class Column {
      * Default column constructor.
      */
     public Column(){
+        this.uuid = null;
         this.objectName = "";
         this.dataType = "";        
         this.keyType = KeyTypes.NO_KEY_TYPE;
@@ -51,12 +55,14 @@ public class Column {
     /**
      * A convenience constructor for building columns quickly.
      * 
+     * @param uuid  The UUID of a column.
      * @param name  The name of a column (must be actual name of column in the db).
      * @param dataType  The name of the datatype as reported by the database.
      * @param dataTypeSize  The size of the datatype as reported by the database.
      * @param table The table to which this column belongs to.
      */
-    public Column(String name, String dataType, int dataTypeSize, Table table) {
+    public Column(UUID uuid, String name, String dataType, int dataTypeSize, Table table) {
+        this.uuid = uuid;
         this.objectName = name;
         this.dataType = dataType;
         this.dataTypeSize = dataTypeSize;
@@ -65,6 +71,14 @@ public class Column {
         this.table = table;
     }
 
+    public void setUUID(UUID uuid) {
+        this.uuid = uuid;
+    }
+    
+    public UUID getUUID() {
+        return uuid;
+    }
+    
     /**
      * Column names are always the same as their name in the database.
      * We store column names exactly as it exists in the database with case sensitivity.
@@ -177,7 +191,7 @@ public class Column {
      *
      * @return  true if foreign key
      */
-    public boolean isForeignKey(){
+    public boolean isForeignKey() {
         return getKeyType() == KeyTypes.FOREIGN_KEY;
     }
     
@@ -185,7 +199,7 @@ public class Column {
      *
      * @return  true if primary key
      */
-    public boolean isPrimaryKey(){
+    public boolean isPrimaryKey() {
         return getKeyType() == KeyTypes.PRIMARY_KEY;
     }
     
