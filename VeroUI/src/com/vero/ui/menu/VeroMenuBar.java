@@ -10,10 +10,12 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.ReportObjectData;
+import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.ReportTabManager;
 
 /**
@@ -45,7 +47,9 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
         
         addBlockMenu = new Menu("ADD BLOCK", new ImageView(ImageList.IMAGE_ADD_BLOCK));
         commentBlockMenuItem = new MenuItem("Comment Block", new ImageView(ImageList.IMAGE_COMMENT));
+        commentBlockMenuItem.setOnAction(this);
         queryBlockMenuItem = new MenuItem("Query Block", new ImageView(ImageList.IMAGE_ACTIVE_CIRCLE));
+        queryBlockMenuItem.setOnAction(this);
         addBlockMenu.getItems().addAll(commentBlockMenuItem, queryBlockMenuItem);
         
         deleteMenu = new Menu("DELETE", new ImageView(ImageList.IMAGE_DELETE));
@@ -58,8 +62,26 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 	if (event.getSource() == newMenu) {
 	    handleNewReportAction();
 	}
+	else if (event.getSource() == commentBlockMenuItem) {
+	    handleAddCommentBlockAction();
+	}
+	else if (event.getSource() == queryBlockMenuItem) {
+	    handleAddQueryBlockAction();
+	}
     }
         
+    private void handleAddQueryBlockAction() {
+        Tab selectedReportTab = ReportTabManager.getInstance().getSelectedTab();
+        ReportPane reportPane = (ReportPane) selectedReportTab.getContent();
+        reportPane.addNewQueryBlockPane();
+    }
+
+    private void handleAddCommentBlockAction() {
+        Tab selectedReportTab = ReportTabManager.getInstance().getSelectedTab();
+        ReportPane reportPane = (ReportPane) selectedReportTab.getContent();
+        reportPane.addNewCommentBlockPane();
+    }
+
     private void handleNewReportAction() {
         ReportObjectData reportObjectData = new ReportObjectData();
         reportObjectData.setName("New Report");

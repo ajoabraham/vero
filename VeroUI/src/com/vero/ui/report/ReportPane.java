@@ -103,4 +103,12 @@ public class ReportPane extends BorderPane implements DockHandler {
     public void setDropZonePaneContainer(StackPane dropZonePaneContainer) {
         this.dropZonePaneContainer = dropZonePaneContainer;
     }
+    
+    public void addNewCommentBlockPane() {
+        queryPane.addNewCommentBlockPane();
+    }
+    
+    public void addNewQueryBlockPane() {
+        queryPane.addNewQueryBlockPane();
+    }
 }

@@ -2,7 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/asm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.7.4.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/easymock-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/guava-15.0.jar"/>
 	<classpathentry kind="lib" path="lib/jgrapht-core-0.8.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/jparsec-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/JSON-java.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.27-bin.jar"/>
 	<classpathentry kind="lib" path="lib/org.api-typeable-pojos.api-0.8-SNAPSHOT.jar"/>
@@ -10,10 +19,9 @@
 	<classpathentry kind="lib" path="lib/org.java-sql-generator.api-0.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/org.java-sql-generator.implementation-0.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc41.jar"/>
+	<classpathentry kind="lib" path="lib/sql-framework-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/tdgssconfig.jar"/>
 	<classpathentry kind="lib" path="lib/terajdbc4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

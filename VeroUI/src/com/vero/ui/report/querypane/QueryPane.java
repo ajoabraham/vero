@@ -58,13 +58,28 @@ public class QueryPane extends ScrollPane {
 	    DropZonePane dropZonePane = new DropZonePane(reportPane);
 	    Pane globalFilter = new GlobalFilterPane();
 	    blockPanes.add(globalFilter);
-	    Pane commentBlock = new CommentBlockPane();
+	    Pane commentBlock = BlockPaneFactory.createCommentBlockPane();
 	    blockPanes.add(commentBlock);
-	    Pane reportBlockPane = new ReportBlockPane(dropZonePane);
+	    Pane reportBlockPane = BlockPaneFactory.createReportBlockPane(dropZonePane);
 	    blockPanes.add(reportBlockPane);
 	    
 	    contentPane.getChildren().addAll(globalFilter, commentBlock, reportBlockPane);
 	    dropZonePaneContainer.getChildren().add(dropZonePane);
 	}
+    }
+    
+    public void addNewCommentBlockPane() {
+        Pane commentBlock = BlockPaneFactory.createCommentBlockPane();
+        blockPanes.add(commentBlock);
+        
+        contentPane.getChildren().add(1, commentBlock);
+    }
+    
+    public void addNewQueryBlockPane() {
+        DropZonePane dropZonePane = new DropZonePane(reportPane);
+        Pane queryBlock = BlockPaneFactory.createQueryBlockPane(dropZonePane);
+        blockPanes.add(queryBlock);
+        
+        contentPane.getChildren().add(1, queryBlock);
     }
 }
