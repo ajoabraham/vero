@@ -606,7 +606,6 @@ public class QueryEngine {
         resultSQL = queryExp.toString();
         System.out.println("Output sql is: " + resultSQL); 
         aBlock.setSqlString(resultSQL);
-        aBlock.setBlockType(Block.BlockType.QUERY_BLOCK);
         
         return aReport;
     }

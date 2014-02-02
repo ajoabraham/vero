@@ -16,16 +16,8 @@ import java.util.UUID;
  *
  * @author yulinwen
  */
-public class Block {
-    public enum BlockType {
-        NONE,
-        QUERY_BLOCK,
-        COMMENT_BLOCK
-    }       
-    
+public class Block {   
     private String sqlString = null;
-    private Block.BlockType blockType = BlockType.NONE;
-    private int blockID;
     private final Map<UUID, UUID> attributeMap = new HashMap();
     private final Map<UUID, UUID> metricMap = new HashMap();
     private final List<UUID> joindefList = new ArrayList();
@@ -33,15 +25,7 @@ public class Block {
     public Block() {
 
     }
-    
-    public BlockType getBlockType() {
-        return this.blockType;
-    }
-    
-    public void setBlockType(BlockType inBlockType) {
-        this.blockType = inBlockType;
-    }
-    
+        
     public String getSqlString() {
         return this.sqlString;
     }
