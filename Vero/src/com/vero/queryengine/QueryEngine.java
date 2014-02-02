@@ -6,6 +6,7 @@
 
 package com.vero.queryengine;
 
+import static com.google.common.collect.ImmutableMap.of;
 import com.vero.metadata.Attribute;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
@@ -14,10 +15,14 @@ import com.vero.metadata.Table;
 import com.vero.report.Block;
 import com.vero.report.Report;
 import com.vero.session.Session;
+import frmw.dialect.GenericSQL;
+import frmw.model.Formula;
+import frmw.parser.Parsing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +87,7 @@ public class QueryEngine {
     private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
             new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
     private String resultSQL = null;
+    public static final Parsing parser = new Parsing();
     
     public QueryEngine() {}
         
@@ -663,5 +669,30 @@ public class QueryEngine {
             System.out.println("Vertext: " + eU +":"+"cost: " + eU.getWeight());
         }
         System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
+    }
+    
+    public static void main(String [] arg) {
+        Formula f = QueryEngine.parser.parse("id");
+        
+        //Formula f = aParsing.parse("count(trim(\"col1\" || \"col2\"))");
+        
+        Set<String> aSet = new HashSet(f.entityNames());
+        
+        for (String curString : aSet) {
+            System.out.println("Individual column: " + curString);
+        }
+        
+        String oriSql = f.sql(new GenericSQL());
+        
+        f.setTableAliases(of("id", "t1", "col2", "t2", "col 3", "t3", "col6", "t6"));
+        
+        String patchedSql = f.sql(new GenericSQL());
+        
+        System.out.println("Original sql output: " + oriSql);
+        System.out.println("Patched sql output: " + patchedSql);
+                
+        //Formula f = PARSER.parse("case col1 when 1 then 2 when 2 then 3 else 5 end");
+        //String sql = f.sql(GENERIC_SQL);
+        //assertEquals("CASE col1 WHEN 1 THEN 2 WHEN 2 THEN 3 ELSE 5 END", sql);   
     }
 }
