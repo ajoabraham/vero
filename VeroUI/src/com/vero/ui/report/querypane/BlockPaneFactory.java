@@ -11,11 +11,11 @@ public final class BlockPaneFactory {
 	return new CommentBlockPane();
     }
     
-    public static BlockPane createQueryBlockPane(DropZonePane dropZonePane) {
-	return new QueryBlockPane(dropZonePane);
+    public static BlockPane createQueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane) {
+	return new QueryBlockPane(queryPane, dropZonePane);
     }
     
-    public static BlockPane createReportBlockPane(DropZonePane dropZonePane) {
-	return new ReportBlockPane(dropZonePane);
+    public static BlockPane createReportBlockPane(QueryPane queryPane, DropZonePane dropZonePane) {
+	return new ReportBlockPane(queryPane, dropZonePane);
     }
 }

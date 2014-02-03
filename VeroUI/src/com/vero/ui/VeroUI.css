@@ -326,7 +326,7 @@
 .drop-zone-pane {
     -fx-border-color: -fx-light-grey-color;
     -fx-border-width: 0 1 0 0;
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-main-background-color;
 }
 
 .drop-zone-pane .drop-zone-content-pane {
