@@ -38,4 +38,9 @@ public class ReportBlockPane extends QueryBlockPane {
     public BlockType getType() {
 	return REPORT_BLOCK;
     }
+    
+    @Override
+    protected void showContextMenu() {
+        // Override to prevent context menu to show up for report block.
+    }
 }

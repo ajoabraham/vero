@@ -6,7 +6,10 @@ import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.QUERY_BLOCK_PANE_HEIGHT;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -23,6 +26,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     private DropZonePane dropZonePane = null;
     private boolean selected = false;
     private ImageView statusImageView = null;
+    private HBox headerPane = null;
     
     public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane) {
         this.queryPane = queryPane;
@@ -35,7 +39,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
         setPrefHeight(QUERY_BLOCK_PANE_HEIGHT);
         setMinHeight(QUERY_BLOCK_PANE_HEIGHT);
         
-        HBox headerPane = new HBox();
+        headerPane = new HBox();
         headerPane.setAlignment(Pos.CENTER_LEFT);
         statusImageView = new ImageView(ImageList.IMAGE_INACTIVE_CIRCLE);
         headerPane.getChildren().add(statusImageView);
@@ -77,6 +81,19 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
             if (!getSelected()) {                
                 queryPane.setSelectedBlock(this);
             }
-         }
+        }
+        else if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {
+            showContextMenu();
+        }       
+    }
+
+    protected void showContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem moveUpMenuItem = new MenuItem("Move Up");
+        MenuItem moveDownMenuItem = new MenuItem("Move Down");
+        contextMenu.getItems().addAll(moveUpMenuItem, moveDownMenuItem);
+        
+        contextMenu.show(headerPane, Side.BOTTOM, 0, 0);
+        
     }
 }

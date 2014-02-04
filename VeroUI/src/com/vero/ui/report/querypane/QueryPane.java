@@ -102,4 +102,12 @@ public class QueryPane extends ScrollPane {
             selectedBlockPane.setSelected(true);
         }
     }
+    
+    public void moveUp(QueryBlockPane blockPane) {
+        
+    }
+    
+    public void moveDown(QueryBlockPane blockPane) {
+        
+    }
 }
