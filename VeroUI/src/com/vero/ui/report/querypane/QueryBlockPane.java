@@ -38,8 +38,8 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
         HBox headerPane = new HBox();
         headerPane.setAlignment(Pos.CENTER_LEFT);
         statusImageView = new ImageView(ImageList.IMAGE_INACTIVE_CIRCLE);
-        statusImageView.setOnMouseClicked(this);
         headerPane.getChildren().add(statusImageView);
+        headerPane.setOnMouseClicked(this);
         Label headerLabel = new Label("REPORT BLOCK");
         headerLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         headerLabel.setMaxWidth(Double.MAX_VALUE);
