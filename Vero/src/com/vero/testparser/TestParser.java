@@ -172,7 +172,7 @@ public class TestParser {
                     JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
                     // add attribute
                     Attribute anAttr = new Attribute(UUID.randomUUID(), oneJSONAttrObj.getString("name"));
-                    testSession.addAttributeMeta(anAttr);
+                    testSession.addAttribute(anAttr);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
                     for (int j = 0; j < expressionsArraySize; j++) {
@@ -223,7 +223,7 @@ public class TestParser {
                     JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
                     // add metric
                     Metric aMetric = new Metric(UUID.randomUUID(), oneJSONMetricObj.getString("name"));
-                    testSession.addMetricMeta(aMetric);
+                    testSession.addMetric(aMetric);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
                     for (int j = 0; j < expressionsArraySize; j++) {
@@ -290,7 +290,7 @@ public class TestParser {
                         oneJSONJDObj.getString("expression"),
                         oneJSONJDObj.getString("jointype")
                     );
-                    testSession.addJoinMeta(aJoin);
+                    testSession.addJoindef(aJoin);
                 }
                 System.out.println("------------------------------");
             }
@@ -304,7 +304,7 @@ public class TestParser {
                     String hhName = jsonHHsArray.getString(i);
                     System.out.println("json whh object " + i + ": " + hhName);
                     // HH
-                    testSession.addWhiteHardhintMeta(hhName);
+                    testSession.addWhiteHardhint(hhName);
                 }
 
                 System.out.println("------------------------------");
@@ -319,7 +319,7 @@ public class TestParser {
                     String hhName = jsonHHsArray.getString(i);
                     System.out.println("json bhh object " + i + ": " + hhName);
                     // HH
-                    testSession.addBlackHardhintMeta(hhName);
+                    testSession.addBlackHardhint(hhName);
                 }
 
                 System.out.println("------------------------------");

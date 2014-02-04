@@ -17,6 +17,9 @@ public class DataSource {
         TERADATA
     }
     
+    public DataSource() {        
+    }
+    
     public DataSource(DsType inType, String inName, String inDescription) {
         uuid = UUID.randomUUID();
         type = inType;
@@ -28,7 +31,7 @@ public class DataSource {
     public void addTable(Table inTable) {
         tables.put(inTable.getObjectName(), inTable);
     }
-
+    
     public UUID getUUID() {
         return uuid;
     }
