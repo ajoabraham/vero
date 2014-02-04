@@ -24,13 +24,50 @@ public class Block {
     
     public Block() {
 
-    }
-        
+    }        
     public String getSqlString() {
-        return this.sqlString;
+        return sqlString;
     }
     
-    public void setSqlString(String inSqlString) {
-        this.sqlString = inSqlString;
+    public void setSqlString(String sqlString) {
+        this.sqlString = sqlString;
+    }
+    
+    public Map getAttributeMap() {
+        return attributeMap;
+    }
+    
+    public void addAttributeMap(UUID attribute, UUID expression) {
+        attributeMap.put(attribute, expression);
+    }
+    
+    public Map getMetricMap() {
+        return metricMap;
+    }
+    
+    public void addMetricMap(UUID metric, UUID expression) {
+        metricMap.put(metric, expression);
+    }
+    
+    public List getJoinDefList() {
+        return joindefList;
+    }
+    
+    public void addJoinDefList(UUID joinDef) {
+        joindefList.add(joinDef);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
+        result.append("Block: ").append(NEW_LINE);
+        result.append("    sqlString = ").append(sqlString).append(NEW_LINE);
+        result.append("    attributeMap size = ").append(attributeMap.size()).append(NEW_LINE);
+        result.append("    metricMap size = ").append(metricMap.size()).append(NEW_LINE);
+        result.append("    joindefList size = ").append(joindefList.size()).append(NEW_LINE);
+        
+        return result.toString();
     }
 }

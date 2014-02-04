@@ -44,6 +44,10 @@ public class JoinDefinition {
         this.type = type;
     }
     
+    public UUID getUUID() {
+        return uuid;
+    }
+    
     public String getName() {
         return name;
     }

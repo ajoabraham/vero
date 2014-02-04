@@ -6,6 +6,7 @@
 
 package com.vero.queryengine;
 
+import com.vero.report.Report;
 import com.vero.session.Session;
 import com.vero.testparser.TestParser;
 
@@ -18,11 +19,11 @@ public class Vero {
         TestParser testParser = new TestParser("test6.json");
         Session userSession = testParser.parse();
         QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);               
+        queryEngine.preprocess(userSession);        
+        Report curReport = queryEngine.getReport();        
         
-        String resultSQL = queryEngine.getResultSQL();
-
+        System.out.println(curReport.getBlocks().get(0));        
         System.out.println("Result SQL:");
-        System.out.println(resultSQL);
+        System.out.println(curReport.getBlocks().get(0).getSqlString());
     }
 }

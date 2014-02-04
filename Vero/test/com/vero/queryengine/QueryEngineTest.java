@@ -6,6 +6,7 @@
 
 package com.vero.queryengine;
 
+import com.vero.report.Report;
 import com.vero.session.Session;
 import com.vero.testparser.TestParser;
 import org.junit.Test;
@@ -29,7 +30,8 @@ public class QueryEngineTest {
             "INNER JOIN DepartmentFacts AS T1 ON T0.id = T1.dept_id\n" +
             "GROUP BY T0.school_name";
         
-        String resultSQL = queryEngine.getResultSQL();
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
         
         System.out.println("Expected SQL:");
         System.out.println(expectedSQL);
@@ -52,7 +54,8 @@ public class QueryEngineTest {
             " CROSS JOIN LessonsFact AS T2\n" +
             "GROUP BY T0.name, T1.name";
         
-        String resultSQL = queryEngine.getResultSQL();
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
         
         System.out.println("Expected SQL:");
         System.out.println(expectedSQL);
@@ -77,7 +80,8 @@ public class QueryEngineTest {
             "INNER JOIN Departments AS T4 ON T4.id = T3.dept_id\n" +
             "GROUP BY T4.name, T2.name";
         
-        String resultSQL = queryEngine.getResultSQL();
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
         
         System.out.println("Expected SQL:");
         System.out.println(expectedSQL);
@@ -102,7 +106,8 @@ public class QueryEngineTest {
             " CROSS JOIN Students AS T1\n" +
             "GROUP BY T4.name, T0.name";
         
-        String resultSQL = queryEngine.getResultSQL();
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
         
         System.out.println("Expected SQL:");
         System.out.println(expectedSQL);
@@ -121,12 +126,34 @@ public class QueryEngineTest {
         String expectedSQL = 
             "SELECT ALL T0.name-2";
         
-        String resultSQL = queryEngine.getResultSQL();
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
         
         System.out.println("Expected SQL:");
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
         assertEquals("test5", expectedSQL, resultSQL);
-    }    
+    }
+    
+    @Test
+    public void testTest6() {
+        TestParser testParser = new TestParser("test6.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT ALL T0.a1-name-2";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("test6", expectedSQL, resultSQL);
+    } 
+    
 }

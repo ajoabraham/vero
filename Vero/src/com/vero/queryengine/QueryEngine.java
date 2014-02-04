@@ -86,20 +86,19 @@ public class QueryEngine {
     private final Stage stage = new Stage();
     private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
             new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
-    private String resultSQL = null;
+    private Report report = null;
     public static final Parsing parser = new Parsing();
     
     public QueryEngine() {}
         
-    public String getResultSQL () {
-        return resultSQL;
+    public Report getReport() {
+        return report;
     }
     
     public void preprocess(Session inSession) {
         stage.preprocess(inSession);
         EdgeUnit.resetID();
         ProcessingUnit.resetID();
-        Report aReport = null;
         
         // create all verteces (PUs)
         List<ProcessingUnit> allSortedPUs = new ArrayList(stage.getPUs().values());
@@ -223,7 +222,7 @@ public class QueryEngine {
         dumpGraph(joinGraph);
         
         // generate report
-        aReport = generateReport(joinGraph, euSet);
+        report = generateReport(joinGraph, euSet);        
     }
     
     private void removeExtraEdges(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
@@ -464,6 +463,7 @@ public class QueryEngine {
         for (EdgeUnit eu : sortedEUs) {
             if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
                 JoinDefinition aJoin = eu.getJoinDef();
+                aBlock.addJoinDefList(aJoin.getUUID());
                 
                 String jType = aJoin.getType();
                 String jExp = aJoin.getExpression();
@@ -574,12 +574,18 @@ public class QueryEngine {
         // get all expressions from all attributes/metrics
         ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
         ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
-        for (ProcessingUnit curPU : sortedVertex) {            
+        for (ProcessingUnit curPU : sortedVertex) {
             if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
                 ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getFormula());
 
-                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { attrCount++; colAttrRefByName.add(aColExp); }
-                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) metCount++;
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { 
+                    attrCount++; 
+                    colAttrRefByName.add(aColExp);
+                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curPU.getUsedExp().getUUID());
+                } else if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                    metCount++;
+                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curPU.getUsedExp().getUUID());
+                }
 
                 colRefByName.add(aColExp);
             }
@@ -603,9 +609,7 @@ public class QueryEngine {
         }
         
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
-        resultSQL = queryExp.toString();
-        System.out.println("Output sql is: " + resultSQL); 
-        aBlock.setSqlString(resultSQL);
+        aBlock.setSqlString(queryExp.toString());
         
         return aReport;
     }

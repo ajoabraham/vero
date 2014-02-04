@@ -6,15 +6,14 @@ import java.util.List;
 public class Report {
     private final List<Block> blocks = new ArrayList();
     
-    public Report() {
-        
+    public Report() {        
     }
     
     public List<Block> getBlocks() {
         return this.blocks;
     }
     
-    public void addBlock(Block inBlock) {
-        this.blocks.add(inBlock);
+    public void addBlock(Block block) {
+        this.blocks.add(block);
     }
 }
