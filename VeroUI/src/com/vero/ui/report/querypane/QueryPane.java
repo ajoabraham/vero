@@ -12,14 +12,14 @@ import static com.vero.ui.constants.CSSConstants.CLASS_QUERY_PANE;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vero.ui.model.ReportObjectData;
-import com.vero.ui.report.ReportPane;
-import com.vero.ui.report.dropzone.DropZonePane;
-
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
+import com.vero.ui.model.ReportObjectData;
+import com.vero.ui.report.ReportPane;
+import com.vero.ui.report.dropzone.DropZonePane;
 
 /**
  *
@@ -59,7 +59,7 @@ public class QueryPane extends ScrollPane {
 	    DropZonePane dropZonePane = new DropZonePane(reportPane);
 	    Pane globalFilter = new GlobalFilterPane();
 	    blockPanes.add(globalFilter);
-	    Pane commentBlock = BlockPaneFactory.createCommentBlockPane();
+	    Pane commentBlock = BlockPaneFactory.createCommentBlockPane(this);
 	    blockPanes.add(commentBlock);
 	    Pane reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane);
 	    blockPanes.add(reportBlockPane);
@@ -73,7 +73,7 @@ public class QueryPane extends ScrollPane {
     }
     
     public void addNewCommentBlockPane() {
-        Pane commentBlock = BlockPaneFactory.createCommentBlockPane();
+        Pane commentBlock = BlockPaneFactory.createCommentBlockPane(this);
         blockPanes.add(commentBlock);
         
         contentPane.getChildren().add(1, commentBlock);
@@ -103,11 +103,21 @@ public class QueryPane extends ScrollPane {
         }
     }
     
-    public void moveUp(QueryBlockPane blockPane) {
-        
+    public void moveUp(BlockPane blockPane) {
+        int index = contentPane.getChildren().indexOf(blockPane);        
+        if (index > 1) {
+//            Collections.swap(blockPanes, index - 1, index);
+            contentPane.getChildren().remove(blockPane);
+            contentPane.getChildren().add(index - 1, blockPane);
+        }
     }
     
-    public void moveDown(QueryBlockPane blockPane) {
-        
+    public void moveDown(BlockPane blockPane) {
+        int index = contentPane.getChildren().indexOf(blockPane);        
+        if (index < (blockPanes.size() - 2)) {         
+//            Collections.swap(blockPanes, index, index + 1); 
+	    contentPane.getChildren().remove(blockPane);
+	    contentPane.getChildren().add(index + 1, blockPane);
+        }
     }
 }

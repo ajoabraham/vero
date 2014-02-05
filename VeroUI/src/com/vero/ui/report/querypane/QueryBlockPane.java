@@ -4,6 +4,7 @@ import static com.vero.ui.constants.BlockType.QUERY_BLOCK;
 import static com.vero.ui.constants.CSSConstants.CLASS_REPORT_BLOCK_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.QUERY_BLOCK_PANE_HEIGHT;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -90,7 +91,22 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     protected void showContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem moveUpMenuItem = new MenuItem("Move Up");
+        moveUpMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+	    @Override
+            public void handle(ActionEvent event) {
+	        queryPane.moveUp(QueryBlockPane.this);
+            }
+            
+        });
         MenuItem moveDownMenuItem = new MenuItem("Move Down");
+        moveDownMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+	    @Override
+            public void handle(ActionEvent event) {
+	        queryPane.moveDown(QueryBlockPane.this);
+            }
+            
+        });
         contextMenu.getItems().addAll(moveUpMenuItem, moveDownMenuItem);
         
         contextMenu.show(headerPane, Side.BOTTOM, 0, 0);

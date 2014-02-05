@@ -7,8 +7,8 @@ public final class BlockPaneFactory {
 	
     }
         
-    public static BlockPane createCommentBlockPane() {
-	return new CommentBlockPane();
+    public static BlockPane createCommentBlockPane(QueryPane queryPane) {
+	return new CommentBlockPane(queryPane);
     }
     
     public static BlockPane createQueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane) {
