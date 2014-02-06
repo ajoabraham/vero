@@ -1,7 +1,7 @@
 package com.vero.ui.report.querypane;
 
-import static com.vero.ui.constants.BlockType.COMMENT_BLOCK;
 import static com.vero.ui.constants.CSSConstants.CLASS_COMMENT_BLOCK_PANE;
+import static com.vero.ui.constants.ObjectType.COMMENT_BLOCK;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -12,8 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-import com.vero.ui.constants.BlockType;
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.constants.ObjectType;
 
 public class CommentBlockPane extends BlockPane implements EventHandler<MouseEvent> {
     private QueryPane queryPane = null;
@@ -36,7 +36,7 @@ public class CommentBlockPane extends BlockPane implements EventHandler<MouseEve
     }
     
     @Override
-    public BlockType getType() {
+    public ObjectType getType() {
 	return COMMENT_BLOCK;
     }
 

@@ -1,8 +1,8 @@
 package com.vero.ui.report.querypane;
 
-import static com.vero.ui.constants.BlockType.QUERY_BLOCK;
 import static com.vero.ui.constants.CSSConstants.CLASS_REPORT_BLOCK_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
+import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
 import static com.vero.ui.constants.UIConstants.QUERY_BLOCK_PANE_HEIGHT;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,8 +18,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-import com.vero.ui.constants.BlockType;
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.constants.ObjectType;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent> {
@@ -59,7 +59,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     }
 
     @Override
-    public BlockType getType() {
+    public ObjectType getType() {
 	return QUERY_BLOCK;
     }    
     

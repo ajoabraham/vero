@@ -1,13 +1,13 @@
 package com.vero.ui.report.querypane;
 
-import com.vero.ui.common.DraggableObject;
-import com.vero.ui.constants.BlockType;
-import com.vero.ui.model.UIData;
-
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+
+import com.vero.ui.common.DraggableObject;
+import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.UIData;
 
 public abstract class BlockPane extends BorderPane implements DraggableObject {
  
@@ -15,7 +15,7 @@ public abstract class BlockPane extends BorderPane implements DraggableObject {
 	
     }
     
-    public abstract BlockType getType();
+    public abstract ObjectType getType();
 
     @Override
     public UIData getTransferData() {

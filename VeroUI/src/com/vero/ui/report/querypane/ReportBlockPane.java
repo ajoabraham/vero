@@ -1,9 +1,9 @@
 package com.vero.ui.report.querypane;
 
-import static com.vero.ui.constants.BlockType.REPORT_BLOCK;
+import static com.vero.ui.constants.ObjectType.REPORT_BLOCK;
 import static com.vero.ui.constants.UIConstants.REPORT_BLOCK_PANE_HEIGHT;
 
-import com.vero.ui.constants.BlockType;
+import com.vero.ui.constants.ObjectType;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class ReportBlockPane extends QueryBlockPane {
@@ -35,7 +35,7 @@ public class ReportBlockPane extends QueryBlockPane {
     }
     
     @Override
-    public BlockType getType() {
+    public ObjectType getType() {
 	return REPORT_BLOCK;
     }
     

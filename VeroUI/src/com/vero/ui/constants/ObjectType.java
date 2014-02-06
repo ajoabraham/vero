@@ -79,6 +79,30 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+    },
+    COMMENT_BLOCK {
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
+    },
+    QUERY_BLOCK {
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
+    },
+    REPORT_BLOCK {
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
+    },
+    FINAL_BLOCK {
+        @Override
+        public String getStyleClass() {
+            return null;
+        }
     };
     
     public abstract String getStyleClass();
