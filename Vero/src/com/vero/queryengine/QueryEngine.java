@@ -6,11 +6,13 @@
 
 package com.vero.queryengine;
 
+import com.vero.metadata.ExpressionUnit;
 import static com.google.common.collect.ImmutableMap.of;
 import com.vero.metadata.Attribute;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
+import static com.vero.metadata.ParameterType.PARAMTYPE_DISTINCT;
 import com.vero.metadata.Table;
 import com.vero.report.Block;
 import com.vero.report.Report;
@@ -587,6 +589,15 @@ public class QueryEngine {
                 // sql-function parsing
                 Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
                 curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
+                
+                if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {
+                    if (curPU.getUsedExp().getExpression().getParameters().containsKey(PARAMTYPE_DISTINCT)) {
+                        String value = curPU.getUsedExp().getExpression().getParameters().get(PARAMTYPE_DISTINCT);                        
+                        Boolean bValue = !value.equals("false");
+                        
+                        curFormula.aggregationParameters().get(0).distinct(bValue);
+                    }
+                }
                 
                 //ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getFormula());
                 // FIXME: use specific db setting

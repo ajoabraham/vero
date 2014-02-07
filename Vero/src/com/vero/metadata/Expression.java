@@ -19,10 +19,9 @@ import java.util.UUID;
 public class Expression implements Comparable<Expression> {
     private UUID uuid = null;
     private String formula = null;
-    private Map<String, String> parameters = null;
+    private Map<ParameterType, String> parameters = null;
     private List<Column> columns = null;
     private Column smallestColumn = null;
-    private Column usedColumn = null;
 
     public Expression() {
     }
@@ -33,7 +32,6 @@ public class Expression implements Comparable<Expression> {
         parameters = new HashMap();
         columns = new ArrayList();
         smallestColumn = null;
-        usedColumn = null;
     }
 
     public Expression(UUID uuid, String formula, Map<String, String> parameters, List<Column> columns) {
@@ -60,11 +58,11 @@ public class Expression implements Comparable<Expression> {
         return formula;
     }
 
-    public void addParameter(String key, String value) {
+    public void addParameter(ParameterType key, String value) {
         parameters.put(key, value);
     }
     
-    public Map<String, String> getParameters() {
+    public Map<ParameterType, String> getParameters() {
         return parameters;
     }
     

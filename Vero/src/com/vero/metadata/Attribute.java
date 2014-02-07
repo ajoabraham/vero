@@ -1,6 +1,5 @@
 package com.vero.metadata;
 
-import com.vero.queryengine.ExpressionUnit;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;

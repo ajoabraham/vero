@@ -12,6 +12,7 @@ import com.vero.metadata.Column;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
+import com.vero.metadata.ParameterType;
 import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.io.File;
@@ -179,16 +180,39 @@ public class TestParser {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         // add expression
                         Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
                         anAttr.addExpression(anExp);
 
+                        // parameters
+                        if (oneJSONExpressionObj.isNull("parameters") == false) {
+                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
+                            int paramArraySize = jsonParamArray.length();
+                            for (int k = 0; k < paramArraySize; k++) {
+                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
+                                if (oneJSONParamObj.isNull("distinct") == false) {
+                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("partition_by") == false) {
+                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("order_by") == false) {
+                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
+                                }                                
+                            }
+                        }
+                        
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                        for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                        for (int k = 0; k < tableUUIDsArraySize; k++) {
                             String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
                             String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                            Table curTab = testDS.getTable(tabName);                                                
+                            Table curTab = testDS.getTable(tabName);
 
                             System.out.println("table's column:" + colName);
                             System.out.println("table's name:" + tabName);
@@ -203,8 +227,8 @@ public class TestParser {
                                 }
                             } else {
                                 System.out.println("can't find table...");
-                            }                       
-                        }                    
+                            }
+                        }                
                     }
                 }
                 System.out.println("------------------------------");
@@ -229,12 +253,35 @@ public class TestParser {
                     for (int j = 0; j < expressionsArraySize; j++) {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
-                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
+                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));                        
                         // add expression
                         Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
                         aMetric.addExpression(anExp);
 
+                        // parameters
+                        if (oneJSONExpressionObj.isNull("parameters") == false) {
+                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
+                            int paramArraySize = jsonParamArray.length();
+                            for (int k = 0; k < paramArraySize; k++) {
+                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
+                                if (oneJSONParamObj.isNull("distinct") == false) {
+                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("partition_by") == false) {
+                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("order_by") == false) {
+                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
+                                }                                
+                            }
+                        }
+                        
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                         for (int k = 0; k < tableUUIDsArraySize; k++) {                        
                             String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);

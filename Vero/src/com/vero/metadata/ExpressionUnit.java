@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.vero.queryengine;
+package com.vero.metadata;
 
 import com.vero.metadata.Column;
 import com.vero.metadata.Expression;
