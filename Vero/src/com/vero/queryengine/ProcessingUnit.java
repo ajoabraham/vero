@@ -38,7 +38,7 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     // update during processing
     private int removeCount = 0;
     private String tableAlias = null;
-    private Expression usedExp = null;
+    private ExpressionUnit usedExp = null;
     private Boolean processed = false;
     
     public ProcessingUnit() {}
@@ -97,11 +97,11 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         return tableAlias;
     }   
     
-    public void setUsedExp(Expression inExp) {
-        usedExp = inExp;
+    public void setUsedExp(ExpressionUnit usedExp) {
+        this.usedExp = usedExp;
     }
     
-    public Expression getUsedExp() {
+    public ExpressionUnit getUsedExp() {
         return usedExp;
     }
     
