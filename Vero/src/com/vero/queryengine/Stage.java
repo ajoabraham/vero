@@ -102,7 +102,7 @@ public class Stage {
                 curAttr.removeTable(curTable);
             }            
             
-            ArrayList<Table> listTables = curAttr.retrieveTables();
+            List<Table> listTables = curAttr.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 
@@ -125,7 +125,7 @@ public class Stage {
                 curMet.removeTable(curTable);
             }
             
-            ArrayList<Table> listTables = curMet.retrieveTables();
+            List<Table> listTables = curMet.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 

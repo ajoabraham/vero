@@ -1,0 +1,202 @@
+{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query. However a joindef is removed on purpose to demostrate a cross join between Departments and Students tables.",
+    "expectedOutput":"SELECT ALL T0.name, T1.name, T2.count(distinct course_id) FROM Departments AS T1 INNER JOIN Students AS T3 ON T1.id = T3.dept_id INNER JOIN LessonsFact AS T2 ON T2.prof_id = T4.id INNER JOIN Departments AS T0 ON T0.id = T4.dept_id CROSS JOIN Students AS T3 GROUP BY T0.name, T1.name",
+    "datasources": [
+        {
+            "name": "Teradata - Prod",
+            "database": {"vendor": "Teradata"}
+        }
+    ],
+    "tables": [
+        {
+            "name": "LessonsFact",
+            "rowCount": 100000,
+            "tableType": "fact",
+            "columns": [
+                {
+                    "name": "prof_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "std_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "course_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "date",
+                    "type": "date",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Departments",
+            "rowCount": 100,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "school_name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Professors",
+            "rowCount": 90,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "name": "Students",
+            "rowCount": 600000,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }           
+            ],
+            "datasource": "Teradata - Prod"
+        }
+    ],
+    "attributes": [
+        {
+            "name": "Professor Department Name",
+            "expressions": [
+                {
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Student Department Name",
+            "expressions": [
+                {
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"]
+                    ]
+                }
+            ]
+        }
+    ],
+    "metrics": [
+        {
+            "name": "# of Lessons",
+            "expressions": [
+                {
+                    "definition": "count(course_id)",
+                    "parameters": [
+                        {
+                            "distinct": "true"
+                        }
+                    ],
+                    "columns": [
+                        ["course_id", "LessonsFact"]
+                    ]
+                }
+            ]
+        }
+    ],
+    "joindefs": [
+        {
+            "name": "on equal professor id",
+            "tleft": "LessonsFact",
+            "cleft": "prof_id",
+            "operator": "=",
+            "tright": "Professors",
+            "cright": "id",
+            "expression": "tleft.prof_id=tright.id",
+            "jointype": "inner"
+        },
+        {
+            "name": "on equal department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",
+            "tright": "Students",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        },
+        {
+            "name": "on equal professor/department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",           
+            "tright": "Professors",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        }
+    ],
+    "hardhints_white":["Students","Professors"]
+}

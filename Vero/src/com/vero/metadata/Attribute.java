@@ -3,6 +3,7 @@ package com.vero.metadata;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Attributes generally map to scalar expressions, where scalar expressions 
@@ -14,7 +15,7 @@ import java.util.Iterator;
 public class Attribute {
     private UUID uuid = null;
     private String name = null;
-    private ArrayList<Expression> expressions = null;
+    private List<Expression> expressions = null;
     
     public Attribute() {
     }
@@ -39,7 +40,7 @@ public class Attribute {
         this.expressions.addAll(expressions);
     }
 
-    public ArrayList<Expression> getExpressions() {
+    public List<Expression> getExpressions() {
         return expressions;
     }
     
@@ -68,7 +69,7 @@ public class Attribute {
      * @return an expression or null if not found.
      */
     public Expression getExpressionByTable(Table table) {
-        ArrayList<Expression> expList = this.getExpressions();
+        List<Expression> expList = this.getExpressions();
         Boolean found = false;
         
         if (expList.size() > 0) {
@@ -76,7 +77,7 @@ public class Attribute {
             
             while (iterExp.hasNext()) {
                 Expression curExp = iterExp.next();
-                ArrayList<Table> tabList = curExp.gatherTables();
+                List<Table> tabList = curExp.gatherTables();
                 
                 if (tabList.size() > 0) {
                     Iterator<Table> iterTab = tabList.iterator();
@@ -102,7 +103,7 @@ public class Attribute {
      * @return an expression or null if not found.
      */
     public Expression getExpressionByTableName(String inTab) {
-        ArrayList<Expression> expList = this.getExpressions();
+        List<Expression> expList = this.getExpressions();
         Boolean found = false;
         
         if (expList.size() > 0) {
@@ -110,7 +111,7 @@ public class Attribute {
             
             while (iterExp.hasNext()) {
                 Expression curExp = iterExp.next();
-                ArrayList<Table> tabList = curExp.gatherTables();
+                List<Table> tabList = curExp.gatherTables();
                 
                 if (tabList.size() > 0) {
                     Iterator<Table> iterTab = tabList.iterator();
@@ -137,7 +138,7 @@ public class Attribute {
      * @param table The table to remove.
      */    
     public void removeTable(String table) {
-        ArrayList<Expression> aList = this.getExpressions();
+        List<Expression> aList = this.getExpressions();
         
         if (aList.size() > 0) {
             Iterator<Expression> iter = aList.iterator();
@@ -157,8 +158,8 @@ public class Attribute {
      * 
      * @return all tables in a list or null if there is no expression.
      */
-    public ArrayList<Table> retrieveTables() {        
-        ArrayList<Expression> aList = this.getExpressions();
+    public List<Table> retrieveTables() {        
+        List<Expression> aList = this.getExpressions();
         
         if (aList.size() > 0) {
             ArrayList<Table> retList = new ArrayList();

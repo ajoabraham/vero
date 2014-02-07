@@ -12,6 +12,7 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.Table;
 import static com.vero.queryengine.ProcessingUnit.PUType.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -112,13 +113,13 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
         return processed;
     }
     
-    public ArrayList<Table> retrieveTables() {
+    public List<Table> retrieveTables() {
         if (type == PUTYPE_ATTRIBUTE) {
             return ((Attribute)content).retrieveTables();
         } else if (type == PUTYPE_METRIC) {
             return ((Metric)content).retrieveTables();
         } else if (type == PUTYPE_HARDHINT) {
-            ArrayList<Table> aAL = new ArrayList();
+            List<Table> aAL = new ArrayList();
             aAL.add((Table)content);
             return aAL;
         } else {

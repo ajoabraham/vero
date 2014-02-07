@@ -112,7 +112,7 @@ public class QueryEngine {
         // for each table, find where it is used and connect vertex and create edges
         for (ProcessingUnit curPU : allSortedPUs) {
             System.out.println("### PU id = " + curPU.getID() + ". Current PU content = " + curPU.getContent());
-            ArrayList<Table> listTables = curPU.retrieveTables();
+            List<Table> listTables = curPU.retrieveTables();
             if (listTables.size() > 0) {
                 Iterator<Table> iterTable = listTables.iterator();
 
@@ -343,14 +343,14 @@ public class QueryEngine {
             if (pu.getProcessed() == false) {
                 if (pu.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                     Attribute curAttr = (Attribute)pu.getContent();
-                    ArrayList<Expression> expAL = curAttr.getExpressions();
+                    List<Expression> expAL = curAttr.getExpressions();
                     Collections.sort(expAL);
                     if (expAL.size() > 0) {
                         pu.setUsedExp(expAL.get(0));
                     }
                 } else if (pu.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                     Metric curMet = (Metric)pu.getContent();
-                    ArrayList<Expression> expAL = curMet.getExpressions();
+                    List<Expression> expAL = curMet.getExpressions();
                     Collections.sort(expAL);
                     if (expAL.size() > 0) {
                         pu.setUsedExp(expAL.get(0));
