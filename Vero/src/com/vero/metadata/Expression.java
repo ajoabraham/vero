@@ -1,7 +1,10 @@
 package com.vero.metadata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,7 +19,8 @@ import java.util.UUID;
 public class Expression implements Comparable<Expression> {
     private UUID uuid = null;
     private String formula = null;
-    private ArrayList<Column> columns = null;
+    private Map<String, String> parameters = null;
+    private List<Column> columns = null;
     private Column smallestColumn = null;
 
     public Expression() {
@@ -25,13 +29,15 @@ public class Expression implements Comparable<Expression> {
     public Expression(UUID uuid, String formula) {
         this.uuid = uuid;
         this.formula = formula;
+        parameters = new HashMap();
         columns = new ArrayList();
         smallestColumn = null;
     }
 
-    public Expression(UUID uuid, String formula, ArrayList<Column> columns) {
+    public Expression(UUID uuid, String formula, Map<String, String> parameters, List<Column> columns) {
         this.uuid = uuid;
         this.formula = formula;
+        this.parameters = new HashMap(parameters);
         this.columns = new ArrayList(columns);
         smallestColumn = null;
     }
@@ -51,6 +57,14 @@ public class Expression implements Comparable<Expression> {
     public String getFormula() {
         return formula;
     }
+
+    public void addParameter(String key, String value) {
+        parameters.put(key, value);
+    }
+    
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
     
     public void addColumn(Column column) {
         if (column != null) {
@@ -58,8 +72,8 @@ public class Expression implements Comparable<Expression> {
         }
     }
 
-    public ArrayList<Column> getColumns() {
-        return this.columns;
+    public List<Column> getColumns() {
+        return columns;
     }
     
     public Column getSmallestColumn() {
@@ -87,7 +101,7 @@ public class Expression implements Comparable<Expression> {
         }
     }
     
-    public ArrayList gatherTables() {
+    public List gatherTables() {
         ArrayList<Table> aTabList = new ArrayList();
         
         for (int i = 0; i < columns.size(); i++) {

@@ -16,7 +16,7 @@ import com.vero.testparser.TestParser;
  */
 public class Vero {
     public static void main(String [] arg) {
-        TestParser testParser = new TestParser("test6.json");
+        TestParser testParser = new TestParser("test7.json");
         Session userSession = testParser.parse();
         QueryEngine queryEngine = new QueryEngine();
         queryEngine.preprocess(userSession);        
