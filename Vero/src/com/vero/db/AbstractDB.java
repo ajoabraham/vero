@@ -175,7 +175,7 @@ public abstract class AbstractDB implements Serializable {
                 if(!prevTableName.isEmpty()){
                     _catalog.put(prevTableName, t);
                 }
-                t = new Table(tableName,null);
+                t = new Table(UUID.randomUUID(), tableName, null);
             }
             
             Column c = new Column(

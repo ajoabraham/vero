@@ -9,6 +9,7 @@ import com.vero.metadata.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Session {
     private final HashMap<String, DataSource> dataSources = new HashMap();
@@ -21,9 +22,9 @@ public class Session {
     
     public Session() {} 
     
-    public void addDataSource(String inType, String inName, String inDescription) {
+    public void addDataSource(UUID uuid, String inType, String inName, String inDescription) {
         if (inType.compareTo("Teradata") == 0) {
-            DataSource ds = new DeleteTeradata(DataSource.DsType.TERADATA, inName, inDescription);            
+            DataSource ds = new DeleteTeradata(uuid, DataSource.DsType.TERADATA, inName, inDescription);            
             dataSources.put(inName, ds);
         } else {
             System.out.println("DS not supported...");

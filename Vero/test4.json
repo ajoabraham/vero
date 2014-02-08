@@ -2,12 +2,14 @@
     "expectedOutput":"SELECT ALL T0.name, T1.name, T2.count(distinct course_id) FROM Departments AS T1 INNER JOIN Students AS T3 ON T1.id = T3.dept_id INNER JOIN LessonsFact AS T2 ON T2.prof_id = T4.id INNER JOIN Departments AS T0 ON T0.id = T4.dept_id CROSS JOIN Students AS T3 GROUP BY T0.name, T1.name",
     "datasources": [
         {
+            "uuid": "1000",
             "name": "Teradata - Prod",
             "database": {"vendor": "Teradata"}
         }
     ],
     "tables": [
         {
+            "uuid": "100",
             "name": "LessonsFact",
             "rowCount": 100000,
             "tableType": "fact",
@@ -44,6 +46,7 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "101",
             "name": "Departments",
             "rowCount": 100,
             "tableType": "dimension",
@@ -73,6 +76,7 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "102",
             "name": "Professors",
             "rowCount": 90,
             "tableType": "dimension",
@@ -102,6 +106,7 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "103",
             "name": "Students",
             "rowCount": 600000,
             "tableType": "dimension",
