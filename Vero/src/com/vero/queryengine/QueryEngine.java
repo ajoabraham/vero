@@ -12,7 +12,7 @@ import com.vero.metadata.Attribute;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
-import static com.vero.metadata.ParameterType.PARAMTYPE_DISTINCT;
+import static com.vero.metadata.ParameterType.*;
 import com.vero.metadata.Table;
 import com.vero.report.Block;
 import com.vero.report.Report;

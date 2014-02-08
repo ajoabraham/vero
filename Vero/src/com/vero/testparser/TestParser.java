@@ -27,7 +27,7 @@ import org.json.JSONTokener;
  *
  * @author yulinwen
  */
-public class TestParser {  
+public class TestParser {
     private final File testFile;
     
     public TestParser(String fileName) { 
@@ -60,9 +60,11 @@ public class TestParser {
                 // DS
                 //System.out.println("name:" + oneJSONDSObj.getString("name"));
                 //System.out.println("vendor:" + oneJSONDSObj.getJSONObject("database").getString("vendor"));
-                
+
+                UUID dsUUID = getUUID(oneJSONDSObj);
                 // add DS
                 testSession.addDataSource(
+                    dsUUID,
                     oneJSONDSObj.getJSONObject("database").getString("vendor"), 
                     oneJSONDSObj.getString("name"),
                     oneJSONDSObj.getString("name"));
@@ -82,11 +84,13 @@ public class TestParser {
                 //System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
                 //System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
+                
+                UUID tabUUID = getUUID(oneJSONTableObj);
                 // add table
                 DataSource specificDS = testSession.getDataSource(oneJSONTableObj.getString("datasource"));
                 Table aTable = null;
                 if (specificDS != null) {
-                    aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
+                    aTable = new Table(tabUUID, oneJSONTableObj.getString("name"), specificDS);
                     aTable.setRowCount(oneJSONTableObj.getInt("rowCount")); 
                     switch (oneJSONTableObj.getString("tableType")) {
                         case "dimension":
@@ -393,7 +397,7 @@ public class TestParser {
     
     private UUID getUUID(JSONObject root) {
         UUID uuid;
-        if (root.isNull("uuid") == false) {              
+        if (root.isNull("uuid") == false) {
             String strUUID = root.getString("uuid");
 
             try {
