@@ -25,6 +25,7 @@ public class AttributeObjectData extends UIData {
     
     private StringProperty name = new SimpleStringProperty();
     private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+    private ExpressionObjectData selectedExpressionObjectData = null;
     
     public AttributeObjectData() {
         
@@ -59,5 +60,13 @@ public class AttributeObjectData extends UIData {
     public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
         expressionObjectData.setAttributeObjectData(null);
         return expressionObjectDataList.remove(expressionObjectData);
+    }
+    
+    public ExpressionObjectData getSelectedExpressionObjectData() {
+        return selectedExpressionObjectData;
+    }
+
+    public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
+        this.selectedExpressionObjectData = selectedExpressionObjectData;
     }
 }

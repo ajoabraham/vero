@@ -84,6 +84,7 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 
     private void handleNewReportAction() {
         ReportObjectData reportObjectData = new ReportObjectData();
+        
         reportObjectData.setName("New Report");
         ReportTabManager.getInstance().createReportTab(reportObjectData);
     }
