@@ -80,6 +80,14 @@ public enum ObjectType {
             return null;
         }
     },
+    GLOBAL_FILTER {
+
+	@Override
+        public String getStyleClass() {
+	    return null;
+        }
+	
+    },
     COMMENT_BLOCK {
         @Override
         public String getStyleClass() {

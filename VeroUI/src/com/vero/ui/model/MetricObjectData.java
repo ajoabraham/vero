@@ -25,6 +25,7 @@ public class MetricObjectData extends UIData {
     
     private StringProperty name = new SimpleStringProperty();
     private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+    private ExpressionObjectData selectedExpressionObjectData = null;
     
     public MetricObjectData() {
         
@@ -63,5 +64,13 @@ public class MetricObjectData extends UIData {
     public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
         expressionObjectData.setMetricObjectData(null);
         return expressionObjectDataList.remove(expressionObjectData);
+    }
+
+    public ExpressionObjectData getSelectedExpressionObjectData() {
+        return selectedExpressionObjectData;
+    }
+
+    public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
+        this.selectedExpressionObjectData = selectedExpressionObjectData;
     }
 }

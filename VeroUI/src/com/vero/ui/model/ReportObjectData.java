@@ -6,7 +6,10 @@
 
 package com.vero.ui.model;
 
+import java.util.List;
+
 import com.vero.ui.constants.ObjectType;
+
 import static com.vero.ui.constants.ObjectType.REPORT;
 
 /**
@@ -17,6 +20,9 @@ public class ReportObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
     private String name = null;
+    private GlobalFilterObjectData globalFilterObjectData = null;
+    private ReportBlockObjectData reportBlockObjectData = null;
+    private List<BlockObjectData> blockObjectDataList = null;
     
     public ReportObjectData() {
         
@@ -33,5 +39,31 @@ public class ReportObjectData extends UIData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public GlobalFilterObjectData getGlobalFilterObjectData() {
+        return globalFilterObjectData;
+    }
+
+    public void setGlobalFilterObjectData(GlobalFilterObjectData globalFilterObjectData) {
+        this.globalFilterObjectData = globalFilterObjectData;
+        this.globalFilterObjectData.setReportObjectData(this);
+    }
+
+    public ReportBlockObjectData getReportBlockObjectData() {
+        return reportBlockObjectData;
+    }
+
+    public void setReportBlockObjectData(ReportBlockObjectData reportBlockObjectData) {
+        this.reportBlockObjectData = reportBlockObjectData;
+        this.reportBlockObjectData.setReportObjectData(this);
+    }
+
+    public List<BlockObjectData> getBlockObjectDataList() {
+        return blockObjectDataList;
+    }
+
+    public void setBlockObjectDataList(List<BlockObjectData> blockObjectDataList) {
+        this.blockObjectDataList = blockObjectDataList;
     }
 }
