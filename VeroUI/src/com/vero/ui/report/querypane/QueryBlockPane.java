@@ -20,18 +20,21 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent> {
     private QueryPane queryPane = null;
     private DropZonePane dropZonePane = null;
+    private QueryBlockObjectData queryBlockObjectData = null;
     private boolean selected = false;
     private ImageView statusImageView = null;
     private HBox headerPane = null;
     
-    public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane) {
+    public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
         this.queryPane = queryPane;
         this.dropZonePane = dropZonePane;
+        this.queryBlockObjectData = queryBlockObjectData;
         buildUI();
     }
     

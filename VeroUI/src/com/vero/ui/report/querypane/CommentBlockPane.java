@@ -6,21 +6,25 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.CommentBlockObjectData;
 
 public class CommentBlockPane extends BlockPane implements EventHandler<MouseEvent> {
     private QueryPane queryPane = null;
     private ImageView commentImageView = null;
+    private CommentBlockObjectData commentBlockObjectData = null;
+    private TextArea commentTextArea = null;
     
-    public CommentBlockPane(QueryPane queryPane) {
+    public CommentBlockPane(QueryPane queryPane, CommentBlockObjectData commentBlockObjectData) {
 	this.queryPane = queryPane;
+	this.commentBlockObjectData = commentBlockObjectData;
 	buildUI();
     }
     
@@ -31,8 +35,9 @@ public class CommentBlockPane extends BlockPane implements EventHandler<MouseEve
         commentImageView.setOnMouseClicked(this);
         setLeft(commentImageView);
         
-        Label commentLabel = new Label("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
-        setCenter(commentLabel);
+        commentTextArea = new TextArea("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
+        commentTextArea.textProperty().bindBidirectional(commentBlockObjectData.comment());
+        setCenter(commentTextArea);
     }
     
     @Override
