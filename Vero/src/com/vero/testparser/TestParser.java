@@ -124,21 +124,23 @@ public class TestParser {
                     
                     // add column
                     Column aColumn;
+
+                    UUID colUUID = getUUID(oneJSONColumnObj);
                     switch (oneJSONColumnObj.getString("type")) {
                         case "string":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"String", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "String", 10,
                                 aTable);
                             break;
                         case "integer":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Int", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Int", 10,
                                 aTable);
                             break;
                         case "date":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Date", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Date", 10,
                                 aTable);
                             break;
                         case "boolean":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Bool", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Bool", 10,
                                 aTable);
                             break;
                         default:
@@ -171,8 +173,10 @@ public class TestParser {
                     // attribute
                     System.out.println("name:" + oneJSONAttrObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
+                    
+                    UUID attrUUID = getUUID(oneJSONAttrObj);
                     // add attribute
-                    Attribute anAttr = new Attribute(UUID.randomUUID(), oneJSONAttrObj.getString("name"));
+                    Attribute anAttr = new Attribute(attrUUID, oneJSONAttrObj.getString("name"));
                     testSession.addAttribute(anAttr);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
@@ -180,8 +184,10 @@ public class TestParser {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                        
+                        UUID expUUID = getUUID(oneJSONExpressionObj);
                         // add expression
-                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
                         anAttr.addExpression(anExp);
 
                         // parameters
@@ -245,17 +251,21 @@ public class TestParser {
                     // metric
                     System.out.println("name:" + oneJSONMetricObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
+                    
+                    UUID metUUID = getUUID(oneJSONMetricObj);
                     // add metric
-                    Metric aMetric = new Metric(UUID.randomUUID(), oneJSONMetricObj.getString("name"));
+                    Metric aMetric = new Metric(metUUID, oneJSONMetricObj.getString("name"));
                     testSession.addMetric(aMetric);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
                     for (int j = 0; j < expressionsArraySize; j++) {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
-                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));                        
+                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
+                        
+                        UUID expUUID = getUUID(oneJSONExpressionObj);
                         // add expression
-                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
                         aMetric.addExpression(anExp);
 
                         // parameters
@@ -315,6 +325,7 @@ public class TestParser {
 
                 for (int i = 0; i < JDsArraySize; i++) {
                     JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
+                                        
                     System.out.println("json JD object " + i + ": ");
                     // DS
                     System.out.println("name:" + oneJSONJDObj.getString("name"));
@@ -325,9 +336,11 @@ public class TestParser {
                     System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
                     System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                     System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+                    
+                    UUID jdUUID = getUUID(oneJSONJDObj);
                     // add DS                
                     JoinDefinition aJoin = new JoinDefinition(
-                        UUID.randomUUID(),
+                        jdUUID,
                         oneJSONJDObj.getString("name"),
                         oneJSONJDObj.getString("tleft"),
                         oneJSONJDObj.getString("cleft"),
@@ -376,5 +389,22 @@ public class TestParser {
         }
         
         return testSession;
-    }    
+    }
+    
+    private UUID getUUID(JSONObject root) {
+        UUID uuid;
+        if (root.isNull("uuid") == false) {              
+            String strUUID = root.getString("uuid");
+
+            try {
+                uuid = UUID.fromString(strUUID);
+            } catch (Exception e) {
+                uuid = UUID.randomUUID();
+            }
+        } else {
+            uuid = UUID.randomUUID();
+        }
+        
+        return uuid;
+    }
 }

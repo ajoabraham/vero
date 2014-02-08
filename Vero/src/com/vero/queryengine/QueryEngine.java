@@ -587,6 +587,7 @@ public class QueryEngine {
         for (ProcessingUnit curPU : sortedVertex) {
             if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
                 // sql-function parsing
+                System.out.println("==> " + curPU.getUsedExp().getExpression().getFormula());
                 Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
                 curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
                 
