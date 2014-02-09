@@ -42,6 +42,7 @@ public interface UIConstants {
     public static final double EDITOR_PANE_ICON_WIDTH = 24;
     public static final double EDITOR_PANE_ICON_HEIGHT = 24;
     public static final double OBJECT_CONTAINER_PANE_HEIGHT = 40;
+    public static final double DEFAULT_COMMENT_BLOCK_PANE_HEIGHT = 65;
     
     // Datasource wizard
     public static final double DATASOURCE_WIZARD_WIDTH = 600;

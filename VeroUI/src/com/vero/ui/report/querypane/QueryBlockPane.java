@@ -93,26 +93,44 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
 
     protected void showContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem moveUpMenuItem = new MenuItem("Move Up");
-        moveUpMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-            public void handle(ActionEvent event) {
-	        queryPane.moveUp(QueryBlockPane.this);
-            }
-            
-        });
-        MenuItem moveDownMenuItem = new MenuItem("Move Down");
-        moveDownMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-
-	    @Override
-            public void handle(ActionEvent event) {
-	        queryPane.moveDown(QueryBlockPane.this);
-            }
-            
-        });
-        contextMenu.getItems().addAll(moveUpMenuItem, moveDownMenuItem);
         
-        contextMenu.show(headerPane, Side.BOTTOM, 0, 0);
+        if (getPosition() > 0) {
+            MenuItem moveUpMenuItem = new MenuItem("Move Up");
+            moveUpMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+                public void handle(ActionEvent event) {
+    	        queryPane.moveUp(QueryBlockPane.this);
+                }
+                
+            });
         
+            contextMenu.getItems().add(moveUpMenuItem);
+        }
+        
+        if (getPosition() < queryPane.getBlockPanesSize() - 1) {
+            MenuItem moveDownMenuItem = new MenuItem("Move Down");
+            moveDownMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+    
+    	    @Override
+                public void handle(ActionEvent event) {
+    	        queryPane.moveDown(QueryBlockPane.this);
+                }
+                
+            });
+            
+            contextMenu.getItems().add(moveDownMenuItem);
+        }
+        
+        contextMenu.show(headerPane, Side.BOTTOM, 0, 0);   
+    }
+    
+    @Override
+    public int getPosition() {
+	return queryBlockObjectData.getPosition();
+    }
+    
+    @Override
+    public void setPosition(int position) {
+	queryBlockObjectData.setPosition(position);
     }
 }

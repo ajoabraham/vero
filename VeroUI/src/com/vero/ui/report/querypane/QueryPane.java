@@ -37,7 +37,7 @@ public class QueryPane extends ScrollPane {
     private List<BlockPane> blockPanes = null;
     private QueryBlockPane selectedQueryBlockPane = null;
     private GlobalFilterPane globalFilterPane = null;
-    private ReportBlockPane reportBlockPane = null;
+    private BlockPane reportBlockPane = null;
     
     private VBox contentPane = null;
     
@@ -77,7 +77,7 @@ public class QueryPane extends ScrollPane {
             }
         }
         
-        BlockPane reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane, reportObjectData.getReportBlockObjectData());
+        reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane, reportObjectData.getReportBlockObjectData());
         contentPane.getChildren().add(reportBlockPane);
         
         dropZonePaneContainer.getChildren().add(dropZonePane);
@@ -88,21 +88,23 @@ public class QueryPane extends ScrollPane {
     
     public void addNewCommentBlockPane() {
         CommentBlockObjectData commentObjectData = new CommentBlockObjectData();
+        commentObjectData.setPosition(blockPanes.size());
         reportObjectData.addBlockObjectData(commentObjectData);
         BlockPane commentBlock = BlockPaneFactory.createCommentBlockPane(this, commentObjectData);
         blockPanes.add(commentBlock);
         
-        contentPane.getChildren().add(1, commentBlock);
+        contentPane.getChildren().add(contentPane.getChildren().size() - 1, commentBlock);
     }
     
     public void addNewQueryBlockPane() {
         DropZonePane dropZonePane = new DropZonePane(reportPane);
         QueryBlockObjectData queryBlockObjectData = new QueryBlockObjectData();
+        queryBlockObjectData.setPosition(blockPanes.size());
         reportObjectData.addBlockObjectData(queryBlockObjectData);
         BlockPane queryBlock = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, queryBlockObjectData);
         blockPanes.add(queryBlock);
         
-        contentPane.getChildren().add(1, queryBlock);
+        contentPane.getChildren().add(contentPane.getChildren().size() - 1, queryBlock);
         dropZonePaneContainer.getChildren().add(dropZonePane);
         
         if (selectedQueryBlockPane != null) {
@@ -122,20 +124,27 @@ public class QueryPane extends ScrollPane {
     }
     
     public void moveUp(BlockPane blockPane) {
-        int index = contentPane.getChildren().indexOf(blockPane);        
-        if (index > 1) {
-//            Collections.swap(blockPanes, index - 1, index);
+        int index = blockPane.getPosition();        
+        if (index > 0) {
             contentPane.getChildren().remove(blockPane);
-            contentPane.getChildren().add(index - 1, blockPane);
+            // TH 02/09/2014 There is a global filter pane in the front
+            contentPane.getChildren().add(index, blockPane);
+            blockPane.setPosition(index - 1);
+            ((BlockPane)contentPane.getChildren().get(index + 1)).setPosition(index);
         }
     }
     
     public void moveDown(BlockPane blockPane) {
-        int index = contentPane.getChildren().indexOf(blockPane);        
-        if (index < (blockPanes.size() - 2)) {         
-//            Collections.swap(blockPanes, index, index + 1); 
+        int index = blockPane.getPosition();
+        if (index < (blockPanes.size() - 1)) {          
 	    contentPane.getChildren().remove(blockPane);
-	    contentPane.getChildren().add(index + 1, blockPane);
+	    contentPane.getChildren().add(index + 2, blockPane);
+	    blockPane.setPosition(index + 1);
+	    ((BlockPane)contentPane.getChildren().get(index + 1)).setPosition(index);
         }
+    }
+    
+    public int getBlockPanesSize() {
+	return blockPanes.size();
     }
 }

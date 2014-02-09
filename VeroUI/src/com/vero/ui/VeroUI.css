@@ -18,6 +18,11 @@
     -fx-context-menu-hover-color: #4A4A4A;
 }
 
+.text-area {
+    -fx-background-color: -fx-main-background-color;
+    -fx-text-fill: -fx-default-text-color;	
+}
+
 .default-button {
 	-fx-background-color: transparent;
     -fx-background-radius: 3;
@@ -438,11 +443,6 @@
     -fx-padding: 5 0 5 0;
     -fx-spacing: 2;
     -fx-alignment: center-left;
-}
-
-.report-block-pane .text-area {
-    -fx-background-color: -fx-main-background-color;
-    -fx-text-fill: -fx-default-text-color;
 }
 
 /*******************************************************************************

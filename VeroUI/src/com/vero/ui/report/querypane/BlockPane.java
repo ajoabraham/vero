@@ -34,4 +34,11 @@ public abstract class BlockPane extends BorderPane implements DraggableObject {
     @Override
     public void handleDragDoneEvent(DragEvent event) {
     }
+    
+    public int getPosition() {
+	return -1;
+    }
+    
+    public void setPosition(int position) {
+    }
 }

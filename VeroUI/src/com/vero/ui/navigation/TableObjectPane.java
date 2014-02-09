@@ -33,7 +33,7 @@ public class TableObjectPane extends ObjectPane {
     private void buildUI() {
         getStyleClass().add(getType().getStyleClass());
         
-        ImageView tableImageView = new ImageView(ImageList.IMAGE_UNKNOWN_TABLE);
+        ImageView tableImageView = new ImageView(data.getTableType().getImage());
         getChildren().add(tableImageView);
 
         Label label = new Label(data.getName());

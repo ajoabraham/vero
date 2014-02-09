@@ -20,6 +20,7 @@ public class CommentBlockObjectData extends BlockObjectData {
     private StringProperty comment = new SimpleStringProperty();
     
     public CommentBlockObjectData() {
+	comment.set("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
     }
 
     @Override

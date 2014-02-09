@@ -43,7 +43,16 @@ public class ReportBlockPane extends QueryBlockPane {
     }
     
     @Override
+    public int getPosition() {
+	return -1;
+    }
+    
+    @Override
+    public void setPosition(int postion) {
+    }
+    
+    @Override
     protected void showContextMenu() {
-        // Override to prevent context menu to show up for report block.
+	
     }
 }
