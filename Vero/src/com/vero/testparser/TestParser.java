@@ -28,6 +28,11 @@ import org.json.JSONTokener;
  * @author yulinwen
  */
 public class TestParser {
+    private static enum Type {
+        TYPE_ATTRIBUTE,
+        TYPE_METRIC
+    }
+    
     private final File testFile;
     
     public TestParser(String fileName) { 
@@ -176,70 +181,13 @@ public class TestParser {
                     System.out.println("json attribute object " + i + ": ");
                     // attribute
                     System.out.println("name:" + oneJSONAttrObj.getString("name"));
-                    JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
-                    
+                                        
                     UUID attrUUID = getUUID(oneJSONAttrObj);
                     // add attribute
                     Attribute anAttr = new Attribute(attrUUID, oneJSONAttrObj.getString("name"));
                     testSession.addAttribute(anAttr);
 
-                    int expressionsArraySize = jsonExpressionsArray.length();
-                    for (int j = 0; j < expressionsArraySize; j++) {
-                        JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
-                        // expression
-                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        
-                        UUID expUUID = getUUID(oneJSONExpressionObj);
-                        // add expression
-                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
-                        anAttr.addExpression(anExp);
-
-                        // parameters
-                        if (oneJSONExpressionObj.isNull("parameters") == false) {
-                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
-                            int paramArraySize = jsonParamArray.length();
-                            for (int k = 0; k < paramArraySize; k++) {
-                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
-                                if (oneJSONParamObj.isNull("distinct") == false) {
-                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
-                                }
-                                
-                                if (oneJSONParamObj.isNull("partition_by") == false) {
-                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
-                                }
-                                
-                                if (oneJSONParamObj.isNull("order_by") == false) {
-                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
-                                }                                
-                            }
-                        }
-                        
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
-                        int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                        for (int k = 0; k < tableUUIDsArraySize; k++) {
-                            String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
-                            String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                            Table curTab = testDS.getTable(tabName);
-
-                            System.out.println("table's column:" + colName);
-                            System.out.println("table's name:" + tabName);
-
-                            if (curTab != null) {
-                                Column aCol = curTab.getColumn(colName);
-
-                                if (aCol != null) {
-                                    anExp.addColumn(aCol);
-                                } else {
-                                    System.out.println("can't find column...");
-                                }
-                            } else {
-                                System.out.println("can't find table...");
-                            }
-                        }                
-                    }
+                    parseExpressions(oneJSONAttrObj, testDS, TestParser.Type.TYPE_ATTRIBUTE, anAttr);
                 }
                 System.out.println("------------------------------");
             }
@@ -261,63 +209,7 @@ public class TestParser {
                     Metric aMetric = new Metric(metUUID, oneJSONMetricObj.getString("name"));
                     testSession.addMetric(aMetric);
 
-                    int expressionsArraySize = jsonExpressionsArray.length();
-                    for (int j = 0; j < expressionsArraySize; j++) {
-                        JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
-                        // expression
-                        System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        
-                        UUID expUUID = getUUID(oneJSONExpressionObj);
-                        // add expression
-                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
-                        aMetric.addExpression(anExp);
-
-                        // parameters
-                        if (oneJSONExpressionObj.isNull("parameters") == false) {
-                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
-                            int paramArraySize = jsonParamArray.length();
-                            for (int k = 0; k < paramArraySize; k++) {
-                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
-                                if (oneJSONParamObj.isNull("distinct") == false) {
-                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
-                                }
-                                
-                                if (oneJSONParamObj.isNull("partition_by") == false) {
-                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
-                                }
-                                
-                                if (oneJSONParamObj.isNull("order_by") == false) {
-                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
-                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
-                                }                                
-                            }
-                        }
-                        
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
-                        int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                        for (int k = 0; k < tableUUIDsArraySize; k++) {                        
-                            String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
-                            String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                            Table curTab = testDS.getTable(tabName);                                                
-
-                            System.out.println("table's column:" + colName);
-                            System.out.println("table's name:" + tabName);
-
-                            if (curTab != null) {
-                                Column aCol = curTab.getColumn(colName);
-
-                                if (aCol != null) {
-                                    anExp.addColumn(aCol);
-                                } else {
-                                    System.out.println("can't find column...");
-                                }
-                            } else {
-                                System.out.println("can't find table...");
-                            }           
-                        }
-                    }
+                    parseExpressions(oneJSONMetricObj, testDS, TestParser.Type.TYPE_METRIC, aMetric);
                 }
                 System.out.println("------------------------------");
             }
@@ -394,6 +286,72 @@ public class TestParser {
         
         return testSession;
     }
+    
+    private void parseExpressions(JSONObject root, DataSource datasource, TestParser.Type type, Object obj) {
+        JSONArray expressionsArray = root.getJSONArray("expressions");
+        int expressionsArraySize = expressionsArray.length();
+        for (int i = 0; i < expressionsArraySize; i++) {
+            JSONObject expressionObj = expressionsArray.getJSONObject(i);
+            UUID expUUID = getUUID(expressionObj);
+            // add expression            
+            Expression anExp = new Expression(expUUID, expressionObj.getString("definition"));
+            
+            if (type == TestParser.Type.TYPE_ATTRIBUTE) {
+                ((Attribute)obj).addExpression(anExp);
+            } else {
+                ((Metric)obj).addExpression(anExp);
+            }
+
+            parseParameters(expressionObj, anExp);
+
+            JSONArray columnsArray = expressionObj.getJSONArray("columns");
+            int columnsArraySize = columnsArray.length();
+            for (int j = 0; j < columnsArraySize; j++) {
+                String colName = columnsArray.getJSONArray(j).getString(0);
+                String tabName = columnsArray.getJSONArray(j).getString(1);
+                Table curTab = datasource.getTable(tabName);
+
+                //System.out.println("table's column:" + colName);
+                //System.out.println("table's name:" + tabName);
+
+                if (curTab != null) {
+                    Column aCol = curTab.getColumn(colName);
+
+                    if (aCol != null) {
+                        anExp.addColumn(aCol);
+                    } else {
+                        System.out.println("can't find column...");
+                    }
+                } else {
+                    System.out.println("can't find table...");
+                }
+            }                
+        }
+    }
+    
+    private void parseParameters(JSONObject root, Expression expression) {
+        if (root.isNull("parameters") == false) {
+            JSONArray paramArray = root.getJSONArray("parameters");
+            int paramArraySize = paramArray.length();
+            for (int i = 0; i < paramArraySize; i++) {
+                JSONObject paramObj = paramArray.getJSONObject(i);
+                if (paramObj.isNull("distinct") == false) {
+                    //System.out.println("Got a distinct object = " + paramObj.getString("distinct"));
+                    expression.addParameter(ParameterType.PARAMTYPE_DISTINCT, paramObj.getString("distinct"));
+                }
+
+                if (paramObj.isNull("partition_by") == false) {
+                    //System.out.println("Got a partition by object = " + paramObj.getString("partition_by"));
+                    expression.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, paramObj.getString("partition_by"));
+                }
+
+                if (paramObj.isNull("order_by") == false) {
+                    //System.out.println("Got a order by object = " + paramObj.getString("order_by"));
+                    expression.addParameter(ParameterType.PARAMTYPE_ORDER_BY, paramObj.getString("order_by"));
+                }                                
+            }
+        }
+    }        
     
     private UUID getUUID(JSONObject root) {
         UUID uuid;
