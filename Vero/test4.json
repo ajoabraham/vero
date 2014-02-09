@@ -2,35 +2,41 @@
     "expectedOutput":"SELECT ALL T0.name, T1.name, T2.count(distinct course_id) FROM Departments AS T1 INNER JOIN Students AS T3 ON T1.id = T3.dept_id INNER JOIN LessonsFact AS T2 ON T2.prof_id = T4.id INNER JOIN Departments AS T0 ON T0.id = T4.dept_id CROSS JOIN Students AS T3 GROUP BY T0.name, T1.name",
     "datasources": [
         {
+            "uuid": "1000",
             "name": "Teradata - Prod",
             "database": {"vendor": "Teradata"}
         }
     ],
     "tables": [
         {
+            "uuid": "100",
             "name": "LessonsFact",
             "rowCount": 100000,
             "tableType": "fact",
             "columns": [
                 {
+                    "uuid": "1",
                     "name": "prof_id",
                     "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
                 {
+                    "uuid": "2",
                     "name": "std_id",
                     "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
                 {
+                    "uuid": "3",
                     "name": "course_id",
                     "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
                 {
+                    "uuid": "4",
                     "name": "date",
                     "type": "date",
                     "primaryKey": false,
@@ -40,23 +46,27 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "101",
             "name": "Departments",
             "rowCount": 100,
             "tableType": "dimension",
             "columns": [
                 {
+                    "uuid": "5",
                     "name": "id",
                     "type": "integer",
                     "primaryKey": true,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "6",
                     "name": "name",
                     "type": "string",
                     "primaryKey": false,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "7",
                     "name": "school_name",
                     "type": "string",
                     "primaryKey": false,
@@ -66,23 +76,27 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "102",
             "name": "Professors",
             "rowCount": 90,
             "tableType": "dimension",
             "columns": [
                 {
+                    "uuid": "8",
                     "name": "id",
                     "type": "integer",
                     "primaryKey": true,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "9",
                     "name": "name",
                     "type": "string",
                     "primaryKey": false,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "10",
                     "name": "dept_id",
                     "type": "integer",
                     "primaryKey": false,
@@ -92,29 +106,34 @@
             "datasource": "Teradata - Prod"
         },
         {
+            "uuid": "103",
             "name": "Students",
             "rowCount": 600000,
             "tableType": "dimension",
             "columns": [
                 {
+                    "uuid": "11",
                     "name": "id",
                     "type": "integer",
                     "primaryKey": true,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "12",
                     "name": "name",
                     "type": "string",
                     "primaryKey": false,
                     "foreignKey": false
                 },
                 {
+                    "uuid": "13",
                     "name": "dept_id",
                     "type": "integer",
                     "primaryKey": false,
                     "foreignKey": true
                 },
                 {
+                    "uuid": "14",
                     "name": "is_active",
                     "type": "boolean",
                     "primaryKey": false,
@@ -126,9 +145,11 @@
     ],
     "attributes": [
         {
+            "uuid": "15",
             "name": "Professor Department Name",
             "expressions": [
                 {
+                    "uuid": "16",
                     "definition": "name",
                     "columns": [
                         ["name", "Departments"]
@@ -137,9 +158,11 @@
             ]
         },
         {
+            "uuid": "17",
             "name": "Student Department Name",
             "expressions": [
                 {
+                    "uuid": "18",
                     "definition": "name",
                     "columns": [
                         ["name", "Departments"]
@@ -150,10 +173,12 @@
     ],
     "metrics": [
         {
+            "uuid": "19",
             "name": "# of Lessons",
             "expressions": [
                 {
-                    "definition": "count(distinct course_id)",
+                    "uuid": "20",
+                    "definition": "count(course_id)",
                     "columns": [
                         ["course_id", "LessonsFact"]
                     ]
@@ -163,6 +188,7 @@
     ],
     "joindefs": [
         {
+            "uuid": "21",
             "name": "on equal professor id",
             "tleft": "LessonsFact",
             "cleft": "prof_id",
@@ -173,6 +199,7 @@
             "jointype": "inner"
         },
         {
+            "uuid": "22",
             "name": "on equal department id",
             "tleft": "Departments",
             "cleft": "id",
@@ -183,6 +210,7 @@
             "jointype": "inner"
         },
         {
+            "uuid": "23",
             "name": "on equal professor/department id",
             "tleft": "Departments",
             "cleft": "id",

@@ -96,6 +96,35 @@ public class Attribute {
         return null;
     }
 
+    public ExpressionUnit getExpressionUnitByTable(Table table) {
+        List<Expression> expList = this.getExpressions();
+        Boolean found = false;
+        
+        if (expList.size() > 0) {
+            Iterator<Expression> iterExp = expList.iterator();
+            
+            while (iterExp.hasNext()) {
+                Expression curExp = iterExp.next();
+                List<Column> colList = curExp.gatherColumns();
+                
+                if (colList.size() > 0) {
+                    Iterator<Column> iterCol = colList.iterator();
+                    
+                    while (iterCol.hasNext()) {
+                        Column curCol = iterCol.next();
+                        Table curTab = curCol.getTable();
+                        
+                        if (table == curTab) {
+                            return new ExpressionUnit(curExp, curCol);
+                        }                        
+                    }
+                }                
+            }
+        }
+        
+        return null;
+    }    
+    
     /**
      * Loop through all expressions and all tables within an expression to find
      * if current table by name is in it. 
@@ -122,6 +151,35 @@ public class Attribute {
                         if (inTab.equals(curTab.getPhysicalName())) {
                             return curExp;
                         }                        
+                    }
+                }                
+            }
+        }
+        
+        return null;
+    }
+
+    public ExpressionUnit getExpressionUnitByTableName(String inTab) {
+        List<Expression> expList = this.getExpressions();
+        Boolean found = false;
+        
+        if (expList.size() > 0) {
+            Iterator<Expression> iterExp = expList.iterator();
+            
+            while (iterExp.hasNext()) {
+                Expression curExp = iterExp.next();
+                List<Column> colList = curExp.gatherColumns();
+                
+                if (colList.size() > 0) {
+                    Iterator<Column> iterCol = colList.iterator();
+                    
+                    while (iterCol.hasNext()) {
+                        Column curCol = iterCol.next();
+                        Table curTab = curCol.getTable();
+                        
+                        if (inTab.equals(curTab.getPhysicalName())) {
+                            return new ExpressionUnit(curExp, curCol);
+                        }
                     }
                 }                
             }

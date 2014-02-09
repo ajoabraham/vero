@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A table in Vero closely reflects the table and its structure as it exists
@@ -16,6 +17,7 @@ import java.util.Map;
  * @author ajoabraham
  */
 public class Table {
+    private UUID uuid = null;
     private String objectName = "";
     private String physicalName = "";
     private final Map<String,Column> columns = new HashMap();
@@ -36,12 +38,17 @@ public class Table {
         UNKNOWN
     }
     
-    public Table(){}
+    public Table() {}
     
-    public Table(String physicalName, DataSource ds) {
+    public Table(UUID uuid, String physicalName, DataSource datasource) {
+        this.uuid = uuid;
         objectName = physicalName;
         this.physicalName = physicalName;
-        dataSource = ds;
+        this.dataSource = dataSource;
+    }
+
+    public UUID getUUID() {
+        return uuid;
     }
     
     /**

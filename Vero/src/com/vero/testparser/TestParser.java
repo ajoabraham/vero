@@ -12,6 +12,7 @@ import com.vero.metadata.Column;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
+import com.vero.metadata.ParameterType;
 import com.vero.metadata.Table;
 import com.vero.session.Session;
 import java.io.File;
@@ -26,7 +27,7 @@ import org.json.JSONTokener;
  *
  * @author yulinwen
  */
-public class TestParser {  
+public class TestParser {
     private final File testFile;
     
     public TestParser(String fileName) { 
@@ -59,9 +60,11 @@ public class TestParser {
                 // DS
                 //System.out.println("name:" + oneJSONDSObj.getString("name"));
                 //System.out.println("vendor:" + oneJSONDSObj.getJSONObject("database").getString("vendor"));
-                
+
+                UUID dsUUID = getUUID(oneJSONDSObj);
                 // add DS
                 testSession.addDataSource(
+                    dsUUID,
                     oneJSONDSObj.getJSONObject("database").getString("vendor"), 
                     oneJSONDSObj.getString("name"),
                     oneJSONDSObj.getString("name"));
@@ -81,11 +84,13 @@ public class TestParser {
                 //System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
                 //System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
                 JSONArray jsonColumnsArray = oneJSONTableObj.getJSONArray("columns");
+                
+                UUID tabUUID = getUUID(oneJSONTableObj);
                 // add table
                 DataSource specificDS = testSession.getDataSource(oneJSONTableObj.getString("datasource"));
                 Table aTable = null;
                 if (specificDS != null) {
-                    aTable = new Table(oneJSONTableObj.getString("name"), specificDS);
+                    aTable = new Table(tabUUID, oneJSONTableObj.getString("name"), specificDS);
                     aTable.setRowCount(oneJSONTableObj.getInt("rowCount")); 
                     switch (oneJSONTableObj.getString("tableType")) {
                         case "dimension":
@@ -123,21 +128,23 @@ public class TestParser {
                     
                     // add column
                     Column aColumn;
+
+                    UUID colUUID = getUUID(oneJSONColumnObj);
                     switch (oneJSONColumnObj.getString("type")) {
                         case "string":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"String", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "String", 10,
                                 aTable);
                             break;
                         case "integer":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Int", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Int", 10,
                                 aTable);
                             break;
                         case "date":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Date", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Date", 10,
                                 aTable);
                             break;
                         case "boolean":
-                            aColumn = new Column(UUID.randomUUID(), oneJSONColumnObj.getString("name"),"Bool", 10,
+                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Bool", 10,
                                 aTable);
                             break;
                         default:
@@ -170,8 +177,10 @@ public class TestParser {
                     // attribute
                     System.out.println("name:" + oneJSONAttrObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONAttrObj.getJSONArray("expressions");
+                    
+                    UUID attrUUID = getUUID(oneJSONAttrObj);
                     // add attribute
-                    Attribute anAttr = new Attribute(UUID.randomUUID(), oneJSONAttrObj.getString("name"));
+                    Attribute anAttr = new Attribute(attrUUID, oneJSONAttrObj.getString("name"));
                     testSession.addAttribute(anAttr);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
@@ -179,16 +188,41 @@ public class TestParser {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
+                        
+                        UUID expUUID = getUUID(oneJSONExpressionObj);
                         // add expression
-                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
                         anAttr.addExpression(anExp);
 
+                        // parameters
+                        if (oneJSONExpressionObj.isNull("parameters") == false) {
+                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
+                            int paramArraySize = jsonParamArray.length();
+                            for (int k = 0; k < paramArraySize; k++) {
+                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
+                                if (oneJSONParamObj.isNull("distinct") == false) {
+                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("partition_by") == false) {
+                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("order_by") == false) {
+                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
+                                }                                
+                            }
+                        }
+                        
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
-                        for (int k = 0; k < tableUUIDsArraySize; k++) {                        
+                        for (int k = 0; k < tableUUIDsArraySize; k++) {
                             String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
                             String tabName = jsonTableUUIDsArray.getJSONArray(k).getString(1);
-                            Table curTab = testDS.getTable(tabName);                                                
+                            Table curTab = testDS.getTable(tabName);
 
                             System.out.println("table's column:" + colName);
                             System.out.println("table's name:" + tabName);
@@ -203,8 +237,8 @@ public class TestParser {
                                 }
                             } else {
                                 System.out.println("can't find table...");
-                            }                       
-                        }                    
+                            }
+                        }                
                     }
                 }
                 System.out.println("------------------------------");
@@ -221,8 +255,10 @@ public class TestParser {
                     // metric
                     System.out.println("name:" + oneJSONMetricObj.getString("name"));
                     JSONArray jsonExpressionsArray = oneJSONMetricObj.getJSONArray("expressions");
+                    
+                    UUID metUUID = getUUID(oneJSONMetricObj);
                     // add metric
-                    Metric aMetric = new Metric(UUID.randomUUID(), oneJSONMetricObj.getString("name"));
+                    Metric aMetric = new Metric(metUUID, oneJSONMetricObj.getString("name"));
                     testSession.addMetric(aMetric);
 
                     int expressionsArraySize = jsonExpressionsArray.length();
@@ -230,11 +266,36 @@ public class TestParser {
                         JSONObject oneJSONExpressionObj = jsonExpressionsArray.getJSONObject(j);
                         // expression
                         System.out.println("definition:" + oneJSONExpressionObj.getString("definition"));
-                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
+                        
+                        UUID expUUID = getUUID(oneJSONExpressionObj);
                         // add expression
-                        Expression anExp = new Expression(UUID.randomUUID(), oneJSONExpressionObj.getString("definition"));
+                        Expression anExp = new Expression(expUUID, oneJSONExpressionObj.getString("definition"));
                         aMetric.addExpression(anExp);
 
+                        // parameters
+                        if (oneJSONExpressionObj.isNull("parameters") == false) {
+                            JSONArray jsonParamArray = oneJSONExpressionObj.getJSONArray("parameters");
+                            int paramArraySize = jsonParamArray.length();
+                            for (int k = 0; k < paramArraySize; k++) {
+                                JSONObject oneJSONParamObj = jsonParamArray.getJSONObject(k);
+                                if (oneJSONParamObj.isNull("distinct") == false) {
+                                    //System.out.println("Got a distinct object = " + oneJSONParamObj.getString("distinct"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_DISTINCT, oneJSONParamObj.getString("distinct"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("partition_by") == false) {
+                                    //System.out.println("Got a partition by object = " + oneJSONParamObj.getString("partition_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_PARTITION_BY, oneJSONParamObj.getString("partition_by"));
+                                }
+                                
+                                if (oneJSONParamObj.isNull("order_by") == false) {
+                                    System.out.println("Got a order by object = " + oneJSONParamObj.getString("order_by"));
+                                    anExp.addParameter(ParameterType.PARAMTYPE_ORDER_BY, oneJSONParamObj.getString("order_by"));
+                                }                                
+                            }
+                        }
+                        
+                        JSONArray jsonTableUUIDsArray = oneJSONExpressionObj.getJSONArray("columns");
                         int tableUUIDsArraySize = jsonTableUUIDsArray.length();
                         for (int k = 0; k < tableUUIDsArraySize; k++) {                        
                             String colName = jsonTableUUIDsArray.getJSONArray(k).getString(0);
@@ -268,6 +329,7 @@ public class TestParser {
 
                 for (int i = 0; i < JDsArraySize; i++) {
                     JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
+                                        
                     System.out.println("json JD object " + i + ": ");
                     // DS
                     System.out.println("name:" + oneJSONJDObj.getString("name"));
@@ -278,9 +340,11 @@ public class TestParser {
                     System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
                     System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                     System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+                    
+                    UUID jdUUID = getUUID(oneJSONJDObj);
                     // add DS                
                     JoinDefinition aJoin = new JoinDefinition(
-                        UUID.randomUUID(),
+                        jdUUID,
                         oneJSONJDObj.getString("name"),
                         oneJSONJDObj.getString("tleft"),
                         oneJSONJDObj.getString("cleft"),
@@ -329,5 +393,22 @@ public class TestParser {
         }
         
         return testSession;
-    }    
+    }
+    
+    private UUID getUUID(JSONObject root) {
+        UUID uuid;
+        if (root.isNull("uuid") == false) {
+            String strUUID = root.getString("uuid");
+
+            try {
+                uuid = UUID.fromString(strUUID);
+            } catch (Exception e) {
+                uuid = UUID.randomUUID();
+            }
+        } else {
+            uuid = UUID.randomUUID();
+        }
+        
+        return uuid;
+    }
 }

@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class DataSource {
-    UUID uuid;
-    DsType type;
-    String name;
-    String description;
-    HashMap<String, Table> tables;
+    private UUID uuid = null;
+    private DsType type;
+    private String name;
+    private String description;
+    private HashMap<String, Table> tables;
     
     public enum DsType {
         NONE,
@@ -20,8 +20,8 @@ public class DataSource {
     public DataSource() {        
     }
     
-    public DataSource(DsType inType, String inName, String inDescription) {
-        uuid = UUID.randomUUID();
+    public DataSource(UUID uuid, DsType inType, String inName, String inDescription) {
+        this.uuid = uuid;
         type = inType;
         name = inName;
         description = inDescription;

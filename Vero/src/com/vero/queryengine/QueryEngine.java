@@ -6,16 +6,19 @@
 
 package com.vero.queryengine;
 
+import com.vero.metadata.ExpressionUnit;
 import static com.google.common.collect.ImmutableMap.of;
 import com.vero.metadata.Attribute;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
+import static com.vero.metadata.ParameterType.*;
 import com.vero.metadata.Table;
 import com.vero.report.Block;
 import com.vero.report.Report;
 import com.vero.session.Session;
 import frmw.dialect.GenericSQL;
+import frmw.dialect.TeradataSQL;
 import frmw.model.Formula;
 import frmw.parser.Parsing;
 import java.util.ArrayList;
@@ -80,14 +83,14 @@ public class QueryEngine {
         
         public List<ProcessingUnit> getLinkedPU() {
             return linkedPU;
-        }        
+        }
     }
     
     private final Stage stage = new Stage();
     private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
             new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
     private Report report = null;
-    public static final Parsing parser = new Parsing();
+    private static final Parsing parser = new Parsing();
     
     public QueryEngine() {}
         
@@ -316,23 +319,26 @@ public class QueryEngine {
             ProcessingUnit srcPU = eu.getSrcPU();
             if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                 Attribute srcAttr = (Attribute)srcPU.getContent();
-                srcPU.setUsedExp(srcAttr.getExpressionByTableName(eu.getSrcTable()));
+                //srcPU.setUsedExp(srcAttr.getExpressionByTableName(eu.getSrcTable()));
+                srcPU.setUsedExp(srcAttr.getExpressionUnitByTableName(eu.getSrcTable()));
             } else if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                 Metric srcMet = (Metric)srcPU.getContent();
-                srcPU.setUsedExp(srcMet.getExpressionByTableName(eu.getSrcTable()));
+                //srcPU.setUsedExp(srcMet.getExpressionByTableName(eu.getSrcTable()));
+                srcPU.setUsedExp(srcMet.getExpressionUnitByTableName(eu.getSrcTable()));
             } else {
-                // PUTYPE_HARDHINT
-                
+                // PUTYPE_HARDHINT                
             }
             srcPU.setProcessed(true);
             
             ProcessingUnit dstPU = eu.getDstPU();
             if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                 Attribute dstAttr = (Attribute)dstPU.getContent();
-                dstPU.setUsedExp(dstAttr.getExpressionByTableName(eu.getDstTable()));
+                //dstPU.setUsedExp(dstAttr.getExpressionByTableName(eu.getDstTable()));
+                dstPU.setUsedExp(dstAttr.getExpressionUnitByTableName(eu.getDstTable()));
             } else if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                 Metric dstMet = (Metric)dstPU.getContent();
-                dstPU.setUsedExp(dstMet.getExpressionByTableName(eu.getDstTable()));
+                //dstPU.setUsedExp(dstMet.getExpressionByTableName(eu.getDstTable()));
+                dstPU.setUsedExp(dstMet.getExpressionUnitByTableName(eu.getDstTable()));
             }
             dstPU.setProcessed(true);
         }
@@ -346,14 +352,16 @@ public class QueryEngine {
                     List<Expression> expAL = curAttr.getExpressions();
                     Collections.sort(expAL);
                     if (expAL.size() > 0) {
-                        pu.setUsedExp(expAL.get(0));
+                        //pu.setUsedExp(expAL.get(0));
+                        pu.setUsedExp(new ExpressionUnit(expAL.get(0), expAL.get(0).getColumns().get(0)));
                     }
                 } else if (pu.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                     Metric curMet = (Metric)pu.getContent();
                     List<Expression> expAL = curMet.getExpressions();
                     Collections.sort(expAL);
                     if (expAL.size() > 0) {
-                        pu.setUsedExp(expAL.get(0));
+                        //pu.setUsedExp(expAL.get(0));
+                        pu.setUsedExp(new ExpressionUnit(expAL.get(0), expAL.get(0).getColumns().get(0)));
                     }
                 }
             } else {
@@ -543,13 +551,15 @@ public class QueryEngine {
                 if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
                     srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
                 } else {
-                    srcTableName = srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                    //srcTableName = srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                    srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
                 }
                 
                 if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
                     dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
                 } else {
-                    dstTableName = dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                    //dstTableName = dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                    dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
                 }
                 
                 if (cnt == 0) {
@@ -575,16 +585,32 @@ public class QueryEngine {
         ArrayList<ColumnReferenceByName> colRefByName = new ArrayList();
         ArrayList<ColumnReferenceByName> colAttrRefByName = new ArrayList();
         for (ProcessingUnit curPU : sortedVertex) {
-            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {                    
-                ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getFormula());
+            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
+                // sql-function parsing
+                System.out.println("==> " + curPU.getUsedExp().getExpression().getFormula());
+                Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
+                curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
+                
+                if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {
+                    if (curPU.getUsedExp().getExpression().getParameters().containsKey(PARAMTYPE_DISTINCT)) {
+                        String value = curPU.getUsedExp().getExpression().getParameters().get(PARAMTYPE_DISTINCT);                        
+                        Boolean bValue = !value.equals("false");
+                        
+                        curFormula.aggregationParameters().get(0).distinct(bValue);
+                    }
+                }
+                
+                //ColumnReferenceByName aColExp = c.colName(curPU.assignTableAlias(), curPU.getUsedExp().getFormula());
+                // FIXME: use specific db setting
+                ColumnReferenceByName aColExp = c.colName(curFormula.sql(new TeradataSQL()));
 
-                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) { 
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                     attrCount++; 
                     colAttrRefByName.add(aColExp);
-                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curPU.getUsedExp().getUUID());
+                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curPU.getUsedExp().getExpression().getUUID());
                 } else if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                     metCount++;
-                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curPU.getUsedExp().getUUID());
+                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curPU.getUsedExp().getExpression().getUUID());
                 }
 
                 colRefByName.add(aColExp);
@@ -621,7 +647,7 @@ public class QueryEngine {
         for (ProcessingUnit pu : graphVertexSet) {
             System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
             if (pu.getUsedExp() != null) {
-                System.out.println("    UsedExp = " + pu.getUsedExp().getFormula());
+                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression().getFormula());
             }
             
             Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);

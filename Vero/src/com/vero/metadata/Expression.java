@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Expression implements Comparable<Expression> {
     private UUID uuid = null;
     private String formula = null;
-    private Map<String, String> parameters = null;
+    private Map<ParameterType, String> parameters = null;
     private List<Column> columns = null;
     private Column smallestColumn = null;
 
@@ -58,11 +58,11 @@ public class Expression implements Comparable<Expression> {
         return formula;
     }
 
-    public void addParameter(String key, String value) {
+    public void addParameter(ParameterType key, String value) {
         parameters.put(key, value);
     }
     
-    public Map<String, String> getParameters() {
+    public Map<ParameterType, String> getParameters() {
         return parameters;
     }
     
@@ -111,6 +111,16 @@ public class Expression implements Comparable<Expression> {
         
         return aTabList;
     }    
+
+    public List gatherColumns() {
+        ArrayList<Column> aColList = new ArrayList();
+        
+        for (int i = 0; i < columns.size(); i++) {
+            aColList.add(columns.get(i));
+        }
+        
+        return aColList;        
+    }
     
     @Override
     public int compareTo(Expression inExp) {

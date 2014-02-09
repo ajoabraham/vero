@@ -10,6 +10,8 @@ package com.vero.metadata;
  *
  * @author yulinwen
  */
-public class PropertyMeta {
-    
+public enum ParameterType {
+    PARAMTYPE_DISTINCT,
+    PARAMTYPE_PARTITION_BY,
+    PARAMTYPE_ORDER_BY
 }

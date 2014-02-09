@@ -153,10 +153,10 @@
             "name": "# of Lessons",
             "expressions": [
                 {
-                    "definition": "count(course_id)",
+                    "definition": "movingavg(course_id, 7)",
                     "parameters": [
                         {
-                            "distinct": "true"
+                            "distinctxx": "true"
                         }
                     ],
                     "columns": [
