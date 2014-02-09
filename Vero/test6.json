@@ -1,4 +1,4 @@
-{   "scenario": "One attribute with 2 expressions. Should pick the second expression because the row count is less.",
+{   "scenario": "One attribute with 3 expressions. Should pick the second expression because the other 2 are blacklisted.",
     "expectedOutput":"SELECT ALL T0.name-2",
     "datasources": [
         {
@@ -129,19 +129,19 @@
             "name": "Attr-1",
             "expressions": [
                 {
-                    "definition": "a1-name-1",
+                    "definition": "lower(name)",
                     "columns": [
                         ["name", "Students"]
                     ]
                 },
                 {
-                    "definition": "a1-name-2",
+                    "definition": "upper(name)",
                     "columns": [
                         ["name", "Departments"]
                     ]
                 },
                 {
-                    "definition": "a1-name-3",
+                    "definition": "trim(name)",
                     "columns": [
                         ["name", "Professors"]
                     ]

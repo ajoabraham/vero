@@ -468,116 +468,127 @@ public class QueryEngine {
         // construct join
         TableReferenceBuilder allJoins = null;
         int cnt = 0;
-        for (EdgeUnit eu : sortedEUs) {
-            if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
-                JoinDefinition aJoin = eu.getJoinDef();
-                aBlock.addJoinDefList(aJoin.getUUID());
-                
-                String jType = aJoin.getType();
-                String jExp = aJoin.getExpression();
-                String jOper = aJoin.getOperator();
-                org.sql.generation.api.grammar.query.joins.JoinType jT;
-                
-                switch (jType) {
-                    case "inner":
-                        jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
-                        break;
-                    case "outer":
-                        jT = org.sql.generation.api.grammar.query.joins.JoinType.FULL_OUTER;
-                        break;
-                    case "left":
-                        jT = org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER;
-                        break;
-                    case "right":
-                        jT = org.sql.generation.api.grammar.query.joins.JoinType.RIGHT_OUTER;
-                        break;
-                    default:
-                        jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
-                        break;
-                }
+        
+        if (sortedEUs.isEmpty()) {
+            // single attribute or metric
+            assert(sortedVertex.size() == 1);
+            ProcessingUnit curPU = sortedVertex.get(0);
+            
+            allJoins = t.tableBuilder(t.table(t.tableName(null, curPU.getUsedExp().getColumn().getTable().getPhysicalName()), t.tableAlias(curPU.assignTableAlias())));
+            curPU.setProcessed(true);
+            cnt++;
+        } else {        
+            for (EdgeUnit eu : sortedEUs) {
+                if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
+                    JoinDefinition aJoin = eu.getJoinDef();
+                    aBlock.addJoinDefList(aJoin.getUUID());
 
-                if (cnt == 0) {
-                    ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(matchingPU.assignTableAlias())));
-                    matchingPU.setProcessed(true);
-                }
-                
-                BooleanExpression bE;
-                switch (jOper) {
-                    case ">":
-                        bE = b.gt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
-                        break;
-                    case "=":
-                        bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
-                        break;
-                    case "<":
-                        bE = b.lt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
-                        break;
-                    default:
-                        bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
-                        break;
-                }
-                
-                if (cnt == 0) {
-                    allJoins.addQualifiedJoin(
-                        jT,
-                        t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
-                        t.jc(b.booleanBuilder(bE).createExpression()));
-                } else {
-                    ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                    ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
-                    
-                    if (leftPU.getProcessed() == false) {
-                        allJoins.addQualifiedJoin(
-                            jT,
-                            t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTLeft()))),
-                            t.jc(b.booleanBuilder(bE).createExpression()));
-                            leftPU.setProcessed(true);
-                    } else {
+                    String jType = aJoin.getType();
+                    String jExp = aJoin.getExpression();
+                    String jOper = aJoin.getOperator();
+                    org.sql.generation.api.grammar.query.joins.JoinType jT;
+
+                    switch (jType) {
+                        case "inner":
+                            jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                            break;
+                        case "outer":
+                            jT = org.sql.generation.api.grammar.query.joins.JoinType.FULL_OUTER;
+                            break;
+                        case "left":
+                            jT = org.sql.generation.api.grammar.query.joins.JoinType.LEFT_OUTER;
+                            break;
+                        case "right":
+                            jT = org.sql.generation.api.grammar.query.joins.JoinType.RIGHT_OUTER;
+                            break;
+                        default:
+                            jT = org.sql.generation.api.grammar.query.joins.JoinType.INNER;
+                            break;
+                    }
+
+                    if (cnt == 0) {
+                        ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        allJoins = t.tableBuilder(t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(matchingPU.assignTableAlias())));
+                        matchingPU.setProcessed(true);
+                    }
+
+                    BooleanExpression bE;
+                    switch (jOper) {
+                        case ">":
+                            bE = b.gt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
+                            break;
+                        case "=":
+                            bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
+                            break;
+                        case "<":
+                            bE = b.lt(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
+                            break;
+                        default:
+                            bE = b.eq(c.colName(eu.retrieveMatchingAlias(aJoin.getTLeft()), aJoin.getCLeft()), c.colName(eu.retrieveMatchingAlias(aJoin.getTRight()), aJoin.getCRight()));
+                            break;
+                    }
+
+                    if (cnt == 0) {
                         allJoins.addQualifiedJoin(
                             jT,
                             t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
                             t.jc(b.booleanBuilder(bE).createExpression()));
-                            rightPU.setProcessed(true);
-                    }
-                }
-            } else {
-                ProcessingUnit srcPU = eu.getSrcPU();
-                ProcessingUnit dstPU = eu.getDstPU();
-                
-                String srcTableName = null;
-                String dstTableName = null;
-                
-                if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
-                    srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
-                } else {
-                    //srcTableName = srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
-                    srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
-                }
-                
-                if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
-                    dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
-                } else {
-                    //dstTableName = dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
-                    dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
-                }
-                
-                if (cnt == 0) {
-                    allJoins = t.tableBuilder(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
-                    srcPU.setProcessed(true);
-                    allJoins.addCrossJoin(t.table(t.tableName(null, dstTableName), t.tableAlias(dstPU.assignTableAlias())));
-                    dstPU.setProcessed(true);
-                } else {
-                    if (srcPU.getProcessed() == false) {
-                        allJoins.addCrossJoin(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
-                        srcPU.setProcessed(true);
                     } else {
+                        ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
+
+                        if (leftPU.getProcessed() == false) {
+                            allJoins.addQualifiedJoin(
+                                jT,
+                                t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTLeft()))),
+                                t.jc(b.booleanBuilder(bE).createExpression()));
+                                leftPU.setProcessed(true);
+                        } else {
+                            allJoins.addQualifiedJoin(
+                                jT,
+                                t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
+                                t.jc(b.booleanBuilder(bE).createExpression()));
+                                rightPU.setProcessed(true);
+                        }
+                    }
+                } else {
+                    ProcessingUnit srcPU = eu.getSrcPU();
+                    ProcessingUnit dstPU = eu.getDstPU();
+
+                    String srcTableName = null;
+                    String dstTableName = null;
+
+                    if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
+                    } else {
+                        //srcTableName = srcPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                        srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
+                    } else {
+                        //dstTableName = dstPU.getUsedExp().getSmallestColumn().getTable().getPhysicalName();
+                        dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (cnt == 0) {
+                        allJoins = t.tableBuilder(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
+                        srcPU.setProcessed(true);
                         allJoins.addCrossJoin(t.table(t.tableName(null, dstTableName), t.tableAlias(dstPU.assignTableAlias())));
                         dstPU.setProcessed(true);
+                    } else {
+                        if (srcPU.getProcessed() == false) {
+                            allJoins.addCrossJoin(t.table(t.tableName(null, srcTableName), t.tableAlias(srcPU.assignTableAlias())));
+                            srcPU.setProcessed(true);
+                        } else {
+                            allJoins.addCrossJoin(t.table(t.tableName(null, dstTableName), t.tableAlias(dstPU.assignTableAlias())));
+                            dstPU.setProcessed(true);
+                        }
                     }
                 }
+                cnt++;
             }
-            cnt++;
         }
 
         // construct select
@@ -589,6 +600,7 @@ public class QueryEngine {
                 // sql-function parsing
                 System.out.println("==> " + curPU.getUsedExp().getExpression().getFormula());
                 Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
+                System.out.println("===> " + curPU.getUsedExp().getColumn().getObjectName() + " aliase with: " + curPU.assignTableAlias());
                 curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
                 
                 if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {

@@ -129,13 +129,13 @@
             "name": "Student Department Name",
             "expressions": [
                 {
-                    "definition": "name-1",
+                    "definition": "lower(name)",
                     "columns": [
                         ["name", "Students"]
                     ]
                 },
                 {
-                    "definition": "name-2",
+                    "definition": "upper(name)",
                     "columns": [
                         ["name", "Departments"]
                     ]

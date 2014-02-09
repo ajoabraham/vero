@@ -153,7 +153,12 @@
             "name": "# of Lessons",
             "expressions": [
                 {
-                    "definition": "count(distinct course_id)",
+                    "definition": "count(course_id)",
+                    "parameters": [
+                        {
+                            "distinct": "true"
+                        }
+                    ],
                     "columns": [
                         ["course_id", "LessonsFact"]
                     ]
