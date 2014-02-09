@@ -14,9 +14,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 
 import com.vero.ui.constants.ImageList;
+import com.vero.ui.model.CommentBlockObjectData;
+import com.vero.ui.model.GlobalFilterObjectData;
+import com.vero.ui.model.ReportBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.ReportTabManager;
+import com.vero.ui.report.querypane.GlobalFilterPane;
 
 /**
  *
@@ -84,6 +88,13 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 
     private void handleNewReportAction() {
         ReportObjectData reportObjectData = new ReportObjectData();
+        GlobalFilterObjectData globalFilterObjectData = new GlobalFilterObjectData();
+        reportObjectData.setGlobalFilterObjectData(globalFilterObjectData);
+        CommentBlockObjectData commentBlockObjectData = new CommentBlockObjectData();
+        commentBlockObjectData.setPosition(0);
+        reportObjectData.addBlockObjectData(commentBlockObjectData);
+        ReportBlockObjectData reportBlockObjectData = new ReportBlockObjectData();
+        reportObjectData.setReportBlockObjectData(reportBlockObjectData);
         
         reportObjectData.setName("New Report");
         ReportTabManager.getInstance().createReportTab(reportObjectData);

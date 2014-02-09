@@ -8,15 +8,19 @@ package com.vero.ui.report.querypane;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_QUERY_CONTENT_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_QUERY_PANE;
+import static com.vero.ui.constants.ObjectType.COMMENT_BLOCK;
+import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import com.vero.ui.model.BlockObjectData;
+import com.vero.ui.model.CommentBlockObjectData;
+import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
@@ -30,8 +34,10 @@ public class QueryPane extends ScrollPane {
     private ReportObjectData reportObjectData = null;
     private StackPane dropZonePaneContainer = null;
     
-    private List<Pane> blockPanes = null;
-    private QueryBlockPane selectedBlockPane = null;
+    private List<BlockPane> blockPanes = null;
+    private QueryBlockPane selectedQueryBlockPane = null;
+    private GlobalFilterPane globalFilterPane = null;
+    private ReportBlockPane reportBlockPane = null;
     
     private VBox contentPane = null;
     
@@ -39,7 +45,7 @@ public class QueryPane extends ScrollPane {
 	this.reportPane = reportPane;
 	this.reportObjectData = reportPane.getReportObjectData();
         this.dropZonePaneContainer = reportPane.getDropZonePaneContainer();
-        blockPanes = new ArrayList<Pane>();
+        blockPanes = new ArrayList<BlockPane>();
 	
         buildUI();
         populateData();
@@ -54,26 +60,36 @@ public class QueryPane extends ScrollPane {
     }
     
     private void populateData() {
-	// New report
-	if (reportObjectData.getId() == null) {
-	    DropZonePane dropZonePane = new DropZonePane(reportPane);
-	    Pane globalFilter = new GlobalFilterPane();
-	    blockPanes.add(globalFilter);
-	    Pane commentBlock = BlockPaneFactory.createCommentBlockPane(this);
-	    blockPanes.add(commentBlock);
-	    Pane reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane);
-	    blockPanes.add(reportBlockPane);
-	    
-	    contentPane.getChildren().addAll(globalFilter, commentBlock, reportBlockPane);
-	    dropZonePaneContainer.getChildren().add(dropZonePane);
-	    
-	    ((QueryBlockPane)reportBlockPane).setSelected(true);
-	    selectedBlockPane = (QueryBlockPane) reportBlockPane;
-	}
+        DropZonePane dropZonePane = new DropZonePane(reportPane);
+        globalFilterPane = new GlobalFilterPane(reportObjectData.getGlobalFilterObjectData());
+        contentPane.getChildren().add(globalFilterPane);
+        
+        for (BlockObjectData blockObjectData : reportObjectData.getBlockObjectDataList()) {
+            if (blockObjectData.getType() == COMMENT_BLOCK) {
+                BlockPane commentBlockPane = BlockPaneFactory.createCommentBlockPane(this, (CommentBlockObjectData) blockObjectData);
+                blockPanes.add(commentBlockPane);
+                contentPane.getChildren().add(commentBlockPane);
+            }
+            else if (blockObjectData.getType() == QUERY_BLOCK) {
+                BlockPane queryBlockPane = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, (QueryBlockObjectData) blockObjectData);
+                blockPanes.add(queryBlockPane);
+                contentPane.getChildren().add(queryBlockPane);
+            }
+        }
+        
+        BlockPane reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane, reportObjectData.getReportBlockObjectData());
+        contentPane.getChildren().add(reportBlockPane);
+        
+        dropZonePaneContainer.getChildren().add(dropZonePane);
+
+        ((QueryBlockPane) reportBlockPane).setSelected(true);
+        selectedQueryBlockPane = (QueryBlockPane) reportBlockPane;
     }
     
     public void addNewCommentBlockPane() {
-        Pane commentBlock = BlockPaneFactory.createCommentBlockPane(this);
+        CommentBlockObjectData commentObjectData = new CommentBlockObjectData();
+        reportObjectData.addBlockObjectData(commentObjectData);
+        BlockPane commentBlock = BlockPaneFactory.createCommentBlockPane(this, commentObjectData);
         blockPanes.add(commentBlock);
         
         contentPane.getChildren().add(1, commentBlock);
@@ -81,25 +97,27 @@ public class QueryPane extends ScrollPane {
     
     public void addNewQueryBlockPane() {
         DropZonePane dropZonePane = new DropZonePane(reportPane);
-        Pane queryBlock = BlockPaneFactory.createQueryBlockPane(this, dropZonePane);
+        QueryBlockObjectData queryBlockObjectData = new QueryBlockObjectData();
+        reportObjectData.addBlockObjectData(queryBlockObjectData);
+        BlockPane queryBlock = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, queryBlockObjectData);
         blockPanes.add(queryBlock);
         
         contentPane.getChildren().add(1, queryBlock);
         dropZonePaneContainer.getChildren().add(dropZonePane);
         
-        if (selectedBlockPane != null) {
-            selectedBlockPane.setSelected(false);
+        if (selectedQueryBlockPane != null) {
+            selectedQueryBlockPane.setSelected(false);
         }
         
-        selectedBlockPane = (QueryBlockPane) queryBlock;
-        selectedBlockPane.setSelected(true);
+        selectedQueryBlockPane = (QueryBlockPane) queryBlock;
+        selectedQueryBlockPane.setSelected(true);
     }
     
     public void setSelectedBlock(QueryBlockPane blockPane) {
-        if (selectedBlockPane != blockPane) {            
-            selectedBlockPane.setSelected(false);
-            selectedBlockPane = blockPane;
-            selectedBlockPane.setSelected(true);
+        if (selectedQueryBlockPane != blockPane) {            
+            selectedQueryBlockPane.setSelected(false);
+            selectedQueryBlockPane = blockPane;
+            selectedQueryBlockPane.setSelected(true);
         }
     }
     

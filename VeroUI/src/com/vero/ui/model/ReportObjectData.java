@@ -6,6 +6,7 @@
 
 package com.vero.ui.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.vero.ui.constants.ObjectType;
@@ -22,7 +23,7 @@ public class ReportObjectData extends UIData {
     private String name = null;
     private GlobalFilterObjectData globalFilterObjectData = null;
     private ReportBlockObjectData reportBlockObjectData = null;
-    private List<BlockObjectData> blockObjectDataList = null;
+    private List<BlockObjectData> blockObjectDataList = new ArrayList<BlockObjectData>();
     
     public ReportObjectData() {
         
@@ -65,5 +66,15 @@ public class ReportObjectData extends UIData {
 
     public void setBlockObjectDataList(List<BlockObjectData> blockObjectDataList) {
         this.blockObjectDataList = blockObjectDataList;
+    }
+    
+    public void addBlockObjectData(BlockObjectData blockObjectData) {
+        blockObjectDataList.add(blockObjectData);
+        blockObjectData.setReportObjectData(this);
+    }
+    
+    public boolean removeBlockObjectData(BlockObjectData blockObjectData) {
+        blockObjectData.setReportObjectData(null);
+        return blockObjectDataList.remove(blockObjectData);
     }
 }

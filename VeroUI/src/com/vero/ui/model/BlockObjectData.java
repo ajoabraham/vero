@@ -10,6 +10,7 @@ package com.vero.ui.model;
  */
 public abstract class BlockObjectData extends UIData {
     private ReportObjectData reportObjectData = null;
+    private String metadata = null;
     
     /**
      * 
@@ -23,5 +24,13 @@ public abstract class BlockObjectData extends UIData {
 
     public void setReportObjectData(ReportObjectData reportObjectData) {
         this.reportObjectData = reportObjectData;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
     }
 }
