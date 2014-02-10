@@ -1,5 +1,5 @@
 {   "scenario": "Simple select and group by scenario.",
-    "expectedOutput":"select t2.school_name,sum(t1.num_students) from DepartmentFacts t1 join Departments t2 on t1.dept_id=t2.id group by t2.school_num",
+    "expectedOutput":"SELECT ALL \"T0\".school_name, sum(\"T1\".num_students) FROM Departments AS T0 INNER JOIN DepartmentFacts AS T1 ON T0.id = T1.dept_id GROUP BY \"T0\".school_name",
     "datasources": [
         {
             "name": "Teradata - Prod",
