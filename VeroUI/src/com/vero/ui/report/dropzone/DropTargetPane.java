@@ -28,6 +28,7 @@ import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
+import com.vero.ui.report.querypane.QueryPane;
 
 /**
  *
@@ -45,7 +46,11 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     private boolean isEmpty = false;
     private DockHandler dockHandler = null;
     
-    public DropTargetPane() {
+    private QueryPane queryPane = null;
+    
+    public DropTargetPane(QueryPane queryPane) {
+        this.queryPane = queryPane;
+        
         getStyleClass().add(CLASS_DROP_PANE);
         setPrefHeight(DEFAULT_DROP_PANE_HEIGHT);
         setMaxHeight(Double.MAX_VALUE);
@@ -130,6 +135,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		expressionObjectData.setFormula(columnObjectData.getName());
 		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
 		attributeObjectData.addExpressionObjectData(expressionObjectData);
+		attributeObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(attributeObjectData);
 	    }
@@ -140,6 +146,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		expressionObjectData.setFormula("sum(" + columnObjectData.getName() + ")");
 		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
 		metricObjectData.addExpressionObjectData(expressionObjectData);
+		metricObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(metricObjectData);
 	    }
@@ -208,5 +215,13 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
      */
     public void setDockHandler(DockHandler dockHandler) {
         this.dockHandler = dockHandler;
+    }
+
+    public QueryPane getQueryPane() {
+        return queryPane;
+    }
+
+    public void setQueryPane(QueryPane queryPane) {
+        this.queryPane = queryPane;
     }
 }
