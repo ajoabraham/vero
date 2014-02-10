@@ -15,12 +15,17 @@ import com.vero.metadata.Metric;
 import com.vero.metadata.ParameterType;
 import com.vero.metadata.Table;
 import com.vero.session.Session;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.util.UUID;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 import org.json.JSONTokener;
 
 /**
@@ -33,19 +38,29 @@ public class TestParser {
         TYPE_METRIC
     }
     
-    private final File testFile;
+    private File testFile;
+    private JSONStringer jsonStringer = null;
     
     public TestParser(String fileName) { 
         testFile = new File(fileName);
     }
     
+    public TestParser(JSONStringer jsonStringer) {
+        this.jsonStringer = jsonStringer;
+    }
+    
     public Session parse() {
         Session testSession = new Session();        
-        FileReader jsonFileReader;
+        BufferedReader jsonFileReader;
         DataSource testDS = null;
         
         try {
-            jsonFileReader = new FileReader(testFile);
+            if (jsonStringer != null) {
+                jsonFileReader = new BufferedReader(new StringReader(jsonStringer.toString()));
+            }
+            else {
+                jsonFileReader = new BufferedReader(new FileReader(testFile));
+            }
         } catch (java.io.FileNotFoundException e) {
             System.out.println("File not found...");
             return null;

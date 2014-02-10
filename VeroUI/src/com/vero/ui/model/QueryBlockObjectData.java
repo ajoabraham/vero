@@ -20,6 +20,7 @@ import com.vero.ui.constants.ObjectType;
 public class QueryBlockObjectData extends BlockObjectData {
     private IntegerProperty position = new SimpleIntegerProperty();
     
+    private DatasourceObjectData datasourceObjectData = null;
     private List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
     private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
@@ -40,6 +41,14 @@ public class QueryBlockObjectData extends BlockObjectData {
 	return position;
     }
     
+    public DatasourceObjectData getDatasourceObjectData() {
+        return datasourceObjectData;
+    }
+
+    public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        this.datasourceObjectData = datasourceObjectData;
+    }
+
     public List<AttributeObjectData> getAttributeObjectDataList() {
         return attributeObjectDataList;
     }

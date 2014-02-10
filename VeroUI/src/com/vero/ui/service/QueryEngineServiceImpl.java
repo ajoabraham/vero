@@ -12,6 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import com.vero.queryengine.QueryEngine;
+import com.vero.report.Report;
+import com.vero.session.Session;
+import com.vero.testparser.TestParser;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
@@ -31,7 +35,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 
     @Override
     public String generateSQL(QueryBlockObjectData queryBlockObjectData) {
-	DatasourceObjectData datasource = null;
+	DatasourceObjectData datasource = queryBlockObjectData.getDatasourceObjectData();
 	List<TableObjectData> tables = queryBlockObjectData.getTableObjectDataList();
 	List<AttributeObjectData> attributes = queryBlockObjectData.getAttributeObjectDataList();
 	List<MetricObjectData> metrics = queryBlockObjectData.getMetricObjectDataList();
@@ -44,15 +48,14 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	jsonDatasource.put("uuid", datasource.getId());
 	jsonDatasource.put("name", datasource.getName());
 	JSONObject databaseObject = new JSONObject();
-	databaseObject.put("vendor", "PostgreSQL");
+	databaseObject.put("vendor", "Teradata");
 	jsonDatasource.put("database", databaseObject);
 	datasourceArray.put(jsonDatasource);
 	
 	jsonOutput.object()
 	          .key("datasources")
-	          .value(datasourceArray)
-	          .endObject();
-	
+	          .value(datasourceArray);
+		
 	// Generate tables
 	JSONArray tableArray = new JSONArray();
 	for (TableObjectData table : tables) {
@@ -61,6 +64,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	    jsonTable.put("name", table.getPhysicalName());
 	    jsonTable.put("rowCount", table.getRowCount());
 	    jsonTable.put("datasource", datasource.getName());
+	    jsonTable.put("tableType", table.getTableType().getName().toLowerCase());
 	    JSONArray columnArray = new JSONArray();
 	    for (ColumnObjectData column : table.getColumnObjectDataList()) {
 		JSONObject jsonColumn = new JSONObject();
@@ -71,13 +75,12 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 		jsonColumn.put("foreignKey", column.getKeyType() == FOREIGN_KEY);
 		columnArray.put(jsonColumn);
 	    }
-	    jsonTable.put("columns", columnArray);	    
+	    jsonTable.put("columns", columnArray);
+	    tableArray.put(jsonTable);
 	}
-	
-	jsonOutput.object()
-	          .key("tables")
-	          .value(tableArray)
-	          .endObject();
+		
+	jsonOutput.key("tables")
+	          .value(tableArray);
 	
 	// Generate attributes
 	JSONArray attributeArray = new JSONArray();
@@ -101,12 +104,11 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	    }
 	    
 	    jsonAttribute.put("expressions", expressionArray);
+	    attributeArray.put(jsonAttribute);
 	}
 	
-	jsonOutput.object()
-	          .key("attributes")
-	          .value(attributeArray)
-	          .endObject();
+	jsonOutput.key("attributes")
+	          .value(attributeArray);
 	
 	// Generate metrics
 	JSONArray metricArray = new JSONArray();
@@ -130,14 +132,22 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	    }
 	    
 	    jsonMetric.put("expressions", expressionArray);
+	    metricArray.put(jsonMetric);
 	}
 	
-	jsonOutput.object()
-	          .key("metrics")
+	jsonOutput.key("metrics")
 	          .value(metricArray)
 	          .endObject();
 	          
 System.out.println("Output = " + jsonOutput.toString());	
+
+        TestParser testParser = new TestParser(jsonOutput);
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+        Report report = queryEngine.getReport();
+System.out.println("SQL = " + report.getBlocks().get(0).getSqlString());        
+        
 	return null;
     }
 

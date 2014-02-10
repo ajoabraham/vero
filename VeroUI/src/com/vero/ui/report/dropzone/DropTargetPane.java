@@ -32,6 +32,7 @@ import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.querypane.QueryBlockPane;
 import com.vero.ui.report.querypane.ReportBlockPane;
+import com.vero.ui.service.ServiceManager;
 
 /**
  *
@@ -148,6 +149,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(columnObjectData.getTableObjectData()));
 		
 		// Link data
+		queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
 		queryBlockPane.getQueryBlockObjectData().addAttributeObjectData(attributeObjectData);
 		queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 		
@@ -167,9 +169,13 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(columnObjectData.getTableObjectData()));
 		
 		// Link data
+	        queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
 		queryBlockPane.getQueryBlockObjectData().addMetricObjectData(metricObjectData);
 		queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 	    }
+	    
+	    // Generate SQL
+	    String sql = ServiceManager.getQueryEngineService().generateSQL(queryBlockPane.getQueryBlockObjectData());
 	}	
 	else { 
 	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
