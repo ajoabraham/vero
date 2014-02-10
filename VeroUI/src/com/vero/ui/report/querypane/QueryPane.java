@@ -60,7 +60,6 @@ public class QueryPane extends ScrollPane {
     }
     
     private void populateData() {
-        DropZonePane dropZonePane = new DropZonePane(reportPane, this);
         globalFilterPane = new GlobalFilterPane(reportObjectData.getGlobalFilterObjectData());
         contentPane.getChildren().add(globalFilterPane);
         
@@ -71,17 +70,19 @@ public class QueryPane extends ScrollPane {
                 contentPane.getChildren().add(commentBlockPane);
             }
             else if (blockObjectData.getType() == QUERY_BLOCK) {
+                DropZonePane dropZonePane = new DropZonePane(reportPane);
                 BlockPane queryBlockPane = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, (QueryBlockObjectData) blockObjectData);
                 blockPanes.add(queryBlockPane);
                 contentPane.getChildren().add(queryBlockPane);
+        	dropZonePaneContainer.getChildren().add(dropZonePane);
             }
         }
         
+        DropZonePane dropZonePane = new DropZonePane(reportPane);
         reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane, reportObjectData.getReportBlockObjectData());
         contentPane.getChildren().add(reportBlockPane);
-        
         dropZonePaneContainer.getChildren().add(dropZonePane);
-
+                
         ((QueryBlockPane) reportBlockPane).setSelected(true);
         selectedQueryBlockPane = (QueryBlockPane) reportBlockPane;
     }
@@ -115,12 +116,16 @@ public class QueryPane extends ScrollPane {
         selectedQueryBlockPane.setSelected(true);
     }
     
-    public void setSelectedBlock(QueryBlockPane blockPane) {
+    public void setSelectedQueryBlockPane(QueryBlockPane blockPane) {
         if (selectedQueryBlockPane != blockPane) {            
             selectedQueryBlockPane.setSelected(false);
             selectedQueryBlockPane = blockPane;
             selectedQueryBlockPane.setSelected(true);
         }
+    }
+    
+    public QueryBlockPane getSelectedQueryBlockPane() {
+	return selectedQueryBlockPane;
     }
     
     public void moveUp(BlockPane blockPane) {

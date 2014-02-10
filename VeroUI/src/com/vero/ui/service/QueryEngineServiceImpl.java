@@ -17,7 +17,7 @@ import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
-import com.vero.ui.model.ReportObjectData;
+import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.TableObjectData;
 
 /**
@@ -30,8 +30,12 @@ public class QueryEngineServiceImpl implements QueryEngineService {
     }
 
     @Override
-    public ReportObjectData generateSQL(DatasourceObjectData datasource, List<AttributeObjectData> attributes,
-	    List<MetricObjectData> metrics, List<TableObjectData> tables) {
+    public String generateSQL(QueryBlockObjectData queryBlockObjectData) {
+	DatasourceObjectData datasource = null;
+	List<TableObjectData> tables = queryBlockObjectData.getTableObjectDataList();
+	List<AttributeObjectData> attributes = queryBlockObjectData.getAttributeObjectDataList();
+	List<MetricObjectData> metrics = queryBlockObjectData.getMetricObjectDataList();
+	
 	JSONStringer jsonOutput = new JSONStringer();
 	
 	// Generate datasources

@@ -8,11 +8,8 @@ import com.vero.ui.model.ReportBlockObjectData;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class ReportBlockPane extends QueryBlockPane {
-    private ReportBlockObjectData reportBlockObjectData = null;
-
     public ReportBlockPane(QueryPane queryPane, DropZonePane dropZonePane, ReportBlockObjectData reportBlockObjectData) {
-	super(queryPane, dropZonePane, null);
-	this.reportBlockObjectData = reportBlockObjectData;
+	super(queryPane, dropZonePane, reportBlockObjectData);
 	buildUI();
     }
     

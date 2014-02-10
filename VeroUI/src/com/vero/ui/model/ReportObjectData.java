@@ -21,6 +21,7 @@ public class ReportObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
     private String name = null;
+    private ProjectObjectData projectObjectData = null;
     private GlobalFilterObjectData globalFilterObjectData = null;
     private ReportBlockObjectData reportBlockObjectData = null;
     private List<BlockObjectData> blockObjectDataList = new ArrayList<BlockObjectData>();
@@ -76,5 +77,13 @@ public class ReportObjectData extends UIData {
     public boolean removeBlockObjectData(BlockObjectData blockObjectData) {
         blockObjectData.setReportObjectData(null);
         return blockObjectDataList.remove(blockObjectData);
+    }
+
+    public ProjectObjectData getProjectObjectData() {
+        return projectObjectData;
+    }
+
+    public void setProjectObjectData(ProjectObjectData projectObjectData) {
+        this.projectObjectData = projectObjectData;
     }
 }

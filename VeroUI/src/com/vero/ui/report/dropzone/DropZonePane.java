@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.report.ReportPane;
-import com.vero.ui.report.querypane.QueryPane;
+import com.vero.ui.report.querypane.QueryBlockPane;
 
 /**
  *
@@ -28,11 +28,14 @@ import com.vero.ui.report.querypane.QueryPane;
  */
 public class DropZonePane extends ScrollPane {
     private ReportPane reportPane = null;
-    private QueryPane queryPane = null;
+    private QueryBlockPane queryBlockPane = null;
+    private DropTargetPane attributeDropPane = null;
+    private DropTargetPane metricDropPane = null;
+    private DropTargetPane tableDropPane = null;
+    private DropTargetPane tableJoinDropPane = null;
     
-    public DropZonePane(ReportPane reportPane, QueryPane queryPane) {
+    public DropZonePane(ReportPane reportPane) {
         this.reportPane = reportPane;
-        this.queryPane = queryPane;
         buildUI();
     }
 
@@ -51,7 +54,7 @@ public class DropZonePane extends ScrollPane {
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(attributesLabel);
         
-        DropTargetPane attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, queryPane, true);
+        attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, this, true);
         attributeDropPane.setDockHandler(reportPane);
         attributeDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
@@ -62,7 +65,7 @@ public class DropZonePane extends ScrollPane {
         metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(metricsLabel);
 
-        DropTargetPane metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, queryPane, true);
+        metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, this, true);
         metricDropPane.setDockHandler(reportPane);
         metricDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
@@ -73,7 +76,7 @@ public class DropZonePane extends ScrollPane {
         tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tablesLabel);
 
-        DropTargetPane tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, queryPane, true);
+        tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, this, true);
         tableDropPane.setDockHandler(reportPane);
         tableDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
@@ -84,11 +87,59 @@ public class DropZonePane extends ScrollPane {
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tableJoinsLabel);
         
-        DropTargetPane tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, queryPane, false);
+        tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, this, false);
         tableJoinDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
 //        tableJoinDropPane.getChildren().add(
 //                LabelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
         contentPane.getChildren().add(tableJoinDropPane);
+    }
+
+    public ReportPane getReportPane() {
+        return reportPane;
+    }
+
+    public void setReportPane(ReportPane reportPane) {
+        this.reportPane = reportPane;
+    }
+
+    public QueryBlockPane getQueryBlockPane() {
+        return queryBlockPane;
+    }
+
+    public void setQueryBlockPane(QueryBlockPane queryBlockPane) {
+        this.queryBlockPane = queryBlockPane;
+    }
+
+    public DropTargetPane getAttributeDropPane() {
+        return attributeDropPane;
+    }
+
+    public void setAttributeDropPane(DropTargetPane attributeDropPane) {
+        this.attributeDropPane = attributeDropPane;
+    }
+
+    public DropTargetPane getMetricDropPane() {
+        return metricDropPane;
+    }
+
+    public void setMetricDropPane(DropTargetPane metricDropPane) {
+        this.metricDropPane = metricDropPane;
+    }
+
+    public DropTargetPane getTableDropPane() {
+        return tableDropPane;
+    }
+
+    public void setTableDropPane(DropTargetPane tableDropPane) {
+        this.tableDropPane = tableDropPane;
+    }
+
+    public DropTargetPane getTableJoinDropPane() {
+        return tableJoinDropPane;
+    }
+
+    public void setTableJoinDropPane(DropTargetPane tableJoinDropPane) {
+        this.tableJoinDropPane = tableJoinDropPane;
     }
 }

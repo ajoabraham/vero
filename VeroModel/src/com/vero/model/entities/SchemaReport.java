@@ -37,10 +37,10 @@ public class SchemaReport extends SchemaData implements Serializable {
 	@OneToMany(mappedBy="schemaReport")
 	private List<SchemaQueryBlock> schemaQueryBlocks;
 
-	//bi-directional many-to-one association to SchemaDatasource
+	//bi-directional many-to-one association to SchemaProject
 	@ManyToOne
-	@JoinColumn(name="SCHEMA_DATASOURCE_ID", nullable=false)
-	private SchemaDatasource schemaDatasource;
+	@JoinColumn(name="SCHEMA_PROJECT_ID", nullable=false)
+	private SchemaProject schemaProject;
 
 	//bi-directional many-to-one association to SchemaReportBlock
 	@OneToMany(mappedBy="schemaReport")
@@ -139,12 +139,12 @@ public class SchemaReport extends SchemaData implements Serializable {
 		return schemaQueryBlock;
 	}
 
-	public SchemaDatasource getSchemaDatasource() {
-		return this.schemaDatasource;
+	public SchemaProject getSchemaProject() {
+		return this.schemaProject;
 	}
 
-	public void setSchemaDatasource(SchemaDatasource schemaDatasource) {
-		this.schemaDatasource = schemaDatasource;
+	public void setSchemaProject(SchemaProject schemaProject) {
+		this.schemaProject = schemaProject;
 	}
 
 	public List<SchemaReportBlock> getSchemaReportBlocks() {

@@ -24,6 +24,7 @@ public class ProjectObjectData extends UIData {
     private StringProperty description = new SimpleStringProperty();
     
     private List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
+    private List<ReportObjectData> reportObjectDataList = new ArrayList<ReportObjectData>();
     
     public ProjectObjectData() {
     }
@@ -68,6 +69,24 @@ public class ProjectObjectData extends UIData {
     public boolean removeDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
 	datasourceObjectData.setProjectObjectData(null);
         return datasourceObjectDataList.remove(datasourceObjectData);
+    }
+    
+    public List<ReportObjectData> getReportObjectDataList() {
+        return reportObjectDataList;
+    }
+
+    public void setReportObjectDataList(List<ReportObjectData> reportObjectDataList) {
+        this.reportObjectDataList = reportObjectDataList;
+    }
+    
+    public void addReportObjectData(ReportObjectData reportObjectData) {
+	reportObjectData.setProjectObjectData(this);
+	reportObjectDataList.add(reportObjectData);
+    }
+    
+    public boolean removeReportObjectData(ReportObjectData reportObjectData) {
+	reportObjectData.setProjectObjectData(null);
+	return reportObjectDataList.remove(reportObjectData);
     }
     
     @Override

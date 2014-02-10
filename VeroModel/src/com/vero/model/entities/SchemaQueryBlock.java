@@ -21,6 +21,9 @@ public class SchemaQueryBlock extends SchemaData implements Serializable {
 	@Column(name="LAST_MOD_TS")
 	private Timestamp lastModTs;
 
+	@Column(length=1)
+	private String metadata;
+
 	@Column(length=100)
 	private String name;
 
@@ -49,6 +52,14 @@ public class SchemaQueryBlock extends SchemaData implements Serializable {
 
 	public void setLastModTs(Timestamp lastModTs) {
 		this.lastModTs = lastModTs;
+	}
+
+	public String getMetadata() {
+		return this.metadata;
+	}
+
+	public void setMetadata(String metadata) {
+		this.metadata = metadata;
 	}
 
 	public String getName() {

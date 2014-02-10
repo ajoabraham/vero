@@ -38,10 +38,6 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 	@JoinColumn(name="SCHEMA_PROJECT_ID", nullable=false)
 	private SchemaProject schemaProject;
 
-	//bi-directional many-to-one association to SchemaReport
-	@OneToMany(mappedBy="schemaDatasource")
-	private List<SchemaReport> schemaReports;
-
 	//bi-directional many-to-one association to SchemaTable
 	@OneToMany(mappedBy="schemaDatasource", cascade={CascadeType.PERSIST})
 	private List<SchemaTable> schemaTables;
@@ -95,28 +91,6 @@ public class SchemaDatasource extends SchemaData implements Serializable {
 
 	public void setSchemaProject(SchemaProject schemaProject) {
 		this.schemaProject = schemaProject;
-	}
-
-	public List<SchemaReport> getSchemaReports() {
-		return this.schemaReports;
-	}
-
-	public void setSchemaReports(List<SchemaReport> schemaReports) {
-		this.schemaReports = schemaReports;
-	}
-
-	public SchemaReport addSchemaReport(SchemaReport schemaReport) {
-		getSchemaReports().add(schemaReport);
-		schemaReport.setSchemaDatasource(this);
-
-		return schemaReport;
-	}
-
-	public SchemaReport removeSchemaReport(SchemaReport schemaReport) {
-		getSchemaReports().remove(schemaReport);
-		schemaReport.setSchemaDatasource(null);
-
-		return schemaReport;
 	}
 
 	public List<SchemaTable> getSchemaTables() {

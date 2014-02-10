@@ -34,6 +34,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
         this.queryPane = queryPane;
         this.dropZonePane = dropZonePane;
+        this.dropZonePane.setQueryBlockPane(this);
         this.queryBlockObjectData = queryBlockObjectData;
         buildUI();
     }
@@ -83,7 +84,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     public void handle(MouseEvent event) {        
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
             if (!getSelected()) {                
-                queryPane.setSelectedBlock(this);
+                queryPane.setSelectedQueryBlockPane(this);
             }
         }
         else if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {
@@ -132,5 +133,13 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     @Override
     public void setPosition(int position) {
 	queryBlockObjectData.setPosition(position);
+    }
+
+    public QueryBlockObjectData getQueryBlockObjectData() {
+        return queryBlockObjectData;
+    }
+
+    public void setQueryBlockObjectData(QueryBlockObjectData queryBlockObjectData) {
+        this.queryBlockObjectData = queryBlockObjectData;
     }
 }

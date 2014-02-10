@@ -20,7 +20,6 @@ import com.vero.ui.model.ReportBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.ReportTabManager;
-import com.vero.ui.report.querypane.GlobalFilterPane;
 
 /**
  *

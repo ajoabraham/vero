@@ -14,7 +14,7 @@ public final class BlockPaneFactory {
 	return new CommentBlockPane(queryPane, commentBlockObjectData);
     }
     
-    public static BlockPane createQueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
+    public static BlockPane createQueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) { 
 	return new QueryBlockPane(queryPane, dropZonePane, queryBlockObjectData);
     }
     

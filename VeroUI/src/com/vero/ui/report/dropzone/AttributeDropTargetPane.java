@@ -6,18 +6,17 @@
 
 package com.vero.ui.report.dropzone;
 
-import com.vero.ui.constants.ObjectType;
-import com.vero.ui.report.querypane.QueryPane;
-
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
+
+import com.vero.ui.constants.ObjectType;
 
 /**
  *
  * @author Tai Hu
  */
 public class AttributeDropTargetPane extends DropTargetPane {    
-    public AttributeDropTargetPane(QueryPane queryPane) {
-        super(queryPane);
+    public AttributeDropTargetPane(DropZonePane dropZonePane) {
+        super(dropZonePane);
     }
 
     @Override
