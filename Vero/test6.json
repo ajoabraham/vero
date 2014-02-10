@@ -1,5 +1,5 @@
 {   "scenario": "One attribute with 3 expressions. Should pick the second expression because the other 2 are blacklisted.",
-    "expectedOutput":"SELECT ALL T0.name-2",
+    "expectedOutput":"SELECT ALL upper(\"T0\".name)FROM Departments AS T0",
     "datasources": [
         {
             "name": "Teradata - Prod",
