@@ -1,5 +1,5 @@
-{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query.",
-    "expectedOutput":"select t3.name,t5.name,count(*) from LessonsFact t1 join Professors t2 on t1.prof_id = t2.id join Students t3 on t1.std_id = t3.id join departments t4 on t4.id=t2.dept_id join Departments t5 on t5.id=t3.dept_id",
+{   "scenario": "Building of test2 user now provides hard hint tables that can help resolve the query. Also note that there are 2 groupbys.",
+    "expectedOutput":"SELECT ALL \"T4\".name, \"T2\".name, count(\"T0\".course_id) FROM LessonsFact AS T0 INNER JOIN Students AS T1 ON T0.std_id = T1.id INNER JOIN Departments AS T2 ON T2.id = T1.dept_id INNER JOIN Professors AS T3 ON T0.prof_id = T3.id INNER JOIN Departments AS T4 ON T4.id = T3.dept_id GROUP BY \"T4\".name, \"T2\".name",
     "datasources": [
         {
             "name": "Teradata - Prod",

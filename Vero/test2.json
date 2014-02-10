@@ -1,5 +1,5 @@
-{   "scenario": "User chooses a set of metrics and attributes that does not have sufficient join defs to resolve directly.",
-    "expectedOutput":"select t2.name,t3.name,count(*) from LessonsFact t1 cross join Departments t2 cross join Departments t3",
+{   "scenario": "User chooses a set of metrics and attributes that does not have sufficient join defs to resolve directly. Cross joins are used.",
+    "expectedOutput":"SELECT ALL \"T0\".name, \"T1\".name, count(DISTINCT \"T2\".course_id) FROM Departments AS T0 CROSS JOIN Departments AS T1 CROSS JOIN LessonsFact AS T2 GROUP BY \"T0\".name, \"T1\".name",
     "datasources": [
         {
             "name": "Teradata - Prod",
