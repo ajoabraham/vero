@@ -60,7 +60,7 @@ public class QueryPane extends ScrollPane {
     }
     
     private void populateData() {
-        DropZonePane dropZonePane = new DropZonePane(reportPane);
+        DropZonePane dropZonePane = new DropZonePane(reportPane, this);
         globalFilterPane = new GlobalFilterPane(reportObjectData.getGlobalFilterObjectData());
         contentPane.getChildren().add(globalFilterPane);
         

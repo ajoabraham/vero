@@ -7,6 +7,8 @@
 package com.vero.ui.report.dropzone;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.report.querypane.QueryPane;
+
 import static com.vero.ui.constants.ObjectType.TABLE;
 
 /**
@@ -15,8 +17,8 @@ import static com.vero.ui.constants.ObjectType.TABLE;
  */
 public class TableDropTargetPane extends DropTargetPane {
 
-    public TableDropTargetPane() {
-        
+    public TableDropTargetPane(QueryPane queryPane) {
+        super(queryPane);
     }
     
     @Override

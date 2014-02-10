@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.report.ReportPane;
+import com.vero.ui.report.querypane.QueryPane;
 
 /**
  *
@@ -27,9 +28,11 @@ import com.vero.ui.report.ReportPane;
  */
 public class DropZonePane extends ScrollPane {
     private ReportPane reportPane = null;
+    private QueryPane queryPane = null;
     
-    public DropZonePane(ReportPane reportPane) {
+    public DropZonePane(ReportPane reportPane, QueryPane queryPane) {
         this.reportPane = reportPane;
+        this.queryPane = queryPane;
         buildUI();
     }
 
@@ -48,7 +51,7 @@ public class DropZonePane extends ScrollPane {
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(attributesLabel);
         
-        DropTargetPane attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, true);
+        DropTargetPane attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, queryPane, true);
         attributeDropPane.setDockHandler(reportPane);
         attributeDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
@@ -59,7 +62,7 @@ public class DropZonePane extends ScrollPane {
         metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(metricsLabel);
 
-        DropTargetPane metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, true);
+        DropTargetPane metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, queryPane, true);
         metricDropPane.setDockHandler(reportPane);
         metricDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
@@ -70,7 +73,7 @@ public class DropZonePane extends ScrollPane {
         tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tablesLabel);
 
-        DropTargetPane tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, true);
+        DropTargetPane tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, queryPane, true);
         tableDropPane.setDockHandler(reportPane);
         tableDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
@@ -81,7 +84,7 @@ public class DropZonePane extends ScrollPane {
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tableJoinsLabel);
         
-        DropTargetPane tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, false);
+        DropTargetPane tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, queryPane, false);
         tableJoinDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
 //        tableJoinDropPane.getChildren().add(

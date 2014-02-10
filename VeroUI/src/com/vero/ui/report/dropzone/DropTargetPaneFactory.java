@@ -8,6 +8,8 @@ package com.vero.ui.report.dropzone;
 
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.common.DropManager;
+import com.vero.ui.report.querypane.QueryPane;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,21 +24,21 @@ public final class DropTargetPaneFactory {
         
     }
     
-    public static DropTargetPane createDropPane(ObjectType type, boolean isDroppable) {
+    public static DropTargetPane createDropPane(ObjectType type, QueryPane queryPane, boolean isDroppable) {
         DropTargetPane dropPane = null;
         
         switch (type) {
             case TABLE:
-                dropPane = new TableDropTargetPane();
+                dropPane = new TableDropTargetPane(queryPane);
                 break;
             case ATTRIBUTE:
-                dropPane = new AttributeDropTargetPane();
+                dropPane = new AttributeDropTargetPane(queryPane);
                 break;
             case METRIC:
-                dropPane = new MetricDropTargetPane();
+                dropPane = new MetricDropTargetPane(queryPane);
                 break;
             case TABLE_JOIN:
-                dropPane = new TableJoinDropTargetPane();
+                dropPane = new TableJoinDropTargetPane(queryPane);
                 break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);

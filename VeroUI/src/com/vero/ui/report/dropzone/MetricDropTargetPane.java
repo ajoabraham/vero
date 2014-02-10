@@ -9,14 +9,15 @@ package com.vero.ui.report.dropzone;
 import static com.vero.ui.constants.ObjectType.METRIC;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.report.querypane.QueryPane;
 
 /**
  *
  * @author Tai Hu
  */
 public class MetricDropTargetPane extends DropTargetPane {
-    public MetricDropTargetPane() {
-        
+    public MetricDropTargetPane(QueryPane queryPane) {
+        super(queryPane);
     }
     
     @Override
