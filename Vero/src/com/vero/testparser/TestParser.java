@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
+import static java.lang.System.exit;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -151,10 +152,12 @@ public class TestParser {
 
                     UUID colUUID = getUUID(oneJSONColumnObj);
                     switch (oneJSONColumnObj.getString("type")) {
+                        case "varchar":
                         case "string":
                             aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "String", 10,
                                 aTable);
                             break;
+                        case "int2":
                         case "integer":
                             aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Int", 10,
                                 aTable);
@@ -297,6 +300,7 @@ public class TestParser {
             }            
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
+            System.exit(0);
         }
         
         return testSession;
@@ -318,12 +322,14 @@ public class TestParser {
             }
 
             parseParameters(expressionObj, anExp);
-
+            
             JSONArray columnsArray = expressionObj.getJSONArray("columns");
             int columnsArraySize = columnsArray.length();
             for (int j = 0; j < columnsArraySize; j++) {
+                        System.out.println("ccc1");
                 String colName = columnsArray.getJSONArray(j).getString(0);
                 String tabName = columnsArray.getJSONArray(j).getString(1);
+                        System.out.println("ccc1");
                 Table curTab = datasource.getTable(tabName);
 
                 //System.out.println("table's column:" + colName);
