@@ -151,30 +151,8 @@ public class TestParser {
                     Column aColumn;
 
                     UUID colUUID = getUUID(oneJSONColumnObj);
-                    switch (oneJSONColumnObj.getString("type")) {
-                        case "varchar":
-                        case "string":
-                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "String", 10,
-                                aTable);
-                            break;
-                        case "int2":
-                        case "integer":
-                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Int", 10,
-                                aTable);
-                            break;
-                        case "date":
-                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Date", 10,
-                                aTable);
-                            break;
-                        case "boolean":
-                            aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), "Bool", 10,
-                                aTable);
-                            break;
-                        default:
-                            System.out.println("ERROR: type is not defined...");
-                            aColumn = new Column();
-                            break;
-                    }
+                    String dataType = oneJSONColumnObj.getString("type");
+                    aColumn = new Column(colUUID, oneJSONColumnObj.getString("name"), dataType, 10, aTable);
                     
                     if (oneJSONColumnObj.getBoolean("primaryKey") == true) {
                         aColumn.setKeyType(Column.KeyTypes.PRIMARY_KEY);
