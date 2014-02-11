@@ -7,6 +7,7 @@ import static com.vero.ui.constants.DBKeyType.FOREIGN_KEY;
 import static com.vero.ui.constants.DBKeyType.PRIMARY_KEY;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ import com.vero.ui.model.TableObjectData;
  *
  */
 public class QueryEngineServiceImpl implements QueryEngineService {
+    private static final Logger logger = Logger.getLogger(QueryEngineServiceImpl.class.getName());
 
     public QueryEngineServiceImpl() {
     }
@@ -58,7 +60,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 		
 	// Generate tables
 	JSONArray tableArray = new JSONArray();
-	for (TableObjectData table : tables) {
+	for (TableObjectData table : tables) {	    
 	    JSONObject jsonTable = new JSONObject();
 	    jsonTable.put("uuid", table.getId());
 	    jsonTable.put("name", table.getPhysicalName());
@@ -97,7 +99,10 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 		jsonExpression.put("definition", expression.getFormula());
 		JSONArray columnArray = new JSONArray();
 		for (ColumnObjectData column : expression.getColumnObjectDataList()) {
-		    columnArray.put(column.getName());
+		    JSONArray columnTablePair = new JSONArray();
+		    columnTablePair.put(column.getName());
+		    columnTablePair.put(column.getTableObjectData().getPhysicalName());
+		    columnArray.put(columnTablePair);
 		}
 		jsonExpression.put("columns", columnArray);
 		expressionArray.put(jsonExpression);
@@ -125,7 +130,10 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 		jsonExpression.put("definition", expression.getFormula());
 		JSONArray columnArray = new JSONArray();
 		for (ColumnObjectData column : expression.getColumnObjectDataList()) {
-		    columnArray.put(column.getName());
+		    JSONArray columnTablePair = new JSONArray();
+		    columnTablePair.put(column.getName());
+		    columnTablePair.put(column.getTableObjectData().getPhysicalName());
+		    columnArray.put(columnTablePair);
 		}
 		jsonExpression.put("columns", columnArray);
 		expressionArray.put(jsonExpression);
@@ -139,16 +147,17 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	          .value(metricArray)
 	          .endObject();
 	          
-System.out.println("Output = " + jsonOutput.toString());	
+	logger.finest("JSON Input = " + jsonOutput.toString());
 
         TestParser testParser = new TestParser(jsonOutput);
         Session userSession = testParser.parse();
         QueryEngine queryEngine = new QueryEngine();
         queryEngine.preprocess(userSession);
         Report report = queryEngine.getReport();
-System.out.println("SQL = " + report.getBlocks().get(0).getSqlString());        
+
+        logger.finest("Generated SQL = " + report.getBlocks().get(0).getSqlString());        
         
-	return null;
+	return report.getBlocks().get(0).getSqlString();
     }
 
 }

@@ -115,7 +115,8 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
         Label databaseNameLabel = UIUtils.createDefaultFormLabel("Database Name:");
         contentPane.add(databaseNameLabel, 0, rowIndex);
        
-        if (wizardData.getData().getDatabaseObjectData().getDatabaseType() == POSTGRE_SQL) {
+        if (wizardData.getData().getDatabaseObjectData().getDatabaseType() == POSTGRE_SQL
+        	|| wizardData.getData().getDatabaseObjectData().getDatabaseType() == TERADATA) {
             TextField databaseNameTextField = UIUtils.createDefaultFormTextField();
             contentPane.add(databaseNameTextField, 1, rowIndex++, 2, 1);
             databaseNameTextField.textProperty().bindBidirectional(wizardData.getData().getDatabaseObjectData().databaseNameProperty());

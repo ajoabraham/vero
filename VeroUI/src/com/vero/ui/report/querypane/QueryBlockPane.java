@@ -30,6 +30,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     private boolean selected = false;
     private ImageView statusImageView = null;
     private HBox headerPane = null;
+    private TextArea sqlTextArea = null;
     
     public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
         this.queryPane = queryPane;
@@ -58,8 +59,9 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
         headerPane.getChildren().add(new ImageView(ImageList.IMAGE_RUN));
         setTop(headerPane);
         
-        TextArea reportBlockTextArea = new TextArea();
-        setCenter(reportBlockTextArea);
+        sqlTextArea = new TextArea();
+        sqlTextArea.setDisable(true);
+        setCenter(sqlTextArea);
     }
 
     @Override
@@ -141,5 +143,9 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
 
     public void setQueryBlockObjectData(QueryBlockObjectData queryBlockObjectData) {
         this.queryBlockObjectData = queryBlockObjectData;
+    }
+    
+    public void setSQLString(String sqlString) {
+	sqlTextArea.setText(sqlString);
     }
 }

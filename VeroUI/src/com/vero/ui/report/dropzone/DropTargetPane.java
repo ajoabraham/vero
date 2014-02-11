@@ -31,7 +31,6 @@ import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.querypane.QueryBlockPane;
-import com.vero.ui.report.querypane.ReportBlockPane;
 import com.vero.ui.service.ServiceManager;
 
 /**
@@ -175,7 +174,8 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    }
 	    
 	    // Generate SQL
-	    String sql = ServiceManager.getQueryEngineService().generateSQL(queryBlockPane.getQueryBlockObjectData());
+	    String sqlString = ServiceManager.getQueryEngineService().generateSQL(queryBlockPane.getQueryBlockObjectData());
+	    queryBlockPane.setSQLString(sqlString);
 	}	
 	else { 
 	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
