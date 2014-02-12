@@ -24,7 +24,6 @@ import javafx.scene.layout.VBox;
 import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
-import com.vero.ui.editor.DockHandler;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
@@ -47,7 +46,6 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
             
     private int currentDropIndex = -1;
     private boolean isEmpty = true;
-    private DockHandler dockHandler = null;
     
     private DropZonePane dropZonePane = null;
     
@@ -180,9 +178,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	else { 
 	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(transferData);
 	}
-	
-        dropZoneObjectPane.setDockHandler(dockHandler);
-        
+	        
         addDropZoneObjectPane(dropZoneObjectPane);
     }
         
@@ -219,20 +215,6 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         double padding = getPadding().getTop() + getPadding().getBottom();
         
         return padding + (DEFAULT_LABEL_PANE_HEIGHT * size) + (spacing * (size - 1));
-    }
-
-    /**
-     * @return the dockHandler
-     */
-    public DockHandler getDockHandler() {
-        return dockHandler;
-    }
-
-    /**
-     * @param dockHandler the dockHandler to set
-     */
-    public void setDockHandler(DockHandler dockHandler) {
-        this.dockHandler = dockHandler;
     }
     
     public void addDropZoneObjectPane(DropZoneObjectPane<? extends UIData> dropZoneObjectPane) {

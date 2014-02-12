@@ -13,7 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;

@@ -55,7 +55,6 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(attributesLabel);
         
         attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, this, true);
-        attributeDropPane.setDockHandler(reportPane);
         attributeDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         contentPane.getChildren().add(attributeDropPane);
@@ -66,7 +65,6 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(metricsLabel);
 
         metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, this, true);
-        metricDropPane.setDockHandler(reportPane);
         metricDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         contentPane.getChildren().add(metricDropPane);
@@ -77,7 +75,6 @@ public class DropZonePane extends ScrollPane {
         contentPane.getChildren().add(tablesLabel);
 
         tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, this, true);
-        tableDropPane.setDockHandler(reportPane);
         tableDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
         contentPane.getChildren().add(tableDropPane);

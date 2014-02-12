@@ -15,11 +15,11 @@ import com.vero.ui.model.MetricObjectData;
  * @author Tai Hu
  *
  */
-public class DockedMetricEditorPane extends DockedEditorPane<MetricObjectData> {
+public class MetricEditorPane extends EditorPane<MetricObjectData> {
     private TextField formulaTextField = null;
     
-    public DockedMetricEditorPane(MetricObjectData data, DockHandler dockHandler) {
-        super(data, dockHandler);
+    public MetricEditorPane(MetricObjectData data) {
+        super(data);
         buildUI();
     }
     
