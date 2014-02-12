@@ -633,6 +633,9 @@ public class QueryEngine {
 
                 colRefByName.add(aColExp);
             }
+            
+            // for all PUs, retrun the table <-> table aliase
+            aBlock.addTableMap(curPU.getUsedExp().getColumn().getTable().getUUID(), curPU.getTableAlias());
         }
         
         ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
