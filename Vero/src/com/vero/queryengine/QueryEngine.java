@@ -619,10 +619,16 @@ public class QueryEngine {
                 if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                     attrCount++; 
                     colAttrRefByName.add(aColExp);
-                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curPU.getUsedExp().getExpression().getUUID());
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
                 } else if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
                     metCount++;
-                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curPU.getUsedExp().getExpression().getUUID());
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
                 }
 
                 colRefByName.add(aColExp);

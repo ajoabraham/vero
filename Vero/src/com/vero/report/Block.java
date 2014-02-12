@@ -20,6 +20,7 @@ public class Block {
     private String sqlString = null;
     private final Map<UUID, UUID> attributeMap = new HashMap();
     private final Map<UUID, UUID> metricMap = new HashMap();
+    private final Map<UUID, UUID> expressionMap = new HashMap();    
     private final List<UUID> joindefList = new ArrayList();
     
     public Block() {
@@ -47,6 +48,14 @@ public class Block {
     
     public void addMetricMap(UUID metric, UUID expression) {
         metricMap.put(metric, expression);
+    }
+
+    public Map getExpressionMap() {
+        return expressionMap;
+    }
+    
+    public void addExpressionMap(UUID expression, UUID table) {
+        expressionMap.put(expression, table);
     }
     
     public List getJoinDefList() {
