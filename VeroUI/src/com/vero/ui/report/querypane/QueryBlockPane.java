@@ -21,6 +21,7 @@ import javafx.scene.layout.Priority;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.QueryBlockObjectData;
+import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent> {
@@ -32,8 +33,8 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     private HBox headerPane = null;
     private TextArea sqlTextArea = null;
     
-    public QueryBlockPane(QueryPane queryPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
-        this.queryPane = queryPane;
+    public QueryBlockPane(ReportPane reportPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
+        this.queryPane = reportPane.getQueryPane();
         this.dropZonePane = dropZonePane;
         this.dropZonePane.setQueryBlockPane(this);
         this.queryBlockObjectData = queryBlockObjectData;
@@ -60,7 +61,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
         setTop(headerPane);
         
         sqlTextArea = new TextArea();
-        sqlTextArea.setDisable(true);
+        sqlTextArea.setEditable(false);
         setCenter(sqlTextArea);
     }
 

@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.report.ReportPane;
 
 /**
  * 
@@ -13,8 +14,8 @@ import com.vero.ui.model.MetricObjectData;
  * 
  */
 public class MetricDropZoneObjectPane extends DropZoneObjectPane<MetricObjectData> {
-    public MetricDropZoneObjectPane(MetricObjectData data) {
-        super(data);
+    public MetricDropZoneObjectPane(ReportPane reportPane, MetricObjectData data) {
+        super(reportPane, data);
         buildUI();
     }
 

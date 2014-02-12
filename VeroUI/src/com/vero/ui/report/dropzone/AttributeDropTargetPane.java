@@ -9,14 +9,15 @@ package com.vero.ui.report.dropzone;
 import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.report.ReportPane;
 
 /**
  *
  * @author Tai Hu
  */
 public class AttributeDropTargetPane extends DropTargetPane {    
-    public AttributeDropTargetPane(DropZonePane dropZonePane) {
-        super(dropZonePane);
+    public AttributeDropTargetPane(ReportPane reportPane, DropZonePane dropZonePane) {
+        super(reportPane, dropZonePane);
     }
 
     @Override

@@ -36,13 +36,14 @@ public interface UIConstants {
     
     public static final double DEFAULT_DROP_PANE_HEIGHT = DEFAULT_LABEL_PANE_HEIGHT;
     
-    public static final double DOCKED_EDITOR_PANE_HEIGHT = 250;
-    public static final double UNDOCKED_EDITOR_PANE_WIDTH = 700;
-    public static final double UNDOCKED_EDITOR_PANE_HEIGHT = 450;
+    public static final double DEFAULT_EDITOR_PANE_HEIGHT = 250;
+    public static final double DEFAULT_EDITOR_PANE_CONTAINER_HEIGHT = DEFAULT_EDITOR_PANE_HEIGHT;
     public static final double EDITOR_PANE_ICON_WIDTH = 24;
     public static final double EDITOR_PANE_ICON_HEIGHT = 24;
     public static final double OBJECT_CONTAINER_PANE_HEIGHT = 40;
     public static final double DEFAULT_COMMENT_BLOCK_PANE_HEIGHT = 65;
+    public static final double EDITOR_TABLE_PANE_WIDTH = 150;
+    public static final double EDITOR_TABLE_PANE_HEIGHT = 32;
     
     // Datasource wizard
     public static final double DATASOURCE_WIZARD_WIDTH = 600;

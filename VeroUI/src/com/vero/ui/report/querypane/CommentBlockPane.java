@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.CommentBlockObjectData;
+import com.vero.ui.report.ReportPane;
 
 public class CommentBlockPane extends BlockPane implements EventHandler<MouseEvent> {
     private QueryPane queryPane = null;
@@ -25,8 +26,8 @@ public class CommentBlockPane extends BlockPane implements EventHandler<MouseEve
     private CommentBlockObjectData commentBlockObjectData = null;
     private TextArea commentTextArea = null;
     
-    public CommentBlockPane(QueryPane queryPane, CommentBlockObjectData commentBlockObjectData) {
-	this.queryPane = queryPane;
+    public CommentBlockPane(ReportPane reportPane, CommentBlockObjectData commentBlockObjectData) {
+	this.queryPane = reportPane.getQueryPane();
 	this.commentBlockObjectData = commentBlockObjectData;
 	buildUI();
     }

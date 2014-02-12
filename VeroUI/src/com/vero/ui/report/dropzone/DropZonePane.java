@@ -54,7 +54,7 @@ public class DropZonePane extends ScrollPane {
         attributesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(attributesLabel);
         
-        attributeDropPane = DropTargetPaneFactory.createDropPane(ATTRIBUTE, this, true);
+        attributeDropPane = DropTargetPaneFactory.createDropPane(reportPane, this, ATTRIBUTE, true);
         attributeDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(attributeDropPane.getPlaceholderText()));
         contentPane.getChildren().add(attributeDropPane);
@@ -64,7 +64,7 @@ public class DropZonePane extends ScrollPane {
         metricsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(metricsLabel);
 
-        metricDropPane = DropTargetPaneFactory.createDropPane(METRIC, this, true);
+        metricDropPane = DropTargetPaneFactory.createDropPane(reportPane, this, METRIC, true);
         metricDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(metricDropPane.getPlaceholderText()));
         contentPane.getChildren().add(metricDropPane);
@@ -74,7 +74,7 @@ public class DropZonePane extends ScrollPane {
         tablesLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tablesLabel);
 
-        tableDropPane = DropTargetPaneFactory.createDropPane(TABLE, this, true);
+        tableDropPane = DropTargetPaneFactory.createDropPane(reportPane, this, TABLE, true);
         tableDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableDropPane.getPlaceholderText()));
         contentPane.getChildren().add(tableDropPane);
@@ -84,7 +84,7 @@ public class DropZonePane extends ScrollPane {
         tableJoinsLabel.setPrefHeight(DEFAULT_LABEL_PANE_HEIGHT);
         contentPane.getChildren().add(tableJoinsLabel);
         
-        tableJoinDropPane = DropTargetPaneFactory.createDropPane(TABLE_JOIN, this, false);
+        tableJoinDropPane = DropTargetPaneFactory.createDropPane(reportPane, this, TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
 //        tableJoinDropPane.getChildren().add(

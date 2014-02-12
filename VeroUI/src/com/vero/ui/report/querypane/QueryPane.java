@@ -65,21 +65,21 @@ public class QueryPane extends ScrollPane {
         
         for (BlockObjectData blockObjectData : reportObjectData.getBlockObjectDataList()) {
             if (blockObjectData.getType() == COMMENT_BLOCK) {
-                BlockPane commentBlockPane = BlockPaneFactory.createCommentBlockPane(this, (CommentBlockObjectData) blockObjectData);
+                BlockPane commentBlockPane = BlockPaneFactory.createCommentBlockPane(reportPane, (CommentBlockObjectData) blockObjectData);
                 blockPanes.add(commentBlockPane);
                 contentPane.getChildren().add(commentBlockPane);
             }
             else if (blockObjectData.getType() == QUERY_BLOCK) {
                 DropZonePane dropZonePane = new DropZonePane(reportPane);
-                BlockPane queryBlockPane = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, (QueryBlockObjectData) blockObjectData);
+                BlockPane queryBlockPane = BlockPaneFactory.createQueryBlockPane(reportPane, dropZonePane, (QueryBlockObjectData) blockObjectData);
                 blockPanes.add(queryBlockPane);
                 contentPane.getChildren().add(queryBlockPane);
-        	dropZonePaneContainer.getChildren().add(dropZonePane);
+                dropZonePaneContainer.getChildren().add(dropZonePane);
             }
         }
         
         DropZonePane dropZonePane = new DropZonePane(reportPane);
-        reportBlockPane = BlockPaneFactory.createReportBlockPane(this, dropZonePane, reportObjectData.getReportBlockObjectData());
+        reportBlockPane = BlockPaneFactory.createReportBlockPane(reportPane, dropZonePane, reportObjectData.getReportBlockObjectData());
         contentPane.getChildren().add(reportBlockPane);
         dropZonePaneContainer.getChildren().add(dropZonePane);
                 
@@ -91,7 +91,7 @@ public class QueryPane extends ScrollPane {
         CommentBlockObjectData commentObjectData = new CommentBlockObjectData();
         commentObjectData.setPosition(blockPanes.size());
         reportObjectData.addBlockObjectData(commentObjectData);
-        BlockPane commentBlock = BlockPaneFactory.createCommentBlockPane(this, commentObjectData);
+        BlockPane commentBlock = BlockPaneFactory.createCommentBlockPane(reportPane, commentObjectData);
         blockPanes.add(commentBlock);
         
         contentPane.getChildren().add(contentPane.getChildren().size() - 1, commentBlock);
@@ -102,7 +102,7 @@ public class QueryPane extends ScrollPane {
         QueryBlockObjectData queryBlockObjectData = new QueryBlockObjectData();
         queryBlockObjectData.setPosition(blockPanes.size());
         reportObjectData.addBlockObjectData(queryBlockObjectData);
-        BlockPane queryBlock = BlockPaneFactory.createQueryBlockPane(this, dropZonePane, queryBlockObjectData);
+        BlockPane queryBlock = BlockPaneFactory.createQueryBlockPane(reportPane, dropZonePane, queryBlockObjectData);
         blockPanes.add(queryBlock);
         
         contentPane.getChildren().add(contentPane.getChildren().size() - 1, queryBlock);

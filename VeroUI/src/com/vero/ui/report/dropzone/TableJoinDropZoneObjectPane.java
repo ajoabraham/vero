@@ -16,6 +16,7 @@ import javafx.scene.layout.Priority;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.TableJoinObjectData;
+import com.vero.ui.report.ReportPane;
 
 /**
  *
@@ -24,8 +25,8 @@ import com.vero.ui.model.TableJoinObjectData;
 public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObjectData> {
     private ImageView tableJoinImageView = null;
     
-    public TableJoinDropZoneObjectPane(TableJoinObjectData data) {
-        super(data);
+    public TableJoinDropZoneObjectPane(ReportPane reportPane, TableJoinObjectData data) {
+        super(reportPane, data);
         buildUI();
     }
     

@@ -9,6 +9,7 @@ package com.vero.ui.common;
 import com.vero.ui.constants.DBType;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.constants.TableJoinType;
+import com.vero.ui.editor.EditorTableLabelPane;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
@@ -22,6 +23,7 @@ import com.vero.ui.navigation.DatasourceObjectPane;
 import com.vero.ui.navigation.MetricObjectPane;
 import com.vero.ui.navigation.ObjectPane;
 import com.vero.ui.navigation.TableObjectPane;
+import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.AttributeDropZoneObjectPane;
 import com.vero.ui.report.dropzone.DropHintPane;
 import com.vero.ui.report.dropzone.DropZoneObjectPane;
@@ -77,21 +79,21 @@ public final class LabelPaneFactory {
         return objectPane;
     }
     
-    public static DropZoneObjectPane<? extends UIData> createDropZoneObjectPane(UIData data) {
+    public static DropZoneObjectPane<? extends UIData> createDropZoneObjectPane(ReportPane reportPane, UIData data) {
        DropZoneObjectPane<? extends UIData> dropZoneObjectPane = null;
         
         switch (data.getType()) {
             case TABLE:
-                dropZoneObjectPane = new TableDropZoneObjectPane((TableObjectData) data);                
+                dropZoneObjectPane = new TableDropZoneObjectPane(reportPane, (TableObjectData) data);                
                 break;
             case ATTRIBUTE:
-                dropZoneObjectPane = new AttributeDropZoneObjectPane((AttributeObjectData) data);
+                dropZoneObjectPane = new AttributeDropZoneObjectPane(reportPane, (AttributeObjectData) data);
                 break;
             case METRIC:
-                dropZoneObjectPane = new MetricDropZoneObjectPane((MetricObjectData) data);               
+                dropZoneObjectPane = new MetricDropZoneObjectPane(reportPane, (MetricObjectData) data);               
                 break;
             case TABLE_JOIN:
-                dropZoneObjectPane = new TableJoinDropZoneObjectPane((TableJoinObjectData) data);               
+                dropZoneObjectPane = new TableJoinDropZoneObjectPane(reportPane, (TableJoinObjectData) data);               
                 break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", data.getType());
@@ -112,8 +114,8 @@ public final class LabelPaneFactory {
         return new ReportNameEditablePane(text);
     }
     
-    public static LabelPane createTableJoinPane(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
-        return new TableJoinDropZoneObjectPane(new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
+    public static LabelPane createTableJoinPane(ReportPane reportPane, String leftTableName, TableJoinType tableJoinType, String rightTableName) {
+        return new TableJoinDropZoneObjectPane(reportPane, new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
     }
     
     public static LabelPane createDBTypeLabelPane(DBType dbType) {
@@ -122,5 +124,9 @@ public final class LabelPaneFactory {
     
     public static ListedTableLabelPane createListedTableLabelPane(TableObjectData tableData, boolean showStats) {
         return new ListedTableLabelPane(tableData, showStats);
+    }
+    
+    public static EditorTableLabelPane createEditorTablePane(TableObjectData tableObjectData) {
+        return new EditorTableLabelPane(tableObjectData);
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.report.ReportPane;
 
 /**
  * 
@@ -13,8 +14,8 @@ import com.vero.ui.model.AttributeObjectData;
  *
  */
 public class AttributeDropZoneObjectPane extends DropZoneObjectPane<AttributeObjectData> {    
-    public AttributeDropZoneObjectPane(AttributeObjectData data) {
-        super(data);
+    public AttributeDropZoneObjectPane(ReportPane reportPane, AttributeObjectData data) {
+        super(reportPane, data);
         buildUI();
     }
     

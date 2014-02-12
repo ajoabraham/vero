@@ -5,11 +5,12 @@ import static com.vero.ui.constants.UIConstants.REPORT_BLOCK_PANE_HEIGHT;
 
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.ReportBlockObjectData;
+import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
 
 public class ReportBlockPane extends QueryBlockPane {
-    public ReportBlockPane(QueryPane queryPane, DropZonePane dropZonePane, ReportBlockObjectData reportBlockObjectData) {
-	super(queryPane, dropZonePane, reportBlockObjectData);
+    public ReportBlockPane(ReportPane reportPane, DropZonePane dropZonePane, ReportBlockObjectData reportBlockObjectData) {
+	super(reportPane, dropZonePane, reportBlockObjectData);
 	buildUI();
     }
     

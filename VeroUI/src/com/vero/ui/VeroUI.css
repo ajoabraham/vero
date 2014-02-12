@@ -445,36 +445,31 @@
     -fx-alignment: center-left;
 }
 
+.editor-pane-container {
+	-fx-border-color: -fx-light-grey-color;
+	-fx-border-width: 2 0 0 0;
+	-fx-padding: 5 0 0 0;
+}
+
 /*******************************************************************************
  * Editor Panes
  ******************************************************************************/
 .editor-pane {
-	-fx-background-color: -fx-main-background-color;
-	-fx-border-color: -fx-light-grey-color;
-	-fx-border-width: 1;
+	-fx-background-color: -fx-light-grey-color;
 }
 
-.docked-editor-pane {
-}
-
-.docked-editor-pane .content-pane {
-	-fx-background-color: -fx-nav-background-color;
+.editor-pane .content-pane {
 	-fx-padding: 10;
 	-fx-spacing: 10;
 }
 
-.docked-editor-pane .content-pane .label {
+.editor-pane .content-pane .label {
 	-fx-font: bold normal 10px "Helvetica";
     -fx-text-fill: -fx-default-text-color;
 }
 
-.docked-editor-pane .content-pane .object-container-pane {
-	-fx-background-color: -fx-button-hover-border-color;
+.editor-pane .content-pane .object-container-pane {
 	-fx-background-radius: 5;
-}
-
-.undocked-editor-pane {
-	
 }
 
 .editor-pane-tool-bar {
@@ -512,6 +507,11 @@
 	-fx-background-image: url("images/bg_attribute.png");
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
+}
+
+.editor-table-label-pane {
+    -fx-background-radius: 5;
+    -fx-background-color: -fx-main-background-color;
 }
 
 /*******************************************************************************

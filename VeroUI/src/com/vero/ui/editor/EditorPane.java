@@ -1,12 +1,13 @@
 package com.vero.ui.editor;
 
-import static com.vero.ui.constants.CSSConstants.CLASS_DOCKED_EDITOR_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_EDITOR_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_EDITOR_PANE_TOOL_BAR;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
-import static com.vero.ui.constants.UIConstants.DOCKED_EDITOR_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_EDITOR_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.EDITOR_PANE_ICON_WIDTH;
+import static com.vero.ui.constants.UIConstants.EDITOR_TABLE_PANE_HEIGHT;
+import static com.vero.ui.constants.UIConstants.EDITOR_TABLE_PANE_WIDTH;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -29,18 +30,16 @@ import com.vero.ui.util.UIUtils;
  *
  */
 public abstract class EditorPane<T extends UIData> extends BorderPane implements EventHandler<ActionEvent> {
-    private T data = null;
+    T data = null;
     
-    Button undockButton = null;
-    Button okButton = null;
-    Button cancelButton = null;
+    Button applyButton = null;
+    HBox tableContainer = null;
     
     public EditorPane(T data) {
         this.data = data;
         getStyleClass().add(CLASS_EDITOR_PANE);
-        getStyleClass().add(CLASS_DOCKED_EDITOR_PANE);
-        setPrefHeight(DOCKED_EDITOR_PANE_HEIGHT);
-        setMaxHeight(DOCKED_EDITOR_PANE_HEIGHT);
+        setPrefHeight(DEFAULT_EDITOR_PANE_HEIGHT);
+        setMaxHeight(DEFAULT_EDITOR_PANE_HEIGHT);
         
         // Create tool bar at top
         HBox toolbar = new HBox();
@@ -56,17 +55,18 @@ public abstract class EditorPane<T extends UIData> extends BorderPane implements
         titleLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         toolbar.getChildren().add(titleLabel);
         
+        tableContainer = new HBox();
+        tableContainer.setFillHeight(true);
+        tableContainer.setPrefSize(EDITOR_TABLE_PANE_WIDTH, EDITOR_TABLE_PANE_HEIGHT);
+        toolbar.getChildren().addAll(UIUtils.createHorizontalSpaceFiller(10), tableContainer);
+        
         Pane fillerPane = UIUtils.createHorizontalSpaceFiller(100);
         HBox.setHgrow(fillerPane, Priority.ALWAYS);
         toolbar.getChildren().add(fillerPane);
         
-        undockButton = new Button("UNDOCK", new ImageView(ImageList.IMAGE_UNDOCK));
-        undockButton.setOnAction(this);
-        okButton = new Button("OK", new ImageView(ImageList.IMAGE_OK));
-        okButton.setOnAction(this);
-        cancelButton = new Button("CANCEL", new ImageView(ImageList.IMAGE_CANCEL));
-        cancelButton.setOnAction(this);
-        toolbar.getChildren().addAll(undockButton, okButton, cancelButton);
+        applyButton = new Button("APPLY", new ImageView(ImageList.IMAGE_APPLY));
+        applyButton.setOnAction(this);
+        toolbar.getChildren().add(applyButton);
         
         setTop(toolbar);
     }
@@ -81,14 +81,8 @@ public abstract class EditorPane<T extends UIData> extends BorderPane implements
     
     @Override
     public void handle(ActionEvent event) { 
-        if (event.getSource() == okButton) {
+        if (event.getSource() == applyButton) {
             
         }
-        else if (event.getSource() == cancelButton) {
-            handleCancelEvent();
-        }
     }    
-    
-    protected void handleCancelEvent() {
-    }
 }

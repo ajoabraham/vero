@@ -94,8 +94,6 @@ public interface CSSConstants {
      * ID for editor pane
      */
     public static final String CLASS_EDITOR_PANE = "editor-pane";
-    public static final String CLASS_DOCKED_EDITOR_PANE = "docked-editor-pane";
-    public static final String CLASS_UNDOCKED_EDITOR_PANE = "undocked-editor-pane";
     public static final String CLASS_EDITOR_PANE_TOOL_BAR = "editor-pane-tool-bar";
     public static final String CLASS_METRIC_ICON_LABEL = "metric-icon-label";
     public static final String CLASS_ATTRIBUTE_ICON_LABEL = "attribute-icon-label";
@@ -103,6 +101,8 @@ public interface CSSConstants {
     public static final String CLASS_CONTENT_PANE = "content-pane";
     // Style class for all object container panes in editor pane (e.x. order by, partition by, etc)
     public static final String CLASS_OBJECT_CONTAINER_PANE = "object-container-pane";
+    public static final String CLASS_EDITOR_PANE_CONTAINER = "editor-pane-container";
+    public static final String CLASS_EDITOR_TABLE_LABEL_PANE = "editor-table-label-pane";
     
     /**
      * ID for wizard

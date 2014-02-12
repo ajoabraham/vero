@@ -10,6 +10,7 @@ import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
 import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.report.ReportPane;
 
 /**
  *
@@ -17,8 +18,8 @@ import com.vero.ui.constants.ObjectType;
  */
 public class TableJoinDropTargetPane extends DropTargetPane {
     
-    public TableJoinDropTargetPane(DropZonePane dropZonePane) {
-        super(dropZonePane);
+    public TableJoinDropTargetPane(ReportPane reportPane, DropZonePane dropZonePane) {
+        super(reportPane, dropZonePane);
         setPrefHeight(DEFAULT_DROP_PANE_HEIGHT * 2 + 5);
     }
     
