@@ -18,11 +18,11 @@ import java.util.UUID;
  */
 public class Block {   
     private String sqlString = null;
-    private final Map<UUID, UUID> attributeMap = new HashMap();
-    private final Map<UUID, UUID> metricMap = new HashMap();
-    private final Map<UUID, UUID> expressionMap = new HashMap();
-    private final Map<UUID, String> tableMap = new HashMap();
-    private final List<UUID> joindefList = new ArrayList();
+    private final Map<String, String> attributeMap = new HashMap();
+    private final Map<String, String> metricMap = new HashMap();
+    private final Map<String, String> expressionMap = new HashMap();
+    private final Map<String, String> tableMap = new HashMap();
+    private final List<String> joindefList = new ArrayList();
     
     public Block() {
 
@@ -40,7 +40,7 @@ public class Block {
     }
     
     public void addAttributeMap(UUID attribute, UUID expression) {
-        attributeMap.put(attribute, expression);
+        attributeMap.put(attribute.toString(), expression.toString());
     }
     
     public Map getMetricMap() {
@@ -48,7 +48,7 @@ public class Block {
     }
     
     public void addMetricMap(UUID metric, UUID expression) {
-        metricMap.put(metric, expression);
+        metricMap.put(metric.toString(), expression.toString());
     }
 
     public Map getExpressionMap() {
@@ -56,7 +56,7 @@ public class Block {
     }
     
     public void addExpressionMap(UUID expression, UUID table) {
-        expressionMap.put(expression, table);
+        expressionMap.put(expression.toString(), table.toString());
     }
 
     public Map getTableMap() {
@@ -64,7 +64,7 @@ public class Block {
     }
     
     public void addTableMap(UUID table, String alias) {
-        tableMap.put(table, alias);
+        tableMap.put(table.toString(), alias);
     }
     
     public List getJoinDefList() {
@@ -72,7 +72,7 @@ public class Block {
     }
     
     public void addJoinDefList(UUID joinDef) {
-        joindefList.add(joinDef);
+        joindefList.add(joinDef.toString());
     }
     
     @Override
