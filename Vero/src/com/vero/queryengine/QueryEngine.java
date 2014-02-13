@@ -370,82 +370,10 @@ public class QueryEngine {
         }
     }
     
-    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
-        Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
-        UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
-        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
-        Collections.sort(sortedVertex);
+    private Block generateBlock(List<EdgeUnit> sortedEUs, List<ProcessingUnit> sortedVertex) {
         int attrCount = 0;
         int metCount = 0;
-        Report aReport = new Report();
         Block aBlock = new Block();
-        aReport.addBlock(aBlock);
-
-        System.out.println("Generate SQL...");
-        
-        // union find on PU
-        for (EdgeUnit eu : euSet) {
-            unionPU.union(eu.getSrcPU(), eu.getDstPU());
-        }
-        
-        // build hashmap and count how many disjoint groups
-        int nGroup = 0;
-        ProcessingUnit allLinkedPU = null;
-        HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
-        for (ProcessingUnit pu : sortedVertex) {
-            ProcessingUnit masterPU = unionPU.find(pu);            
-            
-            // for cross join, initiate a PU that should link to all the other groups
-            if (allLinkedPU == null) {
-                allLinkedPU = masterPU;
-            }
-            
-            if (puHM.containsKey(masterPU) == false) {
-                puHM.put(masterPU, new ArrayList());
-                System.out.println("group count + 1");
-                nGroup++;
-                
-                if (allLinkedPU != masterPU) {
-                    EdgeUnit aEU = new EdgeUnit();
-                    aEU.setType(EdgeUnit.EUType.EUTYPE_VIRTUAL);
-                    aEU.setJoinDef(null);
-                    
-                    if (allLinkedPU.getID() < masterPU.getID()) {
-                        aEU.setSrcPU(allLinkedPU);
-                        aEU.setDstPU(masterPU);
-                    } else {
-                        aEU.setSrcPU(masterPU);
-                        aEU.setDstPU(allLinkedPU);
-                    }
-                    euSet.add(aEU);
-                }                
-            }
-            
-            puHM.get(masterPU).add(pu);            
-        }
-        System.out.println("group count = " + nGroup);                
-        
-        // dump puHM
-        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
-            ProcessingUnit masterPU = entry.getKey();
-            ArrayList<ProcessingUnit> puAL = entry.getValue();
-            System.out.println("master pu id = " + masterPU.getID());
-            
-            for (int i=0; i<puAL.size(); i++) {
-                ProcessingUnit curPU = puAL.get(i);
-                System.out.println("  pu id = " + curPU.getID());
-            }
-        }
-        
-        // sort eu set
-        ArrayList<EdgeUnit> sortedEUs = new ArrayList(euSet);
-        Collections.sort(sortedEUs);
-        
-        // dump sortedEUs
-        System.out.println("########## Dump sortedEUs...");
-        for (EdgeUnit eu : sortedEUs) {
-            System.out.println("eu id: " + eu.getID() + " : " + eu);
-        }
         
         // generate SQL
         // Create or acquire vendor
@@ -464,7 +392,7 @@ public class QueryEngine {
         LiteralFactory l = vendor.getLiteralFactory();
         ColumnsFactory c = vendor.getColumnsFactory();
         QuerySpecificationBuilder sqlQuery = q.querySpecificationBuilder();
-                
+                 
         // construct join
         TableReferenceBuilder allJoins = null;
         int cnt = 0;
@@ -598,9 +526,7 @@ public class QueryEngine {
         for (ProcessingUnit curPU : sortedVertex) {
             if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
                 // sql-function parsing
-                System.out.println("==> " + curPU.getUsedExp().getExpression().getFormula());
                 Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
-                System.out.println("===> " + curPU.getUsedExp().getColumn().getObjectName() + " aliase with: " + curPU.assignTableAlias());
                 curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
                 
                 if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {
@@ -635,7 +561,13 @@ public class QueryEngine {
             }
             
             // for all PUs, retrun the table <-> table aliase
-            aBlock.addTableMap(curPU.getUsedExp().getColumn().getTable().getUUID(), curPU.getTableAlias());
+            if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                System.out.println("Add to tableMap: " + ((Table)curPU.getContent()).getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(((Table)curPU.getContent()).getUUID(), curPU.getTableAlias());
+            } else {
+                System.out.println("Add to tableMap: " + curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(curPU.getUsedExp().getColumn().getTable().getUUID(), curPU.getTableAlias());
+            }
         }
         
         ColumnReference[] colRef = new ColumnReference[colRefByName.size()];
@@ -658,6 +590,83 @@ public class QueryEngine {
         QueryExpressionBody queryExp = q.queryBuilder(sqlQuery.createExpression()).createExpression();
         aBlock.setSqlString(queryExp.toString());
         
+        return aBlock;
+    }    
+    
+    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+        Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
+        UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
+        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
+        Collections.sort(sortedVertex);
+        Report aReport = new Report();
+                     
+        // union find on PU
+        for (EdgeUnit eu : euSet) {
+            unionPU.union(eu.getSrcPU(), eu.getDstPU());
+        }
+        
+        // build hashmap and count how many disjoint groups
+        int nGroup = 0;
+        ProcessingUnit allLinkedPU = null;
+        HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
+        for (ProcessingUnit pu : sortedVertex) {
+            ProcessingUnit masterPU = unionPU.find(pu);            
+            
+            // for cross join, initiate a PU that should link to all the other groups
+            if (allLinkedPU == null) {
+                allLinkedPU = masterPU;
+            }
+            
+            if (puHM.containsKey(masterPU) == false) {
+                puHM.put(masterPU, new ArrayList());
+                nGroup++;
+                
+                if (allLinkedPU != masterPU) {
+                    EdgeUnit aEU = new EdgeUnit();
+                    aEU.setType(EdgeUnit.EUType.EUTYPE_VIRTUAL);
+                    aEU.setJoinDef(null);
+                    
+                    if (allLinkedPU.getID() < masterPU.getID()) {
+                        aEU.setSrcPU(allLinkedPU);
+                        aEU.setDstPU(masterPU);
+                    } else {
+                        aEU.setSrcPU(masterPU);
+                        aEU.setDstPU(allLinkedPU);
+                    }
+                    euSet.add(aEU);
+                }                
+            }
+            
+            puHM.get(masterPU).add(pu);            
+        }
+        System.out.println("Join group count = " + nGroup);                
+        
+        // dump puHM
+        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
+            ProcessingUnit masterPU = entry.getKey();
+            ArrayList<ProcessingUnit> puAL = entry.getValue();
+            System.out.println("Master pu id = " + masterPU.getID());
+            
+            for (int i=0; i<puAL.size(); i++) {
+                ProcessingUnit curPU = puAL.get(i);
+                System.out.println("  pu id = " + curPU.getID());
+            }
+        }
+        
+        // sort eu set
+        // you can only sort eu here because you may need to add new virtual eu
+        ArrayList<EdgeUnit> sortedEUs = new ArrayList(euSet);
+        Collections.sort(sortedEUs);
+        
+        // dump sortedEUs
+        System.out.println("########## Dump sortedEUs...");
+        for (EdgeUnit eu : sortedEUs) {
+            System.out.println("eu id: " + eu.getID() + " : " + eu);
+        }
+
+        Block curBlock = generateBlock(sortedEUs, sortedVertex);
+        aReport.addBlock(curBlock);  
+                
         return aReport;
     }
     
