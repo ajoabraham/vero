@@ -441,7 +441,7 @@ public class QueryEngine {
                         
                         String tempStr = srcTableName + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
                         fromStr = generateSqlString("FROM", tempStr, fromStr);
-                        tempStr = dstTableName + " AS " + dstPU.assignTableAlias();
+                        tempStr = dstTableName + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
                         fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                     } else {
                         if (srcPU.getProcessed() == false) {
