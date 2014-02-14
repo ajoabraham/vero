@@ -34,6 +34,7 @@ public class TableObjectData extends UIData {
     
     private StringProperty name = new SimpleStringProperty();
     private StringProperty physicalName = new SimpleStringProperty();
+    private StringProperty alias = new SimpleStringProperty();
     private IntegerProperty rowCount = new SimpleIntegerProperty();
     private TableType tableType = TableType.UNKNOWN;
     private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
@@ -73,6 +74,18 @@ public class TableObjectData extends UIData {
 	return physicalName;
     }
 
+    public String getAlias() {
+        return alias.get();
+    }
+    
+    public void setAlias(String alias) {
+        this.alias.set(alias);
+    }
+    
+    public StringProperty alias() {
+        return alias;
+    }
+    
     public int getRowCount() {
         return rowCount.get();
     }
