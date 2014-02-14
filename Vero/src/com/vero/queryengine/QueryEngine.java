@@ -774,6 +774,9 @@ public class QueryEngine {
             finalSqlStr = finalSqlStr.append(groupByStr);
         }
         
+        // remove trailing \n character
+        finalSqlStr.deleteCharAt(finalSqlStr.length()-1);
+        
         aBlock.setSqlString(finalSqlStr.toString());
         
         System.out.println("New Result: " + finalSqlStr.toString());
