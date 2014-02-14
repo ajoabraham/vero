@@ -379,7 +379,7 @@ public class QueryEngine {
             assert(sortedVertex.size() == 1);
             ProcessingUnit curPU = sortedVertex.get(0);
             
-            String tempStr = curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " AS " + "\"" + curPU.assignTableAlias() + "\"";
+            String tempStr = "\"" + curPU.getUsedExp().getColumn().getTable().getPhysicalName() + "\"" + " AS " + "\"" + curPU.assignTableAlias() + "\"";
             fromStr = generateSqlString("FROM", tempStr, fromStr);
             
             curPU.setProcessed(true);
@@ -396,7 +396,7 @@ public class QueryEngine {
                     
                     if (cnt == 0) {
                         ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                        String tempStr = aJoin.getTLeft() + " AS " + "\"" + matchingPU.assignTableAlias() + "\"";
+                        String tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + matchingPU.assignTableAlias() + "\"";
                         fromStr = generateSqlString("FROM", tempStr, fromStr);
                         
                         matchingPU.setProcessed(true);
@@ -404,15 +404,15 @@ public class QueryEngine {
 
                     String tempStr;
                     if (cnt == 0) {
-                        tempStr = aJoin.getTRight() + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                        tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
                     } else {
                         ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
                         ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
 
                         if (leftPU.getProcessed() == false) {
-                            tempStr = aJoin.getTLeft() + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTLeft()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                            tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTLeft()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
                         } else {
-                            tempStr = aJoin.getTRight() + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                            tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
                         }
                     }
                     fromStr = generateSqlString("INNER JOIN", tempStr, fromStr);                    
@@ -439,20 +439,20 @@ public class QueryEngine {
                         srcPU.setProcessed(true);
                         dstPU.setProcessed(true);
                         
-                        String tempStr = srcTableName + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
+                        String tempStr = "\"" + srcTableName + "\"" + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
                         fromStr = generateSqlString("FROM", tempStr, fromStr);
-                        tempStr = dstTableName + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
+                        tempStr = "\"" + dstTableName + "\"" + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
                         fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                     } else {
                         if (srcPU.getProcessed() == false) {
                             srcPU.setProcessed(true);
                             
-                            String tempStr = srcTableName + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
+                            String tempStr = "\"" + srcTableName + "\"" + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                         } else {
                             dstPU.setProcessed(true);
                             
-                            String tempStr = dstTableName + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
+                            String tempStr = "\"" + dstTableName + "\"" + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                         }
                     }
