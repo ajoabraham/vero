@@ -20,6 +20,7 @@ import com.vero.session.Session;
 import frmw.dialect.GenericSQL;
 import frmw.dialect.TeradataSQL;
 import frmw.model.Formula;
+import frmw.model.Join;
 import frmw.parser.Parsing;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -469,14 +470,14 @@ public class QueryEngine {
                             allJoins.addQualifiedJoin(
                                 jT,
                                 t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTLeft()))),
-                                t.jc(b.booleanBuilder(bE).createExpression()));
-                                leftPU.setProcessed(true);
+                                t.jc(b.booleanBuilder(bE).createExpression()));                            
+                            leftPU.setProcessed(true);
                         } else {
                             allJoins.addQualifiedJoin(
                                 jT,
                                 t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
                                 t.jc(b.booleanBuilder(bE).createExpression()));
-                                rightPU.setProcessed(true);
+                            rightPU.setProcessed(true);
                         }
                     }
                 } else {
@@ -591,7 +592,194 @@ public class QueryEngine {
         aBlock.setSqlString(queryExp.toString());
         
         return aBlock;
+    }
+
+    public StringBuilder generateSqlString(String prefix, String inplace, StringBuilder builder) {
+        builder.append(prefix).append(" ").append(inplace).append("\n");
+       
+        return builder;
     }    
+    
+    private Block generateBlockNew(List<EdgeUnit> sortedEUs, List<ProcessingUnit> sortedVertex) {
+        int attrCount = 0;
+        int metCount = 0;
+        int cnt = 0;
+        Block aBlock = new Block();
+        StringBuilder selectStr = new StringBuilder();
+        StringBuilder fromStr = new StringBuilder();
+        StringBuilder groupByStr = new StringBuilder();
+        List<String> selectList = new ArrayList();
+        List<String> groupByList = new ArrayList();
+        
+        if (sortedEUs.isEmpty()) {
+            // single attribute or metric
+            assert(sortedVertex.size() == 1);
+            ProcessingUnit curPU = sortedVertex.get(0);
+            
+            String tempStr = curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " AS " + curPU.assignTableAlias();
+            fromStr = generateSqlString("FROM", tempStr, fromStr);
+            
+            curPU.setProcessed(true);
+            cnt++;
+        } else {        
+            for (EdgeUnit eu : sortedEUs) {
+                if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
+                    JoinDefinition aJoin = eu.getJoinDef();
+                    aBlock.addJoinDefList(aJoin.getUUID());
+
+                    String jExp = aJoin.getExpression();
+                    Join j = QueryEngine.parser.parseJoin(jExp);
+                    Join rewrite = QueryEngine.parser.parseJoin(j.rewriteFormula(eu.retrieveMatchingAlias(aJoin.getTLeft()), eu.retrieveMatchingAlias(aJoin.getTRight())));
+                    
+                    if (cnt == 0) {
+                        ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        String tempStr = aJoin.getTLeft() + " AS " + matchingPU.assignTableAlias();
+                        fromStr = generateSqlString("FROM", tempStr, fromStr);
+                        
+                        matchingPU.setProcessed(true);
+                    }
+
+                    String tempStr;
+                    if (cnt == 0) {
+                        tempStr = aJoin.getTRight() + " AS " + eu.retrieveMatchingAlias(aJoin.getTRight()) + " ON " + rewrite.sql(new TeradataSQL());
+                    } else {
+                        ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
+
+                        if (leftPU.getProcessed() == false) {
+                            tempStr = aJoin.getTLeft() + " AS " + eu.retrieveMatchingAlias(aJoin.getTLeft()) + " ON " + rewrite.sql(new TeradataSQL());
+                        } else {
+                            tempStr = aJoin.getTRight() + " AS " + eu.retrieveMatchingAlias(aJoin.getTRight()) + " ON " + rewrite.sql(new TeradataSQL());
+                        }
+                    }
+                    fromStr = generateSqlString("INNER JOIN", tempStr, fromStr);                    
+                } else { //EUTYPE_VIRTUAL
+                    ProcessingUnit srcPU = eu.getSrcPU();
+                    ProcessingUnit dstPU = eu.getDstPU();
+
+                    String srcTableName;
+                    String dstTableName;
+
+                    if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
+                    } else {
+                        srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
+                    } else {
+                        dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (cnt == 0) {
+                        srcPU.setProcessed(true);
+                        dstPU.setProcessed(true);
+                        
+                        String tempStr = srcTableName + " AS " + srcPU.assignTableAlias();
+                        fromStr = generateSqlString("FROM", tempStr, fromStr);
+                        tempStr = dstTableName + " AS " + dstPU.assignTableAlias();
+                        fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                    } else {
+                        if (srcPU.getProcessed() == false) {
+                            srcPU.setProcessed(true);
+                            
+                            String tempStr = srcTableName + " AS " + srcPU.assignTableAlias();
+                            fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                        } else {
+                            dstPU.setProcessed(true);
+                            
+                            String tempStr = dstTableName + " AS " + dstPU.assignTableAlias();
+                            fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                        }
+                    }
+                }
+                cnt++;
+            }
+        }
+
+        // construct select
+        // get all expressions from all attributes/metrics
+        for (ProcessingUnit curPU : sortedVertex) {
+            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
+                // sql-function parsing
+                Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
+                curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
+                
+                if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {
+                    if (curPU.getUsedExp().getExpression().getParameters().containsKey(PARAMTYPE_DISTINCT)) {
+                        String value = curPU.getUsedExp().getExpression().getParameters().get(PARAMTYPE_DISTINCT);
+                        Boolean bValue = !value.equals("false");
+                        
+                        curFormula.aggregationParameters().get(0).distinct(bValue);
+                    }
+                }
+                
+                // FIXME: use specific db setting
+                String selectItem = curFormula.sql(new TeradataSQL());
+                selectList.add(selectItem);
+
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
+                    attrCount++;
+                    groupByList.add(selectItem);
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
+                } else if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                    metCount++;
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
+                }
+            }
+            
+            // for all PUs, retrun the table <-> table aliase
+            if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                System.out.println("Add to tableMap: " + ((Table)curPU.getContent()).getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(((Table)curPU.getContent()).getUUID(), curPU.getTableAlias());
+            } else {
+                System.out.println("Add to tableMap: " + curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(curPU.getUsedExp().getColumn().getTable().getUUID(), curPU.getTableAlias());
+            }
+        }
+                
+        // construct groupby
+        if ((attrCount > 0) && (metCount > 0)) {
+            String tempStr = "";
+            for (int i=0; i<groupByList.size(); i++) {
+                if (i == groupByList.size()-1) {
+                    tempStr = tempStr.concat(groupByList.get(i));
+                } else {
+                    tempStr = tempStr.concat(groupByList.get(i) + ", ");
+                }
+            }
+            groupByStr = generateSqlString("GROUP BY", tempStr, groupByStr);
+        }       
+        
+        // construct select
+        String tempStr = "";
+        for (int i=0; i<selectList.size(); i++) {
+            if (i == selectList.size()-1) {
+                tempStr = tempStr.concat(selectList.get(i));
+            } else {
+                tempStr = tempStr.concat(selectList.get(i) + ", ");
+            }
+        }
+        selectStr = generateSqlString("SELECT", tempStr, selectStr);
+        
+        StringBuilder finalSqlStr = selectStr.append(fromStr);
+        if (groupByStr.length() > 0) {
+            finalSqlStr = finalSqlStr.append(groupByStr);
+        }
+        
+        aBlock.setSqlString(finalSqlStr.toString());
+        
+        System.out.println("New Result: " + finalSqlStr.toString());
+        
+        return aBlock;
+    }
     
     private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
         Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
@@ -664,7 +852,7 @@ public class QueryEngine {
             System.out.println("eu id: " + eu.getID() + " : " + eu);
         }
 
-        Block curBlock = generateBlock(sortedEUs, sortedVertex);
+        Block curBlock = generateBlockNew(sortedEUs, sortedVertex);
         aReport.addBlock(curBlock);  
                 
         return aReport;
