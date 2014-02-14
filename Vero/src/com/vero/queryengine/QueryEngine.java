@@ -20,6 +20,7 @@ import com.vero.session.Session;
 import frmw.dialect.GenericSQL;
 import frmw.dialect.TeradataSQL;
 import frmw.model.Formula;
+import frmw.model.Join;
 import frmw.parser.Parsing;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,20 +35,6 @@ import org.jgrapht.alg.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.WeightedMultigraph;
-import org.sql.generation.api.grammar.booleans.BooleanExpression;
-import org.sql.generation.api.grammar.builders.query.ColumnsBuilder;
-import org.sql.generation.api.grammar.builders.query.QuerySpecificationBuilder;
-import org.sql.generation.api.grammar.builders.query.TableReferenceBuilder;
-import org.sql.generation.api.grammar.factories.BooleanFactory;
-import org.sql.generation.api.grammar.factories.ColumnsFactory;
-import org.sql.generation.api.grammar.factories.LiteralFactory;
-import org.sql.generation.api.grammar.factories.QueryFactory;
-import org.sql.generation.api.grammar.factories.TableReferenceFactory;
-import org.sql.generation.api.grammar.query.ColumnReference;
-import org.sql.generation.api.grammar.query.ColumnReferenceByName;
-import org.sql.generation.api.grammar.query.QueryExpressionBody;
-import org.sql.generation.api.vendor.SQLVendor;
-import org.sql.generation.api.vendor.SQLVendorProvider;
 
 /**
  *
@@ -370,6 +357,359 @@ public class QueryEngine {
         }
     }
     
+    public StringBuilder generateSqlString(String prefix, String inplace, StringBuilder builder) {
+        builder.append(prefix).append(" ").append(inplace).append("\n");
+       
+        return builder;
+    }    
+    
+    private Block generateBlockNew(List<EdgeUnit> sortedEUs, List<ProcessingUnit> sortedVertex) {
+        int attrCount = 0;
+        int metCount = 0;
+        int cnt = 0;
+        Block aBlock = new Block();
+        StringBuilder selectStr = new StringBuilder();
+        StringBuilder fromStr = new StringBuilder();
+        StringBuilder groupByStr = new StringBuilder();
+        List<String> selectList = new ArrayList();
+        List<String> groupByList = new ArrayList();
+        
+        if (sortedEUs.isEmpty()) {
+            // single attribute or metric
+            assert(sortedVertex.size() == 1);
+            ProcessingUnit curPU = sortedVertex.get(0);
+            
+            String tempStr = curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " AS " + curPU.assignTableAlias();
+            fromStr = generateSqlString("FROM", tempStr, fromStr);
+            
+            curPU.setProcessed(true);
+            cnt++;
+        } else {        
+            for (EdgeUnit eu : sortedEUs) {
+                if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
+                    JoinDefinition aJoin = eu.getJoinDef();
+                    aBlock.addJoinDefList(aJoin.getUUID());
+
+                    String jExp = aJoin.getExpression();
+                    Join j = QueryEngine.parser.parseJoin(jExp);
+                    Join rewrite = QueryEngine.parser.parseJoin(j.rewriteFormula(eu.retrieveMatchingAlias(aJoin.getTLeft()), eu.retrieveMatchingAlias(aJoin.getTRight())));
+                    
+                    if (cnt == 0) {
+                        ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        String tempStr = aJoin.getTLeft() + " AS " + matchingPU.assignTableAlias();
+                        fromStr = generateSqlString("FROM", tempStr, fromStr);
+                        
+                        matchingPU.setProcessed(true);
+                    }
+
+                    String tempStr;
+                    if (cnt == 0) {
+                        tempStr = aJoin.getTRight() + " AS " + eu.retrieveMatchingAlias(aJoin.getTRight()) + " ON " + rewrite.sql(new TeradataSQL());
+                    } else {
+                        ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                        ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
+
+                        if (leftPU.getProcessed() == false) {
+                            tempStr = aJoin.getTLeft() + " AS " + eu.retrieveMatchingAlias(aJoin.getTLeft()) + " ON " + rewrite.sql(new TeradataSQL());
+                        } else {
+                            tempStr = aJoin.getTRight() + " AS " + eu.retrieveMatchingAlias(aJoin.getTRight()) + " ON " + rewrite.sql(new TeradataSQL());
+                        }
+                    }
+                    fromStr = generateSqlString("INNER JOIN", tempStr, fromStr);                    
+                } else { //EUTYPE_VIRTUAL
+                    ProcessingUnit srcPU = eu.getSrcPU();
+                    ProcessingUnit dstPU = eu.getDstPU();
+
+                    String srcTableName;
+                    String dstTableName;
+
+                    if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
+                    } else {
+                        srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                        dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
+                    } else {
+                        dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                    }
+
+                    if (cnt == 0) {
+                        srcPU.setProcessed(true);
+                        dstPU.setProcessed(true);
+                        
+                        String tempStr = srcTableName + " AS " + srcPU.assignTableAlias();
+                        fromStr = generateSqlString("FROM", tempStr, fromStr);
+                        tempStr = dstTableName + " AS " + dstPU.assignTableAlias();
+                        fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                    } else {
+                        if (srcPU.getProcessed() == false) {
+                            srcPU.setProcessed(true);
+                            
+                            String tempStr = srcTableName + " AS " + srcPU.assignTableAlias();
+                            fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                        } else {
+                            dstPU.setProcessed(true);
+                            
+                            String tempStr = dstTableName + " AS " + dstPU.assignTableAlias();
+                            fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                        }
+                    }
+                }
+                cnt++;
+            }
+        }
+
+        // construct select
+        // get all expressions from all attributes/metrics
+        for (ProcessingUnit curPU : sortedVertex) {
+            if ((curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) || (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC)) {
+                // sql-function parsing
+                Formula curFormula = QueryEngine.parser.parse(curPU.getUsedExp().getExpression().getFormula());
+                curFormula.setTableAliases(of(curPU.getUsedExp().getColumn().getObjectName(), curPU.assignTableAlias()));
+                
+                if (curPU.getUsedExp().getExpression().getParameters().isEmpty() == false) {
+                    if (curPU.getUsedExp().getExpression().getParameters().containsKey(PARAMTYPE_DISTINCT)) {
+                        String value = curPU.getUsedExp().getExpression().getParameters().get(PARAMTYPE_DISTINCT);
+                        Boolean bValue = !value.equals("false");
+                        
+                        curFormula.aggregationParameters().get(0).distinct(bValue);
+                    }
+                }
+                
+                // FIXME: use specific db setting
+                String selectItem = curFormula.sql(new TeradataSQL());
+                selectList.add(selectItem);
+
+                if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
+                    attrCount++;
+                    groupByList.add(selectItem);
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addAttributeMap(((Attribute)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
+                } else if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_METRIC) {
+                    metCount++;
+                    Expression curUsedExp = curPU.getUsedExp().getExpression();
+                    Table curUsedTab = curPU.getUsedExp().getColumn().getTable();
+                    aBlock.addMetricMap(((Metric)curPU.getContent()).getUUID(), curUsedExp.getUUID());
+                    aBlock.addExpressionMap(curUsedExp.getUUID(), curUsedTab.getUUID());
+                }
+            }
+            
+            // for all PUs, retrun the table <-> table aliase
+            if (curPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                System.out.println("Add to tableMap: " + ((Table)curPU.getContent()).getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(((Table)curPU.getContent()).getUUID(), curPU.getTableAlias());
+            } else {
+                System.out.println("Add to tableMap: " + curPU.getUsedExp().getColumn().getTable().getPhysicalName() + " : " + curPU.getTableAlias());
+                aBlock.addTableMap(curPU.getUsedExp().getColumn().getTable().getUUID(), curPU.getTableAlias());
+            }
+        }
+                
+        // construct groupby
+        if ((attrCount > 0) && (metCount > 0)) {
+            String tempStr = "";
+            for (int i=0; i<groupByList.size(); i++) {
+                if (i == groupByList.size()-1) {
+                    tempStr = tempStr.concat(groupByList.get(i));
+                } else {
+                    tempStr = tempStr.concat(groupByList.get(i) + ", ");
+                }
+            }
+            groupByStr = generateSqlString("GROUP BY", tempStr, groupByStr);
+        }       
+        
+        // construct select
+        String tempStr = "";
+        for (int i=0; i<selectList.size(); i++) {
+            if (i == selectList.size()-1) {
+                tempStr = tempStr.concat(selectList.get(i));
+            } else {
+                tempStr = tempStr.concat(selectList.get(i) + ", ");
+            }
+        }
+        selectStr = generateSqlString("SELECT", tempStr, selectStr);
+        
+        StringBuilder finalSqlStr = selectStr.append(fromStr);
+        if (groupByStr.length() > 0) {
+            finalSqlStr = finalSqlStr.append(groupByStr);
+        }
+        
+        // remove trailing \n character
+        finalSqlStr.deleteCharAt(finalSqlStr.length()-1);
+        
+        aBlock.setSqlString(finalSqlStr.toString());
+        
+        System.out.println("New Result: " + finalSqlStr.toString());
+        
+        return aBlock;
+    }
+    
+    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+        Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
+        UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
+        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
+        Collections.sort(sortedVertex);
+        Report aReport = new Report();
+                     
+        // union find on PU
+        for (EdgeUnit eu : euSet) {
+            unionPU.union(eu.getSrcPU(), eu.getDstPU());
+        }
+        
+        // build hashmap and count how many disjoint groups
+        int nGroup = 0;
+        ProcessingUnit allLinkedPU = null;
+        HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
+        for (ProcessingUnit pu : sortedVertex) {
+            ProcessingUnit masterPU = unionPU.find(pu);            
+            
+            // for cross join, initiate a PU that should link to all the other groups
+            if (allLinkedPU == null) {
+                allLinkedPU = masterPU;
+            }
+            
+            if (puHM.containsKey(masterPU) == false) {
+                puHM.put(masterPU, new ArrayList());
+                nGroup++;
+                
+                if (allLinkedPU != masterPU) {
+                    EdgeUnit aEU = new EdgeUnit();
+                    aEU.setType(EdgeUnit.EUType.EUTYPE_VIRTUAL);
+                    aEU.setJoinDef(null);
+                    
+                    if (allLinkedPU.getID() < masterPU.getID()) {
+                        aEU.setSrcPU(allLinkedPU);
+                        aEU.setDstPU(masterPU);
+                    } else {
+                        aEU.setSrcPU(masterPU);
+                        aEU.setDstPU(allLinkedPU);
+                    }
+                    euSet.add(aEU);
+                }                
+            }
+            
+            puHM.get(masterPU).add(pu);            
+        }
+        System.out.println("Join group count = " + nGroup);                
+        
+        // dump puHM
+        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
+            ProcessingUnit masterPU = entry.getKey();
+            ArrayList<ProcessingUnit> puAL = entry.getValue();
+            System.out.println("Master pu id = " + masterPU.getID());
+            
+            for (int i=0; i<puAL.size(); i++) {
+                ProcessingUnit curPU = puAL.get(i);
+                System.out.println("  pu id = " + curPU.getID());
+            }
+        }
+        
+        // sort eu set
+        // you can only sort eu here because you may need to add new virtual eu
+        ArrayList<EdgeUnit> sortedEUs = new ArrayList(euSet);
+        Collections.sort(sortedEUs);
+        
+        // dump sortedEUs
+        System.out.println("########## Dump sortedEUs...");
+        for (EdgeUnit eu : sortedEUs) {
+            System.out.println("eu id: " + eu.getID() + " : " + eu);
+        }
+
+        Block curBlock = generateBlockNew(sortedEUs, sortedVertex);
+        aReport.addBlock(curBlock);  
+                
+        return aReport;
+    }
+    
+    private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
+        System.out.println("### Dumping graph...");
+        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        int vertexCount = 0;
+        for (ProcessingUnit pu : graphVertexSet) {
+            System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
+            if (pu.getUsedExp() != null) {
+                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression().getFormula());
+            }
+            
+            Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
+            
+            int edgeCount = 0;
+            for (EdgeUnit eu : graphEdgeSet) {
+                System.out.println("    Edge = " + edgeCount + " : " + eu.getJoinDef().getName());
+                edgeCount++;
+            }
+            
+            vertexCount++;
+        }
+    }
+    
+    private void expirimentOnGraph() {
+        WeightedMultigraph<String, EdgeUnit> testGraph
+            = new WeightedMultigraph(new ClassBasedEdgeFactory<String, EdgeUnit>(EdgeUnit.class));
+        
+        testGraph.addVertex("V1");
+        testGraph.addVertex("V2");
+        testGraph.addVertex("V3");
+        testGraph.addVertex("V4");
+        
+        EdgeUnit e1 = new EdgeUnit();
+        testGraph.setEdgeWeight(e1, 5);
+        testGraph.addEdge("V1", "V2", e1);
+        
+        EdgeUnit e2 = new EdgeUnit();
+        testGraph.setEdgeWeight(e2, 3);
+        testGraph.addEdge("V1", "V2", e2);
+        
+        EdgeUnit e3 = new EdgeUnit();
+        testGraph.setEdgeWeight(e3, 7);
+        testGraph.addEdge("V2", "V4", e3);
+      
+        EdgeUnit e4 = new EdgeUnit();
+        testGraph.setEdgeWeight(e4, 8);
+        testGraph.addEdge("V4", "V3", e4);
+
+        EdgeUnit e5 = new EdgeUnit();
+        testGraph.setEdgeWeight(e5, 4);
+        testGraph.addEdge("V4", "V3", e5);
+        KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(testGraph);
+        Set kmtEdges = kmt.getMinimumSpanningTreeEdgeSet();
+        Iterator<EdgeUnit> kmtIter = kmtEdges.iterator();
+        while (kmtIter.hasNext()) {
+            EdgeUnit eU = kmtIter.next();
+            System.out.println("Vertext: " + eU +":"+"cost: " + eU.getWeight());
+        }
+        System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
+    }
+    
+    public static void main(String [] arg) {
+        Formula f = QueryEngine.parser.parse("id");
+        
+        //Formula f = aParsing.parse("count(trim(\"col1\" || \"col2\"))");
+        
+        Set<String> aSet = new HashSet(f.entityNames());
+        
+        for (String curString : aSet) {
+            System.out.println("Individual column: " + curString);
+        }
+        
+        String oriSql = f.sql(new GenericSQL());
+        
+        f.setTableAliases(of("id", "t1", "col2", "t2", "col 3", "t3", "col6", "t6"));
+        
+        String patchedSql = f.sql(new GenericSQL());
+        
+        System.out.println("Original sql output: " + oriSql);
+        System.out.println("Patched sql output: " + patchedSql);
+                
+        //Formula f = PARSER.parse("case col1 when 1 then 2 when 2 then 3 else 5 end");
+        //String sql = f.sql(GENERIC_SQL);
+        //assertEquals("CASE col1 WHEN 1 THEN 2 WHEN 2 THEN 3 ELSE 5 END", sql);   
+    }
+    
+    /*
     private Block generateBlock(List<EdgeUnit> sortedEUs, List<ProcessingUnit> sortedVertex) {
         int attrCount = 0;
         int metCount = 0;
@@ -469,14 +809,14 @@ public class QueryEngine {
                             allJoins.addQualifiedJoin(
                                 jT,
                                 t.table(t.tableName(null, aJoin.getTLeft()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTLeft()))),
-                                t.jc(b.booleanBuilder(bE).createExpression()));
-                                leftPU.setProcessed(true);
+                                t.jc(b.booleanBuilder(bE).createExpression()));                            
+                            leftPU.setProcessed(true);
                         } else {
                             allJoins.addQualifiedJoin(
                                 jT,
                                 t.table(t.tableName(null, aJoin.getTRight()), t.tableAlias(eu.retrieveMatchingAlias(aJoin.getTRight()))),
                                 t.jc(b.booleanBuilder(bE).createExpression()));
-                                rightPU.setProcessed(true);
+                            rightPU.setProcessed(true);
                         }
                     }
                 } else {
@@ -591,167 +931,6 @@ public class QueryEngine {
         aBlock.setSqlString(queryExp.toString());
         
         return aBlock;
-    }    
-    
-    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
-        Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
-        UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
-        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
-        Collections.sort(sortedVertex);
-        Report aReport = new Report();
-                     
-        // union find on PU
-        for (EdgeUnit eu : euSet) {
-            unionPU.union(eu.getSrcPU(), eu.getDstPU());
-        }
-        
-        // build hashmap and count how many disjoint groups
-        int nGroup = 0;
-        ProcessingUnit allLinkedPU = null;
-        HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
-        for (ProcessingUnit pu : sortedVertex) {
-            ProcessingUnit masterPU = unionPU.find(pu);            
-            
-            // for cross join, initiate a PU that should link to all the other groups
-            if (allLinkedPU == null) {
-                allLinkedPU = masterPU;
-            }
-            
-            if (puHM.containsKey(masterPU) == false) {
-                puHM.put(masterPU, new ArrayList());
-                nGroup++;
-                
-                if (allLinkedPU != masterPU) {
-                    EdgeUnit aEU = new EdgeUnit();
-                    aEU.setType(EdgeUnit.EUType.EUTYPE_VIRTUAL);
-                    aEU.setJoinDef(null);
-                    
-                    if (allLinkedPU.getID() < masterPU.getID()) {
-                        aEU.setSrcPU(allLinkedPU);
-                        aEU.setDstPU(masterPU);
-                    } else {
-                        aEU.setSrcPU(masterPU);
-                        aEU.setDstPU(allLinkedPU);
-                    }
-                    euSet.add(aEU);
-                }                
-            }
-            
-            puHM.get(masterPU).add(pu);            
-        }
-        System.out.println("Join group count = " + nGroup);                
-        
-        // dump puHM
-        for (Map.Entry<ProcessingUnit, ArrayList<ProcessingUnit>> entry : puHM.entrySet()) {
-            ProcessingUnit masterPU = entry.getKey();
-            ArrayList<ProcessingUnit> puAL = entry.getValue();
-            System.out.println("Master pu id = " + masterPU.getID());
-            
-            for (int i=0; i<puAL.size(); i++) {
-                ProcessingUnit curPU = puAL.get(i);
-                System.out.println("  pu id = " + curPU.getID());
-            }
-        }
-        
-        // sort eu set
-        // you can only sort eu here because you may need to add new virtual eu
-        ArrayList<EdgeUnit> sortedEUs = new ArrayList(euSet);
-        Collections.sort(sortedEUs);
-        
-        // dump sortedEUs
-        System.out.println("########## Dump sortedEUs...");
-        for (EdgeUnit eu : sortedEUs) {
-            System.out.println("eu id: " + eu.getID() + " : " + eu);
-        }
-
-        Block curBlock = generateBlock(sortedEUs, sortedVertex);
-        aReport.addBlock(curBlock);  
-                
-        return aReport;
     }
-    
-    private void dumpGraph(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
-        System.out.println("### Dumping graph...");
-        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
-        int vertexCount = 0;
-        for (ProcessingUnit pu : graphVertexSet) {
-            System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
-            if (pu.getUsedExp() != null) {
-                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression().getFormula());
-            }
-            
-            Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
-            
-            int edgeCount = 0;
-            for (EdgeUnit eu : graphEdgeSet) {
-                System.out.println("    Edge = " + edgeCount + " : " + eu.getJoinDef().getName());
-                edgeCount++;
-            }
-            
-            vertexCount++;
-        }
-    }
-    
-    private void expirimentOnGraph() {
-        WeightedMultigraph<String, EdgeUnit> testGraph
-            = new WeightedMultigraph(new ClassBasedEdgeFactory<String, EdgeUnit>(EdgeUnit.class));
-        
-        testGraph.addVertex("V1");
-        testGraph.addVertex("V2");
-        testGraph.addVertex("V3");
-        testGraph.addVertex("V4");
-        
-        EdgeUnit e1 = new EdgeUnit();
-        testGraph.setEdgeWeight(e1, 5);
-        testGraph.addEdge("V1", "V2", e1);
-        
-        EdgeUnit e2 = new EdgeUnit();
-        testGraph.setEdgeWeight(e2, 3);
-        testGraph.addEdge("V1", "V2", e2);
-        
-        EdgeUnit e3 = new EdgeUnit();
-        testGraph.setEdgeWeight(e3, 7);
-        testGraph.addEdge("V2", "V4", e3);
-      
-        EdgeUnit e4 = new EdgeUnit();
-        testGraph.setEdgeWeight(e4, 8);
-        testGraph.addEdge("V4", "V3", e4);
-
-        EdgeUnit e5 = new EdgeUnit();
-        testGraph.setEdgeWeight(e5, 4);
-        testGraph.addEdge("V4", "V3", e5);
-        KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(testGraph);
-        Set kmtEdges = kmt.getMinimumSpanningTreeEdgeSet();
-        Iterator<EdgeUnit> kmtIter = kmtEdges.iterator();
-        while (kmtIter.hasNext()) {
-            EdgeUnit eU = kmtIter.next();
-            System.out.println("Vertext: " + eU +":"+"cost: " + eU.getWeight());
-        }
-        System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
-    }
-    
-    public static void main(String [] arg) {
-        Formula f = QueryEngine.parser.parse("id");
-        
-        //Formula f = aParsing.parse("count(trim(\"col1\" || \"col2\"))");
-        
-        Set<String> aSet = new HashSet(f.entityNames());
-        
-        for (String curString : aSet) {
-            System.out.println("Individual column: " + curString);
-        }
-        
-        String oriSql = f.sql(new GenericSQL());
-        
-        f.setTableAliases(of("id", "t1", "col2", "t2", "col 3", "t3", "col6", "t6"));
-        
-        String patchedSql = f.sql(new GenericSQL());
-        
-        System.out.println("Original sql output: " + oriSql);
-        System.out.println("Patched sql output: " + patchedSql);
-                
-        //Formula f = PARSER.parse("case col1 when 1 then 2 when 2 then 3 else 5 end");
-        //String sql = f.sql(GENERIC_SQL);
-        //assertEquals("CASE col1 WHEN 1 THEN 2 WHEN 2 THEN 3 ELSE 5 END", sql);   
-    }
+    */        
 }
