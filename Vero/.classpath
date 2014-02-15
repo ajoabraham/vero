@@ -14,10 +14,6 @@
 	<classpathentry kind="lib" path="lib/jparsec-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/JSON-java.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.27-bin.jar"/>
-	<classpathentry kind="lib" path="lib/org.api-typeable-pojos.api-0.8-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/org.api-typeable-pojos.spi-0.8-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/org.java-sql-generator.api-0.4-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/org.java-sql-generator.implementation-0.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc41.jar"/>
 	<classpathentry kind="lib" path="lib/sql-framework-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>

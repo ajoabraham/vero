@@ -10,5 +10,7 @@
 	<classpathentry kind="lib" path="lib/classmate-1.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/VeroModel"/>
 	<classpathentry kind="lib" path="lib/JSON-java.jar"/>
+	<classpathentry kind="lib" path="/VeroMetadata/lib/sql-framework-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/VeroMetadata/lib/jparsec-2.0.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

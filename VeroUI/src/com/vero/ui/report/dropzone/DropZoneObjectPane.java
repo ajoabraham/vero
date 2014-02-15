@@ -46,7 +46,7 @@ public abstract class DropZoneObjectPane<T extends UIData> extends LabelPane imp
     public void handle(MouseEvent event) {        
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             if (getType() == ATTRIBUTE || getType() == METRIC) {
-                EditorPane<? extends UIData> editorPane = EditorPaneFactory.createEditorPane(getData());
+                EditorPane<? extends UIData> editorPane = EditorPaneFactory.createEditorPane(reportPane.getQueryPane().getSelectedQueryBlockPane(), getData());
                 editorPaneContainer.getChildren().add(editorPane);
             }
         }

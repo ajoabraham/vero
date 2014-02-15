@@ -74,4 +74,13 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> {
         
         setCenter(contentPane);
     }
+
+    /* (non-Javadoc)
+     * @see com.vero.ui.editor.EditorPane#handleApplyAction()
+     */
+    @Override
+    protected void handleApplyAction() {
+	// TODO Auto-generated method stub
+	
+    }
 }

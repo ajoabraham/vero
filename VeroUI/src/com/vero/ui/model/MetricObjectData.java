@@ -26,6 +26,8 @@ public class MetricObjectData extends UIData {
     private StringProperty name = new SimpleStringProperty();
     private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
     private ExpressionObjectData selectedExpressionObjectData = null;
+//    private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+//    private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
     
     public MetricObjectData() {
         
@@ -73,4 +75,40 @@ public class MetricObjectData extends UIData {
     public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
         this.selectedExpressionObjectData = selectedExpressionObjectData;
     }
+    
+//    public List<TableObjectData> getTableObjectDataList() {
+//        return tableObjectDataList;
+//    }
+//
+//    public void setTableObjectDataList(List<TableObjectData> tableObjectDataList) {
+//        this.tableObjectDataList = tableObjectDataList;
+//    }
+//    
+//    public boolean contains(TableObjectData tableObjectData) {
+//	return tableObjectDataList.contains(tableObjectData);
+//    }
+//    
+//    public void addTableObjectData(TableObjectData tableObjectData) {
+//	tableObjectDataList.add(tableObjectData);
+//    }
+//    
+//    public boolean removeTableObjectData(TableObjectData tableObjectData) {
+//	return tableObjectDataList.remove(tableObjectData);
+//    }
+//
+//    public List<TableJoinObjectData> getTableJoinObjectDataList() {
+//        return tableJoinObjectDataList;
+//    }
+//
+//    public void setTableJoinObjectDataList(List<TableJoinObjectData> tableJoinObjectDataList) {
+//        this.tableJoinObjectDataList = tableJoinObjectDataList;
+//    }
+//    
+//    public void addTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
+//	tableJoinObjectDataList.add(tableJoinObjectData);
+//    }
+//    
+//    public boolean removeTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
+//	return tableJoinObjectDataList.remove(tableJoinObjectData);
+//    }
 }

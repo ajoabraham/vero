@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.UIData;
+import com.vero.ui.report.querypane.QueryBlockPane;
 
 /**
  * 
@@ -18,11 +19,11 @@ public final class EditorPaneFactory {
     private EditorPaneFactory() {        
     }
     
-    public static EditorPane<? extends UIData> createEditorPane(UIData data) {
+    public static EditorPane<? extends UIData> createEditorPane(QueryBlockPane queryBlockPane, UIData data) {
         EditorPane<? extends UIData> editorPane = null;
         switch (data.getType()) {
             case ATTRIBUTE:
-        	editorPane = new AttributeEditorPane((AttributeObjectData) data);
+        	editorPane = new AttributeEditorPane(queryBlockPane, (AttributeObjectData) data);
                 break;
             case METRIC:
         	editorPane = new MetricEditorPane((MetricObjectData) data);

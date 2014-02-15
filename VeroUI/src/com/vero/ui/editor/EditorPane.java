@@ -82,7 +82,9 @@ public abstract class EditorPane<T extends UIData> extends BorderPane implements
     @Override
     public void handle(ActionEvent event) { 
         if (event.getSource() == applyButton) {
-            
+            handleApplyAction();
         }
     }    
+    
+    protected abstract void handleApplyAction();
 }

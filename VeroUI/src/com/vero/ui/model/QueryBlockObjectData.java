@@ -89,6 +89,10 @@ public class QueryBlockObjectData extends BlockObjectData {
         this.tableObjectDataList = tableObjectDataList;
     }
     
+    public boolean containsTableObjectData(TableObjectData tableObjectData) {
+	return tableObjectDataList.contains(tableObjectData);
+    }
+    
     public void addTableObjectData(TableObjectData tableObjectData) {
         tableObjectDataList.add(tableObjectData);
     }

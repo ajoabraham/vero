@@ -139,20 +139,21 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		attributeObjectData.setName(columnObjectData.getName());
 		ExpressionObjectData expressionObjectData = new ExpressionObjectData();
 		expressionObjectData.setFormula(columnObjectData.getName());
-		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
+		expressionObjectData.addColumnObjectData(columnObjectData);
 		attributeObjectData.addExpressionObjectData(expressionObjectData);
 		attributeObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, attributeObjectData);
 		
 		// Add table
-		dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
+		if (!queryBlockPane.getQueryBlockObjectData().containsTableObjectData(columnObjectData.getTableObjectData())) {
+		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
+		    queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
+		}
 		
 		// Link data
 		queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
 		queryBlockPane.getQueryBlockObjectData().addAttributeObjectData(attributeObjectData);
-		queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
-		
 	    }
 	    else if (getType() == METRIC) {
 		MetricObjectData metricObjectData = new MetricObjectData();
@@ -166,12 +167,14 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, metricObjectData);
 		
 		// Add table
-		dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
+		if (!queryBlockPane.getQueryBlockObjectData().containsTableObjectData(columnObjectData.getTableObjectData())) {
+		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
+		    queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
+		}
 		
 		// Link data
 	        queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
 		queryBlockPane.getQueryBlockObjectData().addMetricObjectData(metricObjectData);
-		queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 	    }
 	    
 	    // Generate SQL

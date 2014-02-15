@@ -6,7 +6,9 @@ package com.vero.ui.model;
 import static com.vero.ui.constants.ObjectType.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vero.ui.constants.ObjectType;
 
@@ -23,6 +25,8 @@ public class ExpressionObjectData extends UIData {
     private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
     private AttributeObjectData attributeObjectData = null;
     private MetricObjectData metricObjectData = null;
+    private Map<TableObjectData, List<ColumnObjectData>> tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
+    private TableObjectData selectedTableObjectData = null;
     
     public ExpressionObjectData() {
 
@@ -48,15 +52,33 @@ public class ExpressionObjectData extends UIData {
 
     public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
         this.columnObjectDataList = columnObjectDataList;
+        tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
+        
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            addColumnIntoMap(columnObjectData);
+        }
     }
 
-//    public void addColumnObjectData(ColumnObjectData columnObjectData) {
-//        columnObjectDataList.add(columnObjectData);
-//    }
-//    
-//    public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
-//        return columnObjectDataList.remove(columnObjectData);
-//    }
+    private void addColumnIntoMap(ColumnObjectData columnObjectData) {
+        TableObjectData tableObjectData = columnObjectData.getTableObjectData();
+        
+        List<ColumnObjectData> tableColumns = tableToColumnsMap.get(tableObjectData);
+        if (tableColumns == null) {
+        	tableColumns = new ArrayList<ColumnObjectData>();
+        	tableToColumnsMap.put(tableObjectData, tableColumns);
+        }
+        
+        tableColumns.add(columnObjectData);	
+    }
+    
+    public void addColumnObjectData(ColumnObjectData columnObjectData) {
+        columnObjectDataList.add(columnObjectData);
+        addColumnIntoMap(columnObjectData);
+    }
+    
+    public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
+        return columnObjectDataList.remove(columnObjectData);
+    }
 
     public AttributeObjectData getAttributeObjectData() {
         return attributeObjectData;
@@ -77,6 +99,13 @@ public class ExpressionObjectData extends UIData {
         this.metricObjectData = metricObjectData;
     }
 
+    public TableObjectData getSelectedTableObjectData() {
+        return selectedTableObjectData;
+    }
+
+    public void setSelectedTableObjectData(TableObjectData selectedTableObjectData) {
+        this.selectedTableObjectData = selectedTableObjectData;
+    }
 
     @Override
     public ObjectType getType() {
