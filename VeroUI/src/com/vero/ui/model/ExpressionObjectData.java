@@ -76,6 +76,12 @@ public class ExpressionObjectData extends UIData {
         addColumnIntoMap(columnObjectData);
     }
     
+    public void AddAllColumnObjectData(List<ColumnObjectData> columns) {
+	for (ColumnObjectData columnObjectData : columns) {
+	    addColumnObjectData(columnObjectData);
+	}
+    }
+    
     public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
         return columnObjectDataList.remove(columnObjectData);
     }
@@ -108,6 +114,10 @@ public class ExpressionObjectData extends UIData {
 
     public void setSelectedTableObjectData(TableObjectData selectedTableObjectData) {
         this.selectedTableObjectData = selectedTableObjectData;
+    }
+    
+    public boolean containsTableObjectData(TableObjectData tableObjectData) {
+	return tableToColumnsMap.containsKey(tableObjectData);
     }
 
     @Override

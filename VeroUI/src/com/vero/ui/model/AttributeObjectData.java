@@ -71,6 +71,29 @@ public class AttributeObjectData extends UIData {
     public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
         this.selectedExpressionObjectData = selectedExpressionObjectData;
     }
+    
+    public ExpressionObjectData getExpressionByFormula(String formula) {
+	ExpressionObjectData expression = null;
+	
+	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+	    if (formula.equals(expressionObjectData.getFormula())) {
+		expression = expressionObjectData;
+		break;
+	    }
+	}
+	
+	return expression;
+    }
+    
+    public boolean usedTableObjectData(TableObjectData tableObjectData) {
+	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+	    if (expressionObjectData.containsTableObjectData(tableObjectData)) {
+		return true;
+	    }
+	}
+	
+	return false;
+    }
 
 //    public List<TableObjectData> getTableObjectDataList() {
 //        return tableObjectDataList;

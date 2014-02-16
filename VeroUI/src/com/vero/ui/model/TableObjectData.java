@@ -197,4 +197,16 @@ public class TableObjectData extends UIData {
         
         return allColumnNames.containsAll(columnNames);
     }
+    
+    public List<ColumnObjectData> getColumnsByNames(Collection<String> columnNames) {
+	List<ColumnObjectData> columns = new ArrayList<ColumnObjectData>();
+	
+	for (ColumnObjectData columnObjectData : columnObjectDataList) {
+	    if (columnNames.contains(columnObjectData.getName())) {
+		columns.add(columnObjectData);
+	    }
+	}
+	
+	return columns;
+    }
 }
