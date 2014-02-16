@@ -89,7 +89,6 @@ public class ExpressionObjectData extends UIData {
         this.attributeObjectData = attributeObjectData;
     }
 
-
     public MetricObjectData getMetricObjectData() {
         return metricObjectData;
     }
@@ -100,6 +99,10 @@ public class ExpressionObjectData extends UIData {
     }
 
     public TableObjectData getSelectedTableObjectData() {
+        if (selectedTableObjectData == null && tableToColumnsMap.size() > 0) {
+            selectedTableObjectData = tableToColumnsMap.keySet().iterator().next();
+        }
+        
         return selectedTableObjectData;
     }
 

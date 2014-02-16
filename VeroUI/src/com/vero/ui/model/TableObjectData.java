@@ -14,6 +14,7 @@ import com.vero.ui.constants.TableType;
 import com.vero.ui.service.ServiceException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -176,5 +177,24 @@ public class TableObjectData extends UIData {
 	}
 	
 	return unusedColumnObjectDataList;
+    }
+    
+    public boolean containsColumn(String columnName) {
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            if (columnName.equals(columnObjectData.getName())) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean containsColumns(Collection<String> columnNames) {
+        List<String> allColumnNames = new ArrayList<String>();
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            allColumnNames.add(columnObjectData.getName());
+        }
+        
+        return allColumnNames.containsAll(columnNames);
     }
 }
