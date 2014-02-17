@@ -25,6 +25,7 @@ import java.util.UUID;
 public class Stage {
     private class ReferenceUnit {
         private int rowCount = -1;
+        // FIXME: key should be modified to be UUID
         private final HashMap<String, Attribute> attrHT = new HashMap();
         private final HashMap<String, Metric> metricHT = new HashMap();
         private final HashMap<String, JoinDefinition> joindefHT = new HashMap();
@@ -100,7 +101,7 @@ public class Stage {
             // filter out black hardhint tables
             for (String curTable : blackHardhints) {
                 curAttr.removeTable(curTable);
-            }            
+            }
             
             List<Table> listTables = curAttr.retrieveTables();
             if (listTables.size() > 0) {
@@ -161,11 +162,12 @@ public class Stage {
     
     private void setAttributeByTable(String inTable, Attribute inAttr) {
         if (table2ReferenceUnitHT.containsKey(inTable)) {
+            
             table2ReferenceUnitHT.get(inTable).attrHT.put(inAttr.getName(), inAttr);
         }
     }
     
-    private void setMetricByTable(String inTable, Metric inMetric) {        
+    private void setMetricByTable(String inTable, Metric inMetric) {
         if (table2ReferenceUnitHT.containsKey(inTable)) {
             table2ReferenceUnitHT.get(inTable).metricHT.put(inMetric.getName(), inMetric);
         }
@@ -202,7 +204,7 @@ public class Stage {
             return null;
         }
     }
-        
+    
     public int getRowCountByTable(String inTable) {
         if (table2ReferenceUnitHT.containsKey(inTable)) {
             return table2ReferenceUnitHT.get(inTable).rowCount;
