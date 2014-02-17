@@ -11,7 +11,7 @@ import frmw.parser.Parsing;
  *
  */
 public final class ParserUtils {
-    private static final Parsing PARSER = new Parsing();
+    public static final Parsing PARSER = new Parsing();
     /**
      * 
      */

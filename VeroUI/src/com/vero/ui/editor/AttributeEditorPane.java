@@ -7,10 +7,19 @@ import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 import java.util.List;
 import java.util.Set;
 
+import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
@@ -23,10 +32,13 @@ import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.report.querypane.QueryBlockPane;
+import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceManager;
 import com.vero.ui.util.ParserUtils;
 
 import frmw.model.Formula;
+import frmw.model.fun.FunctionSpec;
+import frmw.parser.Hints;
 
 /**
  * @author Tai Hu
@@ -48,6 +60,33 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
     private void buildUI() {
         originalTableObjectData = data.getSelectedExpressionObjectData().getSelectedTableObjectData();
         editorTableLabelPane = LabelPaneFactory.createEditorTablePane(originalTableObjectData);
+        editorTableLabelPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	    @Override
+            public void handle(MouseEvent event) {
+		if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {
+		    try {
+			Formula f = ParserUtils.parse(formulaTextField.getText());
+    		    	MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
+    		    	TableObjectData selectedTableObjectData = data.getSelectedExpressionObjectData().getSelectedTableObjectData();
+    		    	List<TableObjectData> tableObjectDataList = service.findTableObjectDataListByColumnNames(selectedTableObjectData.getDatasourceObjectData().getId(), f.entityNames());
+    		    	
+    		    	ContextMenu contextMenu = new ContextMenu();
+    		    	
+    		    	for (TableObjectData tableObjectData : tableObjectDataList) {
+    		    	    MenuItem menuItem = new MenuItem(tableObjectData.getName(), new ImageView(tableObjectData.getTableType().getImage()));
+    		    	    menuItem.setUserData(tableObjectData);
+    		    	    menuItem.setOnAction(AttributeEditorPane.this);
+    		    	    contextMenu.getItems().add(menuItem);
+    		    	}
+    		    	
+    		    	contextMenu.show((Node) event.getSource(), Side.BOTTOM, 0, 0);
+		    }
+		    catch (Exception e) {
+			// Invalid formula
+		    }
+		}
+            }            
+        });
         tableContainer.getChildren().add(editorTableLabelPane);
         
         VBox contentPane = new VBox();
@@ -71,9 +110,26 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
         contentPane.getChildren().add(tilePane);
         
         BorderPane hintPane = new BorderPane();
-        Label hintLabel = new Label("HINTS/SUGGESTIONS");
-        hintLabel.getStyleClass().add(CLASS_SECTION_TITLE);
-        hintPane.setTop(hintLabel);
+        Label hintTitleLabel = new Label("HINTS/SUGGESTIONS");
+        hintTitleLabel.getStyleClass().add(CLASS_SECTION_TITLE);
+        hintPane.setTop(hintTitleLabel);
+        Label hintLabel = new Label();
+        hintLabel.textProperty().bind(new StringBinding() {
+            {
+        	super.bind(formulaTextField.textProperty());
+            }
+            protected String computeValue() {
+        	Hints hints = Hints.select(formulaTextField.getText(), formulaTextField.getCaretPosition(), ParserUtils.PARSER);
+        	StringBuffer hintText = new StringBuffer();
+        	for (FunctionSpec functionSpec : hints.functions()) {
+        	    hintText.append(functionSpec.name()).append("\n");
+        	}
+        	
+	        return hintText.toString();
+            }
+            
+        });
+        hintPane.setCenter(hintLabel);
         tilePane.getChildren().add(hintPane);
         
         VBox parameterPane = new VBox();
