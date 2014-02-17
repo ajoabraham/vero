@@ -4,6 +4,7 @@
 package com.vero.ui.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,10 +16,12 @@ import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaDatasource;
 import com.vero.model.entities.SchemaMetric;
 import com.vero.model.entities.SchemaProject;
+import com.vero.model.entities.SchemaTable;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.model.TableObjectData;
 import com.vero.ui.util.DataUtils;
 
 /**
@@ -106,6 +109,26 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
 	    }
 	    
 	    return metricObjectDataList;
+        }
+        catch (PersistentException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<TableObjectData> findTableObjectDataListByColumnNames(String datasourceId, Collection<String> columnNames) throws ServiceException {
+        try {
+            List<SchemaTable> schemaTables = metadataDao.findSchemaTablesByColumnNames(datasourceId, columnNames);
+            List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+            
+            for (SchemaTable schemaTable : schemaTables) {
+                TableObjectData tableObjectData = new TableObjectData();
+                DataUtils.copy(schemaTable, tableObjectData);
+                tableObjectDataList.add(tableObjectData);
+            }
+            
+            return tableObjectDataList;
         }
         catch (PersistentException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);

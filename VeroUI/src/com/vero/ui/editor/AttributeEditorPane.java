@@ -7,6 +7,8 @@ import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 import java.util.List;
 import java.util.Set;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -30,11 +32,12 @@ import frmw.model.Formula;
  * @author Tai Hu
  *
  */
-public class AttributeEditorPane extends EditorPane<AttributeObjectData> {
+public class AttributeEditorPane extends EditorPane<AttributeObjectData> implements ChangeListener<String> {
     private QueryBlockPane queryBlockPane = null;
     private EditorTableLabelPane editorTableLabelPane = null;
     private TableObjectData originalTableObjectData = null;
     private String originalFormula = null;
+    private TextField formulaTextField = null;
     
     public AttributeEditorPane(QueryBlockPane queryBlockPane, AttributeObjectData data) {
         super(data);
@@ -52,11 +55,14 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> {
         
         Label formulaLabel = new Label("FORMULA");
         contentPane.getChildren().add(formulaLabel);
-        TextField formulaTextField = new TextField();
+        formulaTextField = new TextField();
+        formulaTextField.setPromptText("Enter an expression");
         formulaTextField.textProperty().bindBidirectional(data.getSelectedExpressionObjectData().formula());
         originalFormula = data.getSelectedExpressionObjectData().getFormula();
         formulaTextField.setPrefHeight(OBJECT_CONTAINER_PANE_HEIGHT);
         formulaTextField.setMaxHeight(OBJECT_CONTAINER_PANE_HEIGHT);
+        formulaTextField.textProperty().addListener(this);
+                
         contentPane.getChildren().add(formulaTextField);
         
         TilePane tilePane = new TilePane();
@@ -158,5 +164,16 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> {
 	catch (Exception e) {
 	    ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
 	}
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        try {
+            ParserUtils.parse(newValue);
+            formulaTextField.setStyle(null);
+        }
+        catch (Exception e) {
+            formulaTextField.setStyle("-fx-text-fill: red;");
+        }
     }
 }

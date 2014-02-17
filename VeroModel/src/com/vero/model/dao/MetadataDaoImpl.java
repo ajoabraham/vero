@@ -3,13 +3,16 @@
  */
 package com.vero.model.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaData;
 import com.vero.model.entities.SchemaMetric;
+import com.vero.model.entities.SchemaTable;
 import com.vero.model.util.PersistentUtils;
 
 /**
@@ -169,6 +172,27 @@ public class MetadataDaoImpl implements MetadataDao {
                      .getResultList();
         }
         catch (Exception e) {
+            throw new PersistentException(e);
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public List<SchemaTable> findSchemaTablesByColumnNames(String datasourceId, Collection<String> columnNames) throws PersistentException {
+        EntityManager em = null;
+        
+        try {
+            em = PersistentUtils.createEntityManager();
+            TypedQuery<SchemaTable> query = em.createNamedQuery("SchemaTable.findTablesByColumnNames", SchemaTable.class); 
+            return query.setParameter("datasourceId", datasourceId)
+                        .setParameter("columnNames", columnNames)
+                        .getResultList();
+        }
+        catch (Exception e) {          
             throw new PersistentException(e);
         }
         finally {

@@ -17,6 +17,10 @@ import javax.persistence.*;
             query = "SELECT a FROM SchemaAttribute a, SchemaTable t JOIN t.schemaColumns c JOIN c.schemaExpressions e WHERE t.id = :tableId AND e.schemaAttribute.id = a.id"),
     @NamedQuery(name = "SchemaTable.findMetrics", 
             query = "SELECT m FROM SchemaMetric m, SchemaTable t JOIN t.schemaColumns c JOIN c.schemaExpressions e WHERE t.id = :tableId AND e.schemaMetric.id = m.id"),
+    @NamedQuery(name = "SchemaTable.findTablesByColumnNames",
+            query = "SELECT DISTINCT t " + 
+                    "FROM SchemaTable t JOIN t.schemaColumns c " +
+                    "WHERE t.schemaDatasource.id = :datasourceId AND c.name in :columnNames"),   
 //    @NamedQuery(name = "SchemaTable.findUnusedColumns", 
 //            query = "SELECT c " + 
 //                    "FROM SchemaTable t JOIN t.schemaColumns c " + 

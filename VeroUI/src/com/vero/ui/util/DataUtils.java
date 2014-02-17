@@ -175,7 +175,7 @@ public final class DataUtils {
         target.setPassword(source.getPassword());
     }
     
-    private static void copy(SchemaTable source, TableObjectData target) {
+    public static void copy(SchemaTable source, TableObjectData target) {
         target.setId(source.getId());
         target.setName(source.getName());
         target.setPhysicalName(source.getPhysicalName());
