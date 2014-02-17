@@ -62,12 +62,12 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
         editorTableLabelPane = LabelPaneFactory.createEditorTablePane(originalTableObjectData);
         editorTableLabelPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 	    @Override
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent event) {	        
 		if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {
 		    try {
 			Formula f = ParserUtils.parse(formulaTextField.getText());
     		    	MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
-    		    	TableObjectData selectedTableObjectData = data.getSelectedExpressionObjectData().getSelectedTableObjectData();
+    		    	TableObjectData selectedTableObjectData = editorTableLabelPane.getData();
     		    	List<TableObjectData> tableObjectDataList = service.findTableObjectDataListByColumnNames(selectedTableObjectData.getDatasourceObjectData().getId(), f.entityNames());
     		    	
     		    	ContextMenu contextMenu = new ContextMenu();
@@ -82,7 +82,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
     		    	contextMenu.show((Node) event.getSource(), Side.BOTTOM, 0, 0);
 		    }
 		    catch (Exception e) {
-			// Invalid formula
+			// Invalid formula		        
 		    }
 		}
             }            
@@ -168,7 +168,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 	    Formula f = ParserUtils.parse(data.getSelectedExpressionObjectData().getFormula());
 	    Set<String> entityNames = f.entityNames();
 
-	    TableObjectData selectedTableObjectData = data.getSelectedExpressionObjectData().getSelectedTableObjectData();
+	    TableObjectData selectedTableObjectData = editorTableLabelPane.getData();
 
 	    if (!selectedTableObjectData.containsColumns(entityNames)) {
 		throw new Exception("Not all columns exist in selected table.");
@@ -231,5 +231,10 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
         catch (Exception e) {
             formulaTextField.setStyle("-fx-text-fill: red;");
         }
+    }
+    
+    @Override
+    protected void handleChangeTableEvent(TableObjectData data) {
+        editorTableLabelPane.setData(data);
     }
 }

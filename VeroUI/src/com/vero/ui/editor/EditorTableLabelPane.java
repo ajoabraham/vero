@@ -19,6 +19,8 @@ import com.vero.ui.model.TableObjectData;
  */
 public class EditorTableLabelPane extends LabelPane {
     private TableObjectData data = null;
+    private Label tableLabel = null;
+    private ImageView tableTypeImageView = null;
     
     public EditorTableLabelPane(TableObjectData data) {
         this.data = data;        
@@ -28,13 +30,28 @@ public class EditorTableLabelPane extends LabelPane {
     private void buildUI() {
         getStyleClass().add(CLASS_EDITOR_TABLE_LABEL_PANE);
         setPrefSize(EDITOR_TABLE_PANE_WIDTH, EDITOR_TABLE_PANE_HEIGHT);
-        ImageView tableImageView = new ImageView(data.getTableType().getImage());
-        getChildren().add(tableImageView);
+        tableTypeImageView = new ImageView();
+        tableLabel = new Label();
+        tableLabel.setGraphic(tableTypeImageView);
+        HBox.setHgrow(tableLabel, Priority.ALWAYS);
+        tableLabel.setMaxWidth(Double.MAX_VALUE);
+        tableLabel.getStyleClass().add(CLASS_OBJECT_LABEL);
+        getChildren().add(tableLabel);
+        
+        populateData(data);
+    }
+    
+    private void populateData(TableObjectData data) {
+        tableLabel.setText(data.getName());
+        tableTypeImageView.setImage(data.getTableType().getImage());
+    }
 
-        Label label = new Label(data.getName());
-        HBox.setHgrow(label, Priority.ALWAYS);
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.getStyleClass().add(CLASS_OBJECT_LABEL);
-        getChildren().add(label);
+    public TableObjectData getData() {
+        return data;
+    }
+
+    public void setData(TableObjectData data) {
+        this.data = data;
+        populateData(data);
     }
 }
