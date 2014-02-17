@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -20,6 +21,7 @@ import javafx.scene.layout.Priority;
 
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.util.UIUtils;
 
@@ -84,7 +86,14 @@ public abstract class EditorPane<T extends UIData> extends BorderPane implements
         if (event.getSource() == applyButton) {
             handleApplyAction();
         }
+        else if (event.getSource() instanceof MenuItem) {
+            handleChangeTableEvent((TableObjectData) ((MenuItem)event.getSource()).getUserData());
+        }
     }    
+    
+    protected void handleChangeTableEvent(TableObjectData tableObjectData) {
+        
+    }
     
     protected abstract void handleApplyAction();
 }

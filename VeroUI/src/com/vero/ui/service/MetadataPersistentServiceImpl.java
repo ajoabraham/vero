@@ -122,9 +122,17 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
             List<SchemaTable> schemaTables = metadataDao.findSchemaTablesByColumnNames(datasourceId, columnNames);
             List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
             
+            DatasourceObjectData datasourceObjectData = null;
             for (SchemaTable schemaTable : schemaTables) {
                 TableObjectData tableObjectData = new TableObjectData();
                 DataUtils.copy(schemaTable, tableObjectData);
+                if (datasourceObjectData == null) {
+                    datasourceObjectData = new DatasourceObjectData();
+                    datasourceObjectData.setId(schemaTable.getSchemaDatasource().getId());
+                }
+                
+                datasourceObjectData.addTableObjectData(tableObjectData);
+                
                 tableObjectDataList.add(tableObjectData);
             }
             
