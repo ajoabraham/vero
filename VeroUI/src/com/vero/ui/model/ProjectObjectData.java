@@ -10,7 +10,11 @@ import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+import com.vero.model.entities.SchemaDatasource;
+import com.vero.model.entities.SchemaProject;
 import com.vero.ui.constants.ObjectType;
 
 /**
@@ -20,13 +24,39 @@ import com.vero.ui.constants.ObjectType;
 public class ProjectObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
+    private SchemaProject schemaProject = null;
+    
     private StringProperty name = new SimpleStringProperty();
     private StringProperty description = new SimpleStringProperty();
     
-    private List<DatasourceObjectData> datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
-    private List<ReportObjectData> reportObjectDataList = new ArrayList<ReportObjectData>();
+    private List<DatasourceObjectData> datasourceObjectDataList = null;
+    private List<ReportObjectData> reportObjectDataList = null;
     
     public ProjectObjectData() {
+        this(new SchemaProject());
+    }
+    
+    public ProjectObjectData(SchemaProject schemaProject) {
+        super(schemaProject);
+        this.schemaProject = schemaProject;
+        
+        // init data
+        name.set(schemaProject.getName());
+        name.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ProjectObjectData.this.schemaProject.setName(newValue);
+            }
+            
+        });
+        description.set(schemaProject.getDescription());
+        description.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ProjectObjectData.this.schemaProject.setDescription(newValue);
+            }
+        });
+        
     }
 
     public String getName() {
@@ -57,27 +87,30 @@ public class ProjectObjectData extends UIData {
         return datasourceObjectDataList;
     }
 
-    public void setDatasourceObjectDataList(List<DatasourceObjectData> datasourceObjectDataList) {
-        this.datasourceObjectDataList = datasourceObjectDataList;
-    }
+//    public void setDatasourceObjectDataList(List<DatasourceObjectData> datasourceObjectDataList) {
+//        this.datasourceObjectDataList = datasourceObjectDataList;
+//    }
     
     public void addDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        if (datasourceObjectDataList == null) initDatasourceObjectDataList();
 	datasourceObjectData.setProjectObjectData(this);
         datasourceObjectDataList.add(datasourceObjectData);
     }
     
     public boolean removeDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+        if (datasourceObjectDataList == null) initDatasourceObjectDataList();
 	datasourceObjectData.setProjectObjectData(null);
         return datasourceObjectDataList.remove(datasourceObjectData);
     }
     
     public List<ReportObjectData> getReportObjectDataList() {
+        if (datasourceObjectDataList == null) initDatasourceObjectDataList();
         return reportObjectDataList;
     }
 
-    public void setReportObjectDataList(List<ReportObjectData> reportObjectDataList) {
-        this.reportObjectDataList = reportObjectDataList;
-    }
+//    public void setReportObjectDataList(List<ReportObjectData> reportObjectDataList) {
+//        this.reportObjectDataList = reportObjectDataList;
+//    }
     
     public void addReportObjectData(ReportObjectData reportObjectData) {
 	reportObjectData.setProjectObjectData(this);
@@ -92,5 +125,19 @@ public class ProjectObjectData extends UIData {
     @Override
     public ObjectType getType() {
         return PROJECT;
+    }
+    
+    public SchemaProject getSchemaProject() {
+        return schemaProject;
+    }
+    
+    private void initDatasourceObjectDataList() {
+        datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
+        
+        for (SchemaDatasource schemaDatasource : schemaProject.getSchemaDatasources()) {
+            DatasourceObjectData datasourceObjectData = new DatasourceObjectData(schemaDatasource);
+            datasourceObjectData.setProjectObjectData(this);
+            datasourceObjectDataList.add(datasourceObjectData);
+        }
     }
 }

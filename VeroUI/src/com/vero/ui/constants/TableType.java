@@ -11,6 +11,18 @@ import javafx.scene.image.Image;
  * 
  */
 public enum TableType {
+    // UNKNOWN has to be the first one (ordinal number 0)
+    UNKNOWN {
+        @Override
+        public Image getImage() {
+            return IMAGE_UNKNOWN_TABLE;
+        }
+
+        @Override
+        public String getName() {
+            return "UNKNOWN";
+        }
+    },
     DIMENSION {
         @Override
         public Image getImage() {
@@ -53,17 +65,6 @@ public enum TableType {
         @Override
         public String getName() {
             return "AGGREGATE";
-        }
-    },
-    UNKNOWN {
-        @Override
-        public Image getImage() {
-            return IMAGE_UNKNOWN_TABLE;
-        }
-
-        @Override
-        public String getName() {
-            return "UNKNOWN";
         }
     };
 

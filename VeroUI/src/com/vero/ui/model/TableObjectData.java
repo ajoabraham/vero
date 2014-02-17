@@ -8,6 +8,8 @@ package com.vero.ui.model;
 
 import static com.vero.ui.constants.ObjectType.TABLE;
 
+import com.vero.model.entities.SchemaColumn;
+import com.vero.model.entities.SchemaTable;
 import com.vero.ui.common.UIDataManager;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.constants.TableType;
@@ -23,6 +25,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  *
@@ -33,17 +37,57 @@ public class TableObjectData extends UIData {
     
     private static final Logger logger = Logger.getLogger(TableObjectData.class.getName());
     
+    private SchemaTable schemaTable = null;
+    
     private StringProperty name = new SimpleStringProperty();
     private StringProperty physicalName = new SimpleStringProperty();
     private StringProperty alias = new SimpleStringProperty();
     private IntegerProperty rowCount = new SimpleIntegerProperty();
     private TableType tableType = TableType.UNKNOWN;
-    private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
+    private List<ColumnObjectData> columnObjectDataList = null;
     private DatasourceObjectData datasourceObjectData = null;
     private List<ColumnObjectData> unusedColumnObjectDataList = null;
     
     public TableObjectData() {
+        this(new SchemaTable());
+    }
+    
+    public TableObjectData(SchemaTable schemaTable) {
+        super(schemaTable);
+        this.schemaTable = schemaTable;
         
+        // init data
+        name.set(schemaTable.getName());
+        name.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {                
+                TableObjectData.this.schemaTable.setName(newValue);
+            }
+            
+        });
+        
+        physicalName.set(schemaTable.getPhysicalName());
+        physicalName.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {                
+                TableObjectData.this.schemaTable.setPhysicalName(newValue);
+            }
+            
+        });
+        
+        rowCount.set(schemaTable.getRowCount());
+        rowCount.addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {                
+                TableObjectData.this.schemaTable.setRowCount(newValue.intValue());
+            }
+            
+        });
+        
+        tableType = TableType.values()[schemaTable.getTableType()];
     }
 
     @Override
@@ -105,22 +149,26 @@ public class TableObjectData extends UIData {
 
     public void setTableType(TableType tableType) {
         this.tableType = tableType;
+        schemaTable.setTableType(tableType.ordinal());
     }
 
     public List<ColumnObjectData> getColumnObjectDataList() {
+        if (columnObjectDataList == null) initColumnObjectDataList();
         return columnObjectDataList;
     }
 
-    public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
-        this.columnObjectDataList = columnObjectDataList;
-    }
+//    public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
+//        this.columnObjectDataList = columnObjectDataList;
+//    }
     
     public void addColumnObjectData(ColumnObjectData data) {
+        if (columnObjectDataList == null) initColumnObjectDataList();
 	data.setTableObjectData(this);
         columnObjectDataList.add(data);
     }
     
     public boolean removeColumnObjectData(ColumnObjectData data) {
+        if (columnObjectDataList == null) initColumnObjectDataList();
 	data.setTableObjectData(null);
         return columnObjectDataList.remove(data);
     }
@@ -131,6 +179,23 @@ public class TableObjectData extends UIData {
 
     public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
         this.datasourceObjectData = datasourceObjectData;
+        
+        if (datasourceObjectData == null) {
+            schemaTable.setSchemaDatasource(null);
+        }
+        else if (schemaTable.getSchemaDatasource() != datasourceObjectData.getSchemaDatasource()) {
+            schemaTable.setSchemaDatasource(datasourceObjectData.getSchemaDatasource());
+        }
+    }
+    
+    private void initColumnObjectDataList() {
+        columnObjectDataList = new ArrayList<ColumnObjectData>();
+        
+        for (SchemaColumn schemaColumn : schemaTable.getSchemaColumns()) {
+            ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
+            columnObjectData.setTableObjectData(this);
+            columnObjectDataList.add(columnObjectData);
+        }
     }
     
     public List<AttributeObjectData> getRelatedAttributeObjectDataList() {
@@ -208,5 +273,9 @@ public class TableObjectData extends UIData {
 	}
 	
 	return columns;
+    }
+    
+    public SchemaTable getSchemaTable() {
+        return schemaTable;
     }
 }

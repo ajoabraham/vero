@@ -13,7 +13,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+import com.vero.model.entities.SchemaDatabase;
 import com.vero.ui.constants.DBType;
 import com.vero.ui.constants.ObjectType;
 
@@ -22,16 +25,70 @@ import com.vero.ui.constants.ObjectType;
  *
  */
 public class DatabaseObjectData extends UIData {
+    private SchemaDatabase schemaDatabase = null;
+    
     private StringProperty userName = new SimpleStringProperty();
     private StringProperty password = new SimpleStringProperty();
     private StringProperty hostname = new SimpleStringProperty();
     private StringProperty databaseName = new SimpleStringProperty();
     private IntegerProperty port = new SimpleIntegerProperty();
     private DBType databaseType = null;
-    private DatasourceObjectData datasourceObjectData = null;
+//    private DatasourceObjectData datasourceObjectData = null;
     
     public DatabaseObjectData() {
+        this(new SchemaDatabase());
     }    
+    
+    public DatabaseObjectData(SchemaDatabase schemaDatabase) {
+        super(schemaDatabase);
+        this.schemaDatabase = schemaDatabase;
+        
+        // init data
+        userName.set(schemaDatabase.getUserName());
+        userName.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                DatabaseObjectData.this.schemaDatabase.setUserName(newValue);
+            }            
+        });
+        
+        password.set(schemaDatabase.getPassword());
+        password.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                DatabaseObjectData.this.schemaDatabase.setPassword(newValue);
+            }            
+        });
+        
+        hostname.set(schemaDatabase.getHostAddress());
+        hostname.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                DatabaseObjectData.this.schemaDatabase.setHostAddress(newValue);
+            }            
+        });
+        
+        databaseName.set(schemaDatabase.getDatabaseName());
+        databaseName.addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                DatabaseObjectData.this.schemaDatabase.setDatabaseName(newValue);
+            }            
+        });
+        
+        port.set(schemaDatabase.getPort());
+        port.addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                DatabaseObjectData.this.schemaDatabase.setPort(newValue.intValue());
+            }            
+        });
+    }
 
     @NotBlank(message = "User name cannot be blank.")
     public String getUserName() {
@@ -111,11 +168,11 @@ public class DatabaseObjectData extends UIData {
         this.databaseType = databaseType;
     }
 
-    public DatasourceObjectData getDatasourceObjectData() {
-        return datasourceObjectData;
-    }
-
-    public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
-        this.datasourceObjectData = datasourceObjectData;
-    }   
+//    public DatasourceObjectData getDatasourceObjectData() {
+//        return datasourceObjectData;
+//    }
+//
+//    public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
+//        this.datasourceObjectData = datasourceObjectData;
+//    }   
 }

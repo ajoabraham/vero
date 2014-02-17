@@ -6,7 +6,9 @@
 
 package com.vero.ui.model;
 
+import com.vero.model.entities.SchemaData;
 import com.vero.ui.constants.ObjectType;
+
 import java.io.Serializable;
 
 /**
@@ -16,18 +18,18 @@ import java.io.Serializable;
 public abstract class UIData implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private String Id = null;
+    private SchemaData schemaData = null;
     
-    public UIData() {
-        
+    public UIData(SchemaData schemaData) {
+        this.schemaData = schemaData;
     }
 
     public String getId() {
-        return Id;
+        return schemaData.getId();
     }
 
-    public void setId(String Id) {
-        this.Id = Id;
+    public void setId(String id) {
+        schemaData.setId(id);
     }
     
     public abstract ObjectType getType();

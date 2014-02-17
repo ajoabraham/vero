@@ -10,10 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vero.model.entities.SchemaColumn;
+import com.vero.model.entities.SchemaExpression;
 import com.vero.ui.constants.ObjectType;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  * @author Tai Hu
@@ -21,15 +25,33 @@ import javafx.beans.property.StringProperty;
  */
 public class ExpressionObjectData extends UIData {
     
+    private SchemaExpression schemaExpression = null;
+    
     private StringProperty formula = new SimpleStringProperty();
-    private List<ColumnObjectData> columnObjectDataList = new ArrayList<ColumnObjectData>();
+    private List<ColumnObjectData> columnObjectDataList = null;
     private AttributeObjectData attributeObjectData = null;
     private MetricObjectData metricObjectData = null;
     private Map<TableObjectData, List<ColumnObjectData>> tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
     private TableObjectData selectedTableObjectData = null;
     
     public ExpressionObjectData() {
+        this(new SchemaExpression());
+    }
+    
+    public ExpressionObjectData(SchemaExpression schemaExpression) {
+        super(schemaExpression);
+        this.schemaExpression = schemaExpression;
+        
+        // init data
+        formula.set(schemaExpression.getExpression());
+        formula.addListener(new ChangeListener<String>() {
 
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ExpressionObjectData.this.schemaExpression.setExpression(newValue);
+            }
+            
+        });
     }
 
     public String getFormula() {
@@ -50,14 +72,14 @@ public class ExpressionObjectData extends UIData {
     }
 
 
-    public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
-        this.columnObjectDataList = columnObjectDataList;
-        tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
-        
-        for (ColumnObjectData columnObjectData : columnObjectDataList) {
-            addColumnIntoMap(columnObjectData);
-        }
-    }
+//    public void setColumnObjectDataList(List<ColumnObjectData> columnObjectDataList) {
+//        this.columnObjectDataList = columnObjectDataList;
+//        tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
+//        
+//        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+//            addColumnIntoMap(columnObjectData);
+//        }
+//    }
 
     private void addColumnIntoMap(ColumnObjectData columnObjectData) {
         TableObjectData tableObjectData = columnObjectData.getTableObjectData();
@@ -76,7 +98,7 @@ public class ExpressionObjectData extends UIData {
         addColumnIntoMap(columnObjectData);
     }
     
-    public void AddAllColumnObjectData(List<ColumnObjectData> columns) {
+    public void addAllColumnObjectData(List<ColumnObjectData> columns) {
 	for (ColumnObjectData columnObjectData : columns) {
 	    addColumnObjectData(columnObjectData);
 	}
@@ -93,6 +115,13 @@ public class ExpressionObjectData extends UIData {
 
     public void setAttributeObjectData(AttributeObjectData attributeObjectData) {
         this.attributeObjectData = attributeObjectData;
+        
+        if (attributeObjectData == null) {
+            schemaExpression.setSchemaAttribute(null);            
+        }
+        else if (schemaExpression.getSchemaAttribute() != attributeObjectData.getSchemaAttribute()) {
+            schemaExpression.setSchemaAttribute(attributeObjectData.getSchemaAttribute());
+        }
     }
 
     public MetricObjectData getMetricObjectData() {
@@ -102,6 +131,13 @@ public class ExpressionObjectData extends UIData {
 
     public void setMetricObjectData(MetricObjectData metricObjectData) {
         this.metricObjectData = metricObjectData;
+        
+        if (metricObjectData == null) {
+            schemaExpression.setSchemaMetric(null);
+        }
+        else if (schemaExpression.getSchemaMetric() != metricObjectData.getSchemaMetric()) {
+            schemaExpression.setSchemaMetric(metricObjectData.getSchemaMetric());
+        }
     }
 
     public TableObjectData getSelectedTableObjectData() {
@@ -123,5 +159,16 @@ public class ExpressionObjectData extends UIData {
     @Override
     public ObjectType getType() {
         return EXPRESSION;
+    }
+    
+    private void initColumnObjectDataList() {
+        columnObjectDataList = new ArrayList<ColumnObjectData>();
+        tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
+        
+        for (SchemaColumn schemaColumn : schemaExpression.getSchemaColumns()) {
+            ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
+            columnObjectDataList.add(columnObjectData);
+            addColumnIntoMap(columnObjectData);
+        }
     }
 }
