@@ -47,7 +47,7 @@ public final class DataUtils {
 	for (Column column : source.getColumns().values()) {
 	    ColumnObjectData columnObjectData = new ColumnObjectData();
 	    copy(column, columnObjectData);
-	    target.getColumnObjectDataList().add(columnObjectData);
+	    target.addColumnObjectData(columnObjectData);
 	}
     }
     

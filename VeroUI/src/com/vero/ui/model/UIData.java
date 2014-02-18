@@ -32,5 +32,34 @@ public abstract class UIData implements Serializable {
         schemaData.setId(id);
     }
     
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) 
+	    return false;
+	
+	if (!(obj instanceof UIData))
+	    return false;
+	
+	if (this == obj) 
+	    return true;
+	
+	UIData other = (UIData) obj;
+	
+	if (getId() != null && other.getId() != null) {
+	    return getId().equals(other.getId());
+	}
+	
+	return false;
+    }
+    
+    @Override
+    public int hashCode() {
+	if (getId() == null) {
+	    return super.hashCode();
+	}
+	
+	return getId().hashCode();
+    }
+    
     public abstract ObjectType getType();
 }
