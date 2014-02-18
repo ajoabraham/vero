@@ -40,7 +40,8 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     private int removeCount = 0;
     private String tableAlias = null;
     private ExpressionUnit usedExp = null;
-    private Boolean processed = false;
+    private ProcessingUnit masterPU = this;
+    private Boolean processed = false;    
     
     public ProcessingUnit() {}
 
@@ -82,20 +83,20 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     }
 
     public void setTableAlias(String inAlias) {
-        tableAlias = inAlias;
+        masterPU.tableAlias = inAlias;
     }
 
     public String assignTableAlias() {
-        if (tableAlias == null) {
+        if (masterPU.tableAlias == null) {
             setTableAlias("T" + ALIAS_ID);
             ALIAS_ID++;
         }
         
-        return tableAlias;
+        return masterPU.tableAlias;
     }
 
      public String getTableAlias() {        
-        return tableAlias;
+        return masterPU.tableAlias;
     }   
     
     public void setUsedExp(ExpressionUnit usedExp) {
@@ -104,6 +105,14 @@ public class ProcessingUnit implements Comparable<ProcessingUnit> {
     
     public ExpressionUnit getUsedExp() {
         return usedExp;
+    }
+
+    public void setMasterPU(ProcessingUnit inPU) {
+        masterPU = inPU;
+    }
+    
+    public ProcessingUnit getMasterPU() {
+        return masterPU;
     }
     
     public void setProcessed(Boolean inProc) {

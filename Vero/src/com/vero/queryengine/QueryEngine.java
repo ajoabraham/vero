@@ -9,6 +9,7 @@ package com.vero.queryengine;
 import com.vero.metadata.ExpressionUnit;
 import static com.google.common.collect.ImmutableMap.of;
 import com.vero.metadata.Attribute;
+import com.vero.metadata.Column;
 import com.vero.metadata.Expression;
 import com.vero.metadata.JoinDefinition;
 import com.vero.metadata.Metric;
@@ -77,6 +78,7 @@ public class QueryEngine {
     private final WeightedMultigraph<ProcessingUnit, EdgeUnit> joinGraph = 
             new WeightedMultigraph(new ClassBasedEdgeFactory<ProcessingUnit, EdgeUnit>(EdgeUnit.class));
     private Report report = null;
+    private List<ProcessingUnit> sortedPU = null;
     private static final Parsing parser = new Parsing();
     
     public QueryEngine() {}
@@ -86,21 +88,22 @@ public class QueryEngine {
     }
     
     public void preprocess(Session inSession) {
-        stage.preprocess(inSession);
         EdgeUnit.resetID();
         ProcessingUnit.resetID();
         
+        stage.preprocess(inSession);
+        
         // create all verteces (PUs)
-        List<ProcessingUnit> allSortedPUs = new ArrayList(stage.getPUs().values());
-        Collections.sort(allSortedPUs);
-        for (ProcessingUnit curPU : allSortedPUs) {
+        sortedPU = new ArrayList(stage.getPUs().values());
+        Collections.sort(sortedPU);
+        for (ProcessingUnit curPU : sortedPU) {
             System.out.println("Adding vertex: " + curPU + ", type: " + curPU.getType());
             joinGraph.addVertex(curPU);
         }
         
         // loop on PUs
         // for each table, find where it is used and connect vertex and create edges
-        for (ProcessingUnit curPU : allSortedPUs) {
+        for (ProcessingUnit curPU : sortedPU) {
             System.out.println("### PU id = " + curPU.getID() + ". Current PU content = " + curPU.getContent());
             List<Table> listTables = curPU.retrieveTables();
             if (listTables.size() > 0) {
@@ -123,7 +126,7 @@ public class QueryEngine {
                                 Attribute otherAttr = allOtherAttrsEntry.getValue();
 
                                 System.out.println("Other Attr: " + otherAttr.getName());
-                                for (ProcessingUnit otherPU : allSortedPUs) {
+                                for (ProcessingUnit otherPU : sortedPU) {
                                     if (otherPU.getContent() == otherAttr) {
                                         System.out.println("Found PU == otherAttr");
                                         int rowCost = aTab.getRowCount();
@@ -154,7 +157,7 @@ public class QueryEngine {
                                 Metric otherMetric = allOtherMetricsEntry.getValue();
 
                                 System.out.println("Other Metric: " + otherMetric.getName());
-                                for (ProcessingUnit otherPU : allSortedPUs) {
+                                for (ProcessingUnit otherPU : sortedPU) {
                                     if (otherPU.getContent() == otherMetric) {
                                         System.out.println("Found PU == otherMetric");
                                         int rowCost = aTab.getRowCount();
@@ -187,15 +190,15 @@ public class QueryEngine {
 
         // dump graph
         System.out.println("#### Before removing extra edges...");
-        dumpGraph(joinGraph);        
+        dumpGraph(joinGraph);
         
         // loop each vertex and remove edges that have same definition until one left
         removeExtraEdges(joinGraph);
         
         // dump graph
         System.out.println("#### After removing extra edges and table aliasing...");
-        dumpGraph(joinGraph);        
-               
+        dumpGraph(joinGraph);
+        
         // mst algo
         KruskalMinimumSpanningTree kmt = new KruskalMinimumSpanningTree(joinGraph);
         System.out.println("kmt total cost: " + kmt.getMinimumSpanningTreeTotalWeight());
@@ -205,14 +208,21 @@ public class QueryEngine {
         }
         
         // match expression
-        matchExpression(joinGraph, euSet);
+        matchExpression(sortedPU, euSet);
 
         // dump graph
         System.out.println("#### After matching expression...");
         dumpGraph(joinGraph);
         
+        // merge PUs
+        mergePU(joinGraph, sortedPU, euSet);
+
+        // dump graph
+        System.out.println("#### After merging PU...");
+        dumpGraph(joinGraph);
+        
         // generate report
-        report = generateReport(joinGraph, euSet);        
+        report = generateReport(joinGraph, sortedPU, euSet);        
     }
     
     private void removeExtraEdges(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph) {
@@ -301,7 +311,7 @@ public class QueryEngine {
         }
     }
     
-    private void matchExpression(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+    private void matchExpression(List<ProcessingUnit> sortedPU, Set<EdgeUnit> euSet) {
         for (EdgeUnit eu : euSet) {
             ProcessingUnit srcPU = eu.getSrcPU();
             if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
@@ -331,8 +341,8 @@ public class QueryEngine {
         }
         
         // now loop on PU for PUs not yet processed because not linked by joindef
-        Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
-        for (ProcessingUnit pu : graphVertexSet) {
+        //Set<ProcessingUnit> graphVertexSet = inGraph.vertexSet();
+        for (ProcessingUnit pu : sortedPU) {
             if (pu.getProcessed() == false) {
                 if (pu.getType() == ProcessingUnit.PUType.PUTYPE_ATTRIBUTE) {
                     Attribute curAttr = (Attribute)pu.getContent();
@@ -353,6 +363,42 @@ public class QueryEngine {
                 }
             } else {
                 pu.setProcessed(false);
+            }
+        }
+    }
+    
+    // ugly fix for test8
+    private void mergePU(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, List<ProcessingUnit>sortedPU, Set<EdgeUnit> euSet) {
+        Map<Table, ProcessingUnit> table2PUMap = new HashMap();
+        Map<Column, ProcessingUnit> column2PUMap = new HashMap();
+        
+        for (ProcessingUnit pu : sortedPU) {
+            if (pu.getUsedExp() != null) {            
+                Table usedTab = pu.getUsedExp().getColumn().getTable();
+
+                if (table2PUMap.containsKey(usedTab)) {
+                    ProcessingUnit tabMatchingPU = table2PUMap.get(usedTab);
+                    Column usedCol = pu.getUsedExp().getColumn();                
+
+                    if (column2PUMap.containsKey(usedCol)) {
+                        ProcessingUnit colMatchingPU = column2PUMap.get(usedCol);
+
+                        if (tabMatchingPU == colMatchingPU) {
+                            // table and column both match
+                            // don't do anything
+                        }
+                    } else {
+                        // same table but different column
+                        column2PUMap.put(usedCol, pu);
+                        // FIXME: try to merge/remove the PU that doesn't have any linked eu
+                        pu.setMasterPU(tabMatchingPU);
+                        inGraph.removeVertex(pu);
+                    }
+                } else {
+                    table2PUMap.put(usedTab, pu);
+                    Column usedCol = pu.getUsedExp().getColumn();
+                    column2PUMap.put(usedCol, pu);
+                }
             }
         }
     }
@@ -547,11 +593,9 @@ public class QueryEngine {
         return aBlock;
     }
     
-    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, Set<EdgeUnit> euSet) {
+    private Report generateReport(WeightedMultigraph<ProcessingUnit, EdgeUnit> inGraph, List<ProcessingUnit> sortedPU, Set<EdgeUnit> euSet) {
         Set<ProcessingUnit> vertexSet = inGraph.vertexSet();
         UnionFind<ProcessingUnit> unionPU = new UnionFind(vertexSet);
-        List<ProcessingUnit> sortedVertex = new ArrayList(vertexSet);
-        Collections.sort(sortedVertex);
         Report aReport = new Report();
                      
         // union find on PU
@@ -563,7 +607,7 @@ public class QueryEngine {
         int nGroup = 0;
         ProcessingUnit allLinkedPU = null;
         HashMap<ProcessingUnit, ArrayList<ProcessingUnit>> puHM = new HashMap();
-        for (ProcessingUnit pu : sortedVertex) {
+        for (ProcessingUnit pu : vertexSet) {
             ProcessingUnit masterPU = unionPU.find(pu);            
             
             // for cross join, initiate a PU that should link to all the other groups
@@ -618,7 +662,7 @@ public class QueryEngine {
             System.out.println("eu id: " + eu.getID() + " : " + eu);
         }
 
-        Block curBlock = generateBlockNew(sortedEUs, sortedVertex);
+        Block curBlock = generateBlockNew(sortedEUs, sortedPU);
         aReport.addBlock(curBlock);  
                 
         return aReport;
@@ -631,7 +675,10 @@ public class QueryEngine {
         for (ProcessingUnit pu : graphVertexSet) {
             System.out.println("  Vertex = " + vertexCount + " : " + pu.getContent() + " : " + pu.getTableAlias());
             if (pu.getUsedExp() != null) {
-                System.out.println("    UsedExp = " + pu.getUsedExp().getExpression().getFormula());
+                System.out.println("    UsedExp (table:column:formula) = " + 
+                    pu.getUsedExp().getColumn().getTable().getPhysicalName() + ":" +
+                    pu.getUsedExp().getColumn().getObjectName() + ":" +
+                    pu.getUsedExp().getExpression().getFormula());
             }
             
             Set<EdgeUnit> graphEdgeSet = inGraph.edgesOf(pu);
