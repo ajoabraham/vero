@@ -6,6 +6,8 @@ import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
@@ -45,6 +47,8 @@ import frmw.parser.Hints;
  *
  */
 public class AttributeEditorPane extends EditorPane<AttributeObjectData> implements ChangeListener<String> {
+    private static final Logger logger = Logger.getLogger(AttributeEditorPane.class.getName());
+    
     private QueryBlockPane queryBlockPane = null;
     private EditorTableLabelPane editorTableLabelPane = null;
     private TableObjectData originalTableObjectData = null;
@@ -165,11 +169,15 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 	    //    b. Create a new expression with selected table.
 	    //    c. Set this new expression as selected and add selected table onto hard hint white list.
 	    
+	    logger.finest("Start apply attribute editing...");
 	    Formula f = ParserUtils.parse(data.getSelectedExpressionObjectData().getFormula());
 	    Set<String> entityNames = f.entityNames();
 
 	    TableObjectData selectedTableObjectData = editorTableLabelPane.getData();
-
+	    logger.finest("Selected table - " 
+	                  + selectedTableObjectData.getName() 
+	                  + "(" + selectedTableObjectData.getId() + ")");
+	    
 	    if (!selectedTableObjectData.containsColumns(entityNames)) {
 		throw new Exception("Not all columns exist in selected table.");
 	    }
@@ -177,21 +185,29 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 	    String formula = data.getSelectedExpressionObjectData().getFormula();
 
 	    if (originalFormula.equals(formula)) {
-		if (originalTableObjectData != selectedTableObjectData) {
+	        logger.finest("Formula is not changed - " + formula);
+		if (!originalTableObjectData.equals(selectedTableObjectData)) {
+		    logger.finest("Original table and selected table are different.");
 		    List<ColumnObjectData> columns = selectedTableObjectData.getColumnsByNames(entityNames);
+		    logger.finest("Columns used in formula - " + columns.size());
 		    data.getSelectedExpressionObjectData().addAllColumnObjectData(columns);
 		    data.getSelectedExpressionObjectData().setSelectedTableObjectData(selectedTableObjectData);
 		    // FIXME add original table into hard hint black list
 		}
 	    }
 	    else if (originalTableObjectData != selectedTableObjectData) {
-		ExpressionObjectData existingExpression = data.getExpressionByFormula(formula);
+	        logger.finest("Original formula is different from current formula - " + originalFormula + " " + formula);
+	        ExpressionObjectData existingExpression = data.getExpressionByFormula(formula);
 		if (existingExpression != null) {
+		    logger.finest("There is an existing expression with same formula - " + existingExpression.getId());
 		    if (existingExpression.containsTableObjectData(selectedTableObjectData)) {
+		        logger.finest("Existing formula has the same table as selected table - " 
+		                      + selectedTableObjectData.getName());
 			existingExpression.setSelectedTableObjectData(selectedTableObjectData);
 			data.setSelectedExpressionObjectData(existingExpression);
 		    }
 		    else {
+		        logger.finest("Existing expression has different table.");
 			List<ColumnObjectData> columns = selectedTableObjectData.getColumnsByNames(entityNames);
 			existingExpression.addAllColumnObjectData(columns);
 			existingExpression.setSelectedTableObjectData(selectedTableObjectData);
@@ -200,6 +216,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 		    }
 		}
 		else {
+		    logger.finest("There is no existing expression contains same formula.");
 		    if (data.usedTableObjectData(selectedTableObjectData)) {
 			throw new Exception("Selected table is already used in other expression under this attribute.");
 		    }
@@ -218,6 +235,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 	    queryBlockPane.setSQLString(sqlString);
 	}
 	catch (Exception e) {
+	    logger.log(Level.INFO, e.getMessage(), e);
 	    ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
 	}
     }

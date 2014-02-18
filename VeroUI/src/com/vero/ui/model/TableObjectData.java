@@ -263,6 +263,7 @@ public class TableObjectData extends UIData {
     }
 
     public boolean containsColumns(Collection<String> columnNames) {
+        if (columnObjectDataList == null) initColumnObjectDataList();
         List<String> allColumnNames = new ArrayList<String>();
         for (ColumnObjectData columnObjectData : columnObjectDataList) {
             allColumnNames.add(columnObjectData.getName());
