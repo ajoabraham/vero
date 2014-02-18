@@ -13,7 +13,6 @@ import com.vero.model.dao.MetadataDao;
 import com.vero.model.dao.MetadataDaoImpl;
 import com.vero.model.dao.PersistentException;
 import com.vero.model.entities.SchemaAttribute;
-import com.vero.model.entities.SchemaDatasource;
 import com.vero.model.entities.SchemaMetric;
 import com.vero.model.entities.SchemaProject;
 import com.vero.model.entities.SchemaTable;
@@ -22,7 +21,6 @@ import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
 import com.vero.ui.model.TableObjectData;
-import com.vero.ui.util.DataUtils;
 
 /**
  * @author Tai Hu
@@ -39,11 +37,8 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
 
     @Override
     public void persistDatasource(DatasourceObjectData data) throws ServiceException {
-        SchemaDatasource schemaDatasource = new SchemaDatasource();
-        DataUtils.copy(data, schemaDatasource);
-        
         try {
-            metadataDao.persist(schemaDatasource);
+            metadataDao.persist(data.getSchemaDatasource());
         }
         catch (PersistentException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -65,10 +60,8 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
     @Override
     public ProjectObjectData getProjectDataObject(String projectId) throws ServiceException {
         try {
-            ProjectObjectData projectObjectData = new ProjectObjectData();
             SchemaProject schemaProject = metadataDao.find(SchemaProject.class, projectId);
-            DataUtils.copy(schemaProject, projectObjectData);
-            return projectObjectData;
+            return new ProjectObjectData(schemaProject);
         }
         catch (PersistentException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -83,8 +76,7 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
 	    List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
 	    
 	    for (SchemaAttribute schemaAttribute : schemaAttributes) {
-		AttributeObjectData attributeObjectData = new AttributeObjectData();
-		DataUtils.copy(schemaAttribute, attributeObjectData);
+		AttributeObjectData attributeObjectData = new AttributeObjectData(schemaAttribute);
 		attributeObjectDataList.add(attributeObjectData);
 	    }
 	    
@@ -103,8 +95,7 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
 	    List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
 	    
 	    for (SchemaMetric schemaMetric : schemaMetrics) {
-		MetricObjectData metricObjectData = new MetricObjectData();
-		DataUtils.copy(schemaMetric, metricObjectData);
+		MetricObjectData metricObjectData = new MetricObjectData(schemaMetric);
 		metricObjectDataList.add(metricObjectData);
 	    }
 	    
@@ -124,8 +115,7 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
             
             DatasourceObjectData datasourceObjectData = null;
             for (SchemaTable schemaTable : schemaTables) {
-                TableObjectData tableObjectData = new TableObjectData();
-                DataUtils.copy(schemaTable, tableObjectData);
+                TableObjectData tableObjectData = new TableObjectData(schemaTable);
                 if (datasourceObjectData == null) {
                     datasourceObjectData = new DatasourceObjectData();
                     datasourceObjectData.setId(schemaTable.getSchemaDatasource().getId());

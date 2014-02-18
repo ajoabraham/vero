@@ -18,6 +18,7 @@ public class GlobalFilterObjectData extends UIData {
      * 
      */
     public GlobalFilterObjectData() {
+	super(null);
     }
 
     public ReportObjectData getReportObjectData() {

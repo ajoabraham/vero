@@ -43,7 +43,7 @@ public class DatabaseObjectData extends UIData {
         super(schemaDatabase);
         this.schemaDatabase = schemaDatabase;
         
-        // init data
+        // init data        
         userName.set(schemaDatabase.getUserName());
         userName.addListener(new ChangeListener<String>() {
 

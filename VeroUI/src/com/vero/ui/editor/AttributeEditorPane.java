@@ -179,7 +179,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 	    if (originalFormula.equals(formula)) {
 		if (originalTableObjectData != selectedTableObjectData) {
 		    List<ColumnObjectData> columns = selectedTableObjectData.getColumnsByNames(entityNames);
-		    data.getSelectedExpressionObjectData().AddAllColumnObjectData(columns);
+		    data.getSelectedExpressionObjectData().addAllColumnObjectData(columns);
 		    data.getSelectedExpressionObjectData().setSelectedTableObjectData(selectedTableObjectData);
 		    // FIXME add original table into hard hint black list
 		}
@@ -193,7 +193,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 		    }
 		    else {
 			List<ColumnObjectData> columns = selectedTableObjectData.getColumnsByNames(entityNames);
-			existingExpression.AddAllColumnObjectData(columns);
+			existingExpression.addAllColumnObjectData(columns);
 			existingExpression.setSelectedTableObjectData(selectedTableObjectData);
 			data.setSelectedExpressionObjectData(existingExpression);
 			// FIXME add selected table into hard hint white list
@@ -206,7 +206,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 		    
 		    ExpressionObjectData expressionObjectData = new ExpressionObjectData();		
 		    List<ColumnObjectData> columns = selectedTableObjectData.getColumnsByNames(entityNames);
-		    expressionObjectData.AddAllColumnObjectData(columns);
+		    expressionObjectData.addAllColumnObjectData(columns);
 		    data.addExpressionObjectData(expressionObjectData);
 		    data.setSelectedExpressionObjectData(expressionObjectData);
 		    // FIXME add selected table into hard hint white list.

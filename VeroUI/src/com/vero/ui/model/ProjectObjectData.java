@@ -84,6 +84,7 @@ public class ProjectObjectData extends UIData {
     }
     
     public List<DatasourceObjectData> getDatasourceObjectDataList() {
+	if (datasourceObjectDataList == null) initDatasourceObjectDataList();
         return datasourceObjectDataList;
     }
 

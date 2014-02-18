@@ -42,6 +42,7 @@ public class CommentBlockPane extends BlockPane implements EventHandler<MouseEve
         setLeft(commentImageView);
         
         commentTextArea = new TextArea();
+        commentTextArea.setPromptText("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
         commentTextArea.setWrapText(true);
         commentTextArea.textProperty().bindBidirectional(commentBlockObjectData.comment());
         setCenter(commentTextArea);

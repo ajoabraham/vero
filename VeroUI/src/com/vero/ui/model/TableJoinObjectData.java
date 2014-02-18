@@ -22,6 +22,7 @@ public class TableJoinObjectData extends UIData {
     private TableJoinType tableJoinType = null;
     
     public TableJoinObjectData(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
+	super(null);
         this.leftTableName = leftTableName;
         this.tableJoinType = tableJoinType;
         this.rightTableName = rightTableName;

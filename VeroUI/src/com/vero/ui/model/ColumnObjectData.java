@@ -6,11 +6,11 @@
 
 package com.vero.ui.model;
 
+import static com.vero.ui.constants.ObjectType.COLUMN;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -20,8 +20,6 @@ import com.vero.model.entities.SchemaColumn;
 import com.vero.model.entities.SchemaExpression;
 import com.vero.ui.constants.DBKeyType;
 import com.vero.ui.constants.ObjectType;
-
-import static com.vero.ui.constants.ObjectType.COLUMN;
 
 /**
  *
@@ -166,5 +164,9 @@ public class ColumnObjectData extends UIData {
             ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
             expressionObjectDataList.add(expressionObjectData);
         }
+    }
+    
+    public SchemaColumn getSchemaColumn() {
+	return schemaColumn;
     }
 }

@@ -10,111 +10,133 @@ import java.util.List;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+import com.vero.model.entities.SchemaData;
+import com.vero.model.entities.SchemaQueryBlock;
 import com.vero.ui.constants.ObjectType;
 
 /**
  * @author Tai Hu
- *
+ * 
  */
 public class QueryBlockObjectData extends BlockObjectData {
     private IntegerProperty position = new SimpleIntegerProperty();
-    
+
     private DatasourceObjectData datasourceObjectData = null;
     private List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
     private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
     private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
-    
+
     public QueryBlockObjectData() {
+	this(new SchemaQueryBlock());
+    }
+
+    public QueryBlockObjectData(SchemaData schemaData) {
+	super(schemaData);
+
+	// init data
+	if (schemaData instanceof SchemaQueryBlock) {
+	    position.set(((SchemaQueryBlock) schemaData).getPosition());
+	    position.addListener(new ChangeListener<Number>() {
+
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		    ((SchemaQueryBlock) QueryBlockObjectData.this.schemaData).setPosition(newValue.intValue());
+		}
+
+	    });
+	}
     }
 
     public void setPosition(int position) {
 	this.position.set(position);
     }
-    
+
     public int getPosition() {
 	return this.position.get();
     }
-    
+
     public IntegerProperty position() {
 	return position;
     }
-    
+
     public DatasourceObjectData getDatasourceObjectData() {
-        return datasourceObjectData;
+	return datasourceObjectData;
     }
 
     public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
-        this.datasourceObjectData = datasourceObjectData;
+	this.datasourceObjectData = datasourceObjectData;
     }
 
     public List<AttributeObjectData> getAttributeObjectDataList() {
-        return attributeObjectDataList;
+	return attributeObjectDataList;
     }
 
     public void setAttributeObjectDataList(List<AttributeObjectData> attributeObjectDataList) {
-        this.attributeObjectDataList = attributeObjectDataList;
+	this.attributeObjectDataList = attributeObjectDataList;
     }
 
     public void addAttributeObjectData(AttributeObjectData attributeObjectData) {
-        attributeObjectDataList.add(attributeObjectData);
+	attributeObjectDataList.add(attributeObjectData);
     }
-    
+
     public boolean removeAttributeObjectData(AttributeObjectData attributeObjectData) {
-        return attributeObjectDataList.remove(attributeObjectData);
+	return attributeObjectDataList.remove(attributeObjectData);
     }
-    
+
     public List<MetricObjectData> getMetricObjectDataList() {
-        return metricObjectDataList;
+	return metricObjectDataList;
     }
 
     public void setMetricObjectDataList(List<MetricObjectData> metricObjectDataList) {
-        this.metricObjectDataList = metricObjectDataList;
+	this.metricObjectDataList = metricObjectDataList;
     }
 
     public void addMetricObjectData(MetricObjectData metricObjectData) {
-        metricObjectDataList.add(metricObjectData);
+	metricObjectDataList.add(metricObjectData);
     }
-    
+
     public boolean removeMetricObjectData(MetricObjectData metricObjectData) {
-        return metricObjectDataList.remove(metricObjectData);
+	return metricObjectDataList.remove(metricObjectData);
     }
-    
+
     public List<TableObjectData> getTableObjectDataList() {
-        return tableObjectDataList;
+	return tableObjectDataList;
     }
 
     public void setTableObjectDataList(List<TableObjectData> tableObjectDataList) {
-        this.tableObjectDataList = tableObjectDataList;
+	this.tableObjectDataList = tableObjectDataList;
     }
-    
+
     public boolean containsTableObjectData(TableObjectData tableObjectData) {
 	return tableObjectDataList.contains(tableObjectData);
     }
-    
+
     public void addTableObjectData(TableObjectData tableObjectData) {
-        tableObjectDataList.add(tableObjectData);
+	tableObjectDataList.add(tableObjectData);
     }
 
     public boolean removeTableObjectData(TableObjectData tableObjectData) {
-        return tableObjectDataList.remove(tableObjectData);
+	return tableObjectDataList.remove(tableObjectData);
     }
-    
+
     public List<TableJoinObjectData> getTableJoinObjectDataList() {
-        return tableJoinObjectDataList;
+	return tableJoinObjectDataList;
     }
 
     public void setTableJoinObjectDataList(List<TableJoinObjectData> tableJoinObjectDataList) {
-        this.tableJoinObjectDataList = tableJoinObjectDataList;
+	this.tableJoinObjectDataList = tableJoinObjectDataList;
     }
-    
+
     public void addTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
-        tableJoinObjectDataList.add(tableJoinObjectData);
+	tableJoinObjectDataList.add(tableJoinObjectData);
     }
-    
+
     public boolean removeTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
-        return tableJoinObjectDataList.remove(tableJoinObjectData);
+	return tableJoinObjectDataList.remove(tableJoinObjectData);
     }
 
     @Override

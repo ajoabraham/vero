@@ -8,7 +8,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+import com.vero.model.entities.SchemaCommentBlock;
 import com.vero.ui.constants.ObjectType;
 
 /**
@@ -16,12 +19,42 @@ import com.vero.ui.constants.ObjectType;
  *
  */
 public class CommentBlockObjectData extends BlockObjectData {
+    private SchemaCommentBlock schemaCommentBlock = null;
+    
     private IntegerProperty position = new SimpleIntegerProperty();
     private StringProperty comment = new SimpleStringProperty();
     
     public CommentBlockObjectData() {
-	comment.set("This is comment block. Since its at the top its likely describing the whole report. Comments can be repositioned anywhere.");
+	this(new SchemaCommentBlock());
     }
+    
+    public CommentBlockObjectData(SchemaCommentBlock schemaCommentBlock) {
+	super(schemaCommentBlock);
+	this.schemaCommentBlock = schemaCommentBlock;
+	
+	// init data
+	comment.set(schemaCommentBlock.getComment());
+	comment.addListener(new ChangeListener<String>() {
+
+	    @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+		CommentBlockObjectData.this.schemaCommentBlock.setComment(newValue);
+            }
+	    
+	});
+
+	position.set(schemaCommentBlock.getPosition());
+	position.addListener(new ChangeListener<Number>() {
+
+	    @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		CommentBlockObjectData.this.schemaCommentBlock.setPosition(newValue.intValue());
+            }
+	    
+	});
+	
+    }
+    
 
     @Override
     public ObjectType getType() {

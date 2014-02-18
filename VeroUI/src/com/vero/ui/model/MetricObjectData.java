@@ -11,7 +11,11 @@ import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
+import com.vero.model.entities.SchemaExpression;
+import com.vero.model.entities.SchemaMetric;
 import com.vero.ui.constants.ObjectType;
 
 import static com.vero.ui.constants.ObjectType.METRIC;
@@ -23,6 +27,7 @@ import static com.vero.ui.constants.ObjectType.METRIC;
 public class MetricObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
+    private SchemaMetric schemaMetric = null;
     private StringProperty name = new SimpleStringProperty();
     private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
     private ExpressionObjectData selectedExpressionObjectData = null;
@@ -30,7 +35,23 @@ public class MetricObjectData extends UIData {
 //    private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
     
     public MetricObjectData() {
-        
+        this(new SchemaMetric());
+    }
+    
+    public MetricObjectData(SchemaMetric schemaMetric) {
+	super(schemaMetric);
+	this.schemaMetric = schemaMetric;
+	
+	// init data
+	name.set(schemaMetric.getName());
+	name.addListener(new ChangeListener<String>() {
+
+	    @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+		MetricObjectData.this.schemaMetric.setName(newValue);
+            }
+	    
+	});
     }
     
     @Override
@@ -51,19 +72,22 @@ public class MetricObjectData extends UIData {
     }
 
     public List<ExpressionObjectData> getExpressionObjectDataList() {
+	if (expressionObjectDataList == null) initExpressionObjectDataList();
         return expressionObjectDataList;
     }
 
-    public void setExpressionObjectDataList(List<ExpressionObjectData> expressionObjectDataList) {
-        this.expressionObjectDataList = expressionObjectDataList;
-    }
+//    public void setExpressionObjectDataList(List<ExpressionObjectData> expressionObjectDataList) {
+//        this.expressionObjectDataList = expressionObjectDataList;
+//    }
     
     public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
+	if (expressionObjectDataList == null) initExpressionObjectDataList();
         expressionObjectDataList.add(expressionObjectData);
         expressionObjectData.setMetricObjectData(this);
     }
     
     public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
+	if (expressionObjectDataList == null) initExpressionObjectDataList();
         expressionObjectData.setMetricObjectData(null);
         return expressionObjectDataList.remove(expressionObjectData);
     }
@@ -74,6 +98,20 @@ public class MetricObjectData extends UIData {
 
     public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
         this.selectedExpressionObjectData = selectedExpressionObjectData;
+    }
+    
+    public SchemaMetric getSchemaMetric() {
+	return schemaMetric;
+    }
+    
+    private void initExpressionObjectDataList() {
+	expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+	
+	for (SchemaExpression schemaExpression : schemaMetric.getSchemaExpressions()) {
+	    ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
+	    expressionObjectData.setMetricObjectData(this);
+	    expressionObjectDataList.add(expressionObjectData);
+	}
     }
     
 //    public List<TableObjectData> getTableObjectDataList() {
