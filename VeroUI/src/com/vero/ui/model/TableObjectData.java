@@ -49,113 +49,112 @@ public class TableObjectData extends UIData {
     private List<ColumnObjectData> unusedColumnObjectDataList = null;
 
     public TableObjectData() {
-	this(new SchemaTable());
+        this(new SchemaTable());
     }
 
     public TableObjectData(SchemaTable schemaTable) {
-	super(schemaTable);
-	this.schemaTable = schemaTable;
+        super(schemaTable);
+        this.schemaTable = schemaTable;
 
-	// init data
-	name.set(schemaTable.getName());
-	name.addListener(new ChangeListener<String>() {
+        // init data
+        name.set(schemaTable.getName());
+        name.addListener(new ChangeListener<String>() {
 
-	    @Override
-	    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		TableObjectData.this.schemaTable.setName(newValue);
-	    }
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                TableObjectData.this.schemaTable.setName(newValue);
+            }
 
-	});
+        });
 
-	physicalName.set(schemaTable.getPhysicalName());
-	physicalName.addListener(new ChangeListener<String>() {
+        physicalName.set(schemaTable.getPhysicalName());
+        physicalName.addListener(new ChangeListener<String>() {
 
-	    @Override
-	    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		TableObjectData.this.schemaTable.setPhysicalName(newValue);
-	    }
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                TableObjectData.this.schemaTable.setPhysicalName(newValue);
+            }
 
-	});
+        });
 
-	rowCount.set(schemaTable.getRowCount());
-	rowCount.addListener(new ChangeListener<Number>() {
+        rowCount.set(schemaTable.getRowCount());
+        rowCount.addListener(new ChangeListener<Number>() {
 
-	    @Override
-	    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-		TableObjectData.this.schemaTable.setRowCount(newValue.intValue());
-	    }
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                TableObjectData.this.schemaTable.setRowCount(newValue.intValue());
+            }
 
-	});
+        });
 
-	tableType = TableType.values()[schemaTable.getTableType()];
+        tableType = TableType.values()[schemaTable.getTableType()];
     }
 
     @Override
     public ObjectType getType() {
-	return TABLE;
+        return TABLE;
     }
 
     public String getName() {
-	return name.get();
+        return name.get();
     }
 
     public void setName(String name) {
-	this.name.set(name);
+        this.name.set(name);
     }
 
     public StringProperty nameProperty() {
-	return name;
+        return name;
     }
 
     public String getPhysicalName() {
-	return physicalName.get();
+        return physicalName.get();
     }
 
     public void setPhysicalName(String physicalName) {
-	this.physicalName.set(physicalName);
+        this.physicalName.set(physicalName);
     }
 
     public StringProperty physicalNameProperty() {
-	return physicalName;
+        return physicalName;
     }
 
     public String getAlias() {
-	return alias.get();
+        return alias.get();
     }
 
     public void setAlias(String alias) {
-	this.alias.set(alias);
+        this.alias.set(alias);
     }
 
     public StringProperty alias() {
-	return alias;
+        return alias;
     }
 
     public int getRowCount() {
-	return rowCount.get();
+        return rowCount.get();
     }
 
     public void setRowCount(int rowCount) {
-	this.rowCount.set(rowCount);
+        this.rowCount.set(rowCount);
     }
 
     public IntegerProperty rowCountProperty() {
-	return rowCount;
+        return rowCount;
     }
 
     public TableType getTableType() {
-	return tableType;
+        return tableType;
     }
 
     public void setTableType(TableType tableType) {
-	this.tableType = tableType;
-	schemaTable.setTableType(tableType.ordinal());
+        this.tableType = tableType;
+        schemaTable.setTableType(tableType.ordinal());
     }
 
     public List<ColumnObjectData> getColumnObjectDataList() {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	return columnObjectDataList;
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        return columnObjectDataList;
     }
 
     // public void setColumnObjectDataList(List<ColumnObjectData>
@@ -164,126 +163,127 @@ public class TableObjectData extends UIData {
     // }
 
     public void addColumnObjectData(ColumnObjectData data) {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	data.setTableObjectData(this);
-	columnObjectDataList.add(data);
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        data.setTableObjectData(this);
+        columnObjectDataList.add(data);
+        schemaTable.addSchemaColumn(data.getSchemaColumn());
     }
 
     public boolean removeColumnObjectData(ColumnObjectData data) {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	data.setTableObjectData(null);
-	return columnObjectDataList.remove(data);
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        data.setTableObjectData(null);
+        schemaTable.removeSchemaColumn(data.getSchemaColumn());
+        return columnObjectDataList.remove(data);
     }
 
     public DatasourceObjectData getDatasourceObjectData() {
-	return datasourceObjectData;
+        return datasourceObjectData;
     }
 
     public void setDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
-	this.datasourceObjectData = datasourceObjectData;
+        this.datasourceObjectData = datasourceObjectData;
 
-	if (datasourceObjectData == null) {
-	    schemaTable.setSchemaDatasource(null);
-	}
-	else if (schemaTable.getSchemaDatasource() != datasourceObjectData.getSchemaDatasource()) {
-	    schemaTable.setSchemaDatasource(datasourceObjectData.getSchemaDatasource());
-	}
+        if (datasourceObjectData == null) {
+            schemaTable.setSchemaDatasource(null);
+        }
+        else if (schemaTable.getSchemaDatasource() != datasourceObjectData.getSchemaDatasource()) {
+            schemaTable.setSchemaDatasource(datasourceObjectData.getSchemaDatasource());
+        }
     }
 
     private void initColumnObjectDataList() {
-	columnObjectDataList = new ArrayList<ColumnObjectData>();
+        columnObjectDataList = new ArrayList<ColumnObjectData>();
 
-	if (schemaTable.getSchemaColumns() != null) {
-	    for (SchemaColumn schemaColumn : schemaTable.getSchemaColumns()) {
-		ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
-		columnObjectData.setTableObjectData(this);
-		columnObjectDataList.add(columnObjectData);
-	    }
-	}
+        if (schemaTable.getSchemaColumns() == null) {
+            schemaTable.setSchemaColumns(new ArrayList<SchemaColumn>());
+        }
+        
+        for (SchemaColumn schemaColumn : schemaTable.getSchemaColumns()) {
+            ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
+            columnObjectData.setTableObjectData(this);
+            columnObjectDataList.add(columnObjectData);
+        }
     }
 
     public List<AttributeObjectData> getRelatedAttributeObjectDataList() {
-	List<AttributeObjectData> attributeObjectDataList = null;
+        List<AttributeObjectData> attributeObjectDataList = null;
 
-	try {
-	    attributeObjectDataList = UIDataManager.getInstance().getRelatedAttributeObjectDataList(getId());
-	}
-	catch (ServiceException e) {
-	    logger.log(Level.SEVERE, e.getMessage(), e);
-	    if (attributeObjectDataList == null) {
-		attributeObjectDataList = new ArrayList<AttributeObjectData>();
-	    }
-	}
+        try {
+            attributeObjectDataList = UIDataManager.getInstance().getRelatedAttributeObjectDataList(getId());
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            if (attributeObjectDataList == null) {
+                attributeObjectDataList = new ArrayList<AttributeObjectData>();
+            }
+        }
 
-	return attributeObjectDataList;
+        return attributeObjectDataList;
     }
 
     public List<MetricObjectData> getRelatedMetricObjectDataList() {
-	List<MetricObjectData> metricObjectDataList = null;
+        List<MetricObjectData> metricObjectDataList = null;
 
-	try {
-	    metricObjectDataList = UIDataManager.getInstance().getRelatedMetricObjectDataList(getId());
-	}
-	catch (ServiceException e) {
-	    logger.log(Level.SEVERE, e.getMessage(), e);
-	    if (metricObjectDataList == null) {
-		metricObjectDataList = new ArrayList<MetricObjectData>();
-	    }
-	}
+        try {
+            metricObjectDataList = UIDataManager.getInstance().getRelatedMetricObjectDataList(getId());
+        }
+        catch (ServiceException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            if (metricObjectDataList == null) {
+                metricObjectDataList = new ArrayList<MetricObjectData>();
+            }
+        }
 
-	return metricObjectDataList;
+        return metricObjectDataList;
     }
 
     public List<ColumnObjectData> getUnusedColumnObjectDataList() {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	if (unusedColumnObjectDataList == null) {
-	    unusedColumnObjectDataList = new ArrayList<ColumnObjectData>();
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        if (unusedColumnObjectDataList == null) {
+            unusedColumnObjectDataList = new ArrayList<ColumnObjectData>();
 
-	    for (ColumnObjectData columnObjectData : columnObjectDataList) {
-		if (!columnObjectData.isUsed()) {
-		    unusedColumnObjectDataList.add(columnObjectData);
-		}
-	    }
-	}
+            for (ColumnObjectData columnObjectData : columnObjectDataList) {
+                if (!columnObjectData.isUsed()) {
+                    unusedColumnObjectDataList.add(columnObjectData);
+                }
+            }
+        }
 
-	return unusedColumnObjectDataList;
+        return unusedColumnObjectDataList;
     }
 
     public boolean containsColumn(String columnName) {
-	for (ColumnObjectData columnObjectData : columnObjectDataList) {
-	    if (columnName.equals(columnObjectData.getName())) {
-		return true;
-	    }
-	}
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            if (columnName.equals(columnObjectData.getName())) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
     public boolean containsColumns(Collection<String> columnNames) {
-	List<String> allColumnNames = new ArrayList<String>();
-	for (ColumnObjectData columnObjectData : columnObjectDataList) {
-	    allColumnNames.add(columnObjectData.getName());
-	}
+        List<String> allColumnNames = new ArrayList<String>();
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            allColumnNames.add(columnObjectData.getName());
+        }
 
-	return allColumnNames.containsAll(columnNames);
+        return allColumnNames.containsAll(columnNames);
     }
 
     public List<ColumnObjectData> getColumnsByNames(Collection<String> columnNames) {
-	List<ColumnObjectData> columns = new ArrayList<ColumnObjectData>();
+        List<ColumnObjectData> columns = new ArrayList<ColumnObjectData>();
 
-	for (ColumnObjectData columnObjectData : columnObjectDataList) {
-	    if (columnNames.contains(columnObjectData.getName())) {
-		columns.add(columnObjectData);
-	    }
-	}
+        for (ColumnObjectData columnObjectData : columnObjectDataList) {
+            if (columnNames.contains(columnObjectData.getName())) {
+                columns.add(columnObjectData);
+            }
+        }
 
-	return columns;
+        return columns;
     }
 
     public SchemaTable getSchemaTable() {
-	return schemaTable;
+        return schemaTable;
     }
 }

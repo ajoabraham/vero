@@ -35,41 +35,40 @@ public class ExpressionObjectData extends UIData {
     private TableObjectData selectedTableObjectData = null;
 
     public ExpressionObjectData() {
-	this(new SchemaExpression());
+        this(new SchemaExpression());
     }
 
     public ExpressionObjectData(SchemaExpression schemaExpression) {
-	super(schemaExpression);
-	this.schemaExpression = schemaExpression;
+        super(schemaExpression);
+        this.schemaExpression = schemaExpression;
 
-	// init data
-	formula.set(schemaExpression.getExpression());
-	formula.addListener(new ChangeListener<String>() {
+        // init data
+        formula.set(schemaExpression.getExpression());
+        formula.addListener(new ChangeListener<String>() {
 
-	    @Override
-	    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		ExpressionObjectData.this.schemaExpression.setExpression(newValue);
-	    }
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ExpressionObjectData.this.schemaExpression.setExpression(newValue);
+            }
 
-	});
+        });
     }
 
     public String getFormula() {
-	return formula.get();
+        return formula.get();
     }
 
     public void setFormula(String formula) {
-	this.formula.set(formula);
+        this.formula.set(formula);
     }
 
     public StringProperty formula() {
-	return formula;
+        return formula;
     }
 
     public List<ColumnObjectData> getColumnObjectDataList() {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	return columnObjectDataList;
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        return columnObjectDataList;
     }
 
     // public void setColumnObjectDataList(List<ColumnObjectData>
@@ -84,101 +83,107 @@ public class ExpressionObjectData extends UIData {
     // }
 
     private void addColumnIntoMap(ColumnObjectData columnObjectData) {
-	TableObjectData tableObjectData = columnObjectData.getTableObjectData();
-	if (tableObjectData == null) {
-	    tableObjectData = new TableObjectData(columnObjectData.getSchemaColumn().getSchemaTable());
-	    columnObjectData.setTableObjectData(tableObjectData);
-	}
+        TableObjectData tableObjectData = columnObjectData.getTableObjectData();
+        if (tableObjectData == null) {
+            tableObjectData = new TableObjectData(columnObjectData.getSchemaColumn().getSchemaTable());
+            columnObjectData.setTableObjectData(tableObjectData);
+        }
 
-	List<ColumnObjectData> tableColumns = tableToColumnsMap.get(tableObjectData);
-	if (tableColumns == null) {
-	    tableColumns = new ArrayList<ColumnObjectData>();
-	    tableToColumnsMap.put(tableObjectData, tableColumns);
-	}
+        List<ColumnObjectData> tableColumns = tableToColumnsMap.get(tableObjectData);
+        if (tableColumns == null) {
+            tableColumns = new ArrayList<ColumnObjectData>();
+            tableToColumnsMap.put(tableObjectData, tableColumns);
+        }
 
-	tableColumns.add(columnObjectData);
+        tableColumns.add(columnObjectData);
     }
 
     public void addColumnObjectData(ColumnObjectData columnObjectData) {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	columnObjectDataList.add(columnObjectData);
-	addColumnIntoMap(columnObjectData);
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        columnObjectDataList.add(columnObjectData);
+        addColumnIntoMap(columnObjectData);
+        schemaExpression.getSchemaColumns().add(columnObjectData.getSchemaColumn());
     }
 
     public void addAllColumnObjectData(List<ColumnObjectData> columns) {
-	for (ColumnObjectData columnObjectData : columns) {
-	    addColumnObjectData(columnObjectData);
-	}
+        for (ColumnObjectData columnObjectData : columns) {
+            addColumnObjectData(columnObjectData);
+        }
     }
 
     public boolean removeColumnObjectData(ColumnObjectData columnObjectData) {
-	if (columnObjectDataList == null)
-	    initColumnObjectDataList();
-	return columnObjectDataList.remove(columnObjectData);
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        schemaExpression.getSchemaColumns().remove(columnObjectData.getSchemaColumn());
+        return columnObjectDataList.remove(columnObjectData);
     }
 
     public AttributeObjectData getAttributeObjectData() {
-	return attributeObjectData;
+        return attributeObjectData;
     }
 
     public void setAttributeObjectData(AttributeObjectData attributeObjectData) {
-	this.attributeObjectData = attributeObjectData;
+        this.attributeObjectData = attributeObjectData;
 
-	if (attributeObjectData == null) {
-	    schemaExpression.setSchemaAttribute(null);
-	}
-	else if (schemaExpression.getSchemaAttribute() != attributeObjectData.getSchemaAttribute()) {
-	    schemaExpression.setSchemaAttribute(attributeObjectData.getSchemaAttribute());
-	}
+        if (attributeObjectData == null) {
+            schemaExpression.setSchemaAttribute(null);
+        }
+        else if (schemaExpression.getSchemaAttribute() != attributeObjectData.getSchemaAttribute()) {
+            schemaExpression.setSchemaAttribute(attributeObjectData.getSchemaAttribute());
+        }
     }
 
     public MetricObjectData getMetricObjectData() {
-	return metricObjectData;
+        return metricObjectData;
     }
 
     public void setMetricObjectData(MetricObjectData metricObjectData) {
-	this.metricObjectData = metricObjectData;
+        this.metricObjectData = metricObjectData;
 
-	if (metricObjectData == null) {
-	    schemaExpression.setSchemaMetric(null);
-	}
-	else if (schemaExpression.getSchemaMetric() != metricObjectData.getSchemaMetric()) {
-	    schemaExpression.setSchemaMetric(metricObjectData.getSchemaMetric());
-	}
+        if (metricObjectData == null) {
+            schemaExpression.setSchemaMetric(null);
+        }
+        else if (schemaExpression.getSchemaMetric() != metricObjectData.getSchemaMetric()) {
+            schemaExpression.setSchemaMetric(metricObjectData.getSchemaMetric());
+        }
     }
 
     public TableObjectData getSelectedTableObjectData() {
-	if (selectedTableObjectData == null && tableToColumnsMap.size() > 0) {
-	    selectedTableObjectData = tableToColumnsMap.keySet().iterator().next();
-	}
+        if (selectedTableObjectData == null && tableToColumnsMap.size() > 0) {
+            selectedTableObjectData = tableToColumnsMap.keySet().iterator().next();
+        }
 
-	return selectedTableObjectData;
+        return selectedTableObjectData;
     }
 
     public void setSelectedTableObjectData(TableObjectData selectedTableObjectData) {
-	this.selectedTableObjectData = selectedTableObjectData;
+        this.selectedTableObjectData = selectedTableObjectData;
     }
 
     public boolean containsTableObjectData(TableObjectData tableObjectData) {
-	return tableToColumnsMap.containsKey(tableObjectData);
+        return tableToColumnsMap.containsKey(tableObjectData);
     }
 
     @Override
     public ObjectType getType() {
-	return EXPRESSION;
+        return EXPRESSION;
     }
 
     private void initColumnObjectDataList() {
-	columnObjectDataList = new ArrayList<ColumnObjectData>();
-	tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
+        columnObjectDataList = new ArrayList<ColumnObjectData>();
+        tableToColumnsMap = new HashMap<TableObjectData, List<ColumnObjectData>>();
 
-	if (schemaExpression.getSchemaColumns() != null) {
-	    for (SchemaColumn schemaColumn : schemaExpression.getSchemaColumns()) {
-		ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
-		columnObjectDataList.add(columnObjectData);
-		addColumnIntoMap(columnObjectData);
-	    }
-	}
+        if (schemaExpression.getSchemaColumns() == null) {
+            schemaExpression.setSchemaColumns(new ArrayList<SchemaColumn>());
+        }
+        
+        for (SchemaColumn schemaColumn : schemaExpression.getSchemaColumns()) {
+            ColumnObjectData columnObjectData = new ColumnObjectData(schemaColumn);
+            columnObjectDataList.add(columnObjectData);
+            addColumnIntoMap(columnObjectData);
+        }
+    }
+
+    public SchemaExpression getSchemaExpression() {
+        return schemaExpression;
     }
 }

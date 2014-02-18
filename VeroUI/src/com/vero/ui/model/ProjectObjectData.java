@@ -96,11 +96,13 @@ public class ProjectObjectData extends UIData {
         if (datasourceObjectDataList == null) initDatasourceObjectDataList();
 	datasourceObjectData.setProjectObjectData(this);
         datasourceObjectDataList.add(datasourceObjectData);
+        schemaProject.addSchemaDatasource(datasourceObjectData.getSchemaDatasource());
     }
     
     public boolean removeDatasourceObjectData(DatasourceObjectData datasourceObjectData) {
         if (datasourceObjectDataList == null) initDatasourceObjectDataList();
 	datasourceObjectData.setProjectObjectData(null);
+	schemaProject.removeSchemaDatasource(datasourceObjectData.getSchemaDatasource());
         return datasourceObjectDataList.remove(datasourceObjectData);
     }
     
@@ -134,6 +136,10 @@ public class ProjectObjectData extends UIData {
     
     private void initDatasourceObjectDataList() {
         datasourceObjectDataList = new ArrayList<DatasourceObjectData>();
+        
+        if (schemaProject.getSchemaDatasources() == null) {
+            schemaProject.setSchemaDatasources(new ArrayList<SchemaDatasource>());
+        }
         
         for (SchemaDatasource schemaDatasource : schemaProject.getSchemaDatasources()) {
             DatasourceObjectData datasourceObjectData = new DatasourceObjectData(schemaDatasource);

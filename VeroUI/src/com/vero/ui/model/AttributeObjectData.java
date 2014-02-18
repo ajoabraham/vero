@@ -39,42 +39,41 @@ public class AttributeObjectData extends UIData {
     // ArrayList<TableJoinObjectData>();
 
     public AttributeObjectData() {
-	this(new SchemaAttribute());
+        this(new SchemaAttribute());
     }
 
     public AttributeObjectData(SchemaAttribute schemaAttribute) {
-	super(schemaAttribute);
-	this.schemaAttribute = schemaAttribute;
+        super(schemaAttribute);
+        this.schemaAttribute = schemaAttribute;
 
-	// init data
-	name.set(schemaAttribute.getName());
-	name.addListener(new ChangeListener<String>() {
+        // init data
+        name.set(schemaAttribute.getName());
+        name.addListener(new ChangeListener<String>() {
 
-	    @Override
-	    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		AttributeObjectData.this.schemaAttribute.setName(newValue);
-	    }
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                AttributeObjectData.this.schemaAttribute.setName(newValue);
+            }
 
-	});
+        });
     }
 
     @Override
     public ObjectType getType() {
-	return ATTRIBUTE;
+        return ATTRIBUTE;
     }
 
     public String getName() {
-	return name.get();
+        return name.get();
     }
 
     public void setName(String name) {
-	this.name.set(name);
+        this.name.set(name);
     }
 
     public List<ExpressionObjectData> getExpressionObjectDataList() {
-	if (expressionObjectDataList == null)
-	    initExpressionObjectDataList();
-	return expressionObjectDataList;
+        if (expressionObjectDataList == null) initExpressionObjectDataList();
+        return expressionObjectDataList;
     }
 
     // public void setExpressionObjectDataList(List<ExpressionObjectData>
@@ -83,64 +82,66 @@ public class AttributeObjectData extends UIData {
     // }
 
     public void addExpressionObjectData(ExpressionObjectData expressionObjectData) {
-	if (expressionObjectDataList == null)
-	    initExpressionObjectDataList();
-	expressionObjectDataList.add(expressionObjectData);
-	expressionObjectData.setAttributeObjectData(this);
+        if (expressionObjectDataList == null) initExpressionObjectDataList();
+        expressionObjectDataList.add(expressionObjectData);
+        expressionObjectData.setAttributeObjectData(this);
+        schemaAttribute.addSchemaExpression(expressionObjectData.getSchemaExpression());
     }
 
     public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
-	if (expressionObjectDataList == null)
-	    initExpressionObjectDataList();
-	expressionObjectData.setAttributeObjectData(null);
-	return expressionObjectDataList.remove(expressionObjectData);
+        if (expressionObjectDataList == null) initExpressionObjectDataList();
+        expressionObjectData.setAttributeObjectData(null);
+        schemaAttribute.removeSchemaExpression(expressionObjectData.getSchemaExpression());
+        return expressionObjectDataList.remove(expressionObjectData);
     }
 
     public ExpressionObjectData getSelectedExpressionObjectData() {
-	return selectedExpressionObjectData;
+        return selectedExpressionObjectData;
     }
 
     public void setSelectedExpressionObjectData(ExpressionObjectData selectedExpressionObjectData) {
-	this.selectedExpressionObjectData = selectedExpressionObjectData;
+        this.selectedExpressionObjectData = selectedExpressionObjectData;
     }
 
     public ExpressionObjectData getExpressionByFormula(String formula) {
-	ExpressionObjectData expression = null;
+        ExpressionObjectData expression = null;
 
-	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
-	    if (formula.equals(expressionObjectData.getFormula())) {
-		expression = expressionObjectData;
-		break;
-	    }
-	}
+        for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+            if (formula.equals(expressionObjectData.getFormula())) {
+                expression = expressionObjectData;
+                break;
+            }
+        }
 
-	return expression;
+        return expression;
     }
 
     public boolean usedTableObjectData(TableObjectData tableObjectData) {
-	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
-	    if (expressionObjectData.containsTableObjectData(tableObjectData)) {
-		return true;
-	    }
-	}
+        for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+            if (expressionObjectData.containsTableObjectData(tableObjectData)) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
     private void initExpressionObjectDataList() {
-	expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+        expressionObjectDataList = new ArrayList<ExpressionObjectData>();
 
-	if (schemaAttribute.getSchemaExpressions() != null) {
-	    for (SchemaExpression schemaExpression : schemaAttribute.getSchemaExpressions()) {
-		ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
-		expressionObjectData.setAttributeObjectData(this);
-		expressionObjectDataList.add(expressionObjectData);
-	    }
-	}
+        if (schemaAttribute.getSchemaExpressions() == null) {
+            schemaAttribute.setSchemaExpressions(new ArrayList<SchemaExpression>());
+        }
+        
+        for (SchemaExpression schemaExpression : schemaAttribute.getSchemaExpressions()) {
+            ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
+            expressionObjectData.setAttributeObjectData(this);
+            expressionObjectDataList.add(expressionObjectData);
+        }
     }
 
     public SchemaAttribute getSchemaAttribute() {
-	return schemaAttribute;
+        return schemaAttribute;
     }
 
     // public List<TableObjectData> getTableObjectDataList() {

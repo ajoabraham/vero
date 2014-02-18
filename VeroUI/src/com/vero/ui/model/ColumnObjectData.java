@@ -160,6 +160,10 @@ public class ColumnObjectData extends UIData {
     private void initExpressionObjectDataList() {
         expressionObjectDataList = new ArrayList<ExpressionObjectData>();
         
+        if (schemaColumn.getSchemaExpressions() == null) {
+            schemaColumn.setSchemaExpressions(new ArrayList<SchemaExpression>());
+        }
+        
         for (SchemaExpression schemaExpression : schemaColumn.getSchemaExpressions()) {
             ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
             expressionObjectDataList.add(expressionObjectData);

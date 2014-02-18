@@ -84,11 +84,13 @@ public class MetricObjectData extends UIData {
 	if (expressionObjectDataList == null) initExpressionObjectDataList();
         expressionObjectDataList.add(expressionObjectData);
         expressionObjectData.setMetricObjectData(this);
+        schemaMetric.addSchemaExpression(expressionObjectData.getSchemaExpression());
     }
     
     public boolean removeExpressionObjectData(ExpressionObjectData expressionObjectData) {
 	if (expressionObjectDataList == null) initExpressionObjectDataList();
         expressionObjectData.setMetricObjectData(null);
+        schemaMetric.removeSchemaExpression(expressionObjectData.getSchemaExpression());
         return expressionObjectDataList.remove(expressionObjectData);
     }
 
@@ -106,6 +108,10 @@ public class MetricObjectData extends UIData {
     
     private void initExpressionObjectDataList() {
 	expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+	
+	if (schemaMetric.getSchemaExpressions() == null) {
+	    schemaMetric.setSchemaExpressions(new ArrayList<SchemaExpression>());
+	}
 	
 	for (SchemaExpression schemaExpression : schemaMetric.getSchemaExpressions()) {
 	    ExpressionObjectData expressionObjectData = new ExpressionObjectData(schemaExpression);
