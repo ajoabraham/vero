@@ -112,6 +112,12 @@ public class DatasourceObjectData extends UIData {
         schemaDatasource.removeSchemaTable(tableObjectData.getSchemaTable());
         return tableObjectDataList.remove(tableObjectData);
     }
+    
+    public void removeAllTableObjectData() {
+        if (tableObjectDataList == null) initTableObjectDataList();
+        tableObjectDataList.clear();
+        schemaDatasource.getSchemaTables().clear();
+    }
 
     public DatasourceStatus getStatus() {
         return status;

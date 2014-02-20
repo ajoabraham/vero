@@ -35,4 +35,33 @@ public abstract class SchemaData {
     public void setId(String id) {
         this.id = id;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) 
+            return false;
+        
+        if (!(obj instanceof SchemaData))
+            return false;
+        
+        if (this == obj) 
+            return true;
+        
+        SchemaData other = (SchemaData) obj;
+        
+        if (getId() != null && other.getId() != null) {
+            return getId().equals(other.getId());
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        if (getId() == null) {
+            return super.hashCode();
+        }
+        
+        return getId().hashCode();
+    }
 }

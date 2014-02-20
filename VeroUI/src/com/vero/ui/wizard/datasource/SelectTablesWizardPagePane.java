@@ -45,7 +45,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
     
     private GridPane contentPane = null;
     private final List<ListedTableLabelPane> allTablePanes = new ArrayList<ListedTableLabelPane>();
-    private final List<ListedTableLabelPane> selectedTablePanes = new ArrayList<ListedTableLabelPane>();
+//    private final List<ListedTableLabelPane> selectedTablePanes = new ArrayList<ListedTableLabelPane>();
 
     private Button selectAllButton = null;
     private Button deselectAllButton = null;
@@ -59,7 +59,7 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
     public void init() throws WizardException {
 	contentPane.getChildren().clear();
 	allTablePanes.clear();
-	selectedTablePanes.clear();
+//	selectedTablePanes.clear();
 
 	int rowIndex = 0;
 	int columnIndex = 0;
@@ -75,9 +75,9 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 
 	    allTablePanes.add(tableLabelPane);
 	    
-	    if (wizardData.getData().getTableObjectDataList().contains(tableData)) {
+	    if (wizardData.getSelectedTableObjectData().contains(tableData)) {
 		tableLabelPane.setSelected(true);
-		selectedTablePanes.add(tableLabelPane);
+//		selectedTablePanes.add(tableLabelPane);
 	    }
 	}
     }
@@ -103,8 +103,9 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
             public void handle(ActionEvent event) {
 	        for (ListedTableLabelPane tablePane : allTablePanes) {
 	            if (!tablePane.isSelected()) {
-	        	tablePane.setSelected(true);
-	        	selectedTablePanes.add(tablePane);
+	                tablePane.setSelected(true);
+//	        	selectedTablePanes.add(tablePane);
+	                wizardData.getSelectedTableObjectData().add(tablePane.getTableData());
 	            }
 	        }
             }	    
@@ -116,7 +117,8 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 		for (ListedTableLabelPane tablePane : allTablePanes) {
 		    if (tablePane.isSelected()) {
 			tablePane.setSelected(false);
-			selectedTablePanes.remove(tablePane);
+//			selectedTablePanes.remove(tablePane);
+			wizardData.getSelectedTableObjectData().remove(tablePane.getTableData());
 		    }
 		}
             }	    
@@ -133,18 +135,18 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 
     @Override
     public String next() throws WizardException {
-	if (selectedTablePanes.size() == 0) {
+	if (wizardData.getSelectedTableObjectData().size() == 0) {
 	    throw new WizardException("Please select at least one table.");
 	}
 	
-	wizardData.getData().getTableObjectDataList().clear();
-	for (ListedTableLabelPane tablePane : selectedTablePanes) {
-	    wizardData.getData().addTableObjectData(tablePane.getTableData());
-	}
+//	wizardData.getData().getTableObjectDataList().clear();
+//	for (ListedTableLabelPane tablePane : selectedTablePanes) {
+//	    wizardData.getData().addTableObjectData(tablePane.getTableData());
+//	}
 	
 	try {
 	    DatasourceImportService service = ServiceManager.getDatasourceImportService();
-	    service.updateTableStats(wizardData.getData(), wizardData.getData().getTableObjectDataList());
+	    service.updateTableStats(wizardData.getData(), wizardData.getSelectedTableObjectData());
         }
         catch (ServiceException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -179,16 +181,17 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
 
     @Override
     public void handle(MouseEvent e) {
+        ListedTableLabelPane selectedTablePane = (ListedTableLabelPane) e.getSource();
 	if (e.getEventType() == MouseEvent.MOUSE_CLICKED && e.getButton() == MouseButton.PRIMARY
 	        && e.getClickCount() == 1) {
-	    handleMouseClickedEvent((ListedTableLabelPane) e.getSource());
+	    handleMouseClickedEvent(selectedTablePane);
 	}
-	else if (!selectedTablePanes.contains(e.getSource())) {
+	else if (!wizardData.getSelectedTableObjectData().contains(selectedTablePane.getTableData())) {
 	    if (e.getEventType() == MouseEvent.MOUSE_ENTERED) {
-		((ListedTableLabelPane) e.getSource()).enableHighlight(true);
+		selectedTablePane.enableHighlight(true);
 	    }
 	    else if (e.getEventType() == MouseEvent.MOUSE_EXITED) {
-		((ListedTableLabelPane) e.getSource()).enableHighlight(false);
+		selectedTablePane.enableHighlight(false);
 	    }
 	}
     }
@@ -197,13 +200,13 @@ public class SelectTablesWizardPagePane extends WizardPagePane<DatasourceWizardD
      * @param source
      */
     private void handleMouseClickedEvent(ListedTableLabelPane source) {
-	if (selectedTablePanes.contains(source)) {
+	if (wizardData.getSelectedTableObjectData().contains(source.getTableData())) {
 	    source.setSelected(false);
-	    selectedTablePanes.remove(source);
+	    wizardData.getSelectedTableObjectData().remove(source.getTableData());
 	}
 	else {
 	    source.setSelected(true);
-	    selectedTablePanes.add(source);
+	    wizardData.getSelectedTableObjectData().add(source.getTableData());
 	}
     }
 }

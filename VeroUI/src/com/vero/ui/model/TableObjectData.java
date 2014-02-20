@@ -175,6 +175,14 @@ public class TableObjectData extends UIData {
         schemaTable.removeSchemaColumn(data.getSchemaColumn());
         return columnObjectDataList.remove(data);
     }
+    
+    public void removeAllColumnObjectData() {
+        if (columnObjectDataList == null) initColumnObjectDataList();
+        // FIXME TH 02/20/2014, this potentially could cause memory leak.
+        // Need to reinvestigate in the next version.
+        columnObjectDataList.clear();
+        schemaTable.getSchemaColumns().clear();
+    }
 
     public DatasourceObjectData getDatasourceObjectData() {
         return datasourceObjectData;

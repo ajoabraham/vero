@@ -170,6 +170,8 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 	    DatasourceImportService service = ServiceManager.getDatasourceImportService();
 	    List<TableObjectData> databaseTables = service.getDatabaseTables(wizardData.getData());
 	    wizardData.setAllTableObjectData(databaseTables);
+	    // Every time reload all table data, also clear all selected table object if any.
+	    wizardData.getSelectedTableObjectData().clear();
 	    
 	    return ID_SELECT_TABLES;
         }
@@ -214,7 +216,7 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
 
     private void handleTestConnectionEvent() {
         // Validate
-        Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "userName", "password", "hostname",
+        Set<ConstraintViolation<DatabaseObjectData>> violations = ValidationUtils.validate(wizardData.getData().getDatabaseObjectData(), "userName", "password", "hostname",
                 "databaseName");
 
         if (violations.isEmpty()) {
@@ -238,7 +240,7 @@ public class DBParamsWizardPagePane extends WizardPagePane<DatasourceWizardData>
     }
     
     private void handleGetDatabaseNamesEvent() {
-        Set<ConstraintViolation<DatasourceObjectData>> violations = ValidationUtils.validate(wizardData.getData(), "userName", "password", "hostname");
+        Set<ConstraintViolation<DatabaseObjectData>> violations = ValidationUtils.validate(wizardData.getData().getDatabaseObjectData(), "userName", "password", "hostname");
         
         if (violations.isEmpty()) {
             DatasourceImportService service = ServiceManager.getDatasourceImportService();

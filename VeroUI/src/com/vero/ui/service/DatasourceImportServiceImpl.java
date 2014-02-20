@@ -23,7 +23,7 @@ import com.vero.ui.util.DataUtils;
  */
 public class DatasourceImportServiceImpl implements DatasourceImportService {
     private static final Logger logger = Logger.getLogger(DatasourceImportServiceImpl.class.getName());
-    
+
     protected DatasourceImportServiceImpl() {
     }
 
@@ -32,7 +32,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         AbstractDB dbConnection = null;
         try {
             dbConnection = createDBConnection(data);
-            
+
             return dbConnection.getDatabases();
         }
         catch (Exception e) {
@@ -52,19 +52,19 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
 
     @Override
     public List<TableObjectData> getDatabaseTables(DatasourceObjectData data) throws ServiceException {
-	AbstractDB dbConnection = null;
-	List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
-	
+        AbstractDB dbConnection = null;
+        List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+
         try {
             dbConnection = createDBConnection(data);
             Map<String, Table> allTables = dbConnection.getDBTables();
 
             for (Table table : allTables.values()) {
                 // Load primary and foreign key information
-//                dbConnection.identifyKeys(table);
+                // dbConnection.identifyKeys(table);
                 TableObjectData tableObjectData = new TableObjectData();
                 DataUtils.copy(table, tableObjectData);
-                
+
                 tableObjectDataList.add(tableObjectData);
             }
         }
@@ -87,10 +87,10 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
     @Override
     public boolean testConnection(DatasourceObjectData data) throws ServiceException {
         AbstractDB dbConnection = null;
-        
+
         try {
             dbConnection = createDBConnection(data);
-            
+
             return dbConnection.testConnection();
         }
         catch (Exception e) {
@@ -98,8 +98,8 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
         }
         finally {
             if (dbConnection != null) {
-        	try {
-	            dbConnection.close();
+                try {
+                    dbConnection.close();
                 }
                 catch (Exception e) {
                     logger.log(Level.SEVERE, e.getMessage(), e);
@@ -107,19 +107,21 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
             }
         }
     }
-    
+
     @Override
     public void updateTableStats(DatasourceObjectData datasourceObjectData, List<TableObjectData> tableObjectDataList) throws ServiceException {
-	AbstractDB dbConnection = null;
-	
+        AbstractDB dbConnection = null;
+
         try {
             dbConnection = createDBConnection(datasourceObjectData);
-            
+
             for (TableObjectData tableObjectData : tableObjectDataList) {
-        	Table table = new Table();
-        	DataUtils.copy(tableObjectData, table);
+                Table table = new Table();
+                DataUtils.copy(tableObjectData, table);
                 dbConnection.identifyKeys(table);
                 dbConnection.collectStats(table);
+                // Otherwise duplicated columns are created.
+                tableObjectData.removeAllColumnObjectData();
                 DataUtils.copy(table, tableObjectData);
             }
         }
@@ -135,13 +137,14 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
                     logger.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
-        }	
+        }
     }
-    
+
     private AbstractDB createDBConnection(DatasourceObjectData data) {
-	DatabaseObjectData databaseObjectData = data.getDatabaseObjectData();
-	AbstractDB dbConnection = databaseObjectData.getDatabaseType().getDBConnection();
-	dbConnection.setUsername(databaseObjectData.getUserName()).setPassword(databaseObjectData.getPassword()).setHostName(databaseObjectData.getHostname()).setDatabaseName(databaseObjectData.getDatabaseName());
-	return dbConnection;
+        DatabaseObjectData databaseObjectData = data.getDatabaseObjectData();
+        AbstractDB dbConnection = databaseObjectData.getDatabaseType().getDBConnection();
+        dbConnection.setUsername(databaseObjectData.getUserName()).setPassword(databaseObjectData.getPassword()).setHostName(databaseObjectData.getHostname())
+                .setDatabaseName(databaseObjectData.getDatabaseName());
+        return dbConnection;
     }
 }

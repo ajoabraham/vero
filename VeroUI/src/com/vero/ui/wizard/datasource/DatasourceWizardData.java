@@ -17,6 +17,7 @@ import com.vero.ui.wizard.WizardData;
 public class DatasourceWizardData extends WizardData {
     private DatasourceObjectData data = null;
     private List<TableObjectData> allTableObjectData = new ArrayList<TableObjectData>();
+    private List<TableObjectData> selectedTableObjectData = new ArrayList<TableObjectData>();
     
     public DatasourceWizardData() {
         data = new DatasourceObjectData();
@@ -36,5 +37,13 @@ public class DatasourceWizardData extends WizardData {
     
     public void setAllTableObjectData(List<TableObjectData> allTableObjectData) {
 	this.allTableObjectData = allTableObjectData;
+    }
+
+    public List<TableObjectData> getSelectedTableObjectData() {
+        return selectedTableObjectData;
+    }
+
+    public void setSelectedTableObjectData(List<TableObjectData> selectedTableObjectData) {
+        this.selectedTableObjectData = selectedTableObjectData;
     }
 }

@@ -56,7 +56,7 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
         int rowIndex = 0;
         int columnIndex = 0;
         
-        for (TableObjectData tableData : wizardData.getData().getTableObjectDataList()) {
+        for (TableObjectData tableData : wizardData.getSelectedTableObjectData()) {
             ListedTableLabelPane tableLabelPane = LabelPaneFactory.createListedTableLabelPane(tableData, true);
             tableLabelPane.setOnMouseClicked(this);
             tableLabelPane.setOnMouseEntered(this);
@@ -93,7 +93,7 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
 
     @Override
     public String back() throws WizardException {
-	for (TableObjectData tableData : wizardData.getData().getTableObjectDataList()) {
+	for (TableObjectData tableData : wizardData.getSelectedTableObjectData()) {
 	    tableData.setTableType(TableType.UNKNOWN);
 	}
 	
@@ -103,10 +103,15 @@ public class UpdateTableStatsWizardPagePane extends WizardPagePane<DatasourceWiz
     @Override
     public void finish() throws WizardException {        
         try {
+            for (TableObjectData tableObjectData : wizardData.getSelectedTableObjectData()) {
+                wizardData.getData().addTableObjectData(tableObjectData);
+            }
+            
             UIDataManager.getInstance().persistDatasourceObjectData(wizardData.getData());
             ConfirmationDialogs.createInfoConfirmation(null, "Successfully imported datasource.").show();
         }
         catch (ServiceException e) {
+            wizardData.getData().removeAllTableObjectData();
             logger.log(Level.SEVERE, e.getMessage(), e);
             throw new WizardException(e.getMessage());
         }
