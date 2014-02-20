@@ -160,7 +160,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		metricObjectData.setName(columnObjectData.getName());
 		ExpressionObjectData expressionObjectData = new ExpressionObjectData();
 		expressionObjectData.setFormula("sum(" + columnObjectData.getName() + ")");
-		expressionObjectData.getColumnObjectDataList().add(columnObjectData);
+		expressionObjectData.addColumnObjectData(columnObjectData);
 		metricObjectData.addExpressionObjectData(expressionObjectData);
 		metricObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		

@@ -29,7 +29,7 @@ public class MetricObjectData extends UIData {
     
     private SchemaMetric schemaMetric = null;
     private StringProperty name = new SimpleStringProperty();
-    private List<ExpressionObjectData> expressionObjectDataList = new ArrayList<ExpressionObjectData>();
+    private List<ExpressionObjectData> expressionObjectDataList = null;
     private ExpressionObjectData selectedExpressionObjectData = null;
 //    private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
 //    private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
@@ -104,6 +104,29 @@ public class MetricObjectData extends UIData {
     
     public SchemaMetric getSchemaMetric() {
 	return schemaMetric;
+    }
+    
+    public ExpressionObjectData getExpressionByFormula(String formula) {
+        ExpressionObjectData expression = null;
+
+        for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+            if (formula.equals(expressionObjectData.getFormula())) {
+                expression = expressionObjectData;
+                break;
+            }
+        }
+
+        return expression;
+    }
+    
+    public boolean usedTableObjectData(TableObjectData tableObjectData) {
+        for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+            if (expressionObjectData.containsTableObjectData(tableObjectData)) {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     private void initExpressionObjectDataList() {
