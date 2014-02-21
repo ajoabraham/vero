@@ -138,7 +138,7 @@
                     "type": "boolean",
                     "primaryKey": false,
                     "foreignKey": false
-                }           
+                }
             ],
             "datasource": "Teradata - Prod"
         }

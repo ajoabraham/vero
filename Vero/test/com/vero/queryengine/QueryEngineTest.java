@@ -183,6 +183,53 @@ public class QueryEngineTest {
         System.out.println(resultSQL);
         assertEquals("test7", expectedSQL, resultSQL);
     }
+
+    @Test
+    public void testTest8() {
+        TestParser testParser = new TestParser("test8.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T0\".\"CompanyName\", \"T0\".\"Phone\"\n" +
+            "FROM \"shippers\" AS \"T0\"";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("test8", expectedSQL, resultSQL);
+    }    
+    
+    @Test
+    public void testTest9() {
+        TestParser testParser = new TestParser("test9.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T4\".\"name\", \"T0\".\"name\", count(\"T2\".\"course_id\")\n" +
+            "FROM \"Departments\" AS \"T0\"\n" +
+            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".\"id\" = \"T1\".\"dept_id\")\n" +
+            "INNER JOIN \"LessonsFact\" AS \"T2\" ON (\"T2\".\"prof_id\" = \"T3\".\"id\")\n" +
+            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".\"id\" = \"T3\".\"dept_id\")\n" +
+            "CROSS JOIN \"Students\" AS \"T1\"\n" +
+            "GROUP BY \"T4\".\"name\", \"T0\".\"name\"";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("test9", expectedSQL, resultSQL);
+    }
     
     @Test
     public void testTai() {

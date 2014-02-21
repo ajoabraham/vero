@@ -421,7 +421,7 @@ public class QueryEngine {
         List<String> groupByList = new ArrayList();
         
         if (sortedEUs.isEmpty()) {
-            // single attribute or metric
+            // single attribute or metric            
             assert(sortedVertex.size() == 1);
             ProcessingUnit curPU = sortedVertex.get(0);
             
