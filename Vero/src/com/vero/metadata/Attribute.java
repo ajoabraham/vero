@@ -16,6 +16,8 @@ public class Attribute {
     private UUID uuid = null;
     private String name = null;
     private List<Expression> expressions = null;
+    private final List<String> whiteHardhints = new ArrayList();
+    private final List<String> blackHardhints = new ArrayList();
     
     public Attribute() {
     }
@@ -42,6 +44,22 @@ public class Attribute {
 
     public List<Expression> getExpressions() {
         return expressions;
+    }
+
+    public void addWhiteHardhint(String inHardhint) {
+        whiteHardhints.add(inHardhint);
+    }
+
+    public void addBlackHardhint(String inHardhint) {
+        blackHardhints.add(inHardhint);
+    }
+
+    public List getWhiteHardhints() {
+        return whiteHardhints;
+    }
+
+    public List getBlackHardhints() {
+        return blackHardhints;
     }
     
     public void setName(String name) {
@@ -202,21 +220,21 @@ public class Attribute {
             Iterator<Expression> iter = aList.iterator();
 
             while (iter.hasNext()) {
-                Expression curExp = iter.next();                
+                Expression curExp = iter.next();
                 curExp.removeTable(table);
                 if (curExp.getColumns().isEmpty()) {
                     iter.remove();
                 }
             }
         }
-    }    
+    }
     
     /**
      * Loop through all expressions and return all tables within an expression.
      * 
      * @return all tables in a list or null if there is no expression.
      */
-    public List<Table> retrieveTables() {        
+    public List<Table> retrieveTables() {
         List<Expression> aList = this.getExpressions();
         
         if (aList.size() > 0) {

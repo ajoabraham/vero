@@ -36,7 +36,9 @@ import org.json.JSONTokener;
 public class TestParser {
     private static enum Type {
         TYPE_ATTRIBUTE,
-        TYPE_METRIC
+        TYPE_METRIC,
+        TYPE_HH_WHITE,
+        TYPE_HH_BLACK
     }
     
     private File testFile;
@@ -183,6 +185,7 @@ public class TestParser {
                     Attribute anAttr = new Attribute(attrUUID, oneJSONAttrObj.getString("name"));
                     testSession.addAttribute(anAttr);
 
+                    parseHardhints(oneJSONAttrObj, anAttr, null, null);
                     parseExpressions(oneJSONAttrObj, testDS, TestParser.Type.TYPE_ATTRIBUTE, anAttr);
                 }
                 System.out.println("------------------------------");
@@ -205,6 +208,7 @@ public class TestParser {
                     Metric aMetric = new Metric(metUUID, oneJSONMetricObj.getString("name"));
                     testSession.addMetric(aMetric);
 
+                    parseHardhints(oneJSONMetricObj, null, aMetric, null);
                     parseExpressions(oneJSONMetricObj, testDS, TestParser.Type.TYPE_METRIC, aMetric);
                 }
                 System.out.println("------------------------------");
@@ -247,41 +251,60 @@ public class TestParser {
                 System.out.println("------------------------------");
             }
             
-            // parsing hardhints_white
-            if (root.isNull("hardhints_white") == false) {
-                JSONArray jsonHHsArray = root.getJSONArray("hardhints_white");
-                int HHsArraySize = jsonHHsArray.length();
-
-                for (int i = 0; i < HHsArraySize; i++) {
-                    String hhName = jsonHHsArray.getString(i);
-                    System.out.println("json whh object " + i + ": " + hhName);
-                    // HH
-                    testSession.addWhiteHardhint(hhName);
-                }
-
-                System.out.println("------------------------------");
-            }
-            
-            // parsing hardhints_black
-            if (root.isNull("hardhints_black") == false) {
-                JSONArray jsonHHsArray = root.getJSONArray("hardhints_black");
-                int HHsArraySize = jsonHHsArray.length();
-
-                for (int i = 0; i < HHsArraySize; i++) {
-                    String hhName = jsonHHsArray.getString(i);
-                    System.out.println("json bhh object " + i + ": " + hhName);
-                    // HH
-                    testSession.addBlackHardhint(hhName);
-                }
-
-                System.out.println("------------------------------");
-            }            
+            parseHardhints(root, null, null, testSession);
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
             System.exit(0);
         }
         
         return testSession;
+    }
+    
+    private void parseHardhints(JSONObject root, Attribute attr, Metric met, Session sess) {
+        JSONArray jsonHHsArray;
+        int HHsArraySize;        
+        TestParser.Type[] blackWhite = {TestParser.Type.TYPE_HH_WHITE, TestParser.Type.TYPE_HH_BLACK};
+        
+        for (TestParser.Type type : blackWhite) {
+            switch (type) {
+                case TYPE_HH_WHITE:
+                    if (root.isNull("hardhints_white") == false) {                
+                        jsonHHsArray = root.getJSONArray("hardhints_white");
+                        HHsArraySize = jsonHHsArray.length();
+                        for (int i = 0; i < HHsArraySize; i++) {
+                            String hhName = jsonHHsArray.getString(i);
+                            System.out.println("json whh object " + i + ": " + hhName);
+                            if (attr != null) {
+                                attr.addWhiteHardhint(hhName);
+                            } else if (met != null) {
+                                met.addWhiteHardhint(hhName);
+                            } else {
+                                sess.addWhiteHardhint(hhName);
+                            }
+                        }
+                    }
+                    break;
+                case TYPE_HH_BLACK:
+                    if (root.isNull("hardhints_black") == false) {
+                        jsonHHsArray = root.getJSONArray("hardhints_black");
+                        HHsArraySize = jsonHHsArray.length();
+                        for (int i = 0; i < HHsArraySize; i++) {
+                            String hhName = jsonHHsArray.getString(i);
+                            System.out.println("json whh object " + i + ": " + hhName);
+                            if (attr != null) {
+                                attr.addBlackHardhint(hhName);
+                            } else if (met != null) {
+                                met.addBlackHardhint(hhName);
+                            } else {
+                                sess.addBlackHardhint(hhName);
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     
     private void parseExpressions(JSONObject root, DataSource datasource, TestParser.Type type, Object obj) {
@@ -304,10 +327,8 @@ public class TestParser {
             JSONArray columnsArray = expressionObj.getJSONArray("columns");
             int columnsArraySize = columnsArray.length();
             for (int j = 0; j < columnsArraySize; j++) {
-                        System.out.println("ccc1");
                 String colName = columnsArray.getJSONArray(j).getString(0);
                 String tabName = columnsArray.getJSONArray(j).getString(1);
-                        System.out.println("ccc1");
                 Table curTab = datasource.getTable(tabName);
 
                 //System.out.println("table's column:" + colName);

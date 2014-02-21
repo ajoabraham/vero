@@ -16,6 +16,8 @@ public class Metric {
     private UUID uuid = null;
     private String name = null;
     private List<Expression> expressions = null;
+    private final List<String> whiteHardhints = new ArrayList();
+    private final List<String> blackHardhints = new ArrayList();
     
     public Metric() {
     }
@@ -44,6 +46,22 @@ public class Metric {
         return expressions;
     }
 
+    public void addWhiteHardhint(String inHardhint) {
+        whiteHardhints.add(inHardhint);
+    }
+    
+    public void addBlackHardhint(String inHardhint) {
+        blackHardhints.add(inHardhint);
+    }
+
+    public List getWhiteHardhints() {
+        return whiteHardhints;
+    }
+
+    public List getBlackHardhints() {
+        return blackHardhints;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }

@@ -37,7 +37,7 @@ public class Stage {
     private final HashMap<String, ReferenceUnit> table2ReferenceUnitHT = new HashMap();
     private final List<Attribute> attributes = new ArrayList();
     private final List<Metric> metrics = new ArrayList();
-    private final List<String> hardhints = new ArrayList();
+    private final List<String> whiteHardhints = new ArrayList();
     private final List<JoinDefinition> joindefs = new ArrayList();
     private final HashMap<UUID, ProcessingUnit> processingUnits = new HashMap();
     
@@ -45,12 +45,12 @@ public class Stage {
     
     public void preprocess(Session inSession) {
         // retrieve all balck hardhints
-        ArrayList<String> blackHardhints = new ArrayList(inSession.getBlackHardhints());
+        ArrayList<String> gBlackHardhints = new ArrayList(inSession.getBlackHardhints());
         
         // associate table with white hardhints
-        hardhints.addAll(inSession.getWhiteHardhints());
-        for (int i = 0; i < hardhints.size(); i++) {
-            String tableName = hardhints.get(i);
+        whiteHardhints.addAll(inSession.getWhiteHardhints());
+        for (int i = 0; i < whiteHardhints.size(); i++) {
+            String tableName = whiteHardhints.get(i);
             Table curTable = inSession.getTable(tableName);
             
             ProcessingUnit aPU = new ProcessingUnit();
@@ -96,11 +96,33 @@ public class Stage {
             ProcessingUnit aPU = new ProcessingUnit();
             aPU.setType(ProcessingUnit.PUType.PUTYPE_ATTRIBUTE);
             aPU.setContent(curAttr);
-            processingUnits.put(aPU.getUUID(), aPU);
+            processingUnits.put(aPU.getUUID(), aPU);            
             
-            // filter out black hardhint tables
-            for (String curTable : blackHardhints) {
-                curAttr.removeTable(curTable);
+            // only keep local white hardhint table
+            ArrayList<String> lWhiteHardhints = new ArrayList(curAttr.getWhiteHardhints());
+            if (lWhiteHardhints.size() > 0) {
+                ArrayList<Table> allTables = new ArrayList(curAttr.retrieveTables());
+                // only keep local white hardhint table
+                // ToDo: only care about the first table
+                String whiteTable = lWhiteHardhints.get(0);
+                for (Table curTable : allTables) {
+                    if (!curTable.getObjectName().equals(whiteTable)) {
+                        curAttr.removeTable(curTable.getObjectName());
+                    } else {
+                        System.out.println("### Found a local white table: " + whiteTable);
+                    }
+                }
+            } else {
+                // filter out local black hardhint tables
+                ArrayList<String> lBlackHardhints = new ArrayList(curAttr.getBlackHardhints());
+                for (String curTable : lBlackHardhints) {
+                    curAttr.removeTable(curTable);
+                }
+
+                // filter out global black hardhint tables
+                for (String curTable : gBlackHardhints) {
+                    curAttr.removeTable(curTable);
+                }
             }
             
             List<Table> listTables = curAttr.retrieveTables();
@@ -120,10 +142,32 @@ public class Stage {
             aPU.setType(ProcessingUnit.PUType.PUTYPE_METRIC);
             aPU.setContent(curMet);
             processingUnits.put(aPU.getUUID(), aPU); 
-            
-            // filter out black hardhint tables
-            for (String curTable : blackHardhints) {
-                curMet.removeTable(curTable);
+
+            // only keep local white hardhint table
+            ArrayList<String> lWhiteHardhints = new ArrayList(curMet.getWhiteHardhints());
+            if (lWhiteHardhints.size() > 0) {
+                ArrayList<Table> allTables = new ArrayList(curMet.retrieveTables());
+                // only keep local white hardhint table
+                // ToDo: only care about the first table
+                String whiteTable = lWhiteHardhints.get(0);
+                for (Table curTable : allTables) {
+                    if (!curTable.getObjectName().equals(whiteTable)) {
+                        curMet.removeTable(curTable.getObjectName());
+                    } else {
+                        System.out.println("### Found a local white table: " + whiteTable);
+                    }
+                }
+            } else {
+                // filter out local black hardhint tables
+                ArrayList<String> lBlackHardhints = new ArrayList(curMet.getBlackHardhints());
+                for (String curTable : lBlackHardhints) {
+                    curMet.removeTable(curTable);
+                }
+
+                // filter out global black hardhint tables
+                for (String curTable : gBlackHardhints) {
+                    curMet.removeTable(curTable);
+                }
             }
             
             List<Table> listTables = curMet.retrieveTables();

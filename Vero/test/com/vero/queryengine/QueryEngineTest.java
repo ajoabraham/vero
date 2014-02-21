@@ -25,10 +25,10 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);               
 
         String expectedSQL = 
-            "SELECT \"T0\".school_name, sum(\"T1\".num_students)\n" +
+            "SELECT \"T0\".\"school_name\", sum(\"T1\".\"num_students\")\n" +
             "FROM \"Departments\" AS \"T0\"\n" +
-            "INNER JOIN \"DepartmentFacts\" AS \"T1\" ON (\"T0\".id = \"T1\".dept_id)\n" +
-            "GROUP BY \"T0\".school_name";
+            "INNER JOIN \"DepartmentFacts\" AS \"T1\" ON (\"T0\".\"id\" = \"T1\".\"dept_id\")\n" +
+            "GROUP BY \"T0\".\"school_name\"";
         
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();
@@ -48,11 +48,11 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);                
 
         String expectedSQL = 
-            "SELECT \"T0\".name, \"T1\".name, count(DISTINCT \"T2\".course_id)\n" +
+            "SELECT \"T0\".\"name\", \"T1\".\"name\", count(DISTINCT \"T2\".\"course_id\")\n" +
             "FROM \"Departments\" AS \"T0\"\n" +
             "CROSS JOIN \"Departments\" AS \"T1\"\n" +
             "CROSS JOIN \"LessonsFact\" AS \"T2\"\n" +
-            "GROUP BY \"T0\".name, \"T1\".name";
+            "GROUP BY \"T0\".\"name\", \"T1\".\"name\"";
         
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();
@@ -72,13 +72,13 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);                
 
         String expectedSQL = 
-            "SELECT \"T4\".name, \"T2\".name, count(\"T0\".course_id)\n" +
+            "SELECT \"T4\".\"name\", \"T2\".\"name\", count(\"T0\".\"course_id\")\n" +
             "FROM \"LessonsFact\" AS \"T0\"\n" +
-            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".std_id = \"T1\".id)\n" +
-            "INNER JOIN \"Departments\" AS \"T2\" ON (\"T2\".id = \"T1\".dept_id)\n" +
-            "INNER JOIN \"Professors\" AS \"T3\" ON (\"T0\".prof_id = \"T3\".id)\n" +
-            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".id = \"T3\".dept_id)\n" +
-            "GROUP BY \"T4\".name, \"T2\".name";
+            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".\"std_id\" = \"T1\".\"id\")\n" +
+            "INNER JOIN \"Departments\" AS \"T2\" ON (\"T2\".\"id\" = \"T1\".\"dept_id\")\n" +
+            "INNER JOIN \"Professors\" AS \"T3\" ON (\"T0\".\"prof_id\" = \"T3\".\"id\")\n" +
+            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".\"id\" = \"T3\".\"dept_id\")\n" +
+            "GROUP BY \"T4\".\"name\", \"T2\".\"name\"";
         
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();
@@ -98,13 +98,13 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL =         
-            "SELECT \"T4\".name, \"T0\".name, count(\"T2\".course_id)\n" +
+            "SELECT \"T4\".\"name\", \"T0\".\"name\", count(\"T2\".\"course_id\")\n" +
             "FROM \"Departments\" AS \"T0\"\n" +
-            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".id = \"T1\".dept_id)\n" +
-            "INNER JOIN \"LessonsFact\" AS \"T2\" ON (\"T2\".prof_id = \"T3\".id)\n" +
-            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".id = \"T3\".dept_id)\n" +
+            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".\"id\" = \"T1\".\"dept_id\")\n" +
+            "INNER JOIN \"LessonsFact\" AS \"T2\" ON (\"T2\".\"prof_id\" = \"T3\".\"id\")\n" +
+            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".\"id\" = \"T3\".\"dept_id\")\n" +
             "CROSS JOIN \"Students\" AS \"T1\"\n" +
-            "GROUP BY \"T4\".name, \"T0\".name";
+            "GROUP BY \"T4\".\"name\", \"T0\".\"name\"";
                 
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();
@@ -124,7 +124,7 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL = 
-            "SELECT upper(\"T0\".name)\n" +
+            "SELECT upper(\"T0\".\"name\")\n" +
             "FROM \"Departments\" AS \"T0\"";
         
         Report curReport = queryEngine.getReport();          
@@ -145,7 +145,7 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL = 
-            "SELECT upper(\"T0\".name)\n" +
+            "SELECT upper(\"T0\".\"name\")\n" +
             "FROM \"Departments\" AS \"T0\"";
         
         Report curReport = queryEngine.getReport();          
@@ -166,13 +166,13 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL = 
-            "SELECT \"T4\".name, \"T0\".name, avg(\"T2\".course_id) OVER ( ROWS 7 PRECEDING)\n" +
+            "SELECT \"T4\".\"name\", \"T0\".\"name\", avg(\"T2\".\"course_id\") OVER ( ROWS 7 PRECEDING)\n" +
             "FROM \"Departments\" AS \"T0\"\n" +
-            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".id = \"T1\".dept_id)\n" +
-            "INNER JOIN \"LessonsFact\" AS \"T2\" ON (\"T2\".prof_id = \"T3\".id)\n" +
-            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".id = \"T3\".dept_id)\n" +
+            "INNER JOIN \"Students\" AS \"T1\" ON (\"T0\".\"id\" = \"T1\".\"dept_id\")\n" +
+            "INNER JOIN \"LessonsFact\" AS \"T2\" ON (\"T2\".\"prof_id\" = \"T3\".\"id\")\n" +
+            "INNER JOIN \"Departments\" AS \"T4\" ON (\"T4\".\"id\" = \"T3\".\"dept_id\")\n" +
             "CROSS JOIN \"Students\" AS \"T1\"\n" +
-            "GROUP BY \"T4\".name, \"T0\".name";
+            "GROUP BY \"T4\".\"name\", \"T0\".\"name\"";
         
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();
@@ -192,7 +192,7 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL = 
-            "SELECT \"T0\".Phone\n" +
+            "SELECT \"T0\".\"Phone\"\n" +
             "FROM \"shippers\" AS \"T0\"";
         
         Report curReport = queryEngine.getReport();          
@@ -213,10 +213,10 @@ public class QueryEngineTest {
         queryEngine.preprocess(userSession);
                 
         String expectedSQL = 
-            "SELECT \"T0\".Phone, sum(\"T1\".UnitPrice)\n" +
+            "SELECT \"T0\".\"Phone\", sum(\"T1\".\"UnitPrice\")\n" +
             "FROM \"shippers\" AS \"T0\"\n" +
             "CROSS JOIN \"order_details\" AS \"T1\"\n" +
-            "GROUP BY \"T0\".Phone";
+            "GROUP BY \"T0\".\"Phone\"";
         
         Report curReport = queryEngine.getReport();          
         String resultSQL = curReport.getBlocks().get(0).getSqlString();

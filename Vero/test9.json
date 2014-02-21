@@ -1,0 +1,230 @@
+{   "scenario": "Building of test3. However a joindef is removed on purpose to demonstrate a cross join between Departments and Students tables.",
+    "expectedOutput":"SELECT ALL \"T4\".name, \"T0\".name, count(\"T2\".course_id) FROM Departments AS T0 INNER JOIN Students AS T1 ON T0.id = T1.dept_id INNER JOIN LessonsFact AS T2 ON T2.prof_id = T3.id INNER JOIN Departments AS T4 ON T4.id = T3.dept_id CROSS JOIN Students AS T1 GROUP BY \"T4\".name, \"T0\".name",
+    "datasources": [
+        {
+            "uuid": "1000",
+            "name": "Teradata - Prod",
+            "database": {"vendor": "Teradata"}
+        }
+    ],
+    "tables": [
+        {
+            "uuid": "100",
+            "name": "LessonsFact",
+            "rowCount": 100000,
+            "tableType": "fact",
+            "columns": [
+                {
+                    "uuid": "1",
+                    "name": "prof_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "uuid": "2",
+                    "name": "std_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "uuid": "3",
+                    "name": "course_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "uuid": "4",
+                    "name": "date",
+                    "type": "date",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "uuid": "101",
+            "name": "Departments",
+            "rowCount": 100,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "uuid": "5",
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "6",
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "7",
+                    "name": "school_name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "uuid": "102",
+            "name": "Professors",
+            "rowCount": 90,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "uuid": "8",
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "9",
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "10",
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                }
+            ],
+            "datasource": "Teradata - Prod"
+        },
+        {
+            "uuid": "103",
+            "name": "Students",
+            "rowCount": 600000,
+            "tableType": "dimension",
+            "columns": [
+                {
+                    "uuid": "11",
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "12",
+                    "name": "name",
+                    "type": "string",
+                    "primaryKey": false,
+                    "foreignKey": false
+                },
+                {
+                    "uuid": "13",
+                    "name": "dept_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "foreignKey": true
+                },
+                {
+                    "uuid": "14",
+                    "name": "is_active",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "foreignKey": false
+                }           
+            ],
+            "datasource": "Teradata - Prod"
+        }
+    ],
+    "attributes": [
+        {
+            "uuid": "15",
+            "name": "Professor Department Name",
+            "expressions": [
+                {
+                    "uuid": "16",
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"],
+                        ["name", "Students"]
+                    ]
+                }
+            ],
+            "hardhints_white":["Departments"],
+            "hardhints_black":["Students"]
+        },
+        {
+            "uuid": "17",
+            "name": "Student Department Name",
+            "expressions": [
+                {
+                    "uuid": "18",
+                    "definition": "name",
+                    "columns": [
+                        ["name", "Departments"],
+                        ["name", "Professors"]
+                    ]
+                }
+            ],
+            "hardhints_black":["Professors"]
+        }
+    ],
+    "metrics": [
+        {
+            "uuid": "19",
+            "name": "# of Lessons",
+            "expressions": [
+                {
+                    "uuid": "20",
+                    "definition": "count(course_id)",
+                    "columns": [
+                        ["course_id", "LessonsFact"]
+                    ]
+                }
+            ]
+        }
+    ],
+    "joindefs": [
+        {
+            "uuid": "21",
+            "name": "on equal professor id",
+            "tleft": "LessonsFact",
+            "cleft": "prof_id",
+            "operator": "=",
+            "tright": "Professors",
+            "cright": "id",
+            "expression": "tleft.prof_id=tright.id",
+            "jointype": "inner"
+        },
+        {
+            "uuid": "22",
+            "name": "on equal department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",
+            "tright": "Students",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        },
+        {
+            "uuid": "23",
+            "name": "on equal professor/department id",
+            "tleft": "Departments",
+            "cleft": "id",
+            "operator": "=",           
+            "tright": "Professors",
+            "cright": "dept_id",
+            "expression": "tleft.id=tright.dept_id",
+            "jointype": "inner"
+        }
+    ],
+    "hardhints_white":["Students","Professors"]
+}
