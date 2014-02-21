@@ -26,7 +26,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
@@ -125,8 +124,10 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                 super.bind(formulaTextField.textProperty());
             }
 
-            protected String computeValue() {
-                Hints hints = Hints.select(formulaTextField.getText(), formulaTextField.getCaretPosition(), ParserUtils.PARSER);
+            protected String computeValue() {      
+        	int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? 
+        		formulaTextField.getText().length() : formulaTextField.getCaretPosition();
+                Hints hints = Hints.select(formulaTextField.getText(), caretPosition, ParserUtils.PARSER);
                 StringBuffer hintText = new StringBuffer();
                 for (FunctionSpec functionSpec : hints.functions()) {
                     hintText.append(functionSpec.name()).append("\n");

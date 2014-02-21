@@ -58,7 +58,7 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
     private String originalFormula = null;
     private TextField formulaTextField = null;
 
-    public MetricEditorPane(MetricObjectData data) {
+    public MetricEditorPane(QueryBlockPane queryBlockPane, MetricObjectData data) {
         super(data);
         this.queryBlockPane = queryBlockPane;
         buildUI();

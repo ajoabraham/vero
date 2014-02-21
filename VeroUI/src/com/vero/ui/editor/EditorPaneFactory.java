@@ -26,7 +26,7 @@ public final class EditorPaneFactory {
         	editorPane = new AttributeEditorPane(queryBlockPane, (AttributeObjectData) data);
                 break;
             case METRIC:
-        	editorPane = new MetricEditorPane((MetricObjectData) data);
+        	editorPane = new MetricEditorPane(queryBlockPane, (MetricObjectData) data);
                 break;
             case TABLE_JOIN:
                 break;
