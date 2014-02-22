@@ -451,6 +451,24 @@
 	-fx-padding: 5 0 0 0;
 }
 
+.query-block-button {
+	-fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.query-block-button:hover {
+	-fx-border-color: -fx-button-hover-border-color;
+	-fx-border-radius: 3;
+}
+
+.query-block-button:pressed {
+	-fx-background-color: derive(-fx-nav-background-color, 50%);
+	-fx-background-radius: 3;
+}
+
 /*******************************************************************************
  * Editor Panes
  ******************************************************************************/

@@ -24,6 +24,9 @@ public class SchemaDatabase extends SchemaData implements Serializable {
 	@Column(name="DATABASE_NAME", length=100)
 	private String databaseName;
 
+	@Column(name="DATABASE_TYPE")
+	private int databaseType;
+
 	@Column(name="DATABASE_VENDOR", length=100)
 	private String databaseVendor;
 
@@ -75,6 +78,14 @@ public class SchemaDatabase extends SchemaData implements Serializable {
 
 	public void setDatabaseName(String databaseName) {
 		this.databaseName = databaseName;
+	}
+
+	public int getDatabaseType() {
+		return this.databaseType;
+	}
+
+	public void setDatabaseType(int databaseType) {
+		this.databaseType = databaseType;
 	}
 
 	public String getDatabaseVendor() {

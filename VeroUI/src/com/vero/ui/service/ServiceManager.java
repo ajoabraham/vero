@@ -13,6 +13,7 @@ package com.vero.ui.service;
 public final class ServiceManager {
     private static final DatasourceImportService datasourceImportService = new DatasourceImportServiceImpl();
     private static final QueryEngineService queryEngineService = new QueryEngineServiceImpl();
+    private static final QueryExecutionService queryExecutionService = new QueryExecutionServiceImpl();
     
     public static DatasourceImportService getDatasourceImportService() {
         return datasourceImportService;
@@ -24,5 +25,9 @@ public final class ServiceManager {
     
     public static QueryEngineService getQueryEngineService() {
         return queryEngineService;
+    }
+    
+    public static QueryExecutionService getQueryExecutionService() {
+	return queryExecutionService;
     }
 }

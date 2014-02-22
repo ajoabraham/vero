@@ -28,7 +28,7 @@ public class DBTypeLabelPane extends LabelPane {
 	getStyleClass().add(CLASS_DB_TYPE_LABEL_PANE);
 	setPrefSize(DB_TYPE_LABEL_PANE_WIDTH, DB_TYPE_LABEL_PANE_HEIGHT);
 	
-	Label label = new Label(dbType.getName());
+	Label label = new Label(dbType.getVendorName());
 	label.getStyleClass().add(CLASS_SECTION_TITLE);
 	getChildren().add(label);
     }

@@ -186,4 +186,16 @@ public class ExpressionObjectData extends UIData {
     public SchemaExpression getSchemaExpression() {
         return schemaExpression;
     }
+    
+    public DatasourceObjectData getDatasourceObjectData() {
+	if (columnObjectDataList == null) initColumnObjectDataList();
+	
+	DatasourceObjectData datasourceObjectData = null;
+	
+	if (tableToColumnsMap.size() > 0) {
+	    datasourceObjectData = tableToColumnsMap.keySet().iterator().next().getDatasourceObjectData();
+	}
+	
+	return datasourceObjectData;
+    }
 }

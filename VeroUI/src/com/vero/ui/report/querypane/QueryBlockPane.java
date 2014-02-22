@@ -1,28 +1,38 @@
 package com.vero.ui.report.querypane;
 
+import static com.vero.ui.constants.CSSConstants.CLASS_QUERY_BLOCK_BUTTON;
 import static com.vero.ui.constants.CSSConstants.CLASS_REPORT_BLOCK_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SUBSECTION_TITLE;
 import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
+import static com.vero.ui.constants.UIConstants.DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT;
+import static com.vero.ui.constants.UIConstants.DEFAULT_QUERY_BLOCK_BUTTON_WIDTH;
 import static com.vero.ui.constants.UIConstants.QUERY_BLOCK_PANE_HEIGHT;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.model.DatabaseObjectData;
 import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
+import com.vero.ui.service.QueryExecutionService;
+import com.vero.ui.service.ServiceException;
+import com.vero.ui.service.ServiceManager;
 
 public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent> {
     private QueryPane queryPane = null;
@@ -32,6 +42,8 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     private ImageView statusImageView = null;
     private HBox headerPane = null;
     private TextArea sqlTextArea = null;
+    private Button filterButton = null;
+    private Button runButton = null;
     
     public QueryBlockPane(ReportPane reportPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
         this.queryPane = reportPane.getQueryPane();
@@ -56,8 +68,45 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
         headerLabel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(headerLabel, Priority.ALWAYS);
         headerPane.getChildren().add(headerLabel);
-        headerPane.getChildren().add(new ImageView(ImageList.IMAGE_FILTER));
-        headerPane.getChildren().add(new ImageView(ImageList.IMAGE_RUN));
+        
+        filterButton = new Button();
+        filterButton.getStyleClass().add(CLASS_QUERY_BLOCK_BUTTON);
+        filterButton.setGraphic(new ImageView(ImageList.IMAGE_FILTER));
+        filterButton.setPrefSize(DEFAULT_QUERY_BLOCK_BUTTON_WIDTH, DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT);
+        filterButton.setMinSize(DEFAULT_QUERY_BLOCK_BUTTON_WIDTH, DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT);
+        filterButton.setTooltip(new Tooltip("Filter"));
+        filterButton.setOnAction(new EventHandler<ActionEvent>() {
+
+	    @Override
+            public void handle(ActionEvent event) {
+	        
+            }            
+        });
+        headerPane.getChildren().add(filterButton);
+        
+        runButton = new Button();
+        runButton.getStyleClass().add(CLASS_QUERY_BLOCK_BUTTON);
+        runButton.setGraphic(new ImageView(ImageList.IMAGE_RUN));
+        runButton.setPrefSize(DEFAULT_QUERY_BLOCK_BUTTON_WIDTH, DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT);
+        runButton.setMinSize(DEFAULT_QUERY_BLOCK_BUTTON_WIDTH, DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT);
+        runButton.setTooltip(new Tooltip("Run"));
+        runButton.setOnAction(new EventHandler<ActionEvent>() {
+
+	    @Override
+            public void handle(ActionEvent event) {
+	        QueryExecutionService service = ServiceManager.getQueryExecutionService();
+	        DatabaseObjectData databaseObjectData = queryBlockObjectData.getDatasourceObjectData().getDatabaseObjectData();
+	        
+	        try {
+	            service.executeQuery(databaseObjectData, sqlTextArea.getText());
+	        }
+	        catch (ServiceException e) {
+	            ConfirmationDialogs.createErrorConfirmation(null, e.getMessage());
+	        }
+            }            
+        });
+        headerPane.getChildren().add(runButton);
+        
         setTop(headerPane);
         
         sqlTextArea = new TextArea();

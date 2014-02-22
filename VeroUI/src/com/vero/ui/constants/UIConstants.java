@@ -44,6 +44,8 @@ public interface UIConstants {
     public static final double DEFAULT_COMMENT_BLOCK_PANE_HEIGHT = 65;
     public static final double EDITOR_TABLE_PANE_WIDTH = 150;
     public static final double EDITOR_TABLE_PANE_HEIGHT = 32;
+    public static final double DEFAULT_QUERY_BLOCK_BUTTON_WIDTH = 20;
+    public static final double DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT = 20;
     
     // Datasource wizard
     public static final double DATASOURCE_WIZARD_WIDTH = 600;

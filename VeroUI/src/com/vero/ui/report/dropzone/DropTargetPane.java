@@ -172,7 +172,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		    queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 		}
 		
-		// Link data
+		// Link data		
 	        queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
 		queryBlockPane.getQueryBlockObjectData().addMetricObjectData(metricObjectData);
 	    }

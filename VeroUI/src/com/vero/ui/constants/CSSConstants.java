@@ -89,6 +89,7 @@ public interface CSSConstants {
     public static final String CLASS_GLOBAL_FILTER_PANE = "global-filter-pane";
     public static final String CLASS_COMMENT_BLOCK_PANE = "comment-block-pane";
     public static final String CLASS_REPORT_BLOCK_PANE = "report-block-pane";
+    public static final String CLASS_QUERY_BLOCK_BUTTON = "query-block-button";
     
     /**
      * ID for editor pane

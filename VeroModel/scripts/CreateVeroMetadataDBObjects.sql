@@ -10,6 +10,7 @@ CREATE TABLE SCHEMA_DATABASE (
     ID                     VARCHAR(36) NOT NULL PRIMARY KEY,
     DATABASE_VENDOR        VARCHAR(100),
     DATABASE_VERSION       VARCHAR(50),
+    DATABASE_TYPE		   INT,
     HOST_ADDRESS           VARCHAR(100),
     PORT                   INT,
     USER_NAME              VARCHAR(100),

@@ -142,7 +142,7 @@ public class DatasourceImportServiceImpl implements DatasourceImportService {
 
     private AbstractDB createDBConnection(DatasourceObjectData data) {
         DatabaseObjectData databaseObjectData = data.getDatabaseObjectData();
-        AbstractDB dbConnection = databaseObjectData.getDatabaseType().getDBConnection();
+        AbstractDB dbConnection = databaseObjectData.getDatabaseType().getMetadataDBConnection();
         dbConnection.setUsername(databaseObjectData.getUserName()).setPassword(databaseObjectData.getPassword()).setHostName(databaseObjectData.getHostname())
                 .setDatabaseName(databaseObjectData.getDatabaseName());
         return dbConnection;

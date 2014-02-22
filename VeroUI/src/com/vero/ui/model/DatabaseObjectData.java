@@ -4,17 +4,16 @@
 package com.vero.ui.model;
 
 import static com.vero.ui.constants.ObjectType.DATABASE;
-
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.vero.model.entities.SchemaDatabase;
 import com.vero.ui.constants.DBType;
@@ -88,6 +87,8 @@ public class DatabaseObjectData extends UIData {
                 DatabaseObjectData.this.schemaDatabase.setPort(newValue.intValue());
             }            
         });
+        
+        databaseType = DBType.values()[schemaDatabase.getDatabaseType()];
     }
 
     @NotBlank(message = "User name cannot be blank.")
@@ -166,6 +167,7 @@ public class DatabaseObjectData extends UIData {
 
     public void setDatabaseType(DBType databaseType) {
         this.databaseType = databaseType;
+        schemaDatabase.setDatabaseType(databaseType.ordinal());
     }
 
 //    public DatasourceObjectData getDatasourceObjectData() {

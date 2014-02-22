@@ -144,6 +144,16 @@ public class AttributeObjectData extends UIData {
         return schemaAttribute;
     }
 
+    public DatasourceObjectData getDatasourceObjectData() {
+	if (expressionObjectDataList == null) initExpressionObjectDataList();
+	DatasourceObjectData datasourceObjectData = null;
+	
+	if (expressionObjectDataList.size() > 0) {
+	    datasourceObjectData = expressionObjectDataList.get(0).getDatasourceObjectData();
+	}
+	
+	return datasourceObjectData;
+    }
     // public List<TableObjectData> getTableObjectDataList() {
     // return tableObjectDataList;
     // }
