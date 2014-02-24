@@ -9,6 +9,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +30,7 @@ public class QueryExecutionServiceImpl implements QueryExecutionService {
     }
 
     @Override
-    public void executeQuery(DatabaseObjectData databaseObjectData, String query)
+    public List<Map<String, Object>> executeQuery(DatabaseObjectData databaseObjectData, String query)
             throws ServiceException {	
 	DBType dbType = databaseObjectData.getDatabaseType();
 	
@@ -51,9 +55,24 @@ public class QueryExecutionServiceImpl implements QueryExecutionService {
 	    ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 	    int columnCount = resultSetMetaData.getColumnCount();
 	    
+	    List<String> columnNames = new ArrayList<String>();
+	    
 	    for (int i = 1; i <= columnCount; i++) {
-		System.err.println("Column name = " + resultSetMetaData.getColumnName(i));
+		columnNames.add(resultSetMetaData.getColumnName(i));
 	    }
+	    
+	    List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+	    
+	    while (resultSet.next()) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		for (String columnName : columnNames) {
+		    result.put(columnName, resultSet.getObject(columnName));
+		}
+		
+		results.add(result);
+	    }
+	    
+	    return results;
 	}
 	catch (SQLException e) {
 	    logger.log(Level.SEVERE, e.getMessage(), e);

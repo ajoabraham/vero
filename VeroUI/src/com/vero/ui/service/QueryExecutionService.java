@@ -3,6 +3,9 @@
  */
 package com.vero.ui.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.vero.ui.model.DatabaseObjectData;
 
 /**
@@ -10,5 +13,5 @@ import com.vero.ui.model.DatabaseObjectData;
  *
  */
 public interface QueryExecutionService {
-    public void executeQuery(DatabaseObjectData databaseObjectData, String query) throws ServiceException;
+    public List<Map<String, Object>> executeQuery(DatabaseObjectData databaseObjectData, String query) throws ServiceException;
 }

@@ -7,6 +7,10 @@ import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
 import static com.vero.ui.constants.UIConstants.DEFAULT_QUERY_BLOCK_BUTTON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_QUERY_BLOCK_BUTTON_WIDTH;
 import static com.vero.ui.constants.UIConstants.QUERY_BLOCK_PANE_HEIGHT;
+
+import java.util.List;
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -24,6 +28,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 import com.vero.ui.common.ConfirmationDialogs;
+import com.vero.ui.common.PopupDialog;
+import com.vero.ui.common.UIManager;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.constants.ObjectType;
 import com.vero.ui.model.DatabaseObjectData;
@@ -98,7 +104,12 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
 	        DatabaseObjectData databaseObjectData = queryBlockObjectData.getDatasourceObjectData().getDatabaseObjectData();
 	        
 	        try {
-	            service.executeQuery(databaseObjectData, sqlTextArea.getText());
+	            List<Map<String, Object>> results = service.executeQuery(databaseObjectData, sqlTextArea.getText());
+	            
+	            PopupDialog popupDialog = new PopupDialog(UIManager.getInstance().getPrimaryStage());
+	            QueryResultPane queryResultPane = new QueryResultPane(popupDialog, results);
+	            popupDialog.createScene(queryResultPane, 400, 400);
+	            popupDialog.show();
 	        }
 	        catch (ServiceException e) {
 	            ConfirmationDialogs.createErrorConfirmation(null, e.getMessage());
