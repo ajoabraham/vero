@@ -8,6 +8,7 @@ package com.vero.ui.model;
 
 import com.vero.model.entities.SchemaData;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.util.DataUtils;
 
 import java.io.Serializable;
 
@@ -22,6 +23,12 @@ public abstract class UIData implements Serializable {
     
     public UIData(SchemaData schemaData) {
         this.schemaData = schemaData;
+        
+        // FIXME TH 02/24/2014 Since GlobalFilterBlock doesn't have
+        // a schema data yet. Check null here for now 
+        if (schemaData != null && schemaData.getId() == null) {
+            schemaData.setId(DataUtils.generateId());
+        }
     }
 
     public String getId() {

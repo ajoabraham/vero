@@ -3,6 +3,8 @@
  */
 package com.vero.ui.util;
 
+import java.util.UUID;
+
 import com.vero.metadata.Column;
 import com.vero.metadata.Table;
 import com.vero.ui.constants.DBKeyType;
@@ -16,6 +18,10 @@ import com.vero.ui.model.TableObjectData;
  */
 public final class DataUtils {
     private DataUtils() {	
+    }
+    
+    public static String generateId() {
+	return UUID.randomUUID().toString();
     }
     
     // Copy between UIData and Metadata
