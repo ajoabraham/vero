@@ -181,6 +181,16 @@ public class AttributeObjectData extends UIData {
         return whiteHardHints.remove(tableObjectData);
     }
     
+    public ExpressionObjectData getExpressionObjectDataById(String id) {
+	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+	    if (id.equalsIgnoreCase(expressionObjectData.getId())) {
+		return expressionObjectData;
+	    }
+	}
+	
+	return null;
+    }
+    
     // public List<TableObjectData> getTableObjectDataList() {
     // return tableObjectDataList;
     // }

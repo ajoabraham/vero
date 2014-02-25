@@ -7,6 +7,7 @@ import static com.vero.ui.constants.ObjectType.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -197,5 +198,16 @@ public class ExpressionObjectData extends UIData {
 	}
 	
 	return datasourceObjectData;
+    }
+    
+    public TableObjectData getTableObjectDataById(String id) {
+	for (Iterator<TableObjectData> i = tableToColumnsMap.keySet().iterator(); i.hasNext();) {
+	    TableObjectData tableObjectData = i.next();
+	    if (id.equalsIgnoreCase(tableObjectData.getId())) {
+		return tableObjectData;
+	    }
+	}
+	
+	return null;
     }
 }

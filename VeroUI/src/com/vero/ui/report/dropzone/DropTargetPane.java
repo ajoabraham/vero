@@ -130,6 +130,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
 	DropZoneObjectPane<? extends UIData> dropZoneObjectPane = null;
 	
@@ -188,7 +189,6 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    queryBlockPane.setSQLString(block.getSqlString());
 	    
 	    // Set up table alias
-	    @SuppressWarnings("unchecked")
             Map<String, String> tableAliasMap = block.getTableMap();
 	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
 	        // FIXME TH 02/24/2014 Id is uppercase in local db, but it is in lower case in query engine.
@@ -198,8 +198,26 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    
 	    // Set up selected expression and table
 	    Map<String, String> attributeExpressionMap = block.getAttributeMap();
+	    Map<String, String> expressionTableMap = block.getExpressionMap();
 	    for (AttributeObjectData attributeObjectData : queryBlockPane.getQueryBlockObjectData().getAttributeObjectDataList()) {
-	        
+		String expressionId = attributeExpressionMap.get(attributeObjectData.getId().toLowerCase());
+		ExpressionObjectData selectedExpression = attributeObjectData.getExpressionObjectDataById(expressionId);
+		attributeObjectData.setSelectedExpressionObjectData(selectedExpression);
+		
+		String tableId = expressionTableMap.get(expressionId);
+		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+		selectedExpression.setSelectedTableObjectData(selectedTable);
+	    }
+	    
+	    Map<String, String> metricExpressionMap = block.getMetricMap();
+	    for (MetricObjectData metricObjectData : queryBlockPane.getQueryBlockObjectData().getMetricObjectDataList()) {
+		String expressionId = metricExpressionMap.get(metricObjectData.getId().toLowerCase());
+		ExpressionObjectData selectedExpression = metricObjectData.getExpressionObjectDataById(expressionId);
+		metricObjectData.setSelectedExpressionObjectData(selectedExpression);
+		
+		String tableId = expressionTableMap.get(expressionId);
+		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+		selectedExpression.setSelectedTableObjectData(selectedTable);
 	    }
 	    
 	    // Update table joins

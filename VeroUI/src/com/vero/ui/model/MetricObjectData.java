@@ -156,6 +156,16 @@ public class MetricObjectData extends UIData {
 	return datasourceObjectData;
     }
     
+    public ExpressionObjectData getExpressionObjectDataById(String id) {
+	for (ExpressionObjectData expressionObjectData : expressionObjectDataList) {
+	    if (id.equalsIgnoreCase(expressionObjectData.getId())) {
+		return expressionObjectData;
+	    }
+	}
+	
+	return null;
+    }
+    
     public List<TableObjectData> getBlackHardHints() {
         return blackHardHints;
     }
