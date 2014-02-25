@@ -32,6 +32,8 @@ public class AttributeObjectData extends UIData {
     private StringProperty name = new SimpleStringProperty();
     private List<ExpressionObjectData> expressionObjectDataList = null;
     private ExpressionObjectData selectedExpressionObjectData = null;
+    private List<TableObjectData> blackHardHints = new ArrayList<TableObjectData>();
+    private List<TableObjectData> whiteHardHints = new ArrayList<TableObjectData>();
 
     // private List<TableObjectData> tableObjectDataList = new
     // ArrayList<TableObjectData>();
@@ -154,6 +156,31 @@ public class AttributeObjectData extends UIData {
 	
 	return datasourceObjectData;
     }
+    
+    public List<TableObjectData> getBlackHardHints() {
+        return blackHardHints;
+    }
+    
+    public void addBlackHardHint(TableObjectData tableObjectData) {
+        blackHardHints.add(tableObjectData);
+    }
+    
+    public boolean removeBlackHardHint(TableObjectData tableObjectData) {
+        return blackHardHints.remove(tableObjectData);
+    }
+    
+    public List<TableObjectData> getWhiteHardHints() {
+        return whiteHardHints;
+    }
+    
+    public void addWhiteHardHint(TableObjectData tableObjectData) {
+        whiteHardHints.add(tableObjectData);
+    }
+    
+    public boolean removeWhiteHardHint(TableObjectData tableObjectData) {
+        return whiteHardHints.remove(tableObjectData);
+    }
+    
     // public List<TableObjectData> getTableObjectDataList() {
     // return tableObjectDataList;
     // }

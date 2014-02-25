@@ -27,7 +27,8 @@ public class TableDropZoneObjectPane extends DropZoneObjectPane<TableObjectData>
         ImageView tableImageView = new ImageView(data.getTableType().getImage());
         getChildren().add(tableImageView);
 
-        Label label = new Label(data.getName());
+        Label label = new Label();
+        label.textProperty().bind(data.nameProperty().concat(" ").concat(data.alias()));        
         HBox.setHgrow(label, Priority.ALWAYS);
         label.setMaxWidth(Double.MAX_VALUE);
         label.getStyleClass().add(CLASS_OBJECT_LABEL);

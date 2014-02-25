@@ -36,7 +36,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
     }
 
     @Override
-    public String generateSQL(QueryBlockObjectData queryBlockObjectData) {
+    public Report generateReportMetadata(QueryBlockObjectData queryBlockObjectData) {
 	DatasourceObjectData datasource = queryBlockObjectData.getDatasourceObjectData();
 	List<TableObjectData> tables = queryBlockObjectData.getTableObjectDataList();
 	List<AttributeObjectData> attributes = queryBlockObjectData.getAttributeObjectDataList();
@@ -157,7 +157,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 
         logger.finest("Generated SQL = " + report.getBlocks().get(0).getSqlString());        
         
-	return report.getBlocks().get(0).getSqlString();
+	return report;
     }
 
 }

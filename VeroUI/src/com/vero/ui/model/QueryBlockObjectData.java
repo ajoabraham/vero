@@ -138,6 +138,26 @@ public class QueryBlockObjectData extends BlockObjectData {
     public boolean removeTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
 	return tableJoinObjectDataList.remove(tableJoinObjectData);
     }
+    
+    public AttributeObjectData getAttributeObjectDataById(String id) {
+        for (AttributeObjectData attributeObjectData : attributeObjectDataList) {
+            if (id.equalsIgnoreCase(attributeObjectData.getId())) {
+                return attributeObjectData;
+            }
+        }
+        
+        return null;
+    }
+    
+    public MetricObjectData getMetricObjectDataById(String id) {
+        for (MetricObjectData metricObjectData : metricObjectDataList) {
+            if (id.equalsIgnoreCase(metricObjectData.getId())) {
+                return metricObjectData;
+            }
+        }
+        
+        return null;
+    }
 
     @Override
     public ObjectType getType() {

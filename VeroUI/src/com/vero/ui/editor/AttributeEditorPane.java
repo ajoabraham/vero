@@ -27,6 +27,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
+import com.vero.report.Report;
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.model.AttributeObjectData;
@@ -246,8 +247,8 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                 }
             }
 
-            String sqlString = ServiceManager.getQueryEngineService().generateSQL(queryBlockPane.getQueryBlockObjectData());
-            queryBlockPane.setSQLString(sqlString);
+            Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockPane.getQueryBlockObjectData());
+            queryBlockPane.setSQLString(report.getBlocks().get(0).getSqlString());
         }
         catch (Exception e) {
             logger.log(Level.INFO, e.getMessage(), e);

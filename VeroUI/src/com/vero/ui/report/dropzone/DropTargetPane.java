@@ -14,6 +14,7 @@ import static com.vero.ui.constants.UIConstants.DEFAULT_DROP_PANE_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_LABEL_PANE_HEIGHT;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,8 @@ import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
 
+import com.vero.report.Block;
+import com.vero.report.Report;
 import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
@@ -28,6 +31,7 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.querypane.QueryBlockPane;
@@ -178,8 +182,28 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    }
 	    
 	    // Generate SQL
-	    String sqlString = ServiceManager.getQueryEngineService().generateSQL(queryBlockPane.getQueryBlockObjectData());
-	    queryBlockPane.setSQLString(sqlString);
+	    Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockPane.getQueryBlockObjectData());
+	    Block block = report.getBlocks().get(0);
+	    // Show SQL in query block
+	    queryBlockPane.setSQLString(block.getSqlString());
+	    
+	    // Set up table alias
+	    @SuppressWarnings("unchecked")
+            Map<String, String> tableAliasMap = block.getTableMap();
+	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
+	        // FIXME TH 02/24/2014 Id is uppercase in local db, but it is in lower case in query engine.
+	        String alias = tableAliasMap.get(tableObjectData.getId().toLowerCase());	        
+	        tableObjectData.setAlias(alias);
+	    }
+	    
+	    // Set up selected expression and table
+	    Map<String, String> attributeExpressionMap = block.getAttributeMap();
+	    for (AttributeObjectData attributeObjectData : queryBlockPane.getQueryBlockObjectData().getAttributeObjectDataList()) {
+	        
+	    }
+	    
+	    // Update table joins
+
 	}	
 	else { 
 	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, transferData);

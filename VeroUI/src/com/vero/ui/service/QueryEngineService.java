@@ -3,6 +3,7 @@
  */
 package com.vero.ui.service;
 
+import com.vero.report.Report;
 import com.vero.ui.model.QueryBlockObjectData;
 
 /**
@@ -10,5 +11,5 @@ import com.vero.ui.model.QueryBlockObjectData;
  *
  */
 public interface QueryEngineService {
-    String generateSQL(QueryBlockObjectData queryBlockObjectData);
+    Report generateReportMetadata(QueryBlockObjectData queryBlockObjectData);
 }
