@@ -16,17 +16,18 @@ import java.util.UUID;
  *
  * @author yulinwen
  */
-public class Block {   
+public class Block {
     private String sqlString = null;
-    private final Map<String, String> attributeMap = new HashMap();
-    private final Map<String, String> metricMap = new HashMap();
-    private final Map<String, String> expressionMap = new HashMap();
-    private final Map<String, String> tableMap = new HashMap();
+    private final Map<String, String> attributeMap = new HashMap(); // (UUID String of attribute, UUID String of expression)
+    private final Map<String, String> metricMap = new HashMap(); // (UUID String of metric, UUID String of expression)
+    private final Map<String, String> expressionMap = new HashMap(); // (UUID String of expression, UUID String of table)
+    private final Map<String, String> tableMap = new HashMap(); // (UUID String of table, String of alias)
     private final List<String> joindefList = new ArrayList();
+    private final List<JoinDefinitionUnit> joindefUnitList = new ArrayList();
     
     public Block() {
-
-    }        
+    }
+    
     public String getSqlString() {
         return sqlString;
     }
@@ -69,6 +70,10 @@ public class Block {
     
     public List getJoinDefList() {
         return joindefList;
+    }
+
+    public List getJoinDefUnitList() {
+        return joindefUnitList;
     }
     
     public void addJoinDefList(UUID joinDef) {
