@@ -41,6 +41,7 @@ import com.vero.ui.service.ServiceException;
 import com.vero.ui.service.ServiceManager;
 
 public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent> {
+    private ReportPane reportPane = null;
     private QueryPane queryPane = null;
     private DropZonePane dropZonePane = null;
     private QueryBlockObjectData queryBlockObjectData = null;
@@ -52,6 +53,7 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     private Button runButton = null;
     
     public QueryBlockPane(ReportPane reportPane, DropZonePane dropZonePane, QueryBlockObjectData queryBlockObjectData) {
+	this.reportPane = reportPane;
         this.queryPane = reportPane.getQueryPane();
         this.dropZonePane = dropZonePane;
         this.dropZonePane.setQueryBlockPane(this);
@@ -208,5 +210,21 @@ public class QueryBlockPane extends BlockPane implements EventHandler<MouseEvent
     
     public void setSQLString(String sqlString) {
 	sqlTextArea.setText(sqlString);
+    }
+
+    public DropZonePane getDropZonePane() {
+        return dropZonePane;
+    }
+
+    public void setDropZonePane(DropZonePane dropZonePane) {
+        this.dropZonePane = dropZonePane;
+    }
+
+    public ReportPane getReportPane() {
+        return reportPane;
+    }
+
+    public void setReportPane(ReportPane reportPane) {
+        this.reportPane = reportPane;
     }
 }

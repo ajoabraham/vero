@@ -109,6 +109,14 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	    }
 	    
 	    jsonAttribute.put("expressions", expressionArray);
+	    
+	    JSONArray hardHintsWhiteArray = new JSONArray();
+	    for (TableObjectData table : attribute.getWhiteHardHints()) {
+		hardHintsWhiteArray.put(table.getPhysicalName());
+	    }
+	    
+	    jsonAttribute.put("hardhints_white", hardHintsWhiteArray);
+	    
 	    attributeArray.put(jsonAttribute);
 	}
 	
@@ -140,6 +148,14 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	    }
 	    
 	    jsonMetric.put("expressions", expressionArray);
+	    
+	    JSONArray hardHintsWhiteArray = new JSONArray();
+	    for (TableObjectData table : metric.getWhiteHardHints()) {
+		hardHintsWhiteArray.put(table.getPhysicalName());
+	    }
+	    
+	    jsonMetric.put("hardhints_white", hardHintsWhiteArray);
+	    
 	    metricArray.put(jsonMetric);
 	}
 	

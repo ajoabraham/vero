@@ -151,9 +151,8 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, attributeObjectData);
 		
 		// Add table
-		if (!queryBlockPane.getQueryBlockObjectData().containsTableObjectData(columnObjectData.getTableObjectData())) {
+		if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(attributeObjectData, columnObjectData.getTableObjectData())) {
 		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
-		    queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 		}
 		
 		// Link data
@@ -171,10 +170,9 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, metricObjectData);
 		
-		// Add table
-		if (!queryBlockPane.getQueryBlockObjectData().containsTableObjectData(columnObjectData.getTableObjectData())) {
+		// Add table		
+		if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(metricObjectData, columnObjectData.getTableObjectData())) {
 		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
-		    queryBlockPane.getQueryBlockObjectData().addTableObjectData(columnObjectData.getTableObjectData());
 		}
 		
 		// Link data		
@@ -191,8 +189,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    // Set up table alias
             Map<String, String> tableAliasMap = block.getTableMap();
 	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
-	        // FIXME TH 02/24/2014 Id is uppercase in local db, but it is in lower case in query engine.
-	        String alias = tableAliasMap.get(tableObjectData.getId().toLowerCase());	        
+	        String alias = tableAliasMap.get(tableObjectData.getId());	        
 	        tableObjectData.setAlias(alias);
 	    }
 	    
@@ -281,5 +278,28 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
         
         isEmpty = false;
         currentDropIndex = -1;
+    }
+    
+    public void removeDropZoneObjectPane(DropZoneObjectPane<? extends UIData> dropZoneObjectPane) {
+	removeDropZoneObjectPane(dropZoneObjectPane.getData().getId());
+    }
+    
+    public void removeDropZoneObjectPane(String id) {
+	DropZoneObjectPane<? extends UIData> selectedDropZoneObjectPane = null;
+	for (Node child : getChildren()) {
+	    @SuppressWarnings("unchecked")
+            DropZoneObjectPane<? extends UIData> dropZoneObjectPane = (DropZoneObjectPane<? extends UIData>) child;
+	    
+	    if (id.equalsIgnoreCase(dropZoneObjectPane.getData().getId())) {
+		selectedDropZoneObjectPane = dropZoneObjectPane;
+		break;
+	    }
+	}
+	
+	if (selectedDropZoneObjectPane != null) {
+	    getChildren().remove(selectedDropZoneObjectPane);
+	    double prefHeight = computePrefHeight(getChildren().size());
+	    setPrefHeight(prefHeight);
+	}
     }
 }

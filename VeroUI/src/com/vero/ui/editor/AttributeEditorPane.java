@@ -5,6 +5,7 @@ import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
+import com.vero.report.Block;
 import com.vero.report.Report;
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
@@ -34,6 +36,8 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.TableObjectData;
+import com.vero.ui.report.ReportPane;
+import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryBlockPane;
 import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceManager;
@@ -50,7 +54,9 @@ import frmw.parser.Hints;
 public class AttributeEditorPane extends EditorPane<AttributeObjectData> implements ChangeListener<String> {
     private static final Logger logger = Logger.getLogger(AttributeEditorPane.class.getName());
 
+    private ReportPane reportPane = null;
     private QueryBlockPane queryBlockPane = null;
+    private DropZonePane dropZonePane = null;
     private EditorTableLabelPane editorTableLabelPane = null;
     private TableObjectData originalTableObjectData = null;
     private String originalFormula = null;
@@ -58,7 +64,9 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 
     public AttributeEditorPane(QueryBlockPane queryBlockPane, AttributeObjectData data) {
         super(data);
+        this.reportPane = queryBlockPane.getReportPane();
         this.queryBlockPane = queryBlockPane;
+        this.dropZonePane = queryBlockPane.getDropZonePane();
         buildUI();
     }
 
@@ -148,6 +156,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void handleApplyAction() {
         try {
             // Attribute/Metric Validation Rules
@@ -210,7 +219,15 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                     logger.finest("Columns used in formula - " + columns.size());
                     data.getSelectedExpressionObjectData().addAllColumnObjectData(columns);
                     data.getSelectedExpressionObjectData().setSelectedTableObjectData(selectedTableObjectData);
-                    // FIXME add original table into hard hint black list
+                    data.addWhiteHardHint(selectedTableObjectData);
+                    
+                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
+                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
+                    }
+                    
+                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
+                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
+                    }
                 }
             }
             else if (originalTableObjectData != selectedTableObjectData) {
@@ -229,7 +246,16 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                         existingExpression.addAllColumnObjectData(columns);
                         existingExpression.setSelectedTableObjectData(selectedTableObjectData);
                         data.setSelectedExpressionObjectData(existingExpression);
-                        // FIXME add selected table into hard hint white list
+                    }
+                    
+                    data.addWhiteHardHint(selectedTableObjectData);
+                    
+                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
+                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
+                    }
+                    
+                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
+                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
                     }
                 }
                 else {
@@ -243,12 +269,28 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                     expressionObjectData.addAllColumnObjectData(columns);
                     data.addExpressionObjectData(expressionObjectData);
                     data.setSelectedExpressionObjectData(expressionObjectData);
-                    // FIXME add selected table into hard hint white list.
+                    
+                    data.addWhiteHardHint(selectedTableObjectData);
+                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
+                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
+                    }
+                    
+                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
+                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
+                    }
                 }
             }
 
             Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockPane.getQueryBlockObjectData());
-            queryBlockPane.setSQLString(report.getBlocks().get(0).getSqlString());
+            Block block = report.getBlocks().get(0);
+            queryBlockPane.setSQLString(block.getSqlString());
+            
+	    // Set up table alias
+            Map<String, String> tableAliasMap = block.getTableMap();
+	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
+	        String alias = tableAliasMap.get(tableObjectData.getId());	        
+	        tableObjectData.setAlias(alias);
+	    }
         }
         catch (Exception e) {
             logger.log(Level.INFO, e.getMessage(), e);

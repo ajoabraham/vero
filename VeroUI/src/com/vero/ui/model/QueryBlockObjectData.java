@@ -6,7 +6,9 @@ package com.vero.ui.model;
 import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,6 +31,7 @@ public class QueryBlockObjectData extends BlockObjectData {
     private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
     private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
     private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
+    private Map<String, List<String>> tableToAttributeMetricMap = new HashMap<String, List<String>>();
 
     public QueryBlockObjectData() {
 	this(new SchemaQueryBlock());
@@ -107,20 +110,78 @@ public class QueryBlockObjectData extends BlockObjectData {
 	return tableObjectDataList;
     }
 
-    public void setTableObjectDataList(List<TableObjectData> tableObjectDataList) {
-	this.tableObjectDataList = tableObjectDataList;
+//    public void setTableObjectDataList(List<TableObjectData> tableObjectDataList) {
+//	this.tableObjectDataList = tableObjectDataList;
+//    }
+
+//    private boolean containsTableObjectData(TableObjectData tableObjectData) {
+//	return tableObjectDataList.contains(tableObjectData);
+//    }
+
+    public boolean addTableObjectData(MetricObjectData metricObjectData, TableObjectData tableObjectData) {
+	boolean isAdded = false;
+	if (!tableObjectDataList.contains(tableObjectData)) {
+	    tableObjectDataList.add(tableObjectData);
+	    isAdded = true;
+	}
+
+	List<String> ids = tableToAttributeMetricMap.get(tableObjectData.getId());
+	if (ids == null) {
+	    ids = new ArrayList<String>();
+	    tableToAttributeMetricMap.put(tableObjectData.getId(), ids);
+	}
+	
+	if (!ids.contains(metricObjectData.getId())) {
+	    ids.add(metricObjectData.getId());
+	}
+	
+	return isAdded;
+    }
+    
+    public boolean addTableObjectData(AttributeObjectData attributeObjectData, TableObjectData tableObjectData) {
+	boolean isAdded = false;
+	if (!tableObjectDataList.contains(tableObjectData)) {
+	    tableObjectDataList.add(tableObjectData);
+	    isAdded = true;
+	}
+
+	List<String> ids = tableToAttributeMetricMap.get(tableObjectData.getId());
+	if (ids == null) {
+	    ids = new ArrayList<String>();
+	    tableToAttributeMetricMap.put(tableObjectData.getId(), ids);
+	}
+	
+	if (!ids.contains(attributeObjectData.getId())) {
+	    ids.add(attributeObjectData.getId());
+	}
+	
+	return isAdded;
     }
 
-    public boolean containsTableObjectData(TableObjectData tableObjectData) {
-	return tableObjectDataList.contains(tableObjectData);
+    public boolean removeTableObjectData(AttributeObjectData attributeObjectData, TableObjectData tableObjectData) {
+	// Remove the link first
+	List<String> ids = tableToAttributeMetricMap.get(tableObjectData.getId());
+	if (ids != null) ids.remove(attributeObjectData.getId());
+	
+	if (ids == null || ids.isEmpty()) {
+	    tableToAttributeMetricMap.remove(tableObjectData.getId());
+	    return tableObjectDataList.remove(tableObjectData);
+	}
+	
+	return false;
     }
-
-    public void addTableObjectData(TableObjectData tableObjectData) {
-	tableObjectDataList.add(tableObjectData);
-    }
-
-    public boolean removeTableObjectData(TableObjectData tableObjectData) {
-	return tableObjectDataList.remove(tableObjectData);
+    
+    public boolean removeTableObjectData(MetricObjectData metricObjectData, TableObjectData tableObjectData) {
+	// Remove the link first
+	List<String> ids = tableToAttributeMetricMap.get(tableObjectData.getId());
+	if (ids != null) ids.remove(metricObjectData.getId());
+	
+	if (ids == null || ids.isEmpty()) {
+	    tableToAttributeMetricMap.remove(tableObjectData.getId());
+	    return tableObjectDataList.remove(tableObjectData);
+	}
+	
+	return false;	
     }
 
     public List<TableJoinObjectData> getTableJoinObjectDataList() {
