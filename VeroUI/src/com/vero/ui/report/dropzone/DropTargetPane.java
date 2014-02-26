@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
 
+import com.vero.metadata.JoinDefinition;
 import com.vero.report.Block;
 import com.vero.report.Report;
 import com.vero.ui.common.DroppableObject;
@@ -52,7 +53,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
     private int currentDropIndex = -1;
     private boolean isEmpty = true;
     
-    private ReportPane reportPane = null;
+    ReportPane reportPane = null;
     private DropZonePane dropZonePane = null;
     
     public DropTargetPane(ReportPane reportPane, DropZonePane dropZonePane) {
@@ -151,9 +152,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, attributeObjectData);
 		
 		// Add table
-		if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(attributeObjectData, columnObjectData.getTableObjectData())) {
-		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
-		}
+		queryBlockPane.getQueryBlockObjectData().addTableObjectData(attributeObjectData, columnObjectData.getTableObjectData());		
 		
 		// Link data
 		queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
@@ -171,9 +170,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 		dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, metricObjectData);
 		
 		// Add table		
-		if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(metricObjectData, columnObjectData.getTableObjectData())) {
-		    dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, columnObjectData.getTableObjectData()));
-		}
+		queryBlockPane.getQueryBlockObjectData().addTableObjectData(metricObjectData, columnObjectData.getTableObjectData());
 		
 		// Link data		
 	        queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
@@ -218,7 +215,15 @@ public abstract class DropTargetPane extends VBox implements DroppableObject {
 	    }
 	    
 	    // Update table joins
-
+	    List<JoinDefinition> joinDefs = block.getJoinDefUnitList();
+	    for (JoinDefinition joinDef : joinDefs) {
+	        System.err.println(joinDef.getCLeft());
+	        System.err.println(joinDef.getCRight());
+	        System.err.println(joinDef.getTLeft());
+	        System.err.println(joinDef.getTRight());
+	        System.err.println(joinDef.getExpression());
+	        System.err.println(joinDef.getOperator());
+	    }
 	}	
 	else { 
 	    dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, transferData);

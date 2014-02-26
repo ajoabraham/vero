@@ -35,19 +35,19 @@ public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObj
         // Table join pane should not have a border.
         getStyleClass().remove(CLASS_OBJECT_PANE);
         
-        Label leftTableLabel = new Label(data.getLeftTableName(), new ImageView(ImageList.IMAGE_UNKNOWN_TABLE));
-        leftTableLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        HBox.setHgrow(leftTableLabel, Priority.ALWAYS);
-        getChildren().add(leftTableLabel);
-
-        tableJoinImageView = new ImageView(ImageList.IMAGE_INNER_JOIN);
-        tableJoinImageView.setOnMouseClicked(this);
-        getChildren().add(tableJoinImageView);
-
-        Label rightTableLabel = new Label(data.getRightTableName(), new ImageView(ImageList.IMAGE_UNKNOWN_TABLE));
-        rightTableLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        HBox.setHgrow(rightTableLabel, Priority.ALWAYS);
-        getChildren().add(rightTableLabel);
+//        Label leftTableLabel = new Label(data.getLeftTableName(), new ImageView(ImageList.IMAGE_UNKNOWN_TABLE));
+//        leftTableLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+//        HBox.setHgrow(leftTableLabel, Priority.ALWAYS);
+//        getChildren().add(leftTableLabel);
+//
+//        tableJoinImageView = new ImageView(ImageList.IMAGE_INNER_JOIN);
+//        tableJoinImageView.setOnMouseClicked(this);
+//        getChildren().add(tableJoinImageView);
+//
+//        Label rightTableLabel = new Label(data.getRightTableName(), new ImageView(ImageList.IMAGE_UNKNOWN_TABLE));
+//        rightTableLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+//        HBox.setHgrow(rightTableLabel, Priority.ALWAYS);
+//        getChildren().add(rightTableLabel);
     }
     
     @Override

@@ -24,6 +24,7 @@ import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
+import com.vero.ui.report.dropzone.TableDropTargetPane;
 
 /**
  *
@@ -37,7 +38,7 @@ public class QueryPane extends ScrollPane {
     private List<BlockPane> blockPanes = null;
     private QueryBlockPane selectedQueryBlockPane = null;
     private GlobalFilterPane globalFilterPane = null;
-    private BlockPane reportBlockPane = null;
+    private ReportBlockPane reportBlockPane = null;
     
     private VBox contentPane = null;
     
@@ -79,7 +80,8 @@ public class QueryPane extends ScrollPane {
         }
         
         DropZonePane dropZonePane = new DropZonePane(reportPane);
-        reportBlockPane = BlockPaneFactory.createReportBlockPane(reportPane, dropZonePane, reportObjectData.getReportBlockObjectData());
+        reportBlockPane = (ReportBlockPane) BlockPaneFactory.createReportBlockPane(reportPane, dropZonePane, reportObjectData.getReportBlockObjectData());
+        reportBlockPane.getQueryBlockObjectData().getTableObjectDataList().addListener((TableDropTargetPane) dropZonePane.getTableDropPane());
         contentPane.getChildren().add(reportBlockPane);
         dropZonePaneContainer.getChildren().add(dropZonePane);
                 

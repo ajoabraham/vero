@@ -115,7 +115,8 @@ public final class LabelPaneFactory {
     }
     
     public static LabelPane createTableJoinPane(ReportPane reportPane, String leftTableName, TableJoinType tableJoinType, String rightTableName) {
-        return new TableJoinDropZoneObjectPane(reportPane, new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
+//        return new TableJoinDropZoneObjectPane(reportPane, new TableJoinObjectData(leftTableName, tableJoinType, rightTableName));
+        return null;
     }
     
     public static LabelPane createDBTypeLabelPane(DBType dbType) {

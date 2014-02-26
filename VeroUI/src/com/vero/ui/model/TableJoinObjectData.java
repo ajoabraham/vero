@@ -17,15 +17,14 @@ import com.vero.ui.constants.TableJoinType;
 public class TableJoinObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
-    private String leftTableName = null;
-    private String rightTableName = null;
+    private TableObjectData leftTable = null;
+    private ColumnObjectData leftColumn = null;
+    private TableObjectData rightTable = null;
+    private ColumnObjectData rightColumn = null;
     private TableJoinType tableJoinType = null;
     
-    public TableJoinObjectData(String leftTableName, TableJoinType tableJoinType, String rightTableName) {
-	super(null);
-        this.leftTableName = leftTableName;
-        this.tableJoinType = tableJoinType;
-        this.rightTableName = rightTableName;
+    public TableJoinObjectData() {
+        super(null);
     }
     
     @Override
@@ -33,20 +32,36 @@ public class TableJoinObjectData extends UIData {
         return TABLE_JOIN;
     }
 
-    public String getLeftTableName() {
-        return leftTableName;
+    public TableObjectData getLeftTable() {
+        return leftTable;
     }
 
-    public void setLeftTableName(String leftTableName) {
-        this.leftTableName = leftTableName;
+    public void setLeftTable(TableObjectData leftTable) {
+        this.leftTable = leftTable;
     }
 
-    public String getRightTableName() {
-        return rightTableName;
+    public ColumnObjectData getLeftColumn() {
+        return leftColumn;
     }
 
-    public void setRightTableName(String rightTableName) {
-        this.rightTableName = rightTableName;
+    public void setLeftColumn(ColumnObjectData leftColumn) {
+        this.leftColumn = leftColumn;
+    }
+
+    public TableObjectData getRightTable() {
+        return rightTable;
+    }
+
+    public void setRightTable(TableObjectData rightTable) {
+        this.rightTable = rightTable;
+    }
+
+    public ColumnObjectData getRightColumn() {
+        return rightColumn;
+    }
+
+    public void setRightColumn(ColumnObjectData rightColumn) {
+        this.rightColumn = rightColumn;
     }
 
     public TableJoinType getTableJoinType() {

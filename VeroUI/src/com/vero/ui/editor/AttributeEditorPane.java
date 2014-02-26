@@ -36,8 +36,6 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.TableObjectData;
-import com.vero.ui.report.ReportPane;
-import com.vero.ui.report.dropzone.DropZonePane;
 import com.vero.ui.report.querypane.QueryBlockPane;
 import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceManager;
@@ -54,9 +52,7 @@ import frmw.parser.Hints;
 public class AttributeEditorPane extends EditorPane<AttributeObjectData> implements ChangeListener<String> {
     private static final Logger logger = Logger.getLogger(AttributeEditorPane.class.getName());
 
-    private ReportPane reportPane = null;
     private QueryBlockPane queryBlockPane = null;
-    private DropZonePane dropZonePane = null;
     private EditorTableLabelPane editorTableLabelPane = null;
     private TableObjectData originalTableObjectData = null;
     private String originalFormula = null;
@@ -64,9 +60,7 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
 
     public AttributeEditorPane(QueryBlockPane queryBlockPane, AttributeObjectData data) {
         super(data);
-        this.reportPane = queryBlockPane.getReportPane();
         this.queryBlockPane = queryBlockPane;
-        this.dropZonePane = queryBlockPane.getDropZonePane();
         buildUI();
     }
 
@@ -221,13 +215,8 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                     data.getSelectedExpressionObjectData().setSelectedTableObjectData(selectedTableObjectData);
                     data.addWhiteHardHint(selectedTableObjectData);
                     
-                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
-                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
-                    }
-                    
-                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
-                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
-                    }
+                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);             
+                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
                 }
             }
             else if (originalTableObjectData != selectedTableObjectData) {
@@ -250,13 +239,8 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                     
                     data.addWhiteHardHint(selectedTableObjectData);
                     
-                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
-                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
-                    }
-                    
-                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
-                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
-                    }
+                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);
+                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
                 }
                 else {
                     logger.finest("There is no existing expression contains same formula.");
@@ -271,13 +255,9 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
                     data.setSelectedExpressionObjectData(expressionObjectData);
                     
                     data.addWhiteHardHint(selectedTableObjectData);
-                    if (queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData)) {
-                	dropZonePane.getTableDropPane().addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, selectedTableObjectData));
-                    }
+                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);
                     
-                    if (queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData)) {
-                	dropZonePane.getTableDropPane().removeDropZoneObjectPane(originalTableObjectData.getId());
-                    }
+                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
                 }
             }
 

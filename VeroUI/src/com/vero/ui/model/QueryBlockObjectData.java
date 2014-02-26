@@ -14,6 +14,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import com.vero.model.entities.SchemaData;
 import com.vero.model.entities.SchemaQueryBlock;
@@ -29,7 +31,7 @@ public class QueryBlockObjectData extends BlockObjectData {
     private DatasourceObjectData datasourceObjectData = null;
     private List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
     private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
-    private List<TableObjectData> tableObjectDataList = new ArrayList<TableObjectData>();
+    private ObservableList<TableObjectData> tableObjectDataList = FXCollections.observableArrayList();
     private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
     private Map<String, List<String>> tableToAttributeMetricMap = new HashMap<String, List<String>>();
 
@@ -106,7 +108,7 @@ public class QueryBlockObjectData extends BlockObjectData {
 	return metricObjectDataList.remove(metricObjectData);
     }
 
-    public List<TableObjectData> getTableObjectDataList() {
+    public ObservableList<TableObjectData> getTableObjectDataList() {
 	return tableObjectDataList;
     }
 
