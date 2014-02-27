@@ -421,10 +421,15 @@ public class QueryEngine {
         List<String> groupByList = new ArrayList();
         
         if (sortedEUs.isEmpty()) {
-            // single attribute or metric            
-            assert(sortedVertex.size() == 1);
-            ProcessingUnit curPU = sortedVertex.get(0);
-            
+            // single attribute or metric but can be multiple because some PUs are linked to master PU
+            ProcessingUnit curPU = null;
+            for (ProcessingUnit masterPU : sortedVertex) {
+                if (masterPU.getMasterPU() == masterPU) {
+                    curPU = masterPU;
+                    break;
+                }
+            }
+                        
             String tempStr = "\"" + curPU.getUsedExp().getColumn().getTable().getPhysicalName() + "\"" + " AS " + "\"" + curPU.assignTableAlias() + "\"";
             fromStr = generateSqlString("FROM", tempStr, fromStr);
             
