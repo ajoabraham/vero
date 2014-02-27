@@ -83,6 +83,7 @@ public class QueryPane extends ScrollPane {
         reportBlockPane.getQueryBlockObjectData().getTableObjectDataList().addListener(dropZonePane.getTableDropPane());
         reportBlockPane.getQueryBlockObjectData().getAttributeObjectDataList().addListener(dropZonePane.getAttributeDropPane());
         reportBlockPane.getQueryBlockObjectData().getMetricObjectDataList().addListener(dropZonePane.getMetricDropPane());
+        reportBlockPane.getQueryBlockObjectData().getTableJoinObjectDataList().addListener(dropZonePane.getTableJoinDropPane());
         contentPane.getChildren().add(reportBlockPane);
         dropZonePaneContainer.getChildren().add(dropZonePane);
                 
@@ -108,7 +109,8 @@ public class QueryPane extends ScrollPane {
         QueryBlockPane queryBlock = (QueryBlockPane) BlockPaneFactory.createQueryBlockPane(reportPane, dropZonePane, queryBlockObjectData);
         queryBlock.getQueryBlockObjectData().getTableObjectDataList().addListener(dropZonePane.getTableDropPane());
         queryBlock.getQueryBlockObjectData().getAttributeObjectDataList().addListener(dropZonePane.getAttributeDropPane());
-        queryBlock.getQueryBlockObjectData().getMetricObjectDataList().addListener(dropZonePane.getMetricDropPane());     
+        queryBlock.getQueryBlockObjectData().getMetricObjectDataList().addListener(dropZonePane.getMetricDropPane());
+        queryBlock.getQueryBlockObjectData().getTableJoinObjectDataList().addListener(dropZonePane.getTableJoinDropPane());
         blockPanes.add(queryBlock);
         
         contentPane.getChildren().add(contentPane.getChildren().size() - 1, queryBlock);

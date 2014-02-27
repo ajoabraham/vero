@@ -14,11 +14,12 @@
 		<class>com.vero.model.entities.SchemaReport</class>
 		<class>com.vero.model.entities.SchemaReportBlock</class>
 		<class>com.vero.model.entities.SchemaTable</class>
-		<class>com.vero.model.entities.SchemaTableJoint</class>
 		<class>com.vero.model.entities.SchemaData</class>
 		<class>com.vero.model.entities.AllNamedQueries</class>
 		<class>com.vero.model.entities.SchemaDatabase</class>
 		<class>com.vero.model.entities.SchemaProject</class>
+		<class>com.vero.model.entities.SchemaTableJoin</class>
+		<class>com.vero.model.entities.SearchableText</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />

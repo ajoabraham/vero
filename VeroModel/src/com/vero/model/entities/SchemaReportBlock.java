@@ -3,6 +3,7 @@ package com.vero.model.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -31,6 +32,10 @@ public class SchemaReportBlock extends SchemaData implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="SCHEMA_REPORT_ID", nullable=false)
 	private SchemaReport schemaReport;
+
+	//bi-directional many-to-one association to SchemaTableJoin
+	@OneToMany(mappedBy="schemaReportBlock")
+	private List<SchemaTableJoin> schemaTableJoins;
 
 	public SchemaReportBlock() {
 	}
@@ -73,6 +78,28 @@ public class SchemaReportBlock extends SchemaData implements Serializable {
 
 	public void setSchemaReport(SchemaReport schemaReport) {
 		this.schemaReport = schemaReport;
+	}
+
+	public List<SchemaTableJoin> getSchemaTableJoins() {
+		return this.schemaTableJoins;
+	}
+
+	public void setSchemaTableJoins(List<SchemaTableJoin> schemaTableJoins) {
+		this.schemaTableJoins = schemaTableJoins;
+	}
+
+	public SchemaTableJoin addSchemaTableJoin(SchemaTableJoin schemaTableJoin) {
+		getSchemaTableJoins().add(schemaTableJoin);
+		schemaTableJoin.setSchemaReportBlock(this);
+
+		return schemaTableJoin;
+	}
+
+	public SchemaTableJoin removeSchemaTableJoin(SchemaTableJoin schemaTableJoin) {
+		getSchemaTableJoins().remove(schemaTableJoin);
+		schemaTableJoin.setSchemaReportBlock(null);
+
+		return schemaTableJoin;
 	}
 
 }

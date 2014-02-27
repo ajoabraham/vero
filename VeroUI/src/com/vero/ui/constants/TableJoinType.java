@@ -13,18 +13,18 @@ import javafx.scene.image.Image;
  * @author Tai Hu
  */
 public enum TableJoinType {
-    FULL_OUTER_JOIN {
+    CROSS_JOIN {
         @Override
         public TableJoinType next() {
-            return CROSS_JOIN;
+            return FULL_OUTER_JOIN;
         }
 
         @Override
         public Image getImage() {
-            return ImageList.IMAGE_FULL_OUTER_JOIN;
+            return ImageList.IMAGE_CROSS_JOIN;
         }
     },
-    CROSS_JOIN {
+    FULL_OUTER_JOIN {
         @Override
         public TableJoinType next() {
             return INNER_JOIN;
@@ -32,7 +32,7 @@ public enum TableJoinType {
 
         @Override
         public Image getImage() {
-            return ImageList.IMAGE_CROSS_JOIN;
+            return ImageList.IMAGE_FULL_OUTER_JOIN;
         }
     },
     INNER_JOIN {
@@ -60,7 +60,7 @@ public enum TableJoinType {
     RIGHT_JOIN {
         @Override
         public TableJoinType next() {
-            return FULL_OUTER_JOIN;
+            return CROSS_JOIN;
         }
 
         @Override

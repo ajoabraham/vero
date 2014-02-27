@@ -29,10 +29,13 @@ import com.vero.report.Report;
 import com.vero.ui.common.DroppableObject;
 import com.vero.ui.common.LabelPaneFactory;
 import com.vero.ui.constants.ObjectType;
+import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.QueryBlockObjectData;
+import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.ReportPane;
@@ -139,6 +142,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 	// 1. If drop a column, create a default attribute or metric
 	if (transferData.getType() == COLUMN) {
 	    QueryBlockPane queryBlockPane = dropZonePane.getQueryBlockPane();
+	    QueryBlockObjectData queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
 	    ColumnObjectData columnObjectData = (ColumnObjectData) transferData;
 	    if (getType() == ATTRIBUTE) {
 		AttributeObjectData attributeObjectData = new AttributeObjectData();
@@ -150,13 +154,13 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 		attributeObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		
 	        // Link data
-                queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
+		queryBlockObjectData.setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
                 
 		// Add attribute
-		queryBlockPane.getQueryBlockObjectData().addAttributeObjectData(attributeObjectData);
+		queryBlockObjectData.addAttributeObjectData(attributeObjectData);
 		
 		// Add table
-		queryBlockPane.getQueryBlockObjectData().addTableObjectData(attributeObjectData, columnObjectData.getTableObjectData());		
+		queryBlockObjectData.addTableObjectData(attributeObjectData, columnObjectData.getTableObjectData());		
 	    }
 	    else if (getType() == METRIC) {
 		MetricObjectData metricObjectData = new MetricObjectData();
@@ -168,24 +172,24 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 		metricObjectData.setSelectedExpressionObjectData(expressionObjectData);
 		
 	        // Link data            
-                queryBlockPane.getQueryBlockObjectData().setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
+		queryBlockObjectData.setDatasourceObjectData(columnObjectData.getTableObjectData().getDatasourceObjectData());
                 
                 // Add metric
-                queryBlockPane.getQueryBlockObjectData().addMetricObjectData(metricObjectData);
+		queryBlockObjectData.addMetricObjectData(metricObjectData);
 		
 		// Add table		
-		queryBlockPane.getQueryBlockObjectData().addTableObjectData(metricObjectData, columnObjectData.getTableObjectData());
+		queryBlockObjectData.addTableObjectData(metricObjectData, columnObjectData.getTableObjectData());
 	    }
 	    
 	    // Generate SQL
-	    Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockPane.getQueryBlockObjectData());
+	    Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockObjectData);
 	    Block block = report.getBlocks().get(0);
 	    // Show SQL in query block
 	    queryBlockPane.setSQLString(block.getSqlString());
 	    
 	    // Set up table alias
             Map<String, String> tableAliasMap = block.getTableMap();
-	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
+	    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
 	        String alias = tableAliasMap.get(tableObjectData.getId());	        
 	        tableObjectData.setAlias(alias);
 	    }
@@ -193,7 +197,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 	    // Set up selected expression and table
 	    Map<String, String> attributeExpressionMap = block.getAttributeMap();
 	    Map<String, String> expressionTableMap = block.getExpressionMap();
-	    for (AttributeObjectData attributeObjectData : queryBlockPane.getQueryBlockObjectData().getAttributeObjectDataList()) {
+	    for (AttributeObjectData attributeObjectData : queryBlockObjectData.getAttributeObjectDataList()) {
 		String expressionId = attributeExpressionMap.get(attributeObjectData.getId().toLowerCase());
 		ExpressionObjectData selectedExpression = attributeObjectData.getExpressionObjectDataById(expressionId);
 		attributeObjectData.setSelectedExpressionObjectData(selectedExpression);
@@ -204,7 +208,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 	    }
 	    
 	    Map<String, String> metricExpressionMap = block.getMetricMap();
-	    for (MetricObjectData metricObjectData : queryBlockPane.getQueryBlockObjectData().getMetricObjectDataList()) {
+	    for (MetricObjectData metricObjectData : queryBlockObjectData.getMetricObjectDataList()) {
 		String expressionId = metricExpressionMap.get(metricObjectData.getId().toLowerCase());
 		ExpressionObjectData selectedExpression = metricObjectData.getExpressionObjectDataById(expressionId);
 		metricObjectData.setSelectedExpressionObjectData(selectedExpression);
@@ -217,10 +221,14 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 	    // Update table joins
 	    List<JoinDefinition> joinDefs = block.getJoinDefList();
 	    for (JoinDefinition joinDef : joinDefs) {
-	        System.err.println("Left Table = " + joinDef.getTLeftStr());
-	        System.err.println("Right Table = " + joinDef.getTRightStr());
-	        System.err.println("Expression = " + joinDef.getExpression());
-	        System.err.println("Operator = " + joinDef.getOperator());
+		TableJoinObjectData tableJoinObjectData = new TableJoinObjectData();
+		TableObjectData rightTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTRightStr());
+		tableJoinObjectData.setRightTable(rightTableObjectData);
+		TableObjectData leftTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTLeftStr());
+		tableJoinObjectData.setLeftTable(leftTableObjectData);
+		tableJoinObjectData.setTableJoinType(TableJoinType.values()[(joinDef.getType() == null ? 0 : joinDef.getType().ordinal())]);
+		
+		queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
 	    }
 	}	
     }
@@ -267,8 +275,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
         else if (currentDropIndex == -1) {
             // Not a drop event, add to the end
             double prefHeight = computePrefHeight(getChildren().size() + 1);
-            setPrefHeight(prefHeight);
-System.err.println("Children node = " + dropZoneObjectPane);            
+            setPrefHeight(prefHeight);            
             getChildren().add(dropZoneObjectPane);
         }
         else {
@@ -304,7 +311,7 @@ System.err.println("Children node = " + dropZoneObjectPane);
     
     @Override
     public void onChanged(ListChangeListener.Change<? extends UIData> change) {        
-        while (change.next()) {
+        while (change.next()) {            
             if (change.wasAdded()) {
                 UIData data = change.getAddedSubList().get(0);
                 addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, data));

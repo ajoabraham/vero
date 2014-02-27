@@ -32,7 +32,7 @@ public class QueryBlockObjectData extends BlockObjectData {
     private ObservableList<AttributeObjectData> attributeObjectDataList = FXCollections.observableArrayList();
     private ObservableList<MetricObjectData> metricObjectDataList = FXCollections.observableArrayList();
     private ObservableList<TableObjectData> tableObjectDataList = FXCollections.observableArrayList();
-    private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
+    private ObservableList<TableJoinObjectData> tableJoinObjectDataList = FXCollections.observableArrayList();
     private Map<String, List<String>> tableToAttributeMetricMap = new HashMap<String, List<String>>();
 
     public QueryBlockObjectData() {
@@ -186,13 +186,13 @@ public class QueryBlockObjectData extends BlockObjectData {
 	return false;	
     }
 
-    public List<TableJoinObjectData> getTableJoinObjectDataList() {
+    public ObservableList<TableJoinObjectData> getTableJoinObjectDataList() {
 	return tableJoinObjectDataList;
     }
 
-    public void setTableJoinObjectDataList(List<TableJoinObjectData> tableJoinObjectDataList) {
-	this.tableJoinObjectDataList = tableJoinObjectDataList;
-    }
+//    public void setTableJoinObjectDataList(List<TableJoinObjectData> tableJoinObjectDataList) {
+//	this.tableJoinObjectDataList = tableJoinObjectDataList;
+//    }
 
     public void addTableJoinObjectData(TableJoinObjectData tableJoinObjectData) {
 	tableJoinObjectDataList.add(tableJoinObjectData);
@@ -220,6 +220,16 @@ public class QueryBlockObjectData extends BlockObjectData {
         }
         
         return null;
+    }
+    
+    public TableObjectData getTableObjectDataById(String id) {
+	for (TableObjectData tableObjectData : tableObjectDataList) {
+	    if (id.equalsIgnoreCase(tableObjectData.getId())) {
+		return tableObjectData;
+	    }
+	}
+	
+	return null;
     }
 
     @Override

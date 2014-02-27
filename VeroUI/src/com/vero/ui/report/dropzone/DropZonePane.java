@@ -87,8 +87,6 @@ public class DropZonePane extends ScrollPane {
         tableJoinDropPane = DropTargetPaneFactory.createDropPane(reportPane, this, TABLE_JOIN, false);
         tableJoinDropPane.getChildren().add(
                 LabelPaneFactory.createPlaceholderPane(tableJoinDropPane.getPlaceholderText()));
-//        tableJoinDropPane.getChildren().add(
-//                LabelPaneFactory.createTableJoinPane("T1", INNER_JOIN, "T2"));
         contentPane.getChildren().add(tableJoinDropPane);
     }
 

@@ -27,12 +27,12 @@ public class JoinDefinition {
     JoinType type;   
     
     public enum JoinType {
-        NONE,
-        INNER,
+        CROSS,
         OUTER,
+        INNER,
         LEFT,
         RIGHT,
-        CROSS
+        NONE
     }
         
     public JoinDefinition(

@@ -6,8 +6,10 @@
 
 package com.vero.ui.model;
 
-import com.vero.ui.constants.ObjectType;
 import static com.vero.ui.constants.ObjectType.TABLE_JOIN;
+
+import com.vero.model.entities.SchemaTableJoin;
+import com.vero.ui.constants.ObjectType;
 import com.vero.ui.constants.TableJoinType;
 
 /**
@@ -17,14 +19,29 @@ import com.vero.ui.constants.TableJoinType;
 public class TableJoinObjectData extends UIData {
     private static final long serialVersionUID = 1L;
     
+    private SchemaTableJoin schemaTableJoin = null;
+    
     private TableObjectData leftTable = null;
-    private ColumnObjectData leftColumn = null;
     private TableObjectData rightTable = null;
-    private ColumnObjectData rightColumn = null;
     private TableJoinType tableJoinType = null;
     
     public TableJoinObjectData() {
-        super(null);
+	this(new SchemaTableJoin());
+    }
+    
+    public TableJoinObjectData(SchemaTableJoin schemaTableJoin) {
+        super(schemaTableJoin);
+        this.schemaTableJoin = schemaTableJoin;
+        
+        // init data
+        tableJoinType = TableJoinType.values()[schemaTableJoin.getJoinType()];
+        if (schemaTableJoin.getSchemaTableLeft() != null) {
+            leftTable = new TableObjectData(schemaTableJoin.getSchemaTableLeft());
+        }
+        
+        if (schemaTableJoin.getSchemaTableRight() != null) {
+            rightTable = new TableObjectData(schemaTableJoin.getSchemaTableRight());
+        }
     }
     
     @Override
@@ -38,14 +55,7 @@ public class TableJoinObjectData extends UIData {
 
     public void setLeftTable(TableObjectData leftTable) {
         this.leftTable = leftTable;
-    }
-
-    public ColumnObjectData getLeftColumn() {
-        return leftColumn;
-    }
-
-    public void setLeftColumn(ColumnObjectData leftColumn) {
-        this.leftColumn = leftColumn;
+        schemaTableJoin.setSchemaTableLeft(leftTable.getSchemaTable());
     }
 
     public TableObjectData getRightTable() {
@@ -54,14 +64,7 @@ public class TableJoinObjectData extends UIData {
 
     public void setRightTable(TableObjectData rightTable) {
         this.rightTable = rightTable;
-    }
-
-    public ColumnObjectData getRightColumn() {
-        return rightColumn;
-    }
-
-    public void setRightColumn(ColumnObjectData rightColumn) {
-        this.rightColumn = rightColumn;
+        schemaTableJoin.setSchemaTableRight(rightTable.getSchemaTable());
     }
 
     public TableJoinType getTableJoinType() {
@@ -70,5 +73,6 @@ public class TableJoinObjectData extends UIData {
 
     public void setTableJoinType(TableJoinType tableJoinType) {
         this.tableJoinType = tableJoinType;
+        schemaTableJoin.setJoinType(tableJoinType.ordinal());
     }    
 }

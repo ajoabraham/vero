@@ -127,7 +127,7 @@ public class TableObjectData extends UIData {
         this.alias.set(alias);
     }
 
-    public StringProperty alias() {
+    public StringProperty aliasProperty() {
         return alias;
     }
 
