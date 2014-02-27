@@ -66,7 +66,7 @@ public class Session {
     public Table getTable(String inName) {
         return tables.get(inName);
     }
-    
+        
     public List<Attribute> getAttributes() {
         return attributes;
     }

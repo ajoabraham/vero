@@ -6,6 +6,7 @@
 
 package com.vero.report;
 
+import com.vero.metadata.JoinDefinition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +23,7 @@ public class Block {
     private final Map<String, String> metricMap = new HashMap(); // (UUID String of metric, UUID String of expression)
     private final Map<String, String> expressionMap = new HashMap(); // (UUID String of expression, UUID String of table)
     private final Map<String, String> tableMap = new HashMap(); // (UUID String of table, String of alias)
-    private final List<String> joindefList = new ArrayList();
-    private final List<JoinDefinitionUnit> joindefUnitList = new ArrayList();
+    private final List<JoinDefinition> joindefList = new ArrayList();
     
     public Block() {
     }
@@ -70,14 +70,10 @@ public class Block {
     
     public List getJoinDefList() {
         return joindefList;
-    }
+    }      
 
-    public List getJoinDefUnitList() {
-        return joindefUnitList;
-    }
-    
-    public void addJoinDefList(UUID joinDef) {
-        joindefList.add(joinDef.toString());
+    public void addJoinDefList(JoinDefinition joinDef) {
+        joindefList.add(joinDef);
     }
     
     @Override
