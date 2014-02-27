@@ -14,31 +14,49 @@ import java.util.UUID;
  */
 public class JoinDefinition {
     private UUID uuid = null;
+    private String uuidStr = null;
     private String name = null;
     private String tleft = null;
+    private String tleftuuidStr = null;
     private String cleft = null;
     private String tright = null;
+    private String trightuuidStr = null;
     private String cright = null;
     private String operator = null;
     private String expression = null;
-    // JoinType type;
-    private String type = null;
+    JoinType type;   
     
     public enum JoinType {
         NONE,
         INNER,
         OUTER,
         LEFT,
-        RIGHT
+        RIGHT,
+        CROSS
     }
         
-    public JoinDefinition(UUID uuid, String name, String tleft, String cleft, String operator, String tright, String cright, String expression, String type) {
+    public JoinDefinition(
+            UUID uuid, 
+            String uuidStr,
+            String name, 
+            String tleft, 
+            String tleftUUID,
+            String cleft, 
+            String operator, 
+            String tright, 
+            String trightUUID,
+            String cright, 
+            String expression, 
+            JoinType type) {
         this.uuid = uuid;
+        this.uuidStr = uuidStr;
         this.name = name;
         this.tleft = tleft;
+        this.tleftuuidStr = tleftUUID;
         this.cleft = cleft;
         this.operator = operator;
         this.tright = tright;
+        this.trightuuidStr = trightUUID;
         this.cright = cright;
         this.expression = expression;
         this.type = type;
@@ -47,6 +65,18 @@ public class JoinDefinition {
     public UUID getUUID() {
         return uuid;
     }
+
+    public String getUUIDStr() {
+        return uuidStr;
+    }
+    
+    public String getTLeftStr() {
+        return tleftuuidStr;
+    }
+    
+    public String getTRightStr() {
+        return trightuuidStr;
+    }    
     
     public String getName() {
         return name;
@@ -72,7 +102,7 @@ public class JoinDefinition {
         return operator;
     }
     
-    public String getType() {
+    public JoinType getType() {
         return type;
     }
 

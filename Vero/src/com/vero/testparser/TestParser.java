@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
-import static java.lang.System.exit;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -221,30 +220,58 @@ public class TestParser {
 
                 for (int i = 0; i < JDsArraySize; i++) {
                     JSONObject oneJSONJDObj = jsonJDsArray.getJSONObject(i);
-                                        
+                    String tleft = oneJSONJDObj.getString("tleft");
+                    String tright = oneJSONJDObj.getString("tright");                   
+                    String jtype = oneJSONJDObj.getString("jointype");
+                    
                     System.out.println("json JD object " + i + ": ");
                     // DS
                     System.out.println("name:" + oneJSONJDObj.getString("name"));
-                    System.out.println("tleft table name:" + oneJSONJDObj.getString("tleft"));
+                    System.out.println("tleft table name:" + tleft);
                     System.out.println("cleft column name:" + oneJSONJDObj.getString("cleft"));
                     System.out.println("operator:" + oneJSONJDObj.getString("operator"));
-                    System.out.println("tright table name:" + oneJSONJDObj.getString("tright"));
+                    System.out.println("tright table name:" + tright);
                     System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
                     System.out.println("expression:" + oneJSONJDObj.getString("expression"));
-                    System.out.println("jointype:" + oneJSONJDObj.getString("jointype"));
+                    System.out.println("jointype:" + jtype);
                     
                     UUID jdUUID = getUUID(oneJSONJDObj);
-                    // add DS                
+                    JoinDefinition.JoinType joinType;
+                    
+                    switch (jtype) {
+                        case "inner":
+                            joinType = JoinDefinition.JoinType.INNER;
+                            break;
+                        case "outer":
+                            joinType = JoinDefinition.JoinType.OUTER;
+                            break;
+                        case "left":
+                            joinType = JoinDefinition.JoinType.LEFT;
+                            break;
+                        case "right":
+                            joinType = JoinDefinition.JoinType.RIGHT;
+                            break;
+                        case "cross":
+                            joinType = JoinDefinition.JoinType.CROSS;
+                            break;
+                        default:
+                            joinType = JoinDefinition.JoinType.NONE;
+                            break;                                    
+                    }
+                                       
                     JoinDefinition aJoin = new JoinDefinition(
                         jdUUID,
+                        jdUUID.toString(),
                         oneJSONJDObj.getString("name"),
-                        oneJSONJDObj.getString("tleft"),
+                        tleft,
+                        testDS.getTable(tleft).getUUID().toString(),
                         oneJSONJDObj.getString("cleft"),
                         oneJSONJDObj.getString("operator"),
-                        oneJSONJDObj.getString("tright"),
+                        tright,
+                        testDS.getTable(tright).getUUID().toString(),
                         oneJSONJDObj.getString("cright"),
                         oneJSONJDObj.getString("expression"),
-                        oneJSONJDObj.getString("jointype")
+                        joinType
                     );
                     testSession.addJoindef(aJoin);
                 }
