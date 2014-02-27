@@ -29,8 +29,8 @@ public class QueryBlockObjectData extends BlockObjectData {
     private IntegerProperty position = new SimpleIntegerProperty();
 
     private DatasourceObjectData datasourceObjectData = null;
-    private List<AttributeObjectData> attributeObjectDataList = new ArrayList<AttributeObjectData>();
-    private List<MetricObjectData> metricObjectDataList = new ArrayList<MetricObjectData>();
+    private ObservableList<AttributeObjectData> attributeObjectDataList = FXCollections.observableArrayList();
+    private ObservableList<MetricObjectData> metricObjectDataList = FXCollections.observableArrayList();
     private ObservableList<TableObjectData> tableObjectDataList = FXCollections.observableArrayList();
     private List<TableJoinObjectData> tableJoinObjectDataList = new ArrayList<TableJoinObjectData>();
     private Map<String, List<String>> tableToAttributeMetricMap = new HashMap<String, List<String>>();
@@ -76,13 +76,13 @@ public class QueryBlockObjectData extends BlockObjectData {
 	this.datasourceObjectData = datasourceObjectData;
     }
 
-    public List<AttributeObjectData> getAttributeObjectDataList() {
+    public ObservableList<AttributeObjectData> getAttributeObjectDataList() {
 	return attributeObjectDataList;
     }
 
-    public void setAttributeObjectDataList(List<AttributeObjectData> attributeObjectDataList) {
-	this.attributeObjectDataList = attributeObjectDataList;
-    }
+//    public void setAttributeObjectDataList(List<AttributeObjectData> attributeObjectDataList) {
+//	this.attributeObjectDataList = attributeObjectDataList;
+//    }
 
     public void addAttributeObjectData(AttributeObjectData attributeObjectData) {
 	attributeObjectDataList.add(attributeObjectData);
@@ -92,13 +92,13 @@ public class QueryBlockObjectData extends BlockObjectData {
 	return attributeObjectDataList.remove(attributeObjectData);
     }
 
-    public List<MetricObjectData> getMetricObjectDataList() {
+    public ObservableList<MetricObjectData> getMetricObjectDataList() {
 	return metricObjectDataList;
     }
 
-    public void setMetricObjectDataList(List<MetricObjectData> metricObjectDataList) {
-	this.metricObjectDataList = metricObjectDataList;
-    }
+//    public void setMetricObjectDataList(List<MetricObjectData> metricObjectDataList) {
+//	this.metricObjectDataList = metricObjectDataList;
+//    }
 
     public void addMetricObjectData(MetricObjectData metricObjectData) {
 	metricObjectDataList.add(metricObjectData);

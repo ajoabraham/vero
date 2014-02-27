@@ -24,7 +24,6 @@ import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.dropzone.DropZonePane;
-import com.vero.ui.report.dropzone.TableDropTargetPane;
 
 /**
  *
@@ -81,7 +80,9 @@ public class QueryPane extends ScrollPane {
         
         DropZonePane dropZonePane = new DropZonePane(reportPane);
         reportBlockPane = (ReportBlockPane) BlockPaneFactory.createReportBlockPane(reportPane, dropZonePane, reportObjectData.getReportBlockObjectData());
-        reportBlockPane.getQueryBlockObjectData().getTableObjectDataList().addListener((TableDropTargetPane) dropZonePane.getTableDropPane());
+        reportBlockPane.getQueryBlockObjectData().getTableObjectDataList().addListener(dropZonePane.getTableDropPane());
+        reportBlockPane.getQueryBlockObjectData().getAttributeObjectDataList().addListener(dropZonePane.getAttributeDropPane());
+        reportBlockPane.getQueryBlockObjectData().getMetricObjectDataList().addListener(dropZonePane.getMetricDropPane());
         contentPane.getChildren().add(reportBlockPane);
         dropZonePaneContainer.getChildren().add(dropZonePane);
                 
@@ -104,7 +105,10 @@ public class QueryPane extends ScrollPane {
         QueryBlockObjectData queryBlockObjectData = new QueryBlockObjectData();
         queryBlockObjectData.setPosition(blockPanes.size());
         reportObjectData.addBlockObjectData(queryBlockObjectData);
-        BlockPane queryBlock = BlockPaneFactory.createQueryBlockPane(reportPane, dropZonePane, queryBlockObjectData);
+        QueryBlockPane queryBlock = (QueryBlockPane) BlockPaneFactory.createQueryBlockPane(reportPane, dropZonePane, queryBlockObjectData);
+        queryBlock.getQueryBlockObjectData().getTableObjectDataList().addListener(dropZonePane.getTableDropPane());
+        queryBlock.getQueryBlockObjectData().getAttributeObjectDataList().addListener(dropZonePane.getAttributeDropPane());
+        queryBlock.getQueryBlockObjectData().getMetricObjectDataList().addListener(dropZonePane.getMetricDropPane());     
         blockPanes.add(queryBlock);
         
         contentPane.getChildren().add(contentPane.getChildren().size() - 1, queryBlock);
