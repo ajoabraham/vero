@@ -215,14 +215,12 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 	    }
 	    
 	    // Update table joins
-	    List<JoinDefinition> joinDefs = block.getJoinDefUnitList();
+	    List<JoinDefinition> joinDefs = block.getJoinDefList();
 	    for (JoinDefinition joinDef : joinDefs) {
-	        System.err.println(joinDef.getCLeft());
-	        System.err.println(joinDef.getCRight());
-	        System.err.println(joinDef.getTLeft());
-	        System.err.println(joinDef.getTRight());
-	        System.err.println(joinDef.getExpression());
-	        System.err.println(joinDef.getOperator());
+	        System.err.println("Left Table = " + joinDef.getTLeftStr());
+	        System.err.println("Right Table = " + joinDef.getTRightStr());
+	        System.err.println("Expression = " + joinDef.getExpression());
+	        System.err.println("Operator = " + joinDef.getOperator());
 	    }
 	}	
     }
