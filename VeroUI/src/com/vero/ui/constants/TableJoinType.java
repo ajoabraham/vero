@@ -6,6 +6,8 @@
 
 package com.vero.ui.constants;
 
+import com.vero.metadata.JoinDefinition.JoinType;
+
 import javafx.scene.image.Image;
 
 /**
@@ -72,4 +74,22 @@ public enum TableJoinType {
     public abstract TableJoinType next();
 
     public abstract Image getImage();
+    
+    public static TableJoinType convertType(JoinType joinType) {
+        switch (joinType) {
+            case  CROSS:
+            case  NONE:
+                return CROSS_JOIN;
+            case OUTER:
+                return FULL_OUTER_JOIN;
+            case INNER:
+                return INNER_JOIN;
+            case LEFT:
+                return LEFT_JOIN;
+            case RIGHT:
+                return RIGHT_JOIN;
+            default:
+                return CROSS_JOIN;
+        }
+    }
 }
