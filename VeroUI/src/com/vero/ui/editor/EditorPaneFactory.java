@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.UIData;
 import com.vero.ui.report.querypane.QueryBlockPane;
 
@@ -29,6 +30,7 @@ public final class EditorPaneFactory {
         	editorPane = new MetricEditorPane(queryBlockPane, (MetricObjectData) data);
                 break;
             case TABLE_JOIN:
+        	editorPane = new TableJoinEditorPane(queryBlockPane, (TableJoinObjectData) data);
                 break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", data.getType());

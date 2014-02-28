@@ -132,13 +132,17 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
             }
 
             protected String computeValue() {
-                Hints hints = Hints.select(formulaTextField.getText(), formulaTextField.getCaretPosition(), ParserUtils.PARSER);
-                StringBuffer hintText = new StringBuffer();
-                for (FunctionSpec functionSpec : hints.functions()) {
-                    hintText.append(functionSpec.name()).append("\n");
-                }
-
-                return hintText.toString();
+        	StringBuffer hintText = new StringBuffer();
+        	if (formulaTextField.getText() != null) {
+            	int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? 
+            		formulaTextField.getText().length() : formulaTextField.getCaretPosition();
+                    Hints hints = Hints.select(formulaTextField.getText(), caretPosition, ParserUtils.PARSER);
+                    for (FunctionSpec functionSpec : hints.functions()) {
+                        hintText.append(functionSpec.name()).append("\n");
+                    }
+        	}
+        	
+        	return hintText.toString();
             }
 
         });

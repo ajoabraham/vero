@@ -128,15 +128,17 @@ public class AttributeEditorPane extends EditorPane<AttributeObjectData> impleme
             }
 
             protected String computeValue() {      
-        	int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? 
-        		formulaTextField.getText().length() : formulaTextField.getCaretPosition();
-                Hints hints = Hints.select(formulaTextField.getText(), caretPosition, ParserUtils.PARSER);
-                StringBuffer hintText = new StringBuffer();
-                for (FunctionSpec functionSpec : hints.functions()) {
-                    hintText.append(functionSpec.name()).append("\n");
-                }
-
-                return hintText.toString();
+        	StringBuffer hintText = new StringBuffer();
+        	if (formulaTextField.getText() != null) {
+            	int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? 
+            		formulaTextField.getText().length() : formulaTextField.getCaretPosition();
+                    Hints hints = Hints.select(formulaTextField.getText(), caretPosition, ParserUtils.PARSER);
+                    for (FunctionSpec functionSpec : hints.functions()) {
+                        hintText.append(functionSpec.name()).append("\n");
+                    }
+        	}
+        	
+        	return hintText.toString();
             }
 
         });

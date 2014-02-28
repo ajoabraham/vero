@@ -23,11 +23,23 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     DATASOURCE {
         @Override
         public String getStyleClass() {
             return CLASS_DATASOURCE_OBJECT_PANE;
+        }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
         }
     }, 
     DATABASE {
@@ -36,6 +48,12 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
         
     },
     TABLE {
@@ -43,11 +61,23 @@ public enum ObjectType {
         public String getStyleClass() {
             return CLASS_TABLE_OBJECT_PANE;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     COLUMN {
         @Override
         public String getStyleClass() {
             return CLASS_COLUMN_OBJECT_PANE;
+        }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
         }
     },
     EXPRESSION {
@@ -55,11 +85,22 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     ATTRIBUTE {
         @Override
         public String getStyleClass() {
             return CLASS_ATTRIBUTE_OBJECT_PANE;
+        }
+
+	@Override
+        public String getName() {
+	    return "ATTRIBUTE";
         }
     },
     METRIC {
@@ -67,11 +108,21 @@ public enum ObjectType {
         public String getStyleClass() {
             return CLASS_METRIC_OBJECT_PANE;
         }
+
+	@Override
+        public String getName() {
+	    return "METRIC";
+        }
     },
     TABLE_JOIN {
         @Override
         public String getStyleClass() {
             return CLASS_TABLE_JOIN_OBJECT_PANE;
+        }
+
+	@Override
+        public String getName() {
+	    return "TABLE JOIN";
         }
     },
     REPORT {
@@ -79,11 +130,23 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     GLOBAL_FILTER {
 
 	@Override
         public String getStyleClass() {
+	    return null;
+        }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
 	    return null;
         }
 	
@@ -93,11 +156,23 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     QUERY_BLOCK {
         @Override
         public String getStyleClass() {
             return null;
+        }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
         }
     },
     REPORT_BLOCK {
@@ -105,13 +180,26 @@ public enum ObjectType {
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     },
     FINAL_BLOCK {
         @Override
         public String getStyleClass() {
             return null;
         }
+
+	@Override
+        public String getName() {
+	    // TODO Auto-generated method stub
+	    return null;
+        }
     };
     
     public abstract String getStyleClass();
+    public abstract String getName();
 }

@@ -9,11 +9,9 @@ package com.vero.ui.report.dropzone;
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_PANE;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.report.ReportPane;
 
@@ -53,12 +51,12 @@ public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObj
         getChildren().add(rightTableLabel);
     }
     
-    @Override
-    public void handle(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            TableJoinType nextType = data.getTableJoinType().next();
-            tableJoinImageView.setImage(nextType.getImage());
-            data.setTableJoinType(nextType);
-        }
-    }
+//    @Override
+//    public void handle(MouseEvent event) {
+//        if (event.getClickCount() == 1) {
+//            TableJoinType nextType = data.getTableJoinType().next();
+//            tableJoinImageView.setImage(nextType.getImage());
+//            data.setTableJoinType(nextType);
+//        }
+//    }
 }

@@ -527,6 +527,12 @@
     -fx-background-position: left top;
 }
 
+.table-icon-label {
+	-fx-background-image: url("images/bg_attribute.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;
+}
+
 .editor-table-label-pane {
     -fx-background-radius: 5;
     -fx-background-color: -fx-main-background-color;

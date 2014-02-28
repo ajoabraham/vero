@@ -13,6 +13,7 @@ import static com.vero.ui.constants.CSSConstants.CLASS_FORM_LABEL;
 import static com.vero.ui.constants.CSSConstants.CLASS_FORM_TEXT_FIELD;
 import static com.vero.ui.constants.CSSConstants.CLASS_METRIC_ICON_LABEL;
 import static com.vero.ui.constants.CSSConstants.CLASS_SELECTED_TOOL_BAR_BUTTON;
+import static com.vero.ui.constants.CSSConstants.CLASS_TABLE_JOIN_ICON_LABEL;
 import static com.vero.ui.constants.CSSConstants.VERO_CSS_FILE;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_HEIGHT;
 import static com.vero.ui.constants.UIConstants.DEFAULT_BUTTON_WIDTH;
@@ -62,6 +63,9 @@ public final class UIUtils {
             case METRIC:
                 styleClass = CLASS_METRIC_ICON_LABEL;
                 break;
+            case TABLE_JOIN:
+        	styleClass = CLASS_TABLE_JOIN_ICON_LABEL;
+        	break;
             default:
                 logger.log(Level.SEVERE, "Invalid object type - {0}", type);
         }

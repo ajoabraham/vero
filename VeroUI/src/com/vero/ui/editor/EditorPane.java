@@ -53,7 +53,7 @@ public abstract class EditorPane<T extends UIData> extends BorderPane implements
         iconLabel.getStyleClass().add(UIUtils.getEditorPaneIconStyleClass(getType()));
         toolbar.getChildren().add(iconLabel);
         
-        Label titleLabel = new Label(data.getType().toString());
+        Label titleLabel = new Label(data.getType().getName());
         titleLabel.getStyleClass().add(CLASS_SUBSECTION_TITLE);
         toolbar.getChildren().add(titleLabel);
         
