@@ -21,10 +21,16 @@ public class EditorTableLabelPane extends LabelPane {
     private TableObjectData data = null;
     private Label tableLabel = null;
     private ImageView tableTypeImageView = null;
+    private boolean showAlias = false;
+    
+    public EditorTableLabelPane(TableObjectData data, boolean showAlias) {
+        this.data = data;        
+        this.showAlias = showAlias;
+        buildUI();
+    }
     
     public EditorTableLabelPane(TableObjectData data) {
-        this.data = data;        
-        buildUI();
+        this(data, false);
     }
     
     private void buildUI() {
@@ -42,7 +48,7 @@ public class EditorTableLabelPane extends LabelPane {
     }
     
     private void populateData(TableObjectData data) {
-        tableLabel.setText(data.getName());
+        tableLabel.setText(showAlias ? data.getName() + " " + data.getAlias() : data.getName());
         tableTypeImageView.setImage(data.getTableType().getImage());
     }
 

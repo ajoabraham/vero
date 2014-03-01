@@ -126,6 +126,10 @@ public final class LabelPaneFactory {
     }
     
     public static EditorTableLabelPane createEditorTablePane(TableObjectData tableObjectData) {
-        return new EditorTableLabelPane(tableObjectData);
+        return createEditorTablePane(tableObjectData, false);
+    }
+    
+    public static EditorTableLabelPane createEditorTablePane(TableObjectData tableObjectData, boolean showAlias) {
+        return new EditorTableLabelPane(tableObjectData, showAlias);
     }
 }

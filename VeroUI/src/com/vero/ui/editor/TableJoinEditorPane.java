@@ -8,14 +8,20 @@ import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_CONTAINER_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,7 +33,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
+import com.vero.ui.common.ConfirmationDialogs;
+import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.TableJoinObjectData;
+import com.vero.ui.model.TableObjectData;
 import com.vero.ui.report.querypane.QueryBlockPane;
 import com.vero.ui.util.ParserUtils;
 
@@ -43,13 +53,16 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
     private static final Logger logger = Logger.getLogger(TableJoinEditorPane.class.getName());
 
     private QueryBlockPane queryBlockPane = null;
-    private String originalFormula = null;
+    private QueryBlockObjectData queryBlockObjectData = null;
+    private EditorTableLabelPane leftTablePane = null;
+    private EditorTableLabelPane rightTablePane = null;
     private ImageView joinTypeImageView = null;
     private TextField formulaTextField = null;
 
     public TableJoinEditorPane(QueryBlockPane queryBlockPane, TableJoinObjectData data) {
         super(data);
         this.queryBlockPane = queryBlockPane;
+        this.queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
         buildUI();
     }
 
@@ -74,7 +87,62 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
                 }
             }
         });
-        tableContainer.getChildren().add(joinTypeImageView);
+	
+	leftTablePane = LabelPaneFactory.createEditorTablePane(data.getLeftTable(), true);
+	leftTablePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {                        
+                    ContextMenu contextMenu = new ContextMenu();
+
+                    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
+                        final MenuItem menuItem = new MenuItem(tableObjectData.getName() + " " + tableObjectData.getAlias(), 
+                                new ImageView(tableObjectData.getTableType().getImage()));
+                        menuItem.setUserData(tableObjectData);
+                        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent evnet) {
+                                leftTablePane.setData((TableObjectData) menuItem.getUserData());
+                            }
+                            
+                        });
+                        contextMenu.getItems().add(menuItem);
+                    }
+
+                    contextMenu.show((Node) event.getSource(), Side.BOTTOM, 0, 0);
+                }
+            }
+        });
+	rightTablePane = LabelPaneFactory.createEditorTablePane(data.getRightTable(), true);
+	rightTablePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY && event.getClickCount() == 1) {                        
+                    ContextMenu contextMenu = new ContextMenu();
+
+                    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
+                        final MenuItem menuItem = new MenuItem(tableObjectData.getName() + " " + tableObjectData.getAlias(), 
+                                new ImageView(tableObjectData.getTableType().getImage()));
+                        menuItem.setUserData(tableObjectData);
+                        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent evnet) {
+                                rightTablePane.setData((TableObjectData) menuItem.getUserData());
+                            }
+                            
+                        });
+                        contextMenu.getItems().add(menuItem);
+                    }
+
+                    contextMenu.show((Node) event.getSource(), Side.BOTTOM, 0, 0);
+                }
+            }
+        });
+	tableContainer.setPrefWidth(420);
+	tableContainer.setSpacing(10);
+        tableContainer.getChildren().addAll(leftTablePane, joinTypeImageView, rightTablePane);
 
         VBox contentPane = new VBox();
         contentPane.getStyleClass().add(CLASS_CONTENT_PANE);
@@ -84,7 +152,6 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
         formulaTextField = new TextField();
         formulaTextField.setPromptText("Enter a join definition");
         formulaTextField.textProperty().bindBidirectional(data.formulaProperty());
-        originalFormula = data.getFormula();
         formulaTextField.setPrefHeight(OBJECT_CONTAINER_PANE_HEIGHT);
         formulaTextField.setMaxHeight(OBJECT_CONTAINER_PANE_HEIGHT);
         formulaTextField.textProperty().addListener(this);
@@ -148,7 +215,19 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
 
     @Override
     protected void handleApplyAction() {
+        // Validate join expression
+        try {
+            Join join = ParserUtils.parseJoin(formulaTextField.getText());
+            join.validate(ParserUtils.GENERIC_SQL);
+            
+            join.elementPositions();
+        }
+        catch (Exception e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+            ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
+        }
         
+        // Check if tables are selected
     }
 
     @Override
