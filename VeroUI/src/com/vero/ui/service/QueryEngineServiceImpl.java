@@ -17,12 +17,14 @@ import com.vero.queryengine.QueryEngine;
 import com.vero.report.Report;
 import com.vero.session.Session;
 import com.vero.testparser.TestParser;
+import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.QueryBlockObjectData;
+import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.TableObjectData;
 
 /**
@@ -41,6 +43,7 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	List<TableObjectData> tables = queryBlockObjectData.getTableObjectDataList();
 	List<AttributeObjectData> attributes = queryBlockObjectData.getAttributeObjectDataList();
 	List<MetricObjectData> metrics = queryBlockObjectData.getMetricObjectDataList();
+	List<TableJoinObjectData> tableJoins = queryBlockObjectData.getTableJoinObjectDataList();
 	
 	JSONStringer jsonOutput = new JSONStringer();
 	
@@ -160,8 +163,23 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	}
 	
 	jsonOutput.key("metrics")
-	          .value(metricArray)
-	          .endObject();
+	          .value(metricArray);
+	
+	JSONArray joinDefArray = new JSONArray();
+	
+	for (TableJoinObjectData tableJoin : tableJoins) {
+	    JSONObject jsonTableJoin = new JSONObject();
+	    jsonTableJoin.put("uuid", tableJoin.getId());
+	    jsonTableJoin.put("name", "");
+	    jsonTableJoin.put("tleft", tableJoin.getLeftTable().getPhysicalName());
+	    jsonTableJoin.put("tright", tableJoin.getRightTable().getPhysicalName());
+	    jsonTableJoin.put("expression", tableJoin.getFormula());
+	    jsonTableJoin.put("jointype", TableJoinType.convertType(tableJoin.getTableJoinType()).toString().toLowerCase());
+	    
+	    joinDefArray.put(jsonTableJoin);
+	}
+	
+	jsonOutput.key("joindefs").value(joinDefArray).endObject();
 	          
 	logger.finest("JSON Input = " + jsonOutput.toString());
 
