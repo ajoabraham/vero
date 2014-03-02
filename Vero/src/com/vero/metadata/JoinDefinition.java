@@ -18,10 +18,8 @@ public class JoinDefinition {
     private String name = null;
     private String tleft = null;
     private String tleftuuidStr = null;
-    private String cleft = null;
     private String tright = null;
     private String trightuuidStr = null;
-    private String cright = null;
     private String operator = null;
     private String expression = null;
     JoinType type;   
@@ -41,11 +39,8 @@ public class JoinDefinition {
             String name, 
             String tleft, 
             String tleftUUID,
-            String cleft, 
-            String operator, 
             String tright, 
             String trightUUID,
-            String cright, 
             String expression, 
             JoinType type) {
         this.uuid = uuid;
@@ -53,11 +48,8 @@ public class JoinDefinition {
         this.name = name;
         this.tleft = tleft;
         this.tleftuuidStr = tleftUUID;
-        this.cleft = cleft;
-        this.operator = operator;
         this.tright = tright;
         this.trightuuidStr = trightUUID;
-        this.cright = cright;
         this.expression = expression;
         this.type = type;
     }
@@ -85,21 +77,9 @@ public class JoinDefinition {
     public String getTLeft() {
         return tleft;
     }
-
-    public String getCLeft() {
-        return cleft;
-    }
     
     public String getTRight() {
         return tright;
-    }
-    
-    public String getCRight() {
-        return cright;
-    }
-
-    public String getOperator() {
-        return operator;
     }
     
     public JoinType getType() {

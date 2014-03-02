@@ -265,11 +265,8 @@ public class TestParser {
                         oneJSONJDObj.getString("name"),
                         tleft,
                         testDS.getTable(tleft).getUUID().toString(),
-                        oneJSONJDObj.getString("cleft"),
-                        oneJSONJDObj.getString("operator"),
                         tright,
                         testDS.getTable(tright).getUUID().toString(),
-                        oneJSONJDObj.getString("cright"),
                         oneJSONJDObj.getString("expression"),
                         joinType
                     );
