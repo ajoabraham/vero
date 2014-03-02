@@ -100,7 +100,7 @@
             "operator": "=",
             "tright": "DepartmentFacts",
             "cright": "dept_id",
-            "expression": "tleft.id=tright.dept_id",
+            "expression": "T0.id=T1.dept_id",
             "jointype": "inner"
         }
     ]

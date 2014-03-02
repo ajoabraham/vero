@@ -443,6 +443,7 @@ public class QueryEngine {
 
                     String jExp = aJoin.getExpression();
                     Join j = QueryEngine.parser.parseJoin(jExp);
+                    j = QueryEngine.parser.parseJoin(j.rewriteFormula());
                     Join rewrite = QueryEngine.parser.parseJoin(j.rewriteFormula(eu.retrieveMatchingAlias(aJoin.getTLeft()), eu.retrieveMatchingAlias(aJoin.getTRight())));
                     
                     if (cnt == 0) {

@@ -174,7 +174,7 @@
             "operator": "=",
             "tright": "Professors",
             "cright": "id",
-            "expression": "tleft.prof_id=tright.id",
+            "expression": "T0.prof_id=T1.id",
             "jointype": "inner"
         },
         {
@@ -184,7 +184,7 @@
             "operator": "=",
             "tright": "Students",
             "cright": "id",            
-            "expression": "tleft.std_id=tright.id",
+            "expression": "T0.std_id=T1.id",
             "jointype": "inner"
         }
     ]
