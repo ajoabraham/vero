@@ -20,7 +20,6 @@ public class JoinDefinition {
     private String tleftuuidStr = null;
     private String tright = null;
     private String trightuuidStr = null;
-    private String operator = null;
     private String expression = null;
     JoinType type;   
     
