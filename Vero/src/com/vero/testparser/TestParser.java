@@ -228,10 +228,7 @@ public class TestParser {
                     // DS
                     System.out.println("name:" + oneJSONJDObj.getString("name"));
                     System.out.println("tleft table name:" + tleft);
-                    System.out.println("cleft column name:" + oneJSONJDObj.getString("cleft"));
-                    System.out.println("operator:" + oneJSONJDObj.getString("operator"));
                     System.out.println("tright table name:" + tright);
-                    System.out.println("cright column name:" + oneJSONJDObj.getString("cright"));
                     System.out.println("expression:" + oneJSONJDObj.getString("expression"));
                     System.out.println("jointype:" + jtype);
                     
