@@ -505,8 +505,8 @@ public class QueryEngine {
                         fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                         
                         // make a virtual join def
-                        virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, null, 
-                            dstTableName, dstTable.getUUID().toString(), null, null, JoinDefinition.JoinType.CROSS);
+                        virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, 
+                            dstTableName, dstTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);
                     } else {
                         if (srcPU.getProcessed() == false) {
                             srcPU.setProcessed(true);
@@ -515,8 +515,8 @@ public class QueryEngine {
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                             
                             // make a virtual join def
-                            virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, null, 
-                                dstTableName, dstTable.getUUID().toString(), null, null, JoinDefinition.JoinType.CROSS);                            
+                            virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, 
+                                dstTableName, dstTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);                            
                         } else {
                             dstPU.setProcessed(true);
                             
@@ -524,8 +524,8 @@ public class QueryEngine {
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                             
                             // make a virtual join def
-                            virtualJD = new JoinDefinition(null, null, null, dstTableName, dstTable.getUUID().toString(), null, null, 
-                                srcTableName, srcTable.getUUID().toString(), null, null, JoinDefinition.JoinType.CROSS);                                                       
+                            virtualJD = new JoinDefinition(null, null, null, dstTableName, dstTable.getUUID().toString(), null, 
+                                srcTableName, srcTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);                                                       
                         }
                     }
                     
