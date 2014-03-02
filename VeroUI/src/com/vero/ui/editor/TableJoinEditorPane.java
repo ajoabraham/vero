@@ -227,6 +227,10 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
 	    join.validate(ParserUtils.GENERIC_SQL);
 	    
 	    Map<String, List<String>> tableAliasColumnMap = join.getTableAliasColumnMap();
+	    TableObjectData leftTable = leftTablePane.getData();
+	    validateColumnNames(leftTable, tableAliasColumnMap.get(leftTable.getAlias()));
+	    TableObjectData rightTable = rightTablePane.getData();
+	    validateColumnNames(rightTable, tableAliasColumnMap.get(rightTable.getAlias()));
 	    
 	}
 	catch (Exception e) {
@@ -246,6 +250,14 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
 	for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
 	    String alias = tableAliasMap.get(tableObjectData.getId());
 	    tableObjectData.setAlias(alias);
+	}
+    }
+    
+    private void validateColumnNames(TableObjectData tableObjectData, List<String> columnNames) throws Exception {
+	for (String columnName : columnNames) {
+	    if (!tableObjectData.containsColumn(columnName)) {
+		throw new Exception(columnName + " does not exist in table " + tableObjectData.getPhysicalName());
+	    }
 	}
     }
 
