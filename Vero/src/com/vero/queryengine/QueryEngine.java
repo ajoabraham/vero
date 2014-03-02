@@ -505,7 +505,7 @@ public class QueryEngine {
                         fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                         
                         // make a virtual join def
-                        virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, 
+                        virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), 
                             dstTableName, dstTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);
                     } else {
                         if (srcPU.getProcessed() == false) {
@@ -515,7 +515,7 @@ public class QueryEngine {
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                             
                             // make a virtual join def
-                            virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), null, 
+                            virtualJD = new JoinDefinition(null, null, null, srcTableName, srcTable.getUUID().toString(), 
                                 dstTableName, dstTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);                            
                         } else {
                             dstPU.setProcessed(true);
@@ -524,7 +524,7 @@ public class QueryEngine {
                             fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
                             
                             // make a virtual join def
-                            virtualJD = new JoinDefinition(null, null, null, dstTableName, dstTable.getUUID().toString(), null, 
+                            virtualJD = new JoinDefinition(null, null, null, dstTableName, dstTable.getUUID().toString(), 
                                 srcTableName, srcTable.getUUID().toString(), null, JoinDefinition.JoinType.CROSS);                                                       
                         }
                     }

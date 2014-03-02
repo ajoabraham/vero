@@ -39,7 +39,6 @@ public class JoinDefinition {
             String name, 
             String tleft, 
             String tleftUUID,
-            String operator, 
             String tright, 
             String trightUUID,
             String expression, 
@@ -49,7 +48,6 @@ public class JoinDefinition {
         this.name = name;
         this.tleft = tleft;
         this.tleftuuidStr = tleftUUID;
-        this.operator = operator;
         this.tright = tright;
         this.trightuuidStr = trightUUID;
         this.expression = expression;
@@ -82,10 +80,6 @@ public class JoinDefinition {
     
     public String getTRight() {
         return tright;
-    }
-
-    public String getOperator() {
-        return operator;
     }
     
     public JoinType getType() {
