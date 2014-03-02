@@ -8,6 +8,7 @@ import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_CONTAINER_PANE;
 import static com.vero.ui.constants.CSSConstants.CLASS_SECTION_TITLE;
 import static com.vero.ui.constants.UIConstants.OBJECT_CONTAINER_PANE_HEIGHT;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -224,6 +225,9 @@ public class TableJoinEditorPane extends EditorPane<TableJoinObjectData> impleme
 	try {
 	    Join join = ParserUtils.parseJoin(formulaTextField.getText());
 	    join.validate(ParserUtils.GENERIC_SQL);
+	    
+	    Map<String, List<String>> tableAliasColumnMap = join.getTableAliasColumnMap();
+	    
 	}
 	catch (Exception e) {
 	    logger.log(Level.INFO, e.getMessage(), e);
