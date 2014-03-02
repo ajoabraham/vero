@@ -30,13 +30,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
+import com.vero.metadata.JoinDefinition;
 import com.vero.report.Block;
 import com.vero.report.Report;
 import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.common.LabelPaneFactory;
+import com.vero.ui.constants.TableJoinType;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.QueryBlockObjectData;
+import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.TableObjectData;
 import com.vero.ui.report.querypane.QueryBlockPane;
 import com.vero.ui.service.MetadataPersistentService;
@@ -56,6 +60,7 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
     private static final Logger logger = Logger.getLogger(MetricEditorPane.class.getName());
 
     private QueryBlockPane queryBlockPane = null;
+    private QueryBlockObjectData queryBlockObjectData = null;
     private EditorTableLabelPane editorTableLabelPane = null;
     private TableObjectData originalTableObjectData = null;
     private String originalFormula = null;
@@ -64,6 +69,7 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
     public MetricEditorPane(QueryBlockPane queryBlockPane, MetricObjectData data) {
         super(data);
         this.queryBlockPane = queryBlockPane;
+        this.queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
         buildUI();
     }
 
@@ -132,17 +138,17 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
             }
 
             protected String computeValue() {
-        	StringBuffer hintText = new StringBuffer();
-        	if (formulaTextField.getText() != null) {
-            	int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? 
-            		formulaTextField.getText().length() : formulaTextField.getCaretPosition();
+                StringBuffer hintText = new StringBuffer();
+                if (formulaTextField.getText() != null) {
+                    int caretPosition = formulaTextField.getCaretPosition() > formulaTextField.getText().length() ? formulaTextField.getText().length()
+                            : formulaTextField.getCaretPosition();
                     Hints hints = Hints.select(formulaTextField.getText(), caretPosition, ParserUtils.PARSER);
                     for (FunctionSpec functionSpec : hints.functions()) {
                         hintText.append(functionSpec.name()).append("\n");
                     }
-        	}
-        	
-        	return hintText.toString();
+                }
+
+                return hintText.toString();
             }
 
         });
@@ -238,8 +244,8 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
                     data.addWhiteHardHint(selectedTableObjectData);
                     
                     data.addWhiteHardHint(selectedTableObjectData);
-                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);
-                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
+                    queryBlockObjectData.addTableObjectData(data, selectedTableObjectData);
+                    queryBlockObjectData.removeTableObjectData(data, originalTableObjectData);
                 }
             }
             else if (originalTableObjectData != selectedTableObjectData) {
@@ -262,8 +268,8 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
                     
                     data.addWhiteHardHint(selectedTableObjectData);
                     
-                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);
-                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
+                    queryBlockObjectData.addTableObjectData(data, selectedTableObjectData);
+                    queryBlockObjectData.removeTableObjectData(data, originalTableObjectData);
                 }
                 else {
                     logger.finest("There is no existing expression contains same formula.");
@@ -279,21 +285,42 @@ public class MetricEditorPane extends EditorPane<MetricObjectData> implements Ch
 
                     data.addWhiteHardHint(selectedTableObjectData);
                     
-                    queryBlockPane.getQueryBlockObjectData().addTableObjectData(data, selectedTableObjectData);
-                    queryBlockPane.getQueryBlockObjectData().removeTableObjectData(data, originalTableObjectData);
+                    queryBlockObjectData.addTableObjectData(data, selectedTableObjectData);
+                    queryBlockObjectData.removeTableObjectData(data, originalTableObjectData);
                 }
             }
 
-            Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockPane.getQueryBlockObjectData());
+            Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockObjectData);
             Block block = report.getBlocks().get(0);
             queryBlockPane.setSQLString(block.getSqlString());
             
 	    // Set up table alias
             Map<String, String> tableAliasMap = block.getTableMap();
-	    for (TableObjectData tableObjectData : queryBlockPane.getQueryBlockObjectData().getTableObjectDataList()) {
+	    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
 	        String alias = tableAliasMap.get(tableObjectData.getId());	        
 	        tableObjectData.setAlias(alias);
 	    }
+	    
+            // Update table join
+            List<JoinDefinition> joinDefs = block.getJoinDefList();
+            for (JoinDefinition joinDef : joinDefs) {
+                TableJoinObjectData tableJoinObjectData = queryBlockObjectData.getTableJoinObjectDataById(joinDef.getUUIDStr());
+                if (tableJoinObjectData == null) {
+                    tableJoinObjectData = new TableJoinObjectData();
+                    TableObjectData rightTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTRightStr());
+                    tableJoinObjectData.setRightTable(rightTableObjectData);
+                    TableObjectData leftTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTLeftStr());
+                    tableJoinObjectData.setLeftTable(leftTableObjectData);
+                    tableJoinObjectData.setTableJoinType(TableJoinType.convertType(joinDef.getType()));
+
+                    queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
+                }
+                else {                    
+                    tableJoinObjectData.setTableJoinType(TableJoinType.convertType(joinDef.getType()));                    
+                }
+            }
+                
+	    setVisible(false);
         }
         catch (Exception e) {
             logger.log(Level.INFO, e.getMessage(), e);

@@ -7,7 +7,9 @@
 package com.vero.ui.report.dropzone;
 
 import static com.vero.ui.constants.CSSConstants.CLASS_OBJECT_PANE;
+import javafx.beans.binding.ObjectBinding;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -39,7 +41,16 @@ public class TableJoinDropZoneObjectPane extends DropZoneObjectPane<TableJoinObj
         HBox.setHgrow(leftTableLabel, Priority.ALWAYS);
         getChildren().add(leftTableLabel);
 
-        tableJoinImageView = new ImageView(data.getTableJoinType().getImage());
+        tableJoinImageView = new ImageView();
+        tableJoinImageView.imageProperty().bind(new ObjectBinding<Image>() {
+            {
+                super.bind(data.tableJoinTypeProperty());
+            }
+            @Override
+            protected Image computeValue() {
+                return data.getTableJoinType().getImage();
+            }
+        });
         tableJoinImageView.setOnMouseClicked(this);
         getChildren().add(tableJoinImageView);
 

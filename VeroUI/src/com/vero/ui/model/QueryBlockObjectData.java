@@ -231,6 +231,16 @@ public class QueryBlockObjectData extends BlockObjectData {
 	
 	return null;
     }
+    
+    public TableJoinObjectData getTableJoinObjectDataById(String id) {
+        for (TableJoinObjectData tableJoinObjectData : tableJoinObjectDataList) {
+            if (id.equalsIgnoreCase(tableJoinObjectData.getId())) {
+                return tableJoinObjectData;
+            }
+        }
+        
+        return null;
+    }
 
     @Override
     public ObjectType getType() {
