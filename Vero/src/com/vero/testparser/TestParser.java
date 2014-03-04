@@ -223,13 +223,19 @@ public class TestParser {
                     String tleft = oneJSONJDObj.getString("tleft");
                     String tright = oneJSONJDObj.getString("tright");                   
                     String jtype = oneJSONJDObj.getString("jointype");
+                    String expression;
+                    if (oneJSONJDObj.isNull("expression")) {
+                        expression = null;
+                    } else {
+                        expression = oneJSONJDObj.getString("expression");
+                    }
                     
                     System.out.println("json JD object " + i + ": ");
                     // DS
                     System.out.println("name:" + oneJSONJDObj.getString("name"));
                     System.out.println("tleft table name:" + tleft);
                     System.out.println("tright table name:" + tright);
-                    System.out.println("expression:" + oneJSONJDObj.getString("expression"));
+                    System.out.println("expression:" + expression);
                     System.out.println("jointype:" + jtype);
                     
                     UUID jdUUID = getUUID(oneJSONJDObj);
@@ -264,7 +270,7 @@ public class TestParser {
                         testDS.getTable(tleft).getUUID().toString(),
                         tright,
                         testDS.getTable(tright).getUUID().toString(),
-                        oneJSONJDObj.getString("expression"),
+                        expression,
                         joinType
                     );
                     testSession.addJoindef(aJoin);
@@ -275,7 +281,7 @@ public class TestParser {
             parseHardhints(root, null, null, testSession);
         } catch (JSONException e) {
             System.out.println("JSONException..." + e.toString());
-            System.exit(0);
+            // System.exit(0);
         }
         
         return testSession;
