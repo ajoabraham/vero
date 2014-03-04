@@ -85,6 +85,10 @@ public class JoinDefinition {
         return type;
     }
 
+    public void setType(JoinType type) {
+        this.type = type;
+    }
+    
     public String getExpression() {
         return expression;
     }

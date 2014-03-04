@@ -87,6 +87,10 @@ public class Block {
         result.append("    metricMap size = ").append(metricMap.size()).append(NEW_LINE);
         result.append("    joindefList size = ").append(joindefList.size()).append(NEW_LINE);
         
+        for (JoinDefinition curJD : joindefList) {
+            result.append("        cur JD: type: ").append(curJD.getType());
+        }
+        
         return result.toString();
     }
 }

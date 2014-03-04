@@ -449,6 +449,12 @@ public class QueryEngine {
             for (EdgeUnit eu : sortedEUs) {
                 if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
                     JoinDefinition aJoin = eu.getJoinDef();
+                    
+                    // change join type to be returned to UI
+                    if (aJoin.getType() == JoinDefinition.JoinType.CROSS) {
+                        aJoin.setType(JoinDefinition.JoinType.INNER);
+                    }
+                    
                     aBlock.addJoinDefList(aJoin);
 
                     String jExp = aJoin.getExpression();
