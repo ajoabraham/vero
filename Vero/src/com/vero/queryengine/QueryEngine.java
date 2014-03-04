@@ -390,9 +390,19 @@ public class QueryEngine {
                     } else {
                         // same table but different column
                         column2PUMap.put(usedCol, pu);
-                        // FIXME: try to merge/remove the PU that doesn't have any linked eu
+                        // FIXME: try to merge/remove the PU
                         pu.setMasterPU(tabMatchingPU);
                         inGraph.removeVertex(pu);
+                        // FIXME: change the destination EU from the removed one the the master one
+                        for (EdgeUnit patchEU : euSet) {
+                            if (patchEU.getSrcPU() == pu) {
+                                patchEU.setSrcPU(tabMatchingPU);
+                            }
+                            
+                            if (patchEU.getDstPU() == pu) {
+                                patchEU.setDstPU(tabMatchingPU);
+                            }
+                        }
                     }
                 } else {
                     table2PUMap.put(usedTab, pu);
@@ -629,6 +639,7 @@ public class QueryEngine {
                      
         // union find on PU
         for (EdgeUnit eu : euSet) {
+            System.out.println("The eu: " + eu + " : " + eu.getDstTable() + " : " + eu.getSrcTable());
             unionPU.union(eu.getSrcPU(), eu.getDstPU());
         }
         

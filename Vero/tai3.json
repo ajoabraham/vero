@@ -1,0 +1,151 @@
+{
+    "datasources": [{
+        "name": "PostgreSQL",
+        "uuid": "d7f3dc03-7bb2-46e0-8850-5dcae283e2d6",
+        "database": {
+            "vendor": "Teradata"
+        }
+    }],
+    "tables": [{
+        "name": "products",
+        "columns": [{
+            "primaryKey": false,
+            "name": "UnitPrice",
+            "uuid": "eb57a645-3cdc-42a9-b3ec-234479f6c4c0",
+            "type": "float4",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "ProductName",
+            "uuid": "b04d40d3-cb43-49b2-87bb-425585e6abf4",
+            "type": "varchar",
+            "foreignKey": false
+        }, {
+            "primaryKey": true,
+            "name": "ProductID",
+            "uuid": "eaf79efd-e1ef-42b0-bfe7-5a9b255d7803",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "CategoryID",
+            "uuid": "a31240bb-d207-4e7f-a759-96736af79905",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "ReorderLevel",
+            "uuid": "bfa52e09-ee6e-42b5-a9b1-97ac649a1eb0",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "SupplierID",
+            "uuid": "14b36429-1c9c-4d43-8de9-59ea3fc18dec",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "UnitsOnOrder",
+            "uuid": "7d2925fa-471c-41ef-acb7-f129d700d9d4",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "UnitsInStock",
+            "uuid": "a4c0e45d-13e4-4e3e-802b-7faea8ff04cf",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "QuantityPerUnit",
+            "uuid": "34ad5ee6-7730-48e9-afe5-4da86d865f7a",
+            "type": "varchar",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "Discontinued",
+            "uuid": "ca1e4866-1beb-4c3f-ba31-088f1678dc6d",
+            "type": "int4",
+            "foreignKey": false
+        }],
+        "tableType": "dimension",
+        "rowCount": 77,
+        "uuid": "8e2d7b19-fd30-4f46-9721-3cc39ec63bf5",
+        "datasource": "PostgreSQL"
+    }, {
+        "name": "categories",
+        "columns": [{
+            "primaryKey": false,
+            "name": "CategoryName",
+            "uuid": "a71a6bb6-c5fc-4807-92d4-be6a1cc3536c",
+            "type": "varchar",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "Picture",
+            "uuid": "6e708fb5-2a69-4882-b393-f7fb93766ac6",
+            "type": "bytea",
+            "foreignKey": false
+        }, {
+            "primaryKey": true,
+            "name": "CategoryID",
+            "uuid": "a4101418-5621-4e2f-9716-d406c06d21e1",
+            "type": "int2",
+            "foreignKey": false
+        }, {
+            "primaryKey": false,
+            "name": "Description",
+            "uuid": "913cbf3c-6b8a-4105-bac8-61c468abcbac",
+            "type": "text",
+            "foreignKey": false
+        }],
+        "tableType": "dimension",
+        "rowCount": 8,
+        "uuid": "e26473eb-8ea1-4bae-940a-31d352fba16d",
+        "datasource": "PostgreSQL"
+    }],
+    "attributes": [{
+        "name": "ProductName",
+        "hardhints_white": [],
+        "uuid": "9eb13951-29ee-44ed-b806-44835b7afc66",
+        "expressions": [{
+            "definition": "ProductName",
+            "columns": [
+                ["ProductName", "products"]
+            ],
+            "uuid": "2c6e50ca-8a4e-4dbc-98ad-6cb2de6f5290"
+        }]
+    }, {
+        "name": "CategoryName",
+        "hardhints_white": [],
+        "uuid": "51ccf0ee-7143-44ea-b45a-0e72ea24eb7a",
+        "expressions": [{
+            "definition": "CategoryName",
+            "columns": [
+                ["CategoryName", "categories"]
+            ],
+            "uuid": "87058a0b-5059-4918-8c88-bbaf74cf63e4"
+        }]
+    }, {
+        "name": "ProductID",
+        "hardhints_white": [],
+        "uuid": "084cdbd1-0499-4c38-b6f5-b7271b6223a0",
+        "expressions": [{
+            "definition": "ProductID",
+            "columns": [
+                ["ProductID", "products"]
+            ],
+            "uuid": "0221cfdd-a866-435a-bed4-7045c6545145"
+        }]
+    }],
+    "metrics": [],
+    "joindefs": [{
+        "jointype": "inner",
+        "expression": "T0.CategoryID=T1.CategoryID",
+        "tright": "categories",
+        "name": "",
+        "uuid": "6986adb6-be7a-43c2-881b-f1f6b6979172",
+        "tleft": "products"
+    }]
+}
