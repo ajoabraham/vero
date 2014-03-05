@@ -232,8 +232,8 @@ public class QueryEngineTest {
     }
     
     @Test
-    public void testTai() {
-        TestParser testParser = new TestParser("tai.json");
+    public void testTai1() {
+        TestParser testParser = new TestParser("tai1.json");
         Session userSession = testParser.parse();
         QueryEngine queryEngine = new QueryEngine();
         queryEngine.preprocess(userSession);
@@ -249,7 +249,7 @@ public class QueryEngineTest {
         System.out.println(expectedSQL);
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
-        assertEquals("tai", expectedSQL, resultSQL);
+        assertEquals("tai1", expectedSQL, resultSQL);
     }
     
     @Test
@@ -273,5 +273,95 @@ public class QueryEngineTest {
         System.out.println("Result SQL:");
         System.out.println(resultSQL);
         assertEquals("tai2", expectedSQL, resultSQL);
+    }
+    
+    @Test
+    public void testTai3() {
+        TestParser testParser = new TestParser("tai3.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T0\".\"ProductName\", \"T1\".\"CategoryName\", \"T0\".\"ProductID\"\n" +
+            "FROM \"products\" AS \"T0\"\n" +
+            "INNER JOIN \"categories\" AS \"T1\" ON (\"T0\".\"CategoryID\" = \"T1\".\"CategoryID\")";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("tai3", expectedSQL, resultSQL);
+    }
+    
+    @Test
+    public void testTai4() {
+        TestParser testParser = new TestParser("tai4.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T0\".\"UnitsInStock\", \"T1\".\"CompanyName\"\n" +
+            "FROM \"products\" AS \"T0\"\n" +
+            "CROSS JOIN \"shippers\" AS \"T1\"";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("tai4", expectedSQL, resultSQL);
+    }
+    
+    @Test
+    public void testYulin1() {
+        TestParser testParser = new TestParser("yulin1.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T2\".\"CompanyName\", \"T1\".\"CategoryName\", \"T0\".\"CompanyName\"\n" +
+            "FROM \"shippers\" AS \"T0\"\n" +
+            "INNER JOIN \"categories\" AS \"T1\" ON (\"T0\".\"ShipperID\" = \"T1\".\"CategoryID\")\n" +
+            "CROSS JOIN \"shippers\" AS \"T2\"";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("yulin1", expectedSQL, resultSQL);
+    }    
+
+    @Test
+    public void testYulin2() {
+        TestParser testParser = new TestParser("yulin2.json");
+        Session userSession = testParser.parse();
+        QueryEngine queryEngine = new QueryEngine();
+        queryEngine.preprocess(userSession);
+                
+        String expectedSQL = 
+            "SELECT \"T0\".\"CustomerTypeID\", \"T1\".\"CompanyName\", \"T2\".\"TerritoryDescription\"\n" +
+            "FROM \"customercustomerdemo\" AS \"T0\"\n" +
+            "CROSS JOIN \"shippers\" AS \"T1\"\n" +
+            "CROSS JOIN \"territories\" AS \"T2\"";
+        
+        Report curReport = queryEngine.getReport();          
+        String resultSQL = curReport.getBlocks().get(0).getSqlString();
+        
+        System.out.println("Expected SQL:");
+        System.out.println(expectedSQL);
+        System.out.println("Result SQL:");
+        System.out.println(resultSQL);
+        assertEquals("yulin2", expectedSQL, resultSQL);
     }
 }
