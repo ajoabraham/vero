@@ -1,0 +1,144 @@
+{
+  "datasources": [
+    {
+      "name": "PostgreSQL",
+      "uuid": "d7f3dc03-7bb2-46e0-8850-5dcae283e2d6",
+      "database": {
+        "vendor": "Teradata"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "name": "shippers",
+      "columns": [
+        {
+          "primaryKey": false,
+          "name": "CompanyName",
+          "uuid": "0813f3c9-fba6-40af-a25a-75f3fbee8f55",
+          "type": "varchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": false,
+          "name": "Phone",
+          "uuid": "d209b01e-c6f7-4efb-b9ec-dc13231ab006",
+          "type": "varchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": true,
+          "name": "ShipperID",
+          "uuid": "054de31b-8694-4a8f-ba60-00a62676672e",
+          "type": "int2",
+          "foreignKey": false
+        }
+      ],
+      "tableType": "dimension",
+      "rowCount": 6,
+      "uuid": "5beee1da-0d55-4892-9330-13572f1bceb3",
+      "datasource": "PostgreSQL"
+    },
+    {
+      "name": "categories",
+      "columns": [
+        {
+          "primaryKey": false,
+          "name": "CategoryName",
+          "uuid": "a71a6bb6-c5fc-4807-92d4-be6a1cc3536c",
+          "type": "varchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": false,
+          "name": "Picture",
+          "uuid": "6e708fb5-2a69-4882-b393-f7fb93766ac6",
+          "type": "bytea",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": true,
+          "name": "CategoryID",
+          "uuid": "a4101418-5621-4e2f-9716-d406c06d21e1",
+          "type": "int2",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": false,
+          "name": "Description",
+          "uuid": "913cbf3c-6b8a-4105-bac8-61c468abcbac",
+          "type": "text",
+          "foreignKey": false
+        }
+      ],
+      "tableType": "dimension",
+      "rowCount": 8,
+      "uuid": "e26473eb-8ea1-4bae-940a-31d352fba16d",
+      "datasource": "PostgreSQL"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "CompanyName",
+      "hardhints_white": [],
+      "uuid": "89e89f60-01b5-4ab2-939d-d15d6b4ccbd2",
+      "expressions": [
+        {
+          "definition": "CompanyName",
+          "columns": [
+            [
+              "CompanyName",
+              "shippers"
+            ]
+          ],
+          "uuid": "b2b4966b-4abd-46b8-906b-19aa6d48fa17"
+        }
+      ]
+    },
+    {
+      "name": "CategoryName",
+      "hardhints_white": [],
+      "uuid": "f636147c-bf46-4f41-9651-7211d9e6ce13",
+      "expressions": [
+        {
+          "definition": "CategoryName",
+          "columns": [
+            [
+              "CategoryName",
+              "categories"
+            ]
+          ],
+          "uuid": "ca6dd537-fa2b-42ab-a34f-0942add2a2e2"
+        }
+      ]
+    },
+    {
+      "name": "CompanyName",
+      "hardhints_white": [],
+      "uuid": "2f204885-1e53-493f-bf24-570078aaafbc",
+      "expressions": [
+        {
+          "definition": "CompanyName",
+          "columns": [
+            [
+              "CompanyName",
+              "shippers"
+            ]
+          ],
+          "uuid": "fe83ed7f-4afe-46c8-893b-de1b194a89c5"
+        }
+      ]
+    }
+  ],
+  "metrics": [],
+  "joindefs": [
+    {
+      "jointype": "inner",
+      "expression": "T0.ShipperID=T1.CategoryID",
+      "tright": "categories",
+      "name": "",
+      "uuid": "95aac0a1-52a8-418d-b905-839b11d5d66b",
+      "tleft": "shippers"
+    }
+  ]
+}

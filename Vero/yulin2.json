@@ -1,0 +1,159 @@
+{
+  "datasources": [
+    {
+      "name": "PostgreSQL",
+      "uuid": "d7f3dc03-7bb2-46e0-8850-5dcae283e2d6",
+      "database": {
+        "vendor": "Teradata"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "name": "customercustomerdemo",
+      "columns": [
+        {
+          "primaryKey": true,
+          "name": "CustomerTypeID",
+          "uuid": "75624482-e191-476a-a932-190eb0ecc2ae",
+          "type": "bpchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": true,
+          "name": "CustomerID",
+          "uuid": "12d82c9a-32ec-49b7-a2a6-4cfff47f7c29",
+          "type": "bpchar",
+          "foreignKey": false
+        }
+      ],
+      "tableType": "dimension",
+      "rowCount": 0,
+      "uuid": "d482bd60-ea96-4865-a588-f9caff9ce71e",
+      "datasource": "PostgreSQL"
+    },
+    {
+      "name": "shippers",
+      "columns": [
+        {
+          "primaryKey": false,
+          "name": "CompanyName",
+          "uuid": "0813f3c9-fba6-40af-a25a-75f3fbee8f55",
+          "type": "varchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": false,
+          "name": "Phone",
+          "uuid": "d209b01e-c6f7-4efb-b9ec-dc13231ab006",
+          "type": "varchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": true,
+          "name": "ShipperID",
+          "uuid": "054de31b-8694-4a8f-ba60-00a62676672e",
+          "type": "int2",
+          "foreignKey": false
+        }
+      ],
+      "tableType": "dimension",
+      "rowCount": 6,
+      "uuid": "5beee1da-0d55-4892-9330-13572f1bceb3",
+      "datasource": "PostgreSQL"
+    },
+    {
+      "name": "territories",
+      "columns": [
+        {
+          "primaryKey": false,
+          "name": "TerritoryDescription",
+          "uuid": "6cdb40fe-ec51-4274-a29a-cd9260bd4220",
+          "type": "bpchar",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": false,
+          "name": "RegionID",
+          "uuid": "e52e95c7-d5bf-4d52-ab0d-c43a9e8959fd",
+          "type": "int2",
+          "foreignKey": false
+        },
+        {
+          "primaryKey": true,
+          "name": "TerritoryID",
+          "uuid": "2f0dadaa-c245-4c16-b1b4-26bb519442a1",
+          "type": "varchar",
+          "foreignKey": false
+        }
+      ],
+      "tableType": "dimension",
+      "rowCount": 53,
+      "uuid": "707f077a-42d2-4be8-875b-67489f83aaad",
+      "datasource": "PostgreSQL"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "CustomerTypeID",
+      "hardhints_white": [],
+      "uuid": "62f0c09f-3954-43de-989a-ece2922d9dac",
+      "expressions": [
+        {
+          "definition": "CustomerTypeID",
+          "columns": [
+            [
+              "CustomerTypeID",
+              "customercustomerdemo"
+            ]
+          ],
+          "uuid": "45115092-8d58-417b-8ffa-e3cb82a000fd"
+        }
+      ]
+    },
+    {
+      "name": "CompanyName",
+      "hardhints_white": [],
+      "uuid": "f78b394f-9a96-492d-bd78-507dff313bf6",
+      "expressions": [
+        {
+          "definition": "CompanyName",
+          "columns": [
+            [
+              "CompanyName",
+              "shippers"
+            ]
+          ],
+          "uuid": "a83894a0-0294-429e-8b3d-cf562145a425"
+        }
+      ]
+    },
+    {
+      "name": "TerritoryDescription",
+      "hardhints_white": [],
+      "uuid": "d660772e-5a22-44aa-8ac0-7f1dc826d907",
+      "expressions": [
+        {
+          "definition": "TerritoryDescription",
+          "columns": [
+            [
+              "TerritoryDescription",
+              "territories"
+            ]
+          ],
+          "uuid": "bbcc582d-d949-4ca2-8c78-4582678ceb43"
+        }
+      ]
+    }
+  ],
+  "metrics": [],
+  "joindefs": [
+    {
+      "jointype": "cross",
+      "tright": "shippers",
+      "name": "",
+      "uuid": "58d3460d-9b8e-46b5-ac2e-0a6158a479b8",
+      "tleft": "customercustomerdemo"
+    }
+  ]
+}

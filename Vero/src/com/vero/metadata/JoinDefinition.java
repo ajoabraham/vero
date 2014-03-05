@@ -108,4 +108,14 @@ public class JoinDefinition {
     public boolean hasTable(String inTable) {
         return (inTable.equals(tleft) || inTable.equals(tright));
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
+        result.append("JD: ").append(expression).append("left: ").append(tleft).append("right: ").append(tright).append(NEW_LINE);
+                
+        return result.toString();
+    }    
 }

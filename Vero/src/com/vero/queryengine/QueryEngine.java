@@ -450,40 +450,96 @@ public class QueryEngine {
                 if (eu.getType() == EdgeUnit.EUType.EUTYPE_PHYSICAL) {
                     JoinDefinition aJoin = eu.getJoinDef();
                     
-                    // change join type to be returned to UI
-                    if (aJoin.getType() == JoinDefinition.JoinType.CROSS) {
-                        aJoin.setType(JoinDefinition.JoinType.INNER);
-                    }
-                    
-                    aBlock.addJoinDefList(aJoin);
+                    if (aJoin.getExpression() == null) {
+                        // the join-definition is a cross join that came from query engine, so there is no expression
+                        ProcessingUnit srcPU = eu.getSrcPU();
+                        ProcessingUnit dstPU = eu.getDstPU();
 
-                    String jExp = aJoin.getExpression();
-                    Join j = QueryEngine.parser.parseJoin(jExp);
-                    j = QueryEngine.parser.parseJoin(j.rewriteFormula());
-                    Join rewrite = QueryEngine.parser.parseJoin(j.rewriteFormula(eu.retrieveMatchingAlias(aJoin.getTLeft()), eu.retrieveMatchingAlias(aJoin.getTRight())));
-                    
-                    if (cnt == 0) {
-                        ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                        String tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + matchingPU.assignTableAlias() + "\"";
-                        fromStr = generateSqlString("FROM", tempStr, fromStr);
-                        
-                        matchingPU.setProcessed(true);
-                    }
+                        Table srcTable;
+                        Table dstTable;
+                        String srcTableName;
+                        String dstTableName;
 
-                    String tempStr;
-                    if (cnt == 0) {
-                        tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
-                    } else {
-                        ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
-                        ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
-
-                        if (leftPU.getProcessed() == false) {
-                            tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTLeft()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                        if (srcPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                            srcTable = (Table)srcPU.getContent();
+                            srcTableName = ((Table)srcPU.getContent()).getPhysicalName();
                         } else {
-                            tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                            srcTable = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable();
+                            srcTableName = srcPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
                         }
+
+                        if (dstPU.getType() == ProcessingUnit.PUType.PUTYPE_HARDHINT) {
+                            dstTable = (Table)dstPU.getContent();
+                            dstTableName = ((Table)dstPU.getContent()).getPhysicalName();
+                        } else {
+                            dstTable = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable();
+                            dstTableName = dstPU.getUsedExp().getExpression().getSmallestColumn().getTable().getPhysicalName();
+                        }
+
+                        // make a virtual join definition
+                        JoinDefinition virtualJD = null;
+
+                        if (cnt == 0) {
+                            srcPU.setProcessed(true);
+                            dstPU.setProcessed(true);
+
+                            String tempStr = "\"" + srcTableName + "\"" + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
+                            fromStr = generateSqlString("FROM", tempStr, fromStr);
+                            tempStr = "\"" + dstTableName + "\"" + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
+                            fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);
+                        } else {
+                            if (srcPU.getProcessed() == false) {
+                                srcPU.setProcessed(true);
+
+                                String tempStr = "\"" + srcTableName + "\"" + " AS " + "\"" + srcPU.assignTableAlias() + "\"";
+                                fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);                          
+                            } else {
+                                dstPU.setProcessed(true);
+
+                                String tempStr = "\"" + dstTableName + "\"" + " AS " + "\"" + dstPU.assignTableAlias() + "\"";
+                                fromStr = generateSqlString("CROSS JOIN", tempStr, fromStr);                                                       
+                            }
+                        }
+
+                        aBlock.addJoinDefList(aJoin);
+                    } else {
+                        // change join type to be returned to UI
+                        if (aJoin.getType() == JoinDefinition.JoinType.CROSS) {
+                            aJoin.setType(JoinDefinition.JoinType.INNER);
+                        }
+
+                        String jExp = aJoin.getExpression();
+                        System.out.println("XXXXXX: " + jExp);
+
+                        Join j = QueryEngine.parser.parseJoin(jExp);
+                        j = QueryEngine.parser.parseJoin(j.rewriteFormula());
+                        Join rewrite = QueryEngine.parser.parseJoin(j.rewriteFormula(eu.retrieveMatchingAlias(aJoin.getTLeft()), eu.retrieveMatchingAlias(aJoin.getTRight())));
+
+                        if (cnt == 0) {
+                            ProcessingUnit matchingPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                            String tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + matchingPU.assignTableAlias() + "\"";
+                            fromStr = generateSqlString("FROM", tempStr, fromStr);
+
+                            matchingPU.setProcessed(true);
+                        }
+
+                        String tempStr;
+                        if (cnt == 0) {
+                            tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                        } else {
+                            ProcessingUnit leftPU = eu.retrieveMatchingPU(aJoin.getTLeft());
+                            ProcessingUnit rightPU = eu.retrieveMatchingPU(aJoin.getTRight());
+
+                            if (leftPU.getProcessed() == false) {
+                                tempStr = "\"" + aJoin.getTLeft() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTLeft()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                            } else {
+                                tempStr = "\"" + aJoin.getTRight() + "\"" + " AS " + "\"" + eu.retrieveMatchingAlias(aJoin.getTRight()) + "\"" + " ON " + rewrite.sql(new TeradataSQL());
+                            }
+                        }
+                        fromStr = generateSqlString("INNER JOIN", tempStr, fromStr);
+                        
+                        aBlock.addJoinDefList(aJoin);
                     }
-                    fromStr = generateSqlString("INNER JOIN", tempStr, fromStr);                    
                 } else { //EUTYPE_VIRTUAL
                     ProcessingUnit srcPU = eu.getSrcPU();
                     ProcessingUnit dstPU = eu.getDstPU();
