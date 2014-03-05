@@ -6,6 +6,8 @@
 
 package com.vero.ui.model;
 
+import static com.vero.ui.constants.ObjectType.METRIC;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +20,11 @@ import com.vero.model.entities.SchemaExpression;
 import com.vero.model.entities.SchemaMetric;
 import com.vero.ui.constants.ObjectType;
 
-import static com.vero.ui.constants.ObjectType.METRIC;
-
 /**
  *
  * @author Tai Hu
  */
-public class MetricObjectData extends UIData {
+public class MetricObjectData extends PositionableObjectData {
     private static final long serialVersionUID = 1L;
     
     private SchemaMetric schemaMetric = null;
@@ -69,7 +69,7 @@ public class MetricObjectData extends UIData {
         this.name.set(name);
     }    
     
-    public StringProperty name() {
+    public StringProperty nameProperty() {
         return name;
     }
 
