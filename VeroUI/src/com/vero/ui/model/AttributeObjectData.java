@@ -6,6 +6,8 @@
 
 package com.vero.ui.model;
 
+import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +20,11 @@ import com.vero.model.entities.SchemaAttribute;
 import com.vero.model.entities.SchemaExpression;
 import com.vero.ui.constants.ObjectType;
 
-import static com.vero.ui.constants.ObjectType.ATTRIBUTE;
-
 /**
  * 
  * @author Tai Hu
  */
-public class AttributeObjectData extends UIData {
+public class AttributeObjectData extends PositionableObjectData {
     private static final long serialVersionUID = 1L;
 
     private SchemaAttribute schemaAttribute = null;
@@ -71,6 +71,10 @@ public class AttributeObjectData extends UIData {
 
     public void setName(String name) {
         this.name.set(name);
+    }
+    
+    public StringProperty nameProperty() {
+        return name;
     }
 
     public List<ExpressionObjectData> getExpressionObjectDataList() {
@@ -189,6 +193,16 @@ public class AttributeObjectData extends UIData {
 	}
 	
 	return null;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append(super.toString());
+        sb.append("Name = " + getName() + "\n");
+        
+        return sb.toString();
     }
     
     // public List<TableObjectData> getTableObjectDataList() {

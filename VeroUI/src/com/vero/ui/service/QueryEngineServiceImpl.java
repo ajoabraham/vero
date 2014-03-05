@@ -6,6 +6,7 @@ package com.vero.ui.service;
 import static com.vero.ui.constants.DBKeyType.FOREIGN_KEY;
 import static com.vero.ui.constants.DBKeyType.PRIMARY_KEY;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,6 +45,9 @@ public class QueryEngineServiceImpl implements QueryEngineService {
 	List<AttributeObjectData> attributes = queryBlockObjectData.getAttributeObjectDataList();
 	List<MetricObjectData> metrics = queryBlockObjectData.getMetricObjectDataList();
 	List<TableJoinObjectData> tableJoins = queryBlockObjectData.getTableJoinObjectDataList();
+	
+	Collections.sort(attributes);
+	Collections.sort(metrics);
 	
 	JSONStringer jsonOutput = new JSONStringer();
 	

@@ -68,5 +68,15 @@ public abstract class UIData implements Serializable {
 	return getId().hashCode();
     }
     
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append("ID = " + getId() + "\n");
+        sb.append("Type = " + getType() + "\n");
+        
+        return sb.toString();
+    }
+    
     public abstract ObjectType getType();
 }

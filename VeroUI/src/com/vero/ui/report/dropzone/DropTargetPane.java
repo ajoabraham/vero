@@ -19,8 +19,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import com.vero.metadata.JoinDefinition;
@@ -34,6 +41,7 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.ColumnObjectData;
 import com.vero.ui.model.ExpressionObjectData;
 import com.vero.ui.model.MetricObjectData;
+import com.vero.ui.model.PositionableObjectData;
 import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.TableJoinObjectData;
 import com.vero.ui.model.TableObjectData;
@@ -46,7 +54,7 @@ import com.vero.ui.service.ServiceManager;
  *
  * @author Tai Hu
  */
-public abstract class DropTargetPane extends VBox implements DroppableObject, ListChangeListener<UIData> {
+public abstract class DropTargetPane extends VBox implements DroppableObject, ListChangeListener<UIData>, EventHandler<MouseEvent> {
     private static final Logger logger = Logger.getLogger(DropTargetPane.class.getName());
     
     private static final String ATTRIBUTE_PLACEHOLDER_HINT = "drag attributes or columns here...";
@@ -56,6 +64,7 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
             
     private int currentDropIndex = -1;
     private boolean isEmpty = true;
+    private boolean nondropCase = false;
     
     ReportPane reportPane = null;
     private DropZonePane dropZonePane = null;
@@ -135,7 +144,6 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void handleDragDroppedEvent(DragEvent event, UIData transferData) {
 	
 	// Drop logic
@@ -181,62 +189,63 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 		queryBlockObjectData.addTableObjectData(metricObjectData, columnObjectData.getTableObjectData());
 	    }
 	    
-	    // Generate SQL
-	    Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockObjectData);
-	    Block block = report.getBlocks().get(0);
-	    // Show SQL in query block
-	    queryBlockPane.setSQLString(block.getSqlString());
-	    
-	    // Set up table alias
-            Map<String, String> tableAliasMap = block.getTableMap();
-	    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
-	        String alias = tableAliasMap.get(tableObjectData.getId());	        
-	        tableObjectData.setAlias(alias);
-	    }
-	    
-	    // Set up selected expression and table
-	    Map<String, String> attributeExpressionMap = block.getAttributeMap();
-	    Map<String, String> expressionTableMap = block.getExpressionMap();
-	    for (AttributeObjectData attributeObjectData : queryBlockObjectData.getAttributeObjectDataList()) {
-		String expressionId = attributeExpressionMap.get(attributeObjectData.getId().toLowerCase());
-		ExpressionObjectData selectedExpression = attributeObjectData.getExpressionObjectDataById(expressionId);
-		attributeObjectData.setSelectedExpressionObjectData(selectedExpression);
-		
-		String tableId = expressionTableMap.get(expressionId);
-		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
-		selectedExpression.setSelectedTableObjectData(selectedTable);
-	    }
-	    
-	    Map<String, String> metricExpressionMap = block.getMetricMap();
-	    for (MetricObjectData metricObjectData : queryBlockObjectData.getMetricObjectDataList()) {
-		String expressionId = metricExpressionMap.get(metricObjectData.getId().toLowerCase());
-		ExpressionObjectData selectedExpression = metricObjectData.getExpressionObjectDataById(expressionId);
-		metricObjectData.setSelectedExpressionObjectData(selectedExpression);
-		
-		String tableId = expressionTableMap.get(expressionId);
-		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
-		selectedExpression.setSelectedTableObjectData(selectedTable);
-	    }
-	    
-	    // Update table joins
-	    List<JoinDefinition> joinDefs = block.getJoinDefList();
-	    for (JoinDefinition joinDef : joinDefs) {
-	        boolean isNew = false;
-		TableJoinObjectData tableJoinObjectData = queryBlockObjectData.getTableJoinObjectDataById(joinDef.getUUIDStr());
-		if (tableJoinObjectData == null) {
-		    tableJoinObjectData = new TableJoinObjectData();
-		    isNew = true;
-		}
-		TableObjectData rightTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTRightStr());
-		tableJoinObjectData.setRightTable(rightTableObjectData);
-		TableObjectData leftTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTLeftStr());
-		tableJoinObjectData.setLeftTable(leftTableObjectData);
-		tableJoinObjectData.setTableJoinType(TableJoinType.convertType(joinDef.getType()));
-		
-		if (isNew) {
-		    queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
-		}
-	    }
+	    updateQuery();
+//	    // Generate SQL
+//	    Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockObjectData);
+//	    Block block = report.getBlocks().get(0);
+//	    // Show SQL in query block
+//	    queryBlockPane.setSQLString(block.getSqlString());
+//	    
+//	    // Set up table alias
+//            Map<String, String> tableAliasMap = block.getTableMap();
+//	    for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
+//	        String alias = tableAliasMap.get(tableObjectData.getId());	        
+//	        tableObjectData.setAlias(alias);
+//	    }
+//	    
+//	    // Set up selected expression and table
+//	    Map<String, String> attributeExpressionMap = block.getAttributeMap();
+//	    Map<String, String> expressionTableMap = block.getExpressionMap();
+//	    for (AttributeObjectData attributeObjectData : queryBlockObjectData.getAttributeObjectDataList()) {
+//		String expressionId = attributeExpressionMap.get(attributeObjectData.getId().toLowerCase());
+//		ExpressionObjectData selectedExpression = attributeObjectData.getExpressionObjectDataById(expressionId);
+//		attributeObjectData.setSelectedExpressionObjectData(selectedExpression);
+//		
+//		String tableId = expressionTableMap.get(expressionId);
+//		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+//		selectedExpression.setSelectedTableObjectData(selectedTable);
+//	    }
+//	    
+//	    Map<String, String> metricExpressionMap = block.getMetricMap();
+//	    for (MetricObjectData metricObjectData : queryBlockObjectData.getMetricObjectDataList()) {
+//		String expressionId = metricExpressionMap.get(metricObjectData.getId().toLowerCase());
+//		ExpressionObjectData selectedExpression = metricObjectData.getExpressionObjectDataById(expressionId);
+//		metricObjectData.setSelectedExpressionObjectData(selectedExpression);
+//		
+//		String tableId = expressionTableMap.get(expressionId);
+//		TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+//		selectedExpression.setSelectedTableObjectData(selectedTable);
+//	    }
+//	    
+//	    // Update table joins
+//	    List<JoinDefinition> joinDefs = block.getJoinDefList();
+//	    for (JoinDefinition joinDef : joinDefs) {
+//	        boolean isNew = false;
+//		TableJoinObjectData tableJoinObjectData = queryBlockObjectData.getTableJoinObjectDataById(joinDef.getUUIDStr());
+//		if (tableJoinObjectData == null) {
+//		    tableJoinObjectData = new TableJoinObjectData();
+//		    isNew = true;
+//		}
+//		TableObjectData rightTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTRightStr());
+//		tableJoinObjectData.setRightTable(rightTableObjectData);
+//		TableObjectData leftTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTLeftStr());
+//		tableJoinObjectData.setLeftTable(leftTableObjectData);
+//		tableJoinObjectData.setTableJoinType(TableJoinType.convertType(joinDef.getType()));
+//		
+//		if (isNew) {
+//		    queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
+//		}
+//	    }
 	}	
     }
         
@@ -285,13 +294,37 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
             setPrefHeight(prefHeight);            
             getChildren().add(dropZoneObjectPane);
         }
+        else if (nondropCase) {
+            double prefHeight = computePrefHeight(getChildren().size() + 1);
+            setPrefHeight(prefHeight);            
+            getChildren().add(currentDropIndex, dropZoneObjectPane);
+            nondropCase = false;            
+        }
         else {
             getChildren().set(currentDropIndex, dropZoneObjectPane);
         }
+	
+	if (dropZoneObjectPane.getData() instanceof PositionableObjectData) {
+	    PositionableObjectData positionableObjectData = (PositionableObjectData) dropZoneObjectPane.getData();
+	    // Update object pane position
+	    if (isEmpty) {	        
+	        // at the position 0
+	        positionableObjectData.setPosition(0);
+	    }
+	    else if (currentDropIndex == -1) {
+	        positionableObjectData.setPosition(getChildren().size() - 1);
+	    }
+	    else {
+	        positionableObjectData.setPosition(currentDropIndex);
+	        for (int i = currentDropIndex + 1; i < getChildren().size(); i++) {
+	            ((PositionableObjectData)((DropZoneObjectPane<?>)getChildren().get(i)).getData()).setPosition(i);
+	        }
+	    }
+	}
         
         isEmpty = false;
         currentDropIndex = -1;
-    }
+    }    
     
     public void removeDropZoneObjectPane(DropZoneObjectPane<? extends UIData> dropZoneObjectPane) {
 	removeDropZoneObjectPane(dropZoneObjectPane.getData().getId());
@@ -299,17 +332,26 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
     
     public void removeDropZoneObjectPane(String id) {
 	DropZoneObjectPane<? extends UIData> selectedDropZoneObjectPane = null;
-	for (Node child : getChildren()) {
+	boolean found = false;
+	for (int i = 0; i < getChildren().size(); i++) {
 	    @SuppressWarnings("unchecked")
-            DropZoneObjectPane<? extends UIData> dropZoneObjectPane = (DropZoneObjectPane<? extends UIData>) child;
+            DropZoneObjectPane<? extends UIData> dropZoneObjectPane = (DropZoneObjectPane<? extends UIData>) getChildren().get(i);
 	    
-	    if (id.equalsIgnoreCase(dropZoneObjectPane.getData().getId())) {
+	    if (found) {
+	        ((PositionableObjectData)dropZoneObjectPane.getData()).setPosition(i + 1);
+	    }
+	    else if (id.equalsIgnoreCase(dropZoneObjectPane.getData().getId())) {
 		selectedDropZoneObjectPane = dropZoneObjectPane;
-		break;
+		if (dropZoneObjectPane.getData() instanceof PositionableObjectData) {
+		    found = true;
+		}
+		else {
+		    break;
+		}
 	    }
 	}
 	
-	if (selectedDropZoneObjectPane != null) {
+	if (selectedDropZoneObjectPane != null) {	    
 	    getChildren().remove(selectedDropZoneObjectPane);
 	    double prefHeight = computePrefHeight(getChildren().size());
 	    setPrefHeight(prefHeight);
@@ -321,12 +363,161 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
         while (change.next()) {            
             if (change.wasAdded()) {
                 UIData data = change.getAddedSubList().get(0);
-                addDropZoneObjectPane(LabelPaneFactory.createDropZoneObjectPane(reportPane, data));
+                if (!contains(data.getId())) {
+                    DropZoneObjectPane<? extends UIData> dropZoneObjectPane = LabelPaneFactory.createDropZoneObjectPane(reportPane, data); 
+                    addDropZoneObjectPane(dropZoneObjectPane);
+                    
+                    if (dropZoneObjectPane.getType() == ATTRIBUTE || dropZoneObjectPane.getType() == METRIC) {
+                        dropZoneObjectPane.setOnMouseClicked(this);
+                    }
+                }
             }
             else if (change.wasRemoved()) {
-                UIData data = change.getRemoved().get(0);
-                removeDropZoneObjectPane(data.getId());
+                UIData data = change.getRemoved().get(0);                
+                removeDropZoneObjectPane(data.getId());                
             }
         }
-    } 
+    }
+    
+    private boolean contains(String id) {
+        for (Node child : getChildren()) {
+            if (child instanceof DropZoneObjectPane) {
+                if (id.equalsIgnoreCase(((DropZoneObjectPane<?>)child).getData().getId())) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public void handle(MouseEvent e) {
+        if (e.getButton() == MouseButton.SECONDARY && e.getClickCount() == 1) {
+            final PositionableObjectData data = (PositionableObjectData) ((DropZoneObjectPane<?>)e.getSource()).getData();
+            
+            ContextMenu contextMenu = new ContextMenu();
+            
+            if (data.getPosition() > 0) {
+                MenuItem moveUpMenuItem = new MenuItem("Move Up");
+                moveUpMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        QueryBlockObjectData queryBlockObjectData = dropZonePane.getQueryBlockPane().getQueryBlockObjectData();
+                        if (data.getType() == ATTRIBUTE) {
+                            queryBlockObjectData.removeAttributeObjectData((AttributeObjectData) data);
+                            currentDropIndex = data.getPosition() - 1;
+                            nondropCase = true;
+                            queryBlockObjectData.addAttributeObjectData((AttributeObjectData) data);
+                        }
+                        else if (data.getType() == METRIC) {
+                            queryBlockObjectData.removeMetricObjectData((MetricObjectData) data);
+                            currentDropIndex = data.getPosition() - 1;
+                            nondropCase = true;
+                            queryBlockObjectData.addMetricObjectData((MetricObjectData) data);
+                        }
+                        
+                        updateQuery();
+                    }
+                    
+                });
+                
+                contextMenu.getItems().add(moveUpMenuItem);
+            }
+            
+            if (data.getPosition() < getChildren().size() - 1) {
+                MenuItem moveDownMenuItem = new MenuItem("Move Down");
+                moveDownMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        QueryBlockObjectData queryBlockObjectData = dropZonePane.getQueryBlockPane().getQueryBlockObjectData();
+                        if (data.getType() == ATTRIBUTE) {
+                            queryBlockObjectData.removeAttributeObjectData((AttributeObjectData) data);
+                            currentDropIndex = data.getPosition() + 1;
+                            nondropCase = true;
+                            queryBlockObjectData.addAttributeObjectData((AttributeObjectData) data);
+                        }
+                        else if (data.getType() == METRIC) {
+                            queryBlockObjectData.removeMetricObjectData((MetricObjectData) data);
+                            currentDropIndex = data.getPosition() + 1;
+                            nondropCase = true;
+                            queryBlockObjectData.addMetricObjectData((MetricObjectData) data);
+                        }
+                        
+                        updateQuery();
+                    }
+                    
+                });
+                
+                contextMenu.getItems().add(moveDownMenuItem);
+            }
+            
+            contextMenu.show((Node) e.getSource(), Side.BOTTOM, 0, 0);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void updateQuery() {
+        QueryBlockPane queryBlockPane = dropZonePane.getQueryBlockPane();
+        QueryBlockObjectData queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
+        
+        // Generate SQL
+        Report report = ServiceManager.getQueryEngineService().generateReportMetadata(queryBlockObjectData);
+        Block block = report.getBlocks().get(0);
+        // Show SQL in query block
+        queryBlockPane.setSQLString(block.getSqlString());
+        
+        // Set up table alias
+        Map<String, String> tableAliasMap = block.getTableMap();
+        for (TableObjectData tableObjectData : queryBlockObjectData.getTableObjectDataList()) {
+            String alias = tableAliasMap.get(tableObjectData.getId());              
+            tableObjectData.setAlias(alias);
+        }
+        
+        // Set up selected expression and table
+        Map<String, String> attributeExpressionMap = block.getAttributeMap();
+        Map<String, String> expressionTableMap = block.getExpressionMap();
+        for (AttributeObjectData attributeObjectData : queryBlockObjectData.getAttributeObjectDataList()) {
+            String expressionId = attributeExpressionMap.get(attributeObjectData.getId().toLowerCase());
+            ExpressionObjectData selectedExpression = attributeObjectData.getExpressionObjectDataById(expressionId);
+            attributeObjectData.setSelectedExpressionObjectData(selectedExpression);
+            
+            String tableId = expressionTableMap.get(expressionId);
+            TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+            selectedExpression.setSelectedTableObjectData(selectedTable);
+        }
+        
+        Map<String, String> metricExpressionMap = block.getMetricMap();
+        for (MetricObjectData metricObjectData : queryBlockObjectData.getMetricObjectDataList()) {
+            String expressionId = metricExpressionMap.get(metricObjectData.getId().toLowerCase());
+            ExpressionObjectData selectedExpression = metricObjectData.getExpressionObjectDataById(expressionId);
+            metricObjectData.setSelectedExpressionObjectData(selectedExpression);
+            
+            String tableId = expressionTableMap.get(expressionId);
+            TableObjectData selectedTable = selectedExpression.getTableObjectDataById(tableId);
+            selectedExpression.setSelectedTableObjectData(selectedTable);
+        }
+        
+        // Update table joins
+        List<JoinDefinition> joinDefs = block.getJoinDefList();
+        for (JoinDefinition joinDef : joinDefs) {
+            boolean isNew = false;
+            TableJoinObjectData tableJoinObjectData = queryBlockObjectData.getTableJoinObjectDataById(joinDef.getUUIDStr());
+            if (tableJoinObjectData == null) {
+                tableJoinObjectData = new TableJoinObjectData();
+                isNew = true;
+            }
+            TableObjectData rightTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTRightStr());
+            tableJoinObjectData.setRightTable(rightTableObjectData);
+            TableObjectData leftTableObjectData = queryBlockObjectData.getTableObjectDataById(joinDef.getTLeftStr());
+            tableJoinObjectData.setLeftTable(leftTableObjectData);
+            tableJoinObjectData.setTableJoinType(TableJoinType.convertType(joinDef.getType()));
+            
+            if (isNew) {
+                queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
+            }
+        }
+    }
 }
