@@ -99,9 +99,9 @@ public class TestParser {
 
             for (int i = 0; i < tablesArraySize; i++) {
                 JSONObject oneJSONTableObj = jsonTablesArray.getJSONObject(i);
-                //System.out.println("json table object " + i + ": ");
+                System.out.println("json table object " + i + ": ");
                 // table
-                //System.out.println("name:" + oneJSONTableObj.getString("name"));
+                System.out.println("name:" + oneJSONTableObj.getString("name"));
                 //System.out.println("rowCount:" + oneJSONTableObj.getInt("rowCount"));
                 //System.out.println("tableType:" + oneJSONTableObj.getString("tableType"));
                 //System.out.println("datasource:" + oneJSONTableObj.getString("datasource"));
@@ -261,19 +261,25 @@ public class TestParser {
                             joinType = JoinDefinition.JoinType.NONE;
                             break;                                    
                     }
-                                       
-                    JoinDefinition aJoin = new JoinDefinition(
-                        jdUUID,
-                        jdUUID.toString(),
-                        oneJSONJDObj.getString("name"),
-                        tleft,
-                        testDS.getTable(tleft).getUUID().toString(),
-                        tright,
-                        testDS.getTable(tright).getUUID().toString(),
-                        expression,
-                        joinType
-                    );
-                    testSession.addJoindef(aJoin);
+                    
+                    // make sure tleft and tright is there
+                    Table tabLeft = testDS.getTable(tleft);
+                    Table tabRight = testDS.getTable(tright);
+                    
+                    if ((tabLeft != null ) && (tabRight != null)) {                    
+                        JoinDefinition aJoin = new JoinDefinition(
+                            jdUUID,
+                            jdUUID.toString(),
+                            oneJSONJDObj.getString("name"),
+                            tleft,
+                            tabLeft.getUUID().toString(),
+                            tright,
+                            tabRight.getUUID().toString(),
+                            expression,
+                            joinType
+                        );
+                        testSession.addJoindef(aJoin);
+                    }
                 }
                 System.out.println("------------------------------");
             }
@@ -367,10 +373,10 @@ public class TestParser {
                     if (aCol != null) {
                         anExp.addColumn(aCol);
                     } else {
-                        System.out.println("can't find column...");
+                        System.out.println("can't find column...:" + colName);
                     }
                 } else {
-                    System.out.println("can't find table...");
+                    System.out.println("can't find table...:" + tabName);
                 }
             }                
         }
