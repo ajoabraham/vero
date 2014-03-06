@@ -233,11 +233,13 @@ public class QueryBlockObjectData extends BlockObjectData {
     }
     
     public TableJoinObjectData getTableJoinObjectDataById(String id) {
-        for (TableJoinObjectData tableJoinObjectData : tableJoinObjectDataList) {
-            if (id.equalsIgnoreCase(tableJoinObjectData.getId())) {
-                return tableJoinObjectData;
+	if (id != null) { 
+            for (TableJoinObjectData tableJoinObjectData : tableJoinObjectDataList) {
+                if (id.equalsIgnoreCase(tableJoinObjectData.getId())) {
+                    return tableJoinObjectData;
+                }
             }
-        }
+	}
         
         return null;
     }
