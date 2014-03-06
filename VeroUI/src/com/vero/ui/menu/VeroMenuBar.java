@@ -13,6 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 
+import com.vero.ui.common.ConfirmationDialogs;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.CommentBlockObjectData;
 import com.vero.ui.model.GlobalFilterObjectData;
@@ -20,6 +21,9 @@ import com.vero.ui.model.ReportBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.ReportTabManager;
+import com.vero.ui.service.MetadataPersistentService;
+import com.vero.ui.service.ServiceException;
+import com.vero.ui.service.ServiceManager;
 
 /**
  *
@@ -44,7 +48,8 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
         newMenu = new ActionMenu("NEW", new ImageView(ImageList.IMAGE_NEW)); 
         ((ActionMenu) newMenu).setOnMenuAction(this);
         
-        saveMenu = new Menu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
+        saveMenu = new ActionMenu("SAVE", new ImageView(ImageList.IMAGE_SAVE));
+        ((ActionMenu) saveMenu).setOnMenuAction(this);
         openMenu = new Menu("OPEN", new ImageView(ImageList.IMAGE_OPEN));
         runMenu = new Menu("RUN", new ImageView(ImageList.IMAGE_RUN));
         
@@ -65,6 +70,9 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 	if (event.getSource() == newMenu) {
 	    handleNewReportAction();
 	}
+	else if (event.getSource() == saveMenu) {
+	    handleSaveAction();
+	}
 	else if (event.getSource() == commentBlockMenuItem) {
 	    handleAddCommentBlockAction();
 	}
@@ -73,6 +81,19 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 	}
     }
         
+    private void handleSaveAction() {
+	Tab selectedReportTab = ReportTabManager.getInstance().getSelectedTab();
+        ReportPane reportPane = (ReportPane) selectedReportTab.getContent();
+        ReportObjectData reportObjectData = reportPane.getReportObjectData();
+        MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
+        try {
+	    service.persistReport(reportObjectData);
+        }
+        catch (ServiceException e) {
+            ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
+        }        
+    }
+
     private void handleAddQueryBlockAction() {
         Tab selectedReportTab = ReportTabManager.getInstance().getSelectedTab();
         ReportPane reportPane = (ReportPane) selectedReportTab.getContent();

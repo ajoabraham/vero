@@ -20,6 +20,7 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.model.TableObjectData;
 
 /**
@@ -132,5 +133,16 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
             logger.log(Level.SEVERE, e.getMessage(), e);
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public void persistReport(ReportObjectData data) throws ServiceException {
+        try {
+            metadataDao.persist(data.getSchemaReport());
+        }
+        catch (PersistentException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            throw new ServiceException(e);
+        }	
     }
 }

@@ -10,6 +10,7 @@ import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.model.TableObjectData;
 
 /**
@@ -23,5 +24,6 @@ public interface MetadataPersistentService {
     public List<AttributeObjectData> findAttributeObjectDataList(String tableId) throws ServiceException;
     public List<MetricObjectData> findMetricObjectDataList(String tableId) throws ServiceException;
     public List<TableObjectData> findTableObjectDataListByColumnNames(String datasourceId, Collection<String> columnNames) throws ServiceException;
+    public void persistReport(ReportObjectData data) throws ServiceException;
 //    public List<ColumnObjectData> findUnusedColumnObjectDataList(String tableId) throws ServiceException;
 }
