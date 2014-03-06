@@ -1,7 +1,9 @@
 package com.vero.model.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class SchemaQueryBlock extends SchemaData implements Serializable {
 	private SchemaReport schemaReport;
 
 	//bi-directional many-to-one association to SchemaTableJoin
-	@OneToMany(mappedBy="schemaQueryBlock")
+	@OneToMany(mappedBy="schemaQueryBlock", cascade={CascadeType.PERSIST})
 	private List<SchemaTableJoin> schemaTableJoins;
 
 	public SchemaQueryBlock() {

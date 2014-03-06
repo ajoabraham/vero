@@ -1,7 +1,9 @@
 package com.vero.model.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class SchemaMetric extends SchemaData implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to SchemaExpression
-	@OneToMany(mappedBy="schemaMetric")
+	@OneToMany(mappedBy="schemaMetric", cascade={CascadeType.PERSIST})
 	private List<SchemaExpression> schemaExpressions;
 
 	public SchemaMetric() {

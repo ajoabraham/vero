@@ -30,7 +30,7 @@ public class MetadataDaoImpl implements MetadataDao {
         try {
             em = PersistentUtils.createEntityManager();
             em.getTransaction().begin();
-            em.persist(schemaData);
+            em.merge(schemaData);
             em.getTransaction().commit();
         }
         catch (Exception e) {

@@ -246,7 +246,34 @@ public abstract class DropTargetPane extends VBox implements DroppableObject, Li
 //		    queryBlockObjectData.addTableJoinObjectData(tableJoinObjectData);
 //		}
 //	    }
-	}	
+	}
+	else if (transferData.getType() == ATTRIBUTE) {
+	    QueryBlockPane queryBlockPane = dropZonePane.getQueryBlockPane();
+            QueryBlockObjectData queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
+            AttributeObjectData attributeObjectData = (AttributeObjectData) transferData;
+            
+            // Link data
+            queryBlockObjectData.setDatasourceObjectData(attributeObjectData.getDatasourceObjectData());
+            
+            // Add attribute
+            queryBlockObjectData.addAttributeObjectData(attributeObjectData);
+            
+            // Add table
+            queryBlockObjectData.addTableObjectData(attributeObjectData, attributeObjectData.getSelectedExpressionObjectData().getSelectedTableObjectData()); 
+            
+            updateQuery();
+	}
+	else if (transferData.getType() == METRIC) {
+	    QueryBlockPane queryBlockPane = dropZonePane.getQueryBlockPane();
+            QueryBlockObjectData queryBlockObjectData = queryBlockPane.getQueryBlockObjectData();
+            MetricObjectData metricObjectData = (MetricObjectData) transferData;
+            
+            queryBlockObjectData.setDatasourceObjectData(metricObjectData.getDatasourceObjectData());
+            queryBlockObjectData.addMetricObjectData(metricObjectData);
+            queryBlockObjectData.addTableObjectData(metricObjectData, metricObjectData.getSelectedExpressionObjectData().getSelectedTableObjectData());
+	
+            updateQuery();
+	}
     }
         
     public String getPlaceholderText() {

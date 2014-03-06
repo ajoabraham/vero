@@ -120,7 +120,7 @@ public class ReportObjectData extends UIData {
         if (projectObjectData == null) {
             schemaReport.setSchemaProject(null);
         }
-        else if (projectObjectData.getSchemaProject() != projectObjectData.getSchemaProject()) {
+        else if (projectObjectData.getSchemaProject() != schemaReport.getSchemaProject()) {
             schemaReport.setSchemaProject(projectObjectData.getSchemaProject());
         }
     }

@@ -5,6 +5,8 @@
  */
 package com.vero.ui.menu;
 
+//import java.util.logging.Logger;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -14,6 +16,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 
 import com.vero.ui.common.ConfirmationDialogs;
+import com.vero.ui.common.UIDataManager;
 import com.vero.ui.constants.ImageList;
 import com.vero.ui.model.CommentBlockObjectData;
 import com.vero.ui.model.GlobalFilterObjectData;
@@ -21,16 +24,15 @@ import com.vero.ui.model.ReportBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.report.ReportPane;
 import com.vero.ui.report.ReportTabManager;
-import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceException;
-import com.vero.ui.service.ServiceManager;
 
 /**
  *
  * @author Tai Hu
  */
 public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
-
+//    private static final Logger logger = Logger.getLogger(VeroMenuBar.class.getName());
+    
     private Menu newMenu = null;
     private Menu saveMenu = null;
     private Menu openMenu = null;
@@ -85,9 +87,10 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
 	Tab selectedReportTab = ReportTabManager.getInstance().getSelectedTab();
         ReportPane reportPane = (ReportPane) selectedReportTab.getContent();
         ReportObjectData reportObjectData = reportPane.getReportObjectData();
-        MetadataPersistentService service = ServiceManager.getMetadataPersistentService();
+
         try {
-	    service.persistReport(reportObjectData);
+	    UIDataManager.getInstance().persistReportObjectData(reportObjectData);
+	    ConfirmationDialogs.createInfoConfirmation(null, "Report is saved successfully.").show();
         }
         catch (ServiceException e) {
             ConfirmationDialogs.createErrorConfirmation(null, e.getMessage()).show();
@@ -114,9 +117,9 @@ public class VeroMenuBar extends MenuBar implements EventHandler<ActionEvent> {
         commentBlockObjectData.setPosition(0);
         reportObjectData.addBlockObjectData(commentBlockObjectData);
         ReportBlockObjectData reportBlockObjectData = new ReportBlockObjectData();
-        reportObjectData.setReportBlockObjectData(reportBlockObjectData);
-        
+        reportObjectData.setReportBlockObjectData(reportBlockObjectData);        
         reportObjectData.setName("New Report");
+        
         ReportTabManager.getInstance().createReportTab(reportObjectData);
     }
 }

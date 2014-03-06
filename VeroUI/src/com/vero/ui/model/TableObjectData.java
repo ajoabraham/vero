@@ -88,6 +88,7 @@ public class TableObjectData extends UIData {
         });
 
         tableType = TableType.values()[schemaTable.getTableType()];
+        datasourceObjectData = new DatasourceObjectData(schemaTable.getSchemaDatasource());
     }
 
     @Override

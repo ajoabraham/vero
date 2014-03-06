@@ -8,10 +8,12 @@ import java.util.Observable;
 
 import com.vero.ui.event.DatasourceEvent;
 import com.vero.ui.event.EventFactory;
+import com.vero.ui.event.ReportEvent;
 import com.vero.ui.model.AttributeObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.service.MetadataPersistentService;
 import com.vero.ui.service.ServiceException;
 import com.vero.ui.service.ServiceManager;
@@ -25,6 +27,7 @@ public final class UIDataManager extends Observable {
     private static UIDataManager INSTANCE = null;
     
     private MetadataPersistentService service = null;
+    private ProjectObjectData projectObjectData = null;
    
     private UIDataManager() {
         service = ServiceManager.getMetadataPersistentService();
@@ -39,7 +42,11 @@ public final class UIDataManager extends Observable {
     }
     
     public ProjectObjectData getProjectObjectData() throws ServiceException {
-        return service.getProjectDataObject(PROJECT_ID);
+        if (projectObjectData == null) {
+            projectObjectData = service.getProjectDataObject(PROJECT_ID);
+        }
+        
+        return projectObjectData; 
     }
     
     public boolean isUniqueDatasourceName(String name) throws ServiceException {
@@ -55,17 +62,27 @@ public final class UIDataManager extends Observable {
     }
     
     public void persistDatasourceObjectData(DatasourceObjectData datasourceObjectData) throws ServiceException {
-	ProjectObjectData projectObjectData = new ProjectObjectData();
-	projectObjectData.setId(PROJECT_ID);
-	datasourceObjectData.setProjectObjectData(projectObjectData);
+        projectObjectData.addDatasourceObjectData(datasourceObjectData);
 	service.persistDatasource(datasourceObjectData);
 	
 	// Notify all listeners
 	fireDatasourceEvent(EventFactory.createDatasourceEvent(DatasourceEvent.DATASOURCE_ADDED, datasourceObjectData));
     }
     
+    public void persistReportObjectData(ReportObjectData reportObjectData) throws ServiceException {
+        projectObjectData.addReportObjectData(reportObjectData);
+        service.persistReport(reportObjectData);
+        
+        fireReportEvent(EventFactory.createReportEvent(ReportEvent.REPORT_SAVED, reportObjectData));
+    }
+    
     public void fireDatasourceEvent(DatasourceEvent datasourceEvent) {
         setChanged();
         notifyObservers(datasourceEvent);
+    }
+    
+    public void fireReportEvent(ReportEvent reportEvent) {
+        setChanged();
+        notifyObservers(reportEvent);
     }
 }

@@ -30,7 +30,7 @@ public class ProjectObjectData extends UIData {
     private StringProperty description = new SimpleStringProperty();
     
     private List<DatasourceObjectData> datasourceObjectDataList = null;
-    private List<ReportObjectData> reportObjectDataList = null;
+    private List<ReportObjectData> reportObjectDataList = new ArrayList<ReportObjectData>();
     
     public ProjectObjectData() {
         this(new SchemaProject());
@@ -106,8 +106,7 @@ public class ProjectObjectData extends UIData {
         return datasourceObjectDataList.remove(datasourceObjectData);
     }
     
-    public List<ReportObjectData> getReportObjectDataList() {
-        if (datasourceObjectDataList == null) initDatasourceObjectDataList();
+    public List<ReportObjectData> getReportObjectDataList() { 
         return reportObjectDataList;
     }
 

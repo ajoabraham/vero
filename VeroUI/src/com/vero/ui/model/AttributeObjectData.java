@@ -102,6 +102,9 @@ public class AttributeObjectData extends PositionableObjectData {
     }
 
     public ExpressionObjectData getSelectedExpressionObjectData() {
+        if (selectedExpressionObjectData == null && getExpressionObjectDataList().size() > 0) {
+            selectedExpressionObjectData = getExpressionObjectDataList().get(0);
+        }
         return selectedExpressionObjectData;
     }
 

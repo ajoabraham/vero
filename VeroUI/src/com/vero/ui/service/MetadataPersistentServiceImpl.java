@@ -3,6 +3,8 @@
  */
 package com.vero.ui.service;
 
+import static com.vero.ui.constants.ObjectType.QUERY_BLOCK;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,9 +19,11 @@ import com.vero.model.entities.SchemaMetric;
 import com.vero.model.entities.SchemaProject;
 import com.vero.model.entities.SchemaTable;
 import com.vero.ui.model.AttributeObjectData;
+import com.vero.ui.model.BlockObjectData;
 import com.vero.ui.model.DatasourceObjectData;
 import com.vero.ui.model.MetricObjectData;
 import com.vero.ui.model.ProjectObjectData;
+import com.vero.ui.model.QueryBlockObjectData;
 import com.vero.ui.model.ReportObjectData;
 import com.vero.ui.model.TableObjectData;
 
@@ -139,6 +143,28 @@ public class MetadataPersistentServiceImpl implements MetadataPersistentService 
     public void persistReport(ReportObjectData data) throws ServiceException {
         try {
             metadataDao.persist(data.getSchemaReport());
+            
+            // Persist all attributes and metrics
+            for (AttributeObjectData attributeObjectData : data.getReportBlockObjectData().getAttributeObjectDataList()) {
+                metadataDao.persist(attributeObjectData.getSchemaAttribute());
+            }
+            
+            for (MetricObjectData metricObjectData : data.getReportBlockObjectData().getMetricObjectDataList()) {
+                metadataDao.persist(metricObjectData.getSchemaMetric());
+            }
+            
+            for (BlockObjectData blockObjectData : data.getBlockObjectDataList()) {
+                if (blockObjectData.getType() == QUERY_BLOCK) {
+                    for (AttributeObjectData attributeObjectData : ((QueryBlockObjectData)blockObjectData).getAttributeObjectDataList()) {
+                        metadataDao.persist(attributeObjectData.getSchemaAttribute());
+                    }
+                    
+                    for (MetricObjectData metricObjectData : ((QueryBlockObjectData)blockObjectData).getMetricObjectDataList()) {
+                        metadataDao.persist(metricObjectData.getSchemaMetric());
+                    }
+                }
+                
+            }
         }
         catch (PersistentException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);

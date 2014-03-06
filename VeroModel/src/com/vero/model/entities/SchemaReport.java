@@ -26,15 +26,15 @@ public class SchemaReport extends SchemaData implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to SchemaCommentBlock
-	@OneToMany(mappedBy="schemaReport")
+	@OneToMany(mappedBy="schemaReport", cascade={CascadeType.PERSIST})
 	private List<SchemaCommentBlock> schemaCommentBlocks;
 
 	//bi-directional many-to-one association to SchemaFinalBlock
-	@OneToMany(mappedBy="schemaReport")
+	@OneToMany(mappedBy="schemaReport", cascade={CascadeType.PERSIST})
 	private List<SchemaFinalBlock> schemaFinalBlocks;
 
 	//bi-directional many-to-one association to SchemaQueryBlock
-	@OneToMany(mappedBy="schemaReport")
+	@OneToMany(mappedBy="schemaReport", cascade={CascadeType.PERSIST})
 	private List<SchemaQueryBlock> schemaQueryBlocks;
 
 	//bi-directional many-to-one association to SchemaProject
@@ -43,7 +43,7 @@ public class SchemaReport extends SchemaData implements Serializable {
 	private SchemaProject schemaProject;
 
 	//bi-directional many-to-one association to SchemaReportBlock
-	@OneToMany(mappedBy="schemaReport")
+	@OneToMany(mappedBy="schemaReport", cascade={CascadeType.PERSIST})
 	private List<SchemaReportBlock> schemaReportBlocks;
 
 	public SchemaReport() {
