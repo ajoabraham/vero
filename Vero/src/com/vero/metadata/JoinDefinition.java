@@ -114,7 +114,7 @@ public class JoinDefinition {
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
         
-        result.append("JD: ").append(expression).append("left: ").append(tleft).append("right: ").append(tright).append(NEW_LINE);
+        result.append("Joindef exp: ").append(expression).append(" left: ").append(tleft).append(" right: ").append(tright).append(" type: ").append(type).append(NEW_LINE);
                 
         return result.toString();
     }    

@@ -88,7 +88,7 @@ public class Block {
         result.append("    joindefList size = ").append(joindefList.size()).append(NEW_LINE);
         
         for (JoinDefinition curJD : joindefList) {
-            result.append("        cur JD: type: ").append(curJD.getType());
+            result.append("        cur JD: ").append(curJD);
         }
         
         return result.toString();

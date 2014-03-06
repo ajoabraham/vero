@@ -320,29 +320,6 @@ public class QueryEngineTest {
     }
     
     @Test
-    public void testYulin1() {
-        TestParser testParser = new TestParser("yulin1.json");
-        Session userSession = testParser.parse();
-        QueryEngine queryEngine = new QueryEngine();
-        queryEngine.preprocess(userSession);
-                
-        String expectedSQL = 
-            "SELECT \"T2\".\"CompanyName\", \"T1\".\"CategoryName\", \"T0\".\"CompanyName\"\n" +
-            "FROM \"shippers\" AS \"T0\"\n" +
-            "INNER JOIN \"categories\" AS \"T1\" ON (\"T0\".\"ShipperID\" = \"T1\".\"CategoryID\")\n" +
-            "CROSS JOIN \"shippers\" AS \"T2\"";
-        
-        Report curReport = queryEngine.getReport();          
-        String resultSQL = curReport.getBlocks().get(0).getSqlString();
-        
-        System.out.println("Expected SQL:");
-        System.out.println(expectedSQL);
-        System.out.println("Result SQL:");
-        System.out.println(resultSQL);
-        assertEquals("yulin1", expectedSQL, resultSQL);
-    }    
-
-    @Test
     public void testYulin2() {
         TestParser testParser = new TestParser("yulin2.json");
         Session userSession = testParser.parse();
